@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 铲子大全 · AI Shovels</title>
+<meta name="description" content="面向 AI 大模型、Agent、MCP 客户端与自动化工作流的工具发现目录，支持实时搜索与分类筛选。">
+<style>
+  :root {
+    --bg: #f6f8fa;
+    --surface: #ffffff;
+    --border: #d8dee4;
+    --text: #1f2328;
+    --text-2: #59636e;
+    --accent: #0969da;
+    --accent-soft: #ddf4ff;
+    --mark: #fff8c5;
+    --shadow: 0 1px 2px rgba(31,35,40,.06), 0 3px 8px rgba(31,35,40,.06);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ===== 顶栏 ===== */
+  .site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 20px 0;
+  }
+  .header-inner { max-width: 1180px; margin: 0 auto; }
+  .brand { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .brand h1 { font-size: 26px; font-weight: 700; letter-spacing: -.5px; }
+  .brand .en { color: var(--text-2); font-size: 15px; font-weight: 500; }
+  .tagline { color: var(--text-2); margin-top: 6px; font-size: 14px; }
+  .stats { color: var(--text-2); font-size: 13px; margin-top: 10px; }
+  .stats b { color: var(--text); font-weight: 600; }
+
+  /* 搜索框 */
+  .search-wrap {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--surface);
+    padding: 18px 0 14px;
+    margin-top: 4px;
+  }
+  .search-box { position: relative; max-width: 640px; }
+  .search-box svg {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 17px; height: 17px; fill: var(--text-2); pointer-events: none;
+  }
+  .search-box input {
+    width: 100%;
+    padding: 10px 84px 10px 40px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .search-box input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(9,105,218,.15);
+    background: var(--surface);
+  }
+  .search-box .count {
+    position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
+    font-size: 12.5px; color: var(--text-2); pointer-events: none;
+  }
+  .search-box .clear-btn {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    border: none; background: none; cursor: pointer;
+    color: var(--text-2); font-size: 17px; line-height: 1;
+    padding: 4px; display: none;
+  }
+  .search-box .clear-btn:hover { color: var(--text); }
+  .search-box.has-text .clear-btn { display: block; }
+  .search-box.has-text .count { right: 34px; }
+  .kbd-hint { font-size: 12px; color: var(--text-2); margin-top: 8px; }
+  .kbd-hint kbd {
+    background: var(--bg); border: 1px solid var(--border); border-bottom-width: 2px;
+    border-radius: 4px; padding: 0 5px; font-size: 11px; font-family: inherit;
+  }
+
+  /* 分类标签 */
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding-bottom: 16px;
+  }
+  .chip {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-2);
+    font-size: 13px;
+    font-family: inherit;
+    padding: 4px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all .12s;
+    white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+  .chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 500;
+  }
+  .chip .n { opacity: .7; font-size: 12px; margin-left: 3px; }
+  .chip.active .n { opacity: .9; }
+
+  /* ===== 主体 ===== */
+  main { max-width: 1180px; margin: 0 auto; padding: 24px 20px 60px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+    display: flex; flex-direction: column; gap: 8px;
+    transition: transform .12s, box-shadow .12s, border-color .12s;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: #b6c2cf;
+    box-shadow: 0 4px 14px rgba(31,35,40,.12);
+  }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+  .card-title {
+    font-size: 15.5px; font-weight: 600; line-height: 1.4;
+    word-break: break-word;
+  }
+  .card-title a { color: var(--text); }
+  .card-title a:hover { color: var(--accent); }
+  .badge {
+    flex: none;
+    font-size: 11.5px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+    max-width: 45%;
+    overflow: hidden; text-overflow: ellipsis;
+    color: var(--badge-fg, var(--text-2));
+    background: var(--badge-bg, var(--bg));
+    border: 1px solid var(--badge-bd, var(--border));
+  }
+  .card-desc { font-size: 13.5px; color: var(--text-2); word-break: break-word; }
+  .card-foot {
+    margin-top: auto; padding-top: 4px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 12.5px; color: var(--text-2);
+  }
+  .card-repo { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 12px; }
+  .ext { display: inline-flex; align-items: center; gap: 4px; font-weight: 500; }
+
+  mark { background: var(--mark); color: inherit; border-radius: 2px; padding: 0 1px; }
+
+  .empty {
+    text-align: center; color: var(--text-2);
+    padding: 70px 20px; display: none;
+  }
+  .empty b { color: var(--text); }
+
+  /* ===== 领域检索 ===== */
+  .section-title {
+    font-size: 19px; font-weight: 700; margin: 44px 0 6px;
+    padding-top: 8px;
+  }
+  .section-sub { color: var(--text-2); font-size: 13.5px; margin-bottom: 16px; }
+  .domain-table {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .domain-row {
+    display: grid;
+    grid-template-columns: minmax(220px, 34%) 1fr;
+    gap: 14px;
+    padding: 11px 16px;
+    border-top: 1px solid var(--border);
+    font-size: 13.5px;
+    align-items: baseline;
+  }
+  .domain-row:first-child { border-top: none; }
+  .domain-row:hover { background: #f6f8fa; }
+  .domain-name { font-weight: 500; }
+  .domain-links a {
+    display: inline-block; margin-right: 4px;
+    background: var(--accent-soft);
+    border-radius: 6px;
+    padding: 1px 8px;
+    font-size: 12.5px;
+    margin-bottom: 3px;
+  }
+  .domain-links a:hover { text-decoration: none; background: #b6e3ff; }
+
+  /* ===== 页脚 ===== */
+  footer {
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    padding: 26px 20px;
+    color: var(--text-2);
+    font-size: 13px;
+  }
+  .footer-inner { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 6px; }
+
+  @media (max-width: 640px) {
+    .brand h1 { font-size: 21px; }
+    .grid { grid-template-columns: 1fr; }
+    .domain-row { grid-template-columns: 1fr; gap: 4px; }
+    .badge { max-width: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <h1>AI 铲子大全</h1>
+      <span class="en">AI Shovels</span>
+    </div>
+    <p class="tagline">面向 AI 大模型、Agent、MCP 客户端与自动化工作流的工具发现目录 —— 让 AI 访问数据、操作软件、执行任务、转换文件。</p>
+    <p class="stats" id="stats">加载中…</p>
+
+    <div class="search-wrap">
+      <div class="search-box" id="searchBox">
+        <svg viewBox="0 0 16 16"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg>
+        <input type="text" id="searchInput" placeholder="实时搜索：工具名、用途、分类、GitHub 链接…" autocomplete="off" spellcheck="false">
+        <span class="count" id="count"></span>
+        <button class="clear-btn" id="clearBtn" title="清空">&times;</button>
+      </div>
+      <p class="kbd-hint">按 <kbd>/</kbd> 快速聚焦搜索框 · 输入即过滤，无需回车</p>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty"></div>
+
+  <h2 class="section-title" id="domains">按行业 / 领域继续检索 GitHub</h2>
+  <p class="section-sub">以下为按关键词生成的实时检索入口，可查看该领域与 MCP、Agent Skills、AI agent 工具相关的最新公开仓库。分类是工作目录，交叉领域项目可能同时出现于多个类别。</p>
+  <div class="domain-table" id="domainTable"></div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>数据来源：<a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">manningyangs/AI-Shovel-Collection</a>（机器可读清单 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv" target="_blank" rel="noopener">catalog.csv</a>）</div>
+    <div>被收录不代表项目安全、活跃、可商用或质量已背书；使用前请自行检查许可证、维护状态、权限和数据安全。欢迎通过 Issue / PR 补充与纠错。</div>
+    <div id="updated"></div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var items = [];          // {cat, catKey, catLabel, title, desc, url, owner, repo, search}
+  var cats = [];           // {key, label, count}
+  var activeCat = "all";
+  var query = "";
+
+  /* ---------- 工具函数 ---------- */
+
+  // 简单 CSV 解析（支持引号包裹与转义）
+  function parseCSV(text) {
+    if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+    var rows = [], row = [], field = "", inQ = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (inQ) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; }
+          else inQ = false;
+        } else field += c;
+      } else if (c === '"') inQ = true;
+      else if (c === ',') { row.push(field); field = ""; }
+      else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ""; }
+      else if (c !== '\r') field += c;
+    }
+    if (field.length || row.length) { row.push(field); rows.push(row); }
+    return rows.filter(function (r) { return r.some(function (v) { return v.trim(); }); });
+  }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (m) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m];
+    });
+  }
+
+  // 高亮匹配片段（先转义再插 mark）
+  function highlight(text, q) {
+    var safe = esc(text);
+    if (!q) return safe;
+    var needle = esc(q);
+    var out = "", rest = safe, lower = rest.toLowerCase(), nl = needle.toLowerCase(), pos;
+    var idx = lower.indexOf(nl);
+    if (idx === -1) return safe;
+    while (idx !== -1) {
+      out += rest.slice(0, idx) + "<mark>" + rest.slice(idx, idx + needle.length) + "</mark>";
+      rest = rest.slice(idx + needle.length);
+      lower = rest.toLowerCase();
+      idx = lower.indexOf(nl);
+    }
+    return out + rest;
+  }
+
+  // 从分类名提取排序键："9A. xxx" -> {num:9, letter:1}
+  function catSortKey(cat) {
+    var m = cat.match(/^(\d+)([A-Za-z]?)\./);
+    if (!m) return { num: 999, letter: 0 };
+    return { num: parseInt(m[1], 10), letter: m[2] ? 1 : 0 };
+  }
+
+  // "名称（描述）" 拆分为 {title, desc}
+  function splitName(full) {
+    var m = full.match(/^(.*?)[（(]([^）)]*)[）)]\s*$/);
+    if (m && m[1].trim()) return { title: m[1].trim(), desc: m[2].trim() };
+    return { title: full, desc: "" };
+  }
+
+  /* ---------- 分类配色（17 类循环取色） ---------- */
+  var palette = [
+    ["#ddf4ff", "#0969da", "#54aeff"], // 蓝
+    ["#dafbe1", "#1a7f37", "#7ee787"], // 绿
+    ["#fff1e5", "#bc4c00", "#ffab70"], // 橙
+    ["#fbefff", "#8250df", "#d8b9ff"], // 紫
+    ["#fff8c5", "#9a6700", "#d4a72c"], // 黄
+    ["#ffebe9", "#cf222e", "#ff7b72"], // 红
+    ["#e7f6ff", "#0550ae", "#79c0ff"], // 深蓝
+    ["#ddf4ff", "#116329", "#4ac26b"], // 深绿
+    ["#f1f8ff", "#0550ae", "#a5d6ff"], // 天蓝
+    ["#fff0f6", "#bf3989", "#ff9ec7"], // 粉
+    ["#f6f8fa", "#57606a", "#8b949e"], // 灰
+    ["#eef4ff", "#3b23a8", "#868faf"], // 靛
+    ["#fffbe6", "#7d4e00", "#e3b341"], // 沙
+    ["#e6ffef", "#0a3069", "#39d353"], // 墨绿
+    ["#f1f0ff", "#6639ba", "#a48cff"], // 靛紫
+    ["#eefcf7", "#0a6e54", "#56d4a0"], // 青
+    ["#fff1f0", "#a40e26", "#ff9492"]  // 绯
+  ];
+
+  /* ---------- 加载数据 ---------- */
+
+  function load() {
+    return Promise.all([
+      fetch("catalog.csv").then(function (r) {
+        if (!r.ok) throw new Error("catalog.csv " + r.status);
+        return r.text();
+      }),
+      fetch("README.md").then(function (r) { return r.ok ? r.text() : ""; })
+        .catch(function () { return ""; })
+    ]).then(function (res) {
+      buildItems(parseCSV(res[0]));
+      buildDomains(res[1]);
+      renderChips();
+      render();
+      renderMeta(res[1]);
+    }).catch(function (err) {
+      document.getElementById("stats").textContent =
+        "数据加载失败：" + err.message + "（请通过本地 HTTP 服务访问本页，而不是直接双击打开文件）";
+      document.getElementById("empty").style.display = "block";
+      document.getElementById("empty").textContent = "无法读取 catalog.csv";
+    });
+  }
+
+  function buildItems(rows) {
+    if (rows.length && rows[0][0] && rows[0][0].indexOf("分类") !== -1) rows = rows.slice(1);
+    items = rows.map(function (r) {
+      var cat = (r[0] || "").trim();
+      var full = (r[1] || "").trim();
+      var url = (r[2] || "").trim();
+      var parts = splitName(full);
+      var slug = url.replace(/https?:\/\/github\.com\//, "").replace(/\.git$/, "").replace(/\/$/, "");
+      return {
+        cat: cat,
+        catLabel: cat.replace(/^\d+[A-Za-z]?\.\s*/, ""),
+        title: parts.title,
+        desc: parts.desc,
+        url: url,
+        slug: slug,
+        hay: (full + " " + cat + " " + url + " " + slug).toLowerCase()
+      };
+    });
+
+    var seen = {};
+    items.forEach(function (it) {
+      if (!seen[it.cat]) seen[it.cat] = { key: it.cat, label: it.catLabel, count: 0 };
+      seen[it.cat].count++;
+    });
+    cats = Object.keys(seen).map(function (k) { return seen[k]; });
+    cats.sort(function (a, b) {
+      var ka = catSortKey(a.key), kb = catSortKey(b.key);
+      return ka.num - kb.num || ka.letter - kb.letter;
+    });
+    // 分类颜色按排序后顺序分配
+    cats.forEach(function (c, i) { c.color = palette[i % palette.length]; });
+    var colorOf = {};
+    cats.forEach(function (c) { colorOf[c.key] = c.color; });
+    items.forEach(function (it) { it.color = colorOf[it.cat] || palette[10]; });
+  }
+
+  /* ---------- README：解析“按行业/领域检索”表格 ---------- */
+  function buildDomains(md) {
+    if (!md) return;
+    var lines = md.split("\n");
+    var inSection = false, rows = [];
+    for (var i = 0; i < lines.length; i++) {
+      var line = lines[i].trim();
+      if (line.indexOf("## ") === 0) {
+        inSection = line.indexOf("按行业/领域检索") !== -1;
+        continue;
+      }
+      if (!inSection) continue;
+      if (line.indexOf("|") !== 0) {
+        if (rows.length && line === "") break;
+        continue;
+      }
+      var cells = line.split("|");
+      // cells: ['', 领域, 链接, '']
+      if (cells.length < 4) continue;
+      var name = cells[1].trim(), linksCell = cells[2];
+      if (!name || name === "领域" || /^-+$/.test(name)) continue;
+      var links = [];
+      linksCell.split("·").forEach(function (seg) {
+        var m = seg.trim().match(/\[([^\]]+)\]\(([^)]+)\)/);
+        if (m) links.push({ text: m[1], url: m[2] });
+      });
+      if (links.length) rows.push({ name: name, links: links });
+    }
+    var html = rows.map(function (r) {
+      return '<div class="domain-row"><div class="domain-name">' + esc(r.name) +
+        '</div><div class="domain-links">' +
+        r.links.map(function (l) {
+          return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.text) + "</a>";
+        }).join("") + "</div></div>";
+    }).join("");
+    document.getElementById("domainTable").innerHTML = html ||
+      '<div class="domain-row"><div class="domain-name">（未能解析 README 表格）</div><div class="domain-links"></div></div>';
+  }
+
+  /* ---------- 页脚元信息 ---------- */
+  function renderMeta(md) {
+    var m = md && md.match(/本轮初始检索整理日期：([0-9-]+)/);
+    if (m) document.getElementById("updated").textContent = "初始检索整理日期：" + m[1] + " · 页面随 catalog.csv 更新";
+  }
+
+  /* ---------- 渲染 ---------- */
+
+  function renderChips() {
+    var html = '<button class="chip active" data-cat="all">全部<span class="n">' + items.length + "</span></button>";
+    html += cats.map(function (c) {
+      return '<button class="chip" data-cat="' + esc(c.key) + '" title="' + esc(c.key) + '">' +
+        esc(c.label) + '<span class="n">' + c.count + "</span></button>";
+    }).join("");
+    document.getElementById("chips").innerHTML = html;
+    document.getElementById("chips").addEventListener("click", function (e) {
+      var btn = e.target.closest(".chip");
+      if (!btn) return;
+      activeCat = btn.getAttribute("data-cat");
+      document.querySelectorAll(".chip").forEach(function (c) { c.classList.remove("active"); });
+      btn.classList.add("active");
+      render();
+    });
+  }
+
+  function matches(it) {
+    if (activeCat !== "all" && it.cat !== activeCat) return false;
+    if (query && it.hay.indexOf(query) === -1) return false;
+    return true;
+  }
+
+  function render() {
+    var list = items.filter(matches);
+    var grid = document.getElementById("grid");
+    var empty = document.getElementById("empty");
+
+    grid.innerHTML = list.map(function (it) {
+      return '<article class="card">' +
+        '<div class="card-top">' +
+          '<div class="card-title"><a href="' + esc(it.url) + '" target="_blank" rel="noopener">' +
+            highlight(it.title, query) + "</a></div>" +
+          '<span class="badge" style="--badge-bg:' + it.color[0] + ";--badge-fg:" + it.color[1] + ";--badge-bd:" + it.color[2] + '" title="' + esc(it.cat) + '">' +
+            highlight(it.catLabel, query) + "</span>" +
+        "</div>" +
+        (it.desc ? '<div class="card-desc">' + highlight(it.desc, query) + "</div>" : "") +
+        '<div class="card-foot"><span class="card-repo">' + highlight(it.slug, query) + "</span>" +
+          '<a class="ext" href="' + esc(it.url) + '" target="_blank" rel="noopener">GitHub ↗</a></div>' +
+      "</article>";
+    }).join("");
+
+    if (!list.length) {
+      empty.style.display = "block";
+      empty.innerHTML = "没有匹配 <b>" + esc(query || activeCat) + "</b> 的工具，换个关键词或分类试试？";
+    } else {
+      empty.style.display = "none";
+    }
+
+    document.getElementById("count").textContent = list.length + " / " + items.length;
+    document.getElementById("stats").innerHTML =
+      "已收录 <b>" + items.length + "</b> 个工具 · <b>" + cats.length + "</b> 个分类 · 支持实时搜索";
+  }
+
+  /* ---------- 搜索交互 ---------- */
+
+  var input = document.getElementById("searchInput");
+  var box = document.getElementById("searchBox");
+
+  input.addEventListener("input", function () {
+    query = input.value.trim().toLowerCase();
+    box.classList.toggle("has-text", !!query);
+    render();
+  });
+
+  document.getElementById("clearBtn").addEventListener("click", function () {
+    input.value = ""; query = "";
+    box.classList.remove("has-text");
+    input.focus();
+    render();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "/" && document.activeElement !== input) {
+      e.preventDefault();
+      input.focus();
+      input.select();
+    }
+    if (e.key === "Escape" && document.activeElement === input && input.value) {
+      input.value = ""; query = "";
+      box.classList.remove("has-text");
+      render();
+    }
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
