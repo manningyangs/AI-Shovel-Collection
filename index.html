@@ -293,6 +293,39 @@
   .empty { text-align: center; color: var(--text-2); padding: 56px 20px; display: none; font-size: 15px; }
   .empty b { color: var(--text); }
 
+  /* 来源徽章（右上角彩色小标签） */
+  .source-badge {
+    font-size: 10.5px; font-weight: 700; letter-spacing: .3px;
+    border-radius: 4px; padding: 1px 7px; white-space: nowrap;
+    line-height: 1.5;
+  }
+  .src-mcp_registry { background: #eef4ff; color: #1d4ed8; }
+  .src-github_rest   { background: #f1f3f5; color: #24292f; border: 1px solid #d0d7de; }
+  .src-npm           { background: #ffebe9; color: #c21825; }
+  .src-crates        { background: #fff0f6; color: #be1a72; }
+
+  /* 端点 URL 小胶囊 */
+  .ep-pill {
+    display: inline-block; max-width: 100%;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 11px; color: var(--text-2);
+    background: #f6f8fa; border: 1px solid var(--border);
+    border-radius: 4px; padding: 1px 7px; margin-top: 4px;
+    word-break: break-all; cursor: pointer;
+  }
+  .ep-pill:hover { color: var(--primary); border-color: #b6c8f5; }
+
+  /* 候选区块 */
+  .candidates-section { margin-top: 38px; }
+  .candidates-hint { font-size: 12.5px; color: var(--text-3); margin-top: -4px; margin-bottom: 10px; }
+  .candidates-hint b { color: var(--text-2); }
+  .card.unverified { border-style: dashed; border-color: #d0d7de; }
+  .unverified-tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    background: #f1f3f5; color: #57606a;
+    border-radius: 3px; padding: 0 5px; margin-left: 6px;
+  }
+
   /* ---- GitHub 全站实时搜索 ---- */
   .live-search-strip {
     display: none;
@@ -385,6 +418,7 @@
     <div class="nav-links">
       <a href="#hero">🏠 首页</a>
       <a href="#tools">📦 已收录</a>
+      <a href="#candidates">🧭 候选</a>
       <a href="#domains">🌍 领域检索</a>
       <a class="gh" href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">GitHub ↗</a>
     </div>
@@ -446,6 +480,15 @@
     </div>
   </section>
 
+  <section id="candidates" class="candidates-section">
+    <div class="section-head">
+      <h2>🧭 自动发现的候选铲子<span class="unverified-tag">自动发现</span></h2>
+      <span class="hint">由 Pipeline 从 MCP 官方 Registry / npm / crates 自动挖到，<b>未人工核验</b></span>
+    </div>
+    <div class="candidates-hint">候选按 <b>MCP 官方注册 + Stars / 下载量 + 端点可调用 + 活跃状态</b> 加权排序 · 当前每轮保留 Top <b id="candidateCount">…</b> 条</div>
+    <div class="grid" id="candidateGrid"></div>
+  </section>
+
   <section id="domains">
     <div class="section-head">
       <h2>🌍 按行业 / 领域实时检索 GitHub</h2>
@@ -457,7 +500,7 @@
 
 <footer>
   <div class="footer-inner">
-    <div>数据来源：<a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">manningyangs/AI-Shovel-Collection</a>（机器可读清单 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv" target="_blank" rel="noopener">catalog.csv</a> · 实时状态 <a href="live.json">live.json</a>）</div>
+    <div>数据来源：<a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">manningyangs/AI-Shovel-Collection</a> · 机器可读清单 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv" target="_blank" rel="noopener">catalog.csv</a> · 多源聚合 <a href="live_multi.json">live_multi.json</a>（MCP Registry / GitHub REST / npm / crates.io）</div>
     <div>被收录不代表项目安全、活跃、可商用或质量已背书；使用前请自行检查许可证、维护状态、权限和数据安全。欢迎通过 Issue / PR 补充与纠错。</div>
     <div id="updated"></div>
   </div>
@@ -471,10 +514,19 @@
   var cats = [];
   var activeCat = "all";
   var query = "";
-  var liveMap = null;       // owner/repo -> 实时数据
-  var liveResults = [];     // GitHub 全站实时搜索结果
+  var liveMap = null;       // deprecated — 保留给安全引用
+  var livePayload = null;   // live_multi.json 完整内容 { updated_at, curated, candidates }
+  var candidateItems = [];  // 候选条目（标准化后）
+  var liveResults = [];
   var liveAbort = null;
   var liveFetchedFor = "";
+
+  var SOURCE_LABEL = {
+    mcp_registry: "MCP Registry",
+    github_rest: "GitHub",
+    npm: "npm",
+    crates: "crates.io"
+  };
 
   /* ================= 工具函数 ================= */
 
@@ -575,14 +627,15 @@
         return r.text();
       }),
       fetch("README.md").then(function (r) { return r.ok ? r.text() : ""; }).catch(function () { return ""; }),
-      fetch("live.json?ts=" + Math.floor(Date.now() / 3600000)).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+      fetch("live_multi.json?ts=" + Math.floor(Date.now() / 3600000)).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
     ]).then(function (res) {
-      liveMap = res[2] && res[2].repos ? res[2].repos : null;
-      if (liveMap && res[2].updated_at) liveMap.__updated = res[2].updated_at;
+      livePayload = res[2];
       buildItems(parseCSV(res[0]));
+      buildCandidates();
       buildDomains(res[1]);
       renderChips();
       render();
+      renderCandidates();
       renderMeta(res[1]);
       renderLiveMeta();
       animateStats();
@@ -592,6 +645,46 @@
       document.getElementById("empty").innerHTML =
         "数据加载失败：" + esc(err.message) + "<br><small>请通过本地 HTTP 服务访问本页，而不是直接双击打开文件</small>";
     });
+  }
+
+  // 把 live_multi.json.candidates 数组标准化成 { title, url, hay, source, stars, ... }
+  function buildCandidates() {
+    if (!livePayload || !Array.isArray(livePayload.candidates)) {
+      candidateItems = [];
+      return;
+    }
+    // 用 catalog 的 repo_slugs 建一个 set，候选与 curated 重叠的剔除（避免重复出现）
+    var curatedIds = {};
+    items.forEach(function (it) { curatedIds[it.slug.toLowerCase()] = true; });
+    candidateItems = livePayload.candidates.map(function (e) {
+      var url = e.repo_url || e.registry_url || "#";
+      return {
+        id: e.id,
+        source: e.source,
+        title: e.title,
+        desc: e.desc || "",
+        url: url,
+        slug: e.repo_slug || "",
+        registry_url: e.registry_url,
+        endpoint: e.endpoint,
+        stars: e.stars,
+        forks: e.forks,
+        downloads: e.downloads,
+        pushed_at: e.pushed_at,
+        status: e.status,
+        lang: e.lang,
+        license: e.license,
+        published_at: e.published_at,
+        confidence: (e.extra && e.extra.confidence) || 0,
+        isCandidate: true,
+        hay: (e.title + " " + (e.desc || "") + " " + (e.repo_slug || "") + " " + (e.source || "") + " stars" + (e.stars || 0) + " " + (e.lang || "") + " " + (e.endpoint || "")).toLowerCase()
+      };
+    }).filter(function (c) {
+      // 剔除与 curated 重复的
+      if (c.slug && curatedIds[c.slug.toLowerCase()]) return false;
+      return true;
+    });
+    document.getElementById("candidateCount").textContent = candidateItems.length;
   }
 
   function buildItems(rows) {
@@ -609,12 +702,28 @@
         desc: parts.desc,
         url: url,
         slug: slug,
+        live: null,   // 实时字段来自 live_multi.json.curated
+        source: "catalog",
         hay: ""
       };
     });
 
+    var curated = livePayload && livePayload.curated ? livePayload.curated : {};
+
     var seen = {};
     items.forEach(function (it) {
+      // 合并多源 Pipeline 拉到的实时数据（以 repo_slug 为 key）
+      var live = curated[it.slug];
+      if (!live) {
+        // 尝试用 id 匹配
+        var idKey = "github.com/" + it.slug.toLowerCase();
+        live = curated[idKey];
+      }
+      it.live = live || null;
+      if (live) {
+        it.source = live.source || "catalog";
+      }
+      // 建立分类统计
       if (!seen[it.cat]) seen[it.cat] = { key: it.cat, label: it.catLabel, count: 0 };
       seen[it.cat].count++;
     });
@@ -629,14 +738,13 @@
 
     items.forEach(function (it) {
       it.color = colorOf[it.cat] || palette[10];
-      it.live = liveMap ? liveMap[it.slug] : null;
-      // 搜索索引纳入实时字段（stars、GitHub 描述、许可证、语言）
       var extra = "";
       if (it.live) {
         extra = " " + (it.live.desc || "") + " " + (it.live.license || "") + " " + (it.live.lang || "") +
-                " stars" + (it.live.stars || 0);
+                " " + (it.live.source || "") + " stars" + (it.live.stars || 0) + " " +
+                (it.live.endpoint || "");
       }
-      it.hay = (it.title + " " + it.desc + " " + it.cat + " " + it.catLabel + " " + it.slug + " " + it.url + extra).toLowerCase();
+      it.hay = (it.title + " " + it.desc + " " + it.cat + " " + it.catLabel + " " + it.slug + " " + it.url + " " + it.source + extra).toLowerCase();
     });
   }
 
@@ -686,17 +794,17 @@
   }
 
   function renderLiveMeta() {
-    if (liveMap && liveMap.__updated) {
-      document.getElementById("liveUpdated").textContent = "实时数据同步于 " + liveMap.__updated.replace("T", " ").slice(0, 16) + " UTC";
+    if (livePayload && livePayload.updated_at) {
+      document.getElementById("liveUpdated").textContent = "多源同步于 " + livePayload.updated_at.replace("T", " ").slice(0, 16) + " UTC";
     } else {
       document.getElementById("liveUpdated").textContent = "实时数据待首次同步";
     }
-    // 累计 stars
+    // 累计 stars（来自 curated 的 GitHub REST 字段）
     var total = null;
-    if (liveMap) {
+    if (livePayload && livePayload.curated) {
       total = 0;
-      Object.keys(liveMap).forEach(function (k) {
-        var v = liveMap[k];
+      Object.keys(livePayload.curated).forEach(function (k) {
+        var v = livePayload.curated[k];
         if (v && typeof v.stars === "number") total += v.stars;
       });
     }
@@ -747,15 +855,29 @@
     return true;
   }
 
+  // liveRow 统一：接受 Entry 风格对象（curated 来自 Pipeline、GitHub 全站实时搜索来自 Search API）
   function liveRow(live) {
     if (!live) return "";
     var bits = [];
     if (typeof live.stars === "number") bits.push('<span class="stars">★ ' + fmtStars(live.stars) + "</span>");
-    var rel = relTime(live.pushed_at);
+    if (typeof live.downloads === "number" && live.downloads > 0) bits.push('<span class="fresh ok">↧ ' + fmtStars(live.downloads) + "/wk</span>");
+    var rel = relTime(live.pushed_at || live.published_at);
     if (rel) bits.push('<span class="fresh ' + rel.cls + '">' + rel.text + "</span>");
-    if (live.archived) bits.push('<span class="archived">已归档</span>');
+    if (live.status === "archived" || live.archived) bits.push('<span class="archived">已归档</span>');
+    if (live.lang) bits.push('<span class="lang-pill">' + esc(live.lang) + "</span>");
     if (!bits.length) return "";
     return '<div class="card-live">' + bits.join("") + "</div>";
+  }
+
+  function sourceBadge(src) {
+    if (!src || src === "catalog") return "";
+    var label = SOURCE_LABEL[src] || src;
+    return '<span class="source-badge src-' + esc(src) + '" title="数据来源：' + esc(label) + '">' + esc(label) + "</span>";
+  }
+
+  function epPill(ep) {
+    if (!ep) return "";
+    return '<div class="ep-pill" title="MCP Server 端点 · 点击复制" onclick="navigator.clipboard.writeText(this.textContent)">📡 ' + esc(ep) + "</div>";
   }
 
   function render() {
@@ -764,16 +886,22 @@
     var empty = document.getElementById("empty");
 
     grid.innerHTML = list.map(function (it) {
+      var live = it.live || {};
+      // curated 卡：优先显示 live.endpoint，否则显示 registry_url 端点（来自 live_multi.json.curated）
+      var ep = live.endpoint || (live.remotes && live.remotes[0] && live.remotes[0].url);
+      var titleUrl = live.repo_url || live.registry_url || it.url;
       return '<article class="card">' +
         '<div class="card-top">' +
-          '<div class="card-title"><a href="' + esc(it.url) + '" target="_blank" rel="noopener">' +
+          '<div class="card-title"><a href="' + esc(titleUrl) + '" target="_blank" rel="noopener">' +
             highlight(it.title, query) + "</a></div>" +
           '<span class="badge" style="--badge-bg:' + it.color[0] + ";--badge-fg:" + it.color[1] + ";--badge-bd:" + it.color[2] + '" title="' + esc(it.cat) + '">' +
             highlight(it.catLabel, query) + "</span>" +
         "</div>" +
         (it.desc ? '<div class="card-desc">' + highlight(it.desc, query) + "</div>" : "") +
-        liveRow(it.live) +
-        '<div class="card-foot"><span class="card-repo">' + highlight(it.slug, query) + "</span>" +
+        epPill(ep) +
+        liveRow(live) +
+        sourceBadge(it.source) +
+        '<div class="card-foot"><span class="card-repo">' + highlight((live.repo_slug || it.slug), query) + "</span>" +
           '<a class="ext" href="' + esc(it.url) + '" target="_blank" rel="noopener">GitHub ↗</a></div>' +
       "</article>";
     }).join("");
@@ -788,22 +916,55 @@
     document.getElementById("count").textContent = list.length + " / " + items.length;
     document.getElementById("heroCount").textContent = items.length;
 
-    // 实时搜索提示条
     var strip = document.getElementById("liveStrip");
     if (query && query.length >= 2 && activeCat === "all") {
       strip.classList.add("show");
       document.getElementById("liveStripText").innerHTML =
-        "本地 <b>" + list.length + "</b> 条结果" +
-        (list.length === 0 ? "，没有你要的？" : "还不够？") +
-        " 在 GitHub <b>几十亿级仓库</b>里实时搜索「<b>" + esc(query) + "</b>」";
+        "本地已收录 <b>" + list.length + "</b> 条结果" +
+        (list.length === 0 ? "，自动发现区和 GitHub 全站还有？" : " · 自动发现 <b>" + candidateItems.filter(function(c){return c.hay.indexOf(query)!==-1}).length + "</b> 条匹配候选") +
+        " · 还想在 GitHub <b>几十亿级仓库</b>里继续搜「<b>" + esc(query) + "</b>」？";
       if (liveFetchedFor !== query) {
         document.getElementById("liveStatus").textContent = "";
         document.getElementById("btnLive").disabled = false;
-        // 自动触发由输入框防抖统一处理，避免打字过程消耗 API 限流额度
       }
     } else {
       strip.classList.remove("show");
       if (query !== liveFetchedFor) hideLiveSection();
+    }
+    renderCandidates();
+  }
+
+  // 候选区块渲染（独立，不受分类 chip 影响，但受搜索词过滤）
+  function renderCandidates() {
+    var section = document.getElementById("candidates");
+    var grid = document.getElementById("candidateGrid");
+    var list = candidateItems;
+    if (query) list = list.filter(function (c) { return c.hay.indexOf(query) !== -1; });
+    if (!candidateItems.length) {
+      section.style.display = "none";
+      return;
+    }
+    section.style.display = "";
+    grid.innerHTML = list.map(function (c) {
+      var titleUrl = c.url || "#";
+      return '<article class="card unverified">' +
+        '<div class="card-top">' +
+          '<div class="card-title"><a href="' + esc(titleUrl) + '" target="_blank" rel="noopener">' +
+            highlight(c.title, query) + "</a></div>" +
+          sourceBadge(c.source) +
+        "</div>" +
+        (c.desc ? '<div class="card-desc">' + highlight(c.desc, query) + "</div>" : "") +
+        epPill(c.endpoint) +
+        liveRow(c) +
+        '<div class="card-foot">' +
+          '<span class="card-repo">' + highlight((c.slug || c.id), query) + "</span>" +
+          (c.registry_url ? '<a class="ext" href="' + esc(c.registry_url) + '" target="_blank" rel="noopener">来源 ↗</a>' : "") +
+        "</div>" +
+      "</article>";
+    }).join("");
+    // 没有候选项或过滤后空
+    if (!list.length) {
+      grid.innerHTML = '<div class="empty" style="display:block">没有匹配的候选自动发现条目</div>';
     }
   }
 

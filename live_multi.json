@@ -1,0 +1,3013 @@
+{
+"updated_at": "TEST",
+"curated_count": 11,
+"candidates_count": 150,
+"curated": {
+"apify/apify-mcp-server": {
+"id": "github.com/apify/apify-mcp-server",
+"source": "npm",
+"title": "@apify/actors-mcp-server",
+"desc": "Apify MCP Server",
+"repo_url": "https://github.com/apify/apify-mcp-server.git",
+"repo_slug": "apify/apify-mcp-server",
+"registry_url": "https://www.npmjs.com/package/@apify/actors-mcp-server",
+"version": "0.19.5",
+"downloads": 20765,
+"published_at": "2026-10-27T17:30:58.190Z",
+"status": "active",
+"lang": "JavaScript"
+},
+"upstash/context7": {
+"id": "github.com/upstash/context7",
+"source": "npm",
+"title": "@upstash/context7-mcp",
+"desc": "MCP server for Context7",
+"repo_url": "git+https://github.com/upstash/context7.git",
+"repo_slug": "upstash/context7",
+"registry_url": "https://www.npmjs.com/package/@upstash/context7-mcp",
+"version": "4.4.4",
+"downloads": 478355,
+"published_at": "2026-10-19T13:48:09.451Z",
+"status": "active",
+"lang": "JavaScript"
+},
+"modelcontextprotocol/servers": {
+"id": "github.com/modelcontextprotocol/servers",
+"source": "npm",
+"title": "@modelcontextprotocol/server-filesystem",
+"desc": "MCP server for filesystem access",
+"repo_url": "git+https://github.com/modelcontextprotocol/servers.git",
+"repo_slug": "modelcontextprotocol/servers",
+"registry_url": "https://www.npmjs.com/package/@modelcontextprotocol/server-filesystem",
+"version": "2.1.0",
+"downloads": 911283,
+"published_at": "2026-10-28T21:08:05.003Z",
+"status": "active",
+"lang": "JavaScript"
+},
+"xeroapi/xero-mcp-server": {
+"id": "github.com/xeroapi/xero-mcp-server",
+"source": "npm",
+"title": "@xeroapi/xero-mcp-server",
+"desc": "MCP server implementation for Xero integration",
+"repo_url": "git://github.com/XeroAPI/xero-mcp-server.git",
+"repo_slug": "xeroapi/xero-mcp-server",
+"registry_url": "https://www.npmjs.com/package/@xeroapi/xero-mcp-server",
+"version": "0.0.17",
+"downloads": 61464,
+"published_at": "2026-05-26T05:07:15.624Z",
+"status": "active",
+"lang": "JavaScript"
+},
+"mapbox/mcp-server": {
+"id": "github.com/mapbox/mcp-server",
+"source": "npm",
+"title": "@mapbox/mcp-server",
+"desc": "Mapbox MCP server.",
+"repo_url": "git+https://github.com/mapbox/mcp-server.git",
+"repo_slug": "mapbox/mcp-server",
+"registry_url": "https://www.npmjs.com/package/@mapbox/mcp-server",
+"version": "0.16.0",
+"downloads": 1553,
+"published_at": "2026-10-15T18:11:36.263Z",
+"status": "active",
+"lang": "JavaScript"
+},
+"roychri/mcp-server-asana": {
+"id": "github.com/roychri/mcp-server-asana",
+"source": "npm",
+"title": "@roychri/mcp-server-asana",
+"desc": "MCP Server for Asana",
+"repo_url": "git+https://github.com/roychri/mcp-server-asana.git",
+"repo_slug": "roychri/mcp-server-asana",
+"registry_url": "https://www.npmjs.com/package/@roychri/mcp-server-asana",
+"version": "1.8.0",
+"downloads": 2306,
+"published_at": "2026-03-29T22:57:42.258Z",
+"status": "active",
+"lang": "JavaScript"
+},
+"taazkareem/clickup-mcp-server": {
+"id": "github.com/taazkareem/clickup-mcp-server",
+"source": "npm",
+"title": "@taazkareem/clickup-mcp-server",
+"desc": "ClickUp MCP Server - Powering AI Agents with full ClickUp task, document, and chat management capabilities.",
+"repo_url": "git+https://github.com/taazkareem/clickup-mcp-server.git",
+"repo_slug": "taazkareem/clickup-mcp-server",
+"registry_url": "https://www.npmjs.com/package/@taazkareem/clickup-mcp-server",
+"version": "0.14.6",
+"downloads": 22016,
+"published_at": "2026-10-07T16:48:12.918Z",
+"status": "active",
+"lang": "JavaScript"
+},
+"browsermcp/mcp": {
+"id": "github.com/browsermcp/mcp",
+"source": "npm",
+"title": "@browsermcp/mcp",
+"desc": "MCP server for browser automation using Browser MCP",
+"repo_url": "git+https://github.com/BrowserMCP/mcp.git",
+"repo_slug": "browsermcp/mcp",
+"registry_url": "https://www.npmjs.com/package/@browsermcp/mcp",
+"version": "2.1.0",
+"downloads": 29218,
+"published_at": "2026-10-27T07:53:47.822Z",
+"status": "active",
+"lang": "JavaScript"
+},
+"pascalorg/editor": {
+"id": "github.com/pascalorg/editor",
+"source": "npm",
+"title": "@pascal-app/mcp",
+"desc": "Model Context Protocol server for Pascal 3D editor",
+"repo_url": "git+https://github.com/pascalorg/editor.git",
+"repo_slug": "pascalorg/editor",
+"registry_url": "https://www.npmjs.com/package/@pascal-app/mcp",
+"version": "1.0.6",
+"downloads": 295,
+"published_at": "2026-10-23T00:52:56.913Z",
+"status": "active",
+"lang": "JavaScript"
+},
+"microsoft/playwright-mcp": {
+"id": "github.com/microsoft/playwright-mcp",
+"source": "npm",
+"title": "@playwright/mcp",
+"desc": "Playwright Tools for MCP",
+"repo_url": "git+https://github.com/microsoft/playwright-mcp.git",
+"repo_slug": "microsoft/playwright-mcp",
+"registry_url": "https://www.npmjs.com/package/@playwright/mcp",
+"version": "0.0.83",
+"downloads": 5364110,
+"published_at": "2026-09-28T23:19:13.609Z",
+"status": "active",
+"lang": "JavaScript"
+},
+"brightdata/brightdata-mcp": {
+"id": "github.com/brightdata/brightdata-mcp",
+"source": "npm",
+"title": "@brightdata/mcp",
+"desc": "An MCP interface into the Bright Data toolset",
+"repo_url": "git+https://github.com/brightdata/brightdata-mcp.git",
+"repo_slug": "brightdata/brightdata-mcp",
+"registry_url": "https://www.npmjs.com/package/@brightdata/mcp",
+"version": "4.1.0",
+"downloads": 13072,
+"published_at": "2026-10-20T09:39:38.546Z",
+"status": "active",
+"lang": "JavaScript"
+}
+},
+"candidates": [
+{
+"id": "reg:ac.inference.sh/mcp",
+"source": "mcp_registry",
+"title": "inference.sh",
+"desc": "Run 150+ AI apps — image, video, audio, LLMs, 3D and more. Browse, execute, stream results.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ac.inference.sh/mcp",
+"endpoint": "https://sh.inference.ac",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-04-13T17:32:20.852269Z",
+"pushed_at": "2026-04-13T17:32:20.852269Z",
+"status": "active",
+"extra": {
+"registry_name": "ac.inference.sh/mcp",
+"remotes_count": 2,
+"confidence": 5
+}
+},
+{
+"id": "reg:ac.snag/snag",
+"source": "mcp_registry",
+"title": "ac.snag/snag",
+"desc": "Gives your coding agent the captured console, network, replay and screenshot evidence for a bug.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ac.snag/snag",
+"endpoint": "https://mcp.snag.ac/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-09-09T10:35:53.194664Z",
+"pushed_at": "2026-09-09T10:35:53.194664Z",
+"status": "active",
+"extra": {
+"registry_name": "ac.snag/snag",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/frumu-ai/tandem",
+"source": "mcp_registry",
+"title": "ac.tandem/docs-mcp",
+"desc": "Remote MCP server for Tandem docs, install guides, SDKs, workflows, and agent setup help.",
+"repo_url": "https://github.com/frumu-ai/tandem",
+"repo_slug": "frumu-ai/tandem",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ac.tandem/docs-mcp",
+"endpoint": "https://tandem.ac/mcp",
+"protocol": "mcp",
+"version": "0.3.0",
+"published_at": "2026-04-02T11:22:40.005172Z",
+"pushed_at": "2026-04-02T11:22:40.005172Z",
+"status": "active",
+"extra": {
+"registry_name": "ac.tandem/docs-mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/apexai-academy/sample-agents",
+"source": "mcp_registry",
+"title": "Apex AI Academy",
+"desc": "Lessons, news and pricing from Apex AI Academy, an AI academy run by agents. Free lessons, no key.",
+"repo_url": "https://github.com/ApexAI-Academy/sample-agents",
+"repo_slug": "apexai-academy/sample-agents",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=academy.apexai/apex-ai-academy",
+"endpoint": "https://apexai.academy/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-16T03:32:46.025467Z",
+"pushed_at": "2026-10-16T03:32:46.025467Z",
+"status": "active",
+"headers_req": [
+"Optional: Bearer <personal apex_ key> for Premium tools. Public tools need no key."
+],
+"extra": {
+"registry_name": "academy.apexai/apex-ai-academy",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:academy.ase/periodic-system",
+"source": "mcp_registry",
+"title": "Agentic Engineering Periodic System",
+"desc": "Practices for building software with coding agents, each with a test you check on your repo.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=academy.ase/periodic-system",
+"endpoint": "https://ase.academy/mcp",
+"protocol": "mcp",
+"version": "2026.4.1",
+"published_at": "2026-10-22T20:23:57.545065Z",
+"pushed_at": "2026-10-22T20:23:57.545065Z",
+"status": "active",
+"extra": {
+"registry_name": "academy.ase/periodic-system",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/adgrowofficial/getlead-mcp",
+"source": "mcp_registry",
+"title": "Getlead",
+"desc": "Find B2B leads with verified work emails, find and verify emails, and run cold email outreach.",
+"repo_url": "https://github.com/Adgrowofficial/getlead-mcp",
+"repo_slug": "adgrowofficial/getlead-mcp",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ad.getle/leads",
+"endpoint": "https://mcp.getle.ad/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-09-26T12:28:37.779048Z",
+"pushed_at": "2026-09-26T12:28:37.779048Z",
+"status": "active",
+"extra": {
+"registry_name": "ad.getle/leads",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ad.inside/inside-ads",
+"source": "mcp_registry",
+"title": "Inside Ads",
+"desc": "Telegram ad exchange: estimate reach and cost with no account, then create and run campaigns.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ad.inside/inside-ads",
+"endpoint": "https://app.inside.ad/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-18T20:55:46.452926Z",
+"pushed_at": "2026-08-18T20:55:46.452926Z",
+"status": "active",
+"extra": {
+"registry_name": "ad.inside/inside-ads",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ae.beachclubs/mcp",
+"source": "mcp_registry",
+"title": "BeachClubs.ae",
+"desc": "Search UAE beach clubs, day pass prices, amenities, opening hours and events across all 7 emirates.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ae.beachclubs/mcp",
+"endpoint": "https://www.beachclubs.ae/mcp",
+"protocol": "mcp",
+"version": "0.2.0",
+"published_at": "2026-10-22T22:20:40.178549Z",
+"pushed_at": "2026-10-22T22:20:40.178549Z",
+"status": "active",
+"extra": {
+"registry_name": "ae.beachclubs/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ae.brainy/grocery-prices",
+"source": "mcp_registry",
+"title": "Dubai Grocery Prices",
+"desc": "Compare Dubai grocery lists, observed prices, delivery rules and indicative online offers in AED.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ae.brainy/grocery-prices",
+"endpoint": "https://prices.brainy.ae/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-09-30T10:34:55.977998Z",
+"pushed_at": "2026-09-30T10:34:55.977998Z",
+"status": "active",
+"extra": {
+"registry_name": "ae.brainy/grocery-prices",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/datadubai/dubai-real-estate-dld",
+"source": "mcp_registry",
+"title": "Dubai Data — Dubai real estate statistics",
+"desc": "Dubai property prices, AED/sqft, sales, rents, yields and projects from DLD registered transactions.",
+"repo_url": "https://github.com/datadubai/dubai-real-estate-dld",
+"repo_slug": "datadubai/dubai-real-estate-dld",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ae.datadubai/dubai-real-estate",
+"endpoint": "https://mcp.datadubai.ae/mcp",
+"protocol": "mcp",
+"version": "1.1.0",
+"published_at": "2026-09-30T08:30:47.911063Z",
+"pushed_at": "2026-09-30T08:30:47.911063Z",
+"status": "active",
+"extra": {
+"registry_name": "ae.datadubai/dubai-real-estate",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ae.easyvoice/tts",
+"source": "mcp_registry",
+"title": "EasyVoice text to speech",
+"desc": "Hosted text-to-speech MCP server: 66 voices in 9 languages, long-form narration, podcasts.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ae.easyvoice/tts",
+"endpoint": "https://easyvoice.ae/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-11T18:47:52.634428Z",
+"pushed_at": "2026-10-11T18:47:52.634428Z",
+"status": "active",
+"headers_req": [
+"Bearer <your EasyVoice API key> (free key at https://easyvoice.ae/account/keys)"
+],
+"extra": {
+"registry_name": "ae.easyvoice/tts",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ae.genosys/genosys",
+"source": "mcp_registry",
+"title": "GENOSYS UAE",
+"desc": "Shop GENOSYS Korean skincare in the UAE from chat: find products, AED prices, order and pay.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ae.genosys/genosys",
+"endpoint": "https://genosys.ae/mcp",
+"protocol": "mcp",
+"version": "1.1.0",
+"published_at": "2026-10-12T08:52:12.154288Z",
+"pushed_at": "2026-10-12T08:52:12.154288Z",
+"status": "active",
+"extra": {
+"registry_name": "ae.genosys/genosys",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ae.grovisor/grotax",
+"source": "mcp_registry",
+"title": "groTAX by Grovisor",
+"desc": "UAE Corporate Tax: CT computation, SBR, penalties, free zone test, TP and health-check.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ae.grovisor/grotax",
+"endpoint": "https://mcp.grovisor.ae/",
+"protocol": "mcp",
+"version": "1.2.0",
+"published_at": "2026-10-02T03:01:23.583792Z",
+"pushed_at": "2026-10-02T03:01:23.583792Z",
+"status": "active",
+"extra": {
+"registry_name": "ae.grovisor/grotax",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ae.plantguide/dubai-gardening",
+"source": "mcp_registry",
+"title": "Plant Guide: Dubai gardening research",
+"desc": "What to plant in Dubai each month, plant care in the heat, garden styles and Garden Care prices.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ae.plantguide/dubai-gardening",
+"endpoint": "https://plantguide.ae/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-07T06:55:35.364125Z",
+"pushed_at": "2026-10-07T06:55:35.364125Z",
+"status": "active",
+"extra": {
+"registry_name": "ae.plantguide/dubai-gardening",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ae.projectory/mcp",
+"source": "mcp_registry",
+"title": "Projectory",
+"desc": "Find UAE off-plan developments and registered residential sales.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ae.projectory/mcp",
+"endpoint": "https://mcp.projectory.ae/mcp",
+"protocol": "mcp",
+"version": "0.6.0",
+"published_at": "2026-09-29T20:37:54.5633Z",
+"pushed_at": "2026-09-29T20:37:54.5633Z",
+"status": "active",
+"extra": {
+"registry_name": "ae.projectory/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ae.propick/propick",
+"source": "mcp_registry",
+"title": "Propick Integration MCP",
+"desc": "Manage your real-estate stock on Propick (Dubai): bulk listing sync, lookups and run reports.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ae.propick/propick",
+"endpoint": "https://propick.ae/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-25T11:16:56.879334Z",
+"pushed_at": "2026-08-25T11:16:56.879334Z",
+"status": "active",
+"headers_req": [
+"Bearer <integration key> (ppk_live_...) issued in the Propick cabinet when creating an import channel"
+],
+"extra": {
+"registry_name": "ae.propick/propick",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ae.waggle/fenlight",
+"source": "mcp_registry",
+"title": "Fenlight",
+"desc": "Google search results, forum threads, local and shopping data, keyword ideas, AI answer tracking.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ae.waggle/fenlight",
+"endpoint": "https://fenlight.waggle.ae/mcp",
+"protocol": "mcp",
+"version": "0.3.0",
+"published_at": "2026-10-16T04:35:48.176825Z",
+"pushed_at": "2026-10-16T04:35:48.176825Z",
+"status": "active",
+"headers_req": [
+"Your Vera API key as a Bearer token. Create a key, with 3,000 free credits, at vera.waggle.ae."
+],
+"extra": {
+"registry_name": "ae.waggle/fenlight",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ae.waggle/vera",
+"source": "mcp_registry",
+"title": "Vera",
+"desc": "Scrape, search and extract the public web. 3,000 free credits at https://vera.waggle.ae/signup",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ae.waggle/vera",
+"endpoint": "https://vera.waggle.ae/v1/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-10-20T08:03:33.116792Z",
+"pushed_at": "2026-10-20T08:03:33.116792Z",
+"status": "active",
+"headers_req": [
+"Your Vera API key as a Bearer token. Create a key, with 3,000 free credits, at https://vera.waggle.ae/signup."
+],
+"extra": {
+"registry_name": "ae.waggle/vera",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:aero.events/events",
+"source": "mcp_registry",
+"title": "Events.Aero",
+"desc": "Find aviation events: airshows, fly-ins, workshops and club meets. Public and read-only.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=aero.events/events",
+"endpoint": "https://events.aero/mcp/events",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-09T21:06:19.122059Z",
+"pushed_at": "2026-10-09T21:06:19.122059Z",
+"status": "active",
+"extra": {
+"registry_name": "aero.events/events",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:africa.ugc/ugc",
+"source": "mcp_registry",
+"title": "UGC, the Human Ad Network",
+"desc": "The Human Ad Network. Campaigns, clipping, and Clip Studio from chat.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=africa.ugc/ugc",
+"endpoint": "https://api.ugc.africa/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-03T16:28:09.054327Z",
+"pushed_at": "2026-10-03T16:28:09.054327Z",
+"status": "active",
+"extra": {
+"registry_name": "africa.ugc/ugc",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ag.hood/name-service",
+"source": "mcp_registry",
+"title": "hood. — .hood name service",
+"desc": "Resolve .hood names on Robinhood Chain — forward/reverse, text records, availability & pricing.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ag.hood/name-service",
+"endpoint": "https://www.hood.ag/api/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-07-10T04:58:06.628668Z",
+"pushed_at": "2026-07-10T04:58:06.628668Z",
+"status": "active",
+"extra": {
+"registry_name": "ag.hood/name-service",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/goji-agency/website",
+"source": "mcp_registry",
+"title": "agency.goji/goji",
+"desc": "AEO, SEO, web and brand answers from a Melbourne agency's published glossary, guides and pricing.",
+"repo_url": "https://github.com/goji-agency/website",
+"repo_slug": "goji-agency/website",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=agency.goji/goji",
+"endpoint": "https://mcp.goji.agency/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-03T10:29:06.593837Z",
+"pushed_at": "2026-08-03T10:29:06.593837Z",
+"status": "active",
+"extra": {
+"registry_name": "agency.goji/goji",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:agency.justidea/justidea-agency",
+"source": "mcp_registry",
+"title": "JustIdea Agency",
+"desc": "Services, published prices, site search and sales inquiries of JustIdea, a Polish e-commerce agency.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=agency.justidea/justidea-agency",
+"endpoint": "https://justidea.agency/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-09-27T23:11:35.114076Z",
+"pushed_at": "2026-09-27T23:11:35.114076Z",
+"status": "active",
+"extra": {
+"registry_name": "agency.justidea/justidea-agency",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/mindsightventures/lona",
+"source": "mcp_registry",
+"title": "agency.lona/trading",
+"desc": "AI-powered trading strategy development: backtesting, market data, and portfolio analysis",
+"repo_url": "https://github.com/mindsightventures/lona",
+"repo_slug": "mindsightventures/lona",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=agency.lona/trading",
+"endpoint": "https://mcp.lona.agency/mcp",
+"protocol": "mcp",
+"version": "2.0.0",
+"published_at": "2026-02-24T00:07:27.525636Z",
+"pushed_at": "2026-02-24T00:07:27.525636Z",
+"status": "active",
+"extra": {
+"registry_name": "agency.lona/trading",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/modelcontextprotocol/registry",
+"source": "mcp_registry",
+"title": "Business Contact Finder",
+"desc": "Check how to contact a business website, and whether that contact path actually works.",
+"repo_url": "https://github.com/modelcontextprotocol/registry",
+"repo_slug": "modelcontextprotocol/registry",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=agency.ottobot/business-contact-finder",
+"endpoint": "https://business-contact-finder-mcp.ottobot2025.workers.dev/mcp",
+"protocol": "mcp",
+"version": "0.2.0",
+"published_at": "2026-09-07T21:23:32.359958Z",
+"pushed_at": "2026-09-07T21:23:32.359958Z",
+"status": "active",
+"extra": {
+"registry_name": "agency.ottobot/business-contact-finder",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:agency.thebureauoflostcontext/bureau-public",
+"source": "mcp_registry",
+"title": "Bureau public reader",
+"desc": "Bureau-operated public read-only MCP service for public Context Packets and Cases.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=agency.thebureauoflostcontext/bureau-public",
+"endpoint": "https://thebureauoflostcontext.agency/mcp",
+"protocol": "mcp",
+"version": "3.0.0",
+"published_at": "2026-09-13T05:48:39.780486Z",
+"pushed_at": "2026-09-13T05:48:39.780486Z",
+"status": "active",
+"extra": {
+"registry_name": "agency.thebureauoflostcontext/bureau-public",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:agency.zoll/ausfuhr",
+"source": "mcp_registry",
+"title": "zoll.agency",
+"desc": "Regeln und Suchen zur Ausfuhr aus der EU: Kumulierung, Präferenznachweis, Incoterms, Warennummer",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=agency.zoll/ausfuhr",
+"endpoint": "https://zoll.agency/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-24T14:11:05.083261Z",
+"pushed_at": "2026-10-24T14:11:05.083261Z",
+"status": "active",
+"extra": {
+"registry_name": "agency.zoll/ausfuhr",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.0si/disclosures",
+"source": "mcp_registry",
+"title": "0si.ai Disclosures",
+"desc": "Korean (DART/KIND) and US SEC filings with AI summaries, direction labels and market reaction.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.0si/disclosures",
+"endpoint": "https://app.0si.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-09T06:35:05.568225Z",
+"pushed_at": "2026-10-09T06:35:05.568225Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.0si/disclosures",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/1325ai/1325ai",
+"source": "mcp_registry",
+"title": "1325.AI",
+"desc": "Verified directory of 44,000+ Black-owned U.S. businesses. Search, maps, loyalty rewards.",
+"repo_url": "https://github.com/1325ai/1325ai",
+"repo_slug": "1325ai/1325ai",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.1325/mcp",
+"endpoint": "https://agoclnqfyinwjxdmjnns.supabase.co/functions/v1/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-07-10T05:01:17.106808Z",
+"pushed_at": "2026-07-10T05:01:17.106808Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.1325/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.1clickwebsite/mcp",
+"source": "mcp_registry",
+"title": "1ClickWebsite",
+"desc": "Build and edit WordPress websites for local service businesses and run Lead Gen demo-site batches.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.1clickwebsite/mcp",
+"endpoint": "https://www.1clickwebsite.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-05T09:31:32.655518Z",
+"pushed_at": "2026-10-05T09:31:32.655518Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.1clickwebsite/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.1court.state/court-directory",
+"source": "mcp_registry",
+"title": "1Court Directory",
+"desc": "US county court directory: clerk, courthouse address, e-filing, filing fees, and case lookup.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.1court.state/court-directory",
+"endpoint": "https://state.1court.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-21T01:56:14.481942Z",
+"pushed_at": "2026-10-21T01:56:14.481942Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.1court.state/court-directory",
+"remotes_count": 2,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.69ai/69ai",
+"source": "mcp_registry",
+"title": "69.ai",
+"desc": "Relationship network for AI agents and people: register, match, chat, dinner ideas, virtual gifts.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.69ai/69ai",
+"endpoint": "https://69ai.ai/mcp",
+"protocol": "mcp",
+"version": "1.5.0",
+"published_at": "2026-09-29T16:18:02.678783Z",
+"pushed_at": "2026-09-29T16:18:02.678783Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.69ai/69ai",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aard/aard",
+"source": "mcp_registry",
+"title": "Aard",
+"desc": "Official statistics from 170+ publishers, resolved from natural language with provenance.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aard/aard",
+"endpoint": "https://api.aard.ai/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-09-15T02:38:30.780577Z",
+"pushed_at": "2026-09-15T02:38:30.780577Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aard/aard",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aarna/atars-mcp",
+"source": "mcp_registry",
+"title": "aTars MCP",
+"desc": "Crypto market signals, technical indicators, and sentiment analysis for AI agents.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aarna/atars-mcp",
+"endpoint": "https://mcp.aarna.ai/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-03-10T11:09:59.15927Z",
+"pushed_at": "2026-03-10T11:09:59.15927Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aarna/atars-mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/abmeter/abmeter",
+"source": "mcp_registry",
+"title": "ABMeter",
+"desc": "Feature flagging and A/B testing platform with AI-first experimentation workflows.",
+"repo_url": "https://github.com/abmeter/abmeter",
+"repo_slug": "abmeter/abmeter",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.abmeter/abmeter",
+"endpoint": "https://mcp.abmeter.ai",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-04-19T18:11:04.905549Z",
+"pushed_at": "2026-04-19T18:11:04.905549Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.abmeter/abmeter",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.actwise/ideation",
+"source": "mcp_registry",
+"title": "ai.actwise/ideation",
+"desc": "Actwise Ideation helps founders benchmark startup and product ideas before they build.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.actwise/ideation",
+"endpoint": "https://actwise.ai/ideation/mcp/v1",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-14T04:14:24.243152Z",
+"pushed_at": "2026-08-14T04:14:24.243152Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.actwise/ideation",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.adadvisor/mcp-server",
+"source": "mcp_registry",
+"title": "AdAdvisor MCP Server",
+"desc": "Query Meta Ads performance data — accounts, campaigns, ad sets, ads, metrics & settings.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.adadvisor/mcp-server",
+"endpoint": "https://api.adadvisor.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-02-28T12:39:22.82128Z",
+"pushed_at": "2026-02-28T12:39:22.82128Z",
+"status": "active",
+"headers_req": [
+"Bearer token (adv_sk_...). Get key: https://www.adadvisor.ai/docs/user-guide/managing-api-keys?utm_source=mcp-registry"
+],
+"extra": {
+"registry_name": "ai.adadvisor/mcp-server",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/ruslan2027/adako-mcp",
+"source": "mcp_registry",
+"title": "Adako — careful ad ops for AI agents",
+"desc": "Google, Meta, ChatGPT, TikTok and LinkedIn Ads for AI agents. Every write needs your approval.",
+"repo_url": "https://github.com/ruslan2027/adako-mcp",
+"repo_slug": "ruslan2027/adako-mcp",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.adako/ads",
+"endpoint": "https://adako.ai/mcp",
+"protocol": "mcp",
+"version": "0.2.0",
+"published_at": "2026-09-13T20:00:50.661243Z",
+"pushed_at": "2026-09-13T20:00:50.661243Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.adako/ads",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.adkix/adkix",
+"source": "mcp_registry",
+"title": "adkix",
+"desc": "Turn a website into a short 9:16 video ad: script, cast, voice, shots, music. Asks before spending.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.adkix/adkix",
+"endpoint": "https://adkix.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-21T10:30:19.62174Z",
+"pushed_at": "2026-10-21T10:30:19.62174Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.adkix/adkix",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/digibiz360-com/adoraads",
+"source": "mcp_registry",
+"title": "ai.adoraads/beauty",
+"desc": "AI-native beauty ads, sponsored product discovery, and brand recommendations.",
+"repo_url": "https://github.com/DIGIBIZ360-COM/adoraads",
+"repo_slug": "digibiz360-com/adoraads",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.adoraads/beauty",
+"endpoint": "https://mcp.adoraads.ai/beauty",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-08T16:09:27.163464Z",
+"pushed_at": "2026-08-08T16:09:27.163464Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.adoraads/beauty",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.adplane/google-ads",
+"source": "mcp_registry",
+"title": "ai.adplane/google-ads",
+"desc": "Google Ads reporting and campaign management. Everything it creates starts paused.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.adplane/google-ads",
+"endpoint": "https://mcp.adplane.ai",
+"protocol": "mcp",
+"version": "1.29.0",
+"published_at": "2026-08-08T17:50:55.40943Z",
+"pushed_at": "2026-08-08T17:50:55.40943Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.adplane/google-ads",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.adrails/adrails",
+"source": "mcp_registry",
+"title": "Adrails",
+"desc": "Specialist AI agents for Meta Ads and Google Ads. Every change waits for your approval.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.adrails/adrails",
+"endpoint": "https://adrails.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-03T17:44:39.042634Z",
+"pushed_at": "2026-10-03T17:44:39.042634Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.adrails/adrails",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/stylemi-co/adramp",
+"source": "mcp_registry",
+"title": "ai.adramp/google-ads",
+"desc": "Google Ads MCP server — manage campaigns, keywords, and metrics.",
+"repo_url": "https://github.com/stylemi-co/adramp",
+"repo_slug": "stylemi-co/adramp",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.adramp/google-ads",
+"endpoint": "https://mcp.adramp.ai/sse",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-03-20T10:48:50.293302Z",
+"pushed_at": "2026-03-20T10:48:50.293302Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.adramp/google-ads",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.adrio/adrio",
+"source": "mcp_registry",
+"title": "Adrio",
+"desc": "Research competitor Meta ads, manage brand angles and audiences, and brief Spark to create ads.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.adrio/adrio",
+"endpoint": "https://api.adrio.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-03T12:20:35.801463Z",
+"pushed_at": "2026-10-03T12:20:35.801463Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.adrio/adrio",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.adsap/adsap",
+"source": "mcp_registry",
+"title": "Adsap",
+"desc": "Launch and manage Meta and Google Ads from your AI assistant. You approve every change first.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.adsap/adsap",
+"endpoint": "https://mcp.adsap.ai/mcp",
+"protocol": "mcp",
+"version": "0.73.0",
+"published_at": "2026-09-19T12:13:27.871767Z",
+"pushed_at": "2026-09-19T12:13:27.871767Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.adsap/adsap",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.adside/adside",
+"source": "mcp_registry",
+"title": "ai.adside/adside",
+"desc": "AI agents that manage paid ads on Meta, LinkedIn, and Google Ads from any MCP client.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.adside/adside",
+"endpoint": "https://api.adside.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-07-16T19:48:48.148514Z",
+"pushed_at": "2026-07-16T19:48:48.148514Z",
+"status": "active",
+"headers_req": [
+"Bearer sk_live_... API key from your Adside account"
+],
+"extra": {
+"registry_name": "ai.adside/adside",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.advisorsai/service-navigator",
+"source": "mcp_registry",
+"title": "Advisors AI Service Navigator",
+"desc": "Read-only service discovery, public-page checks, and request-link preparation.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.advisorsai/service-navigator",
+"endpoint": "https://advisorsai.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-28T14:34:43.327043Z",
+"pushed_at": "2026-08-28T14:34:43.327043Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.advisorsai/service-navigator",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.advisorsai/store-readiness",
+"source": "mcp_registry",
+"title": "Advisors AI Store Readiness Check",
+"desc": "One read-only public-page readiness check with a signed, recheckable evidence receipt.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.advisorsai/store-readiness",
+"endpoint": "https://advisorsai.ai/store-readiness-mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-22T20:48:28.258862Z",
+"pushed_at": "2026-08-22T20:48:28.258862Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.advisorsai/store-readiness",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.adweave/meta-ads-mcp",
+"source": "mcp_registry",
+"title": "AdWeave — Meta Ads MCP Server",
+"desc": "Meta Ads MCP server with 47 tools for campaigns, creatives, audiences, and insights.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.adweave/meta-ads-mcp",
+"endpoint": "https://mcp.adweave.ai/meta-ads-mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-04-10T16:46:57.731179Z",
+"pushed_at": "2026-04-10T16:46:57.731179Z",
+"status": "active",
+"headers_req": [
+"Bearer token using your AdWeave API key (aw_ prefix)"
+],
+"extra": {
+"registry_name": "ai.adweave/meta-ads-mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aeoengine/best-ai-search-agency-aeo-report",
+"source": "mcp_registry",
+"title": "Best AI Search Agency AEO Report",
+"desc": "Free AEO visibility report MCP — run AI search audits for any domain.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aeoengine/best-ai-search-agency-aeo-report",
+"endpoint": "https://aeoengine.ai/mcp",
+"protocol": "mcp",
+"version": "2.0.0",
+"published_at": "2026-10-27T22:27:06.327377Z",
+"pushed_at": "2026-10-27T22:27:06.327377Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aeoengine/best-ai-search-agency-aeo-report",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aetherya/mcp",
+"source": "mcp_registry",
+"title": "Aetherya",
+"desc": "Test decisions on a synthetic audience: studies, site audits, copy tests and post simulations.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aetherya/mcp",
+"endpoint": "https://mcp.aetherya.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.3",
+"published_at": "2026-10-19T09:16:53.096286Z",
+"pushed_at": "2026-10-19T09:16:53.096286Z",
+"status": "active",
+"headers_req": [
+"Bearer followed by your Aetherya API key (aeth_live_...)"
+],
+"extra": {
+"registry_name": "ai.aetherya/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aeviamodeler/aevia",
+"source": "mcp_registry",
+"title": "Aevia",
+"desc": "AI-powered life cycle assessment and modelling: connect to LCA databases, build and analyze systems",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aeviamodeler/aevia",
+"endpoint": "https://app.aeviamodeler.ai/api/v1/connector/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-09-15T15:36:29.139616Z",
+"pushed_at": "2026-09-15T15:36:29.139616Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aeviamodeler/aevia",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.afg/afg",
+"source": "mcp_registry",
+"title": "AFG: agents hire agents (test money)",
+"desc": "Sandbox marketplace where AI agents hire agents for verified outcomes. Test money only.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.afg/afg",
+"endpoint": "https://afg.ai/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-09-26T00:07:22.148008Z",
+"pushed_at": "2026-09-26T00:07:22.148008Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.afg/afg",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.afmr/discovery",
+"source": "mcp_registry",
+"title": "AFMR Discovery",
+"desc": "Read AFMR failure modes and discover scoped attestation and lift-evidence contracts.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.afmr/discovery",
+"endpoint": "https://afmr.ai/api/rpc",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-07-30T18:14:19.797129Z",
+"pushed_at": "2026-07-30T18:14:19.797129Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.afmr/discovery",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agenlify/catalog",
+"source": "mcp_registry",
+"title": "Agenlify AI Agent Directory",
+"desc": "Find AI tools by task, with pricing context, setup steps, limitations and official sources.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agenlify/catalog",
+"endpoint": "https://agenlify.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-13T16:09:56.551448Z",
+"pushed_at": "2026-10-13T16:09:56.551448Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agenlify/catalog",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agent-bev/bev-door",
+"source": "mcp_registry",
+"title": "agent-bev",
+"desc": "Agentic B2B hub for beer, wine and spirits across Europe.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agent-bev/bev-door",
+"endpoint": "https://mcp.bev-buyer.ai/mcp",
+"protocol": "mcp",
+"version": "0.2.0",
+"published_at": "2026-09-27T02:35:14.72457Z",
+"pushed_at": "2026-09-27T02:35:14.72457Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agent-bev/bev-door",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/agentberg/agentberg",
+"source": "mcp_registry",
+"title": "ai.agentberg/agentberg",
+"desc": "Agent-to-agent trading intelligence exchange. Publish findings, vote on quality, earn reputation.",
+"repo_url": "https://github.com/Agentberg/agentberg",
+"repo_slug": "agentberg/agentberg",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentberg/agentberg",
+"endpoint": "https://agentberg.ai/mcp",
+"protocol": "mcp",
+"version": "0.2.0",
+"published_at": "2026-06-18T01:49:38.050173Z",
+"pushed_at": "2026-06-18T01:49:38.050173Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentberg/agentberg",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentboard/agentboard",
+"source": "mcp_registry",
+"title": "Agentboard",
+"desc": "The public message board for AI agents: register in one call, introduce yourself, ask, read replies.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentboard/agentboard",
+"endpoint": "https://www.agentboard.ai/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-10-12T15:45:35.695832Z",
+"pushed_at": "2026-10-12T15:45:35.695832Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentboard/agentboard",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentdm/agentdm",
+"source": "mcp_registry",
+"title": "AgentDM",
+"desc": "Agent-to-agent messaging platform using MCP for cross-model communication.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentdm/agentdm",
+"endpoint": "https://api.agentdm.ai/api/v1/grid",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-03-21T03:25:57.564566Z",
+"pushed_at": "2026-03-21T03:25:57.564566Z",
+"status": "active",
+"headers_req": [
+"Bearer token for authentication (e.g., 'Bearer agentdm_...'). Get your token at https://app.agentdm.ai"
+],
+"extra": {
+"registry_name": "ai.agentdm/agentdm",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentese.lifeclaw/lifeclaw",
+"source": "mcp_registry",
+"title": "LifeClaw",
+"desc": "Call you, a person, or a business; find places, book or inquire by phone, and return the answer.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentese.lifeclaw/lifeclaw",
+"endpoint": "https://api-v2.lifeclaw.agentese.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-13T23:20:53.722619Z",
+"pushed_at": "2026-10-13T23:20:53.722619Z",
+"status": "active",
+"headers_req": [
+"Bearer lc_xxx API key from https://lifeclaw.agentese.ai/chat?settings=tokens"
+],
+"extra": {
+"registry_name": "ai.agentese.lifeclaw/lifeclaw",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentgates/mcp",
+"source": "mcp_registry",
+"title": "ai.agentgates/mcp",
+"desc": "Confidential compute and inference sold to agents over x402 USDC, plus an agent wallet over MCP.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentgates/mcp",
+"endpoint": "https://agentgates.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-25T05:32:02.617195Z",
+"pushed_at": "2026-08-25T05:32:02.617195Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentgates/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/u00dxk2/agentic-news",
+"source": "mcp_registry",
+"title": "Agentic News",
+"desc": "AI-powered news intelligence — 21 tools for personalized monitoring, briefings, and semantic search",
+"repo_url": "https://github.com/u00dxk2/agentic-news",
+"repo_slug": "u00dxk2/agentic-news",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentic-news/mcp",
+"endpoint": "https://api.agentic-news.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-04-06T18:34:53.583541Z",
+"pushed_at": "2026-04-06T18:34:53.583541Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentic-news/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/bobberrisford/affiliatemcp",
+"source": "mcp_registry",
+"title": "Affiliate Networks MCP",
+"desc": "Affiliate network reporting in your AI client. Bring your own keys. Most adapters experimental.",
+"repo_url": "https://github.com/bobberrisford/affiliatemcp",
+"repo_slug": "bobberrisford/affiliatemcp",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agenticaffiliate/affiliate-networks-mcp",
+"endpoint": "https://mcp.agenticaffiliate.ai/mcp",
+"protocol": "mcp",
+"version": "0.19.0",
+"published_at": "2026-07-29T07:26:14.414867Z",
+"pushed_at": "2026-07-29T07:26:14.414867Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agenticaffiliate/affiliate-networks-mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/agenticbooks/agenticbooks",
+"source": "mcp_registry",
+"title": "AgenticBooks",
+"desc": "Startup books from live bank and billing feeds: P&L, balances, approvals, period close.",
+"repo_url": "https://github.com/AgenticBooks/agenticbooks",
+"repo_slug": "agenticbooks/agenticbooks",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agenticbooks/books",
+"endpoint": "https://mcp.agenticbooks.ai/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-09-20T15:34:07.095403Z",
+"pushed_at": "2026-09-20T15:34:07.095403Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agenticbooks/books",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agenticfabricationnetwork/ufp",
+"source": "mcp_registry",
+"title": "Agent Fabrication Network (UFP)",
+"desc": "Turn designs into shipped parts: quote 3D printing, CNC, and decals, then check out.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agenticfabricationnetwork/ufp",
+"endpoint": "https://agenticfabricationnetwork.ai/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-07-24T06:26:25.029641Z",
+"pushed_at": "2026-07-24T06:26:25.029641Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agenticfabricationnetwork/ufp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agenticplug/agent-ready-report",
+"source": "mcp_registry",
+"title": "Agent Ready Report",
+"desc": "Scan any public website and see how ready it is for AI agents and AI search, explained plainly.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agenticplug/agent-ready-report",
+"endpoint": "https://scan.agenticplug.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-09T22:47:11.858569Z",
+"pushed_at": "2026-10-09T22:47:11.858569Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agenticplug/agent-ready-report",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/vboykocto/agentic-shelf",
+"source": "mcp_registry",
+"title": "Agentic Shelf",
+"desc": "Hosted MCP for e-commerce: live product catalog, stock, and pricing for AI agents.",
+"repo_url": "https://github.com/vboykoCTO/agentic-shelf",
+"repo_slug": "vboykocto/agentic-shelf",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agenticshelf/mcp",
+"endpoint": "https://api.agenticshelf.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-05-06T16:24:16.952518Z",
+"pushed_at": "2026-05-06T16:24:16.952518Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agenticshelf/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agenticshelf/puroair",
+"source": "mcp_registry",
+"title": "PuroAir",
+"desc": "Live MCP catalog for PuroAir HEPA-14 air purifiers - real-time stock, pricing, and details.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agenticshelf/puroair",
+"endpoint": "https://api.agenticshelf.ai/m/puroair/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-07-02T16:20:31.236902Z",
+"pushed_at": "2026-07-02T16:20:31.236902Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agenticshelf/puroair",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/observer-protocol/at-directory",
+"source": "mcp_registry",
+"title": "Agentic Terminal Directory",
+"desc": "Verified merchants accepting agentic payments on Lightning/L402/BOLT12/USDT — search, verify, pay.",
+"repo_url": "https://github.com/observer-protocol/at-directory",
+"repo_slug": "observer-protocol/at-directory",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agenticterminal/directory",
+"endpoint": "https://mcp.agenticterminal.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-05-19T15:17:01.794422Z",
+"pushed_at": "2026-05-19T15:17:01.794422Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agenticterminal/directory",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentlookups/counterscript",
+"source": "mcp_registry",
+"title": "ai.agentlookups/counterscript",
+"desc": "What pharmacies actually pay for prescriptions (CMS NADAC) plus fair-cash-price estimates.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentlookups/counterscript",
+"endpoint": "https://rx.agentlookups.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-05T00:13:29.161664Z",
+"pushed_at": "2026-08-05T00:13:29.161664Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentlookups/counterscript",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentlookups/groundrules",
+"source": "mcp_registry",
+"title": "GroundRules - US Law Text",
+"desc": "The original text of US federal and state law, with official sources; never a summary or advice.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentlookups/groundrules",
+"endpoint": "https://law.agentlookups.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-09T19:30:00.23043Z",
+"pushed_at": "2026-10-09T19:30:00.23043Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentlookups/groundrules",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentlookups/groundtruth",
+"source": "mcp_registry",
+"title": "ai.agentlookups/groundtruth",
+"desc": "Federal environmental records + address due-diligence layers near any US location. Tools",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentlookups/groundtruth",
+"endpoint": "https://env.agentlookups.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-05T00:12:30.451036Z",
+"pushed_at": "2026-08-05T00:12:30.451036Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentlookups/groundtruth",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentlookups/overassessed",
+"source": "mcp_registry",
+"title": "ai.agentlookups/overassessed",
+"desc": "Maryland property-assessment fairness checks vs similar homes, with appeal windows and links.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentlookups/overassessed",
+"endpoint": "https://overassessed.agentlookups.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-05T01:26:05.596901Z",
+"pushed_at": "2026-08-05T01:26:05.596901Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentlookups/overassessed",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentlookups/plumbline",
+"source": "mcp_registry",
+"title": "ai.agentlookups/plumbline",
+"desc": "Free public-record contractor license checks across 34 US jurisdictions (2.7M records). Tool",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentlookups/plumbline",
+"endpoint": "https://contractors.agentlookups.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-05T00:11:53.761275Z",
+"pushed_at": "2026-08-05T00:11:53.761275Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentlookups/plumbline",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentlookups/spoon-scout",
+"source": "mcp_registry",
+"title": "Spoon Scout - Food Contaminant Lookup",
+"desc": "Lab results, FDA recalls and additive rules for US packaged foods, with sources; never a grade.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentlookups/spoon-scout",
+"endpoint": "https://food.agentlookups.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-09T19:30:00.936116Z",
+"pushed_at": "2026-10-09T19:30:00.936116Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentlookups/spoon-scout",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/ramyachinnadurai/agentmash-mcp",
+"source": "mcp_registry",
+"title": "AgentMash",
+"desc": "All your bookmarks in one library. Share them with your AI agents. Read-only search over your saves.",
+"repo_url": "https://github.com/RamyaChinnadurai/agentmash-mcp",
+"repo_slug": "ramyachinnadurai/agentmash-mcp",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentmash/agentmash",
+"endpoint": "https://agentmash.ai/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-10-19T20:25:29.586764Z",
+"pushed_at": "2026-10-19T20:25:29.586764Z",
+"status": "active",
+"headers_req": [
+"Your AgentMash API key from the Agents & API page, sent as: Bearer am_live_YOUR_KEY"
+],
+"extra": {
+"registry_name": "ai.agentmash/agentmash",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentmesh/mesh",
+"source": "mcp_registry",
+"title": "AgentMesh",
+"desc": "Be an agent on the AgentMesh network: find agents, hire them, be hired, and read your mesh inbox.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentmesh/mesh",
+"endpoint": "https://api.agentmesh.ai/v1/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-23T19:33:28.656602Z",
+"pushed_at": "2026-08-23T19:33:28.656602Z",
+"status": "active",
+"headers_req": [
+"Bearer <token>. Create the token at https://app.agentmesh.ai on the Keys page (Connect your assistant), then enter it as: Bearer amt_..."
+],
+"extra": {
+"registry_name": "ai.agentmesh/mesh",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/matebenyovszky/agentplaybooks",
+"source": "mcp_registry",
+"title": "AgentPlaybooks",
+"desc": "Portable, vendor-neutral home for agent skills, MCP servers, personas, and memory.",
+"repo_url": "https://github.com/matebenyovszky/agentplaybooks",
+"repo_slug": "matebenyovszky/agentplaybooks",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentplaybooks/agentplaybooks",
+"endpoint": "https://agentplaybooks.ai/api/mcp/manage",
+"protocol": "mcp",
+"version": "0.2.0",
+"published_at": "2026-08-01T20:43:43.868547Z",
+"pushed_at": "2026-08-01T20:43:43.868547Z",
+"status": "active",
+"headers_req": [
+"Bearer AgentPlaybooks user API key (for example: Bearer apb_live_...)"
+],
+"extra": {
+"registry_name": "ai.agentplaybooks/agentplaybooks",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentrapay/agentra",
+"source": "mcp_registry",
+"title": "ai.agentrapay/agentra",
+"desc": "Identity oracle and trust layer for autonomous AI agents. Bidirectional KYA and trust scoring.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentrapay/agentra",
+"endpoint": "https://api.agentrapay.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-03-22T18:16:07.628131Z",
+"pushed_at": "2026-03-22T18:16:07.628131Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentrapay/agentra",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/adiny/nomad-crypto-travel",
+"source": "mcp_registry",
+"title": "AgentRoam",
+"desc": "Buy travel eSIMs, gift cards and mobile top-ups with crypto — user confirms before any order.",
+"repo_url": "https://github.com/adiny/nomad-crypto-travel",
+"repo_slug": "adiny/nomad-crypto-travel",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentroam/agentroam",
+"endpoint": "https://agentroam.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-22T05:50:30.033913Z",
+"pushed_at": "2026-08-22T05:50:30.033913Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentroam/agentroam",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentsindex/mcp",
+"source": "mcp_registry",
+"title": "AgentsIndex",
+"desc": "The editors' index of AI-native software, from AI agents to the models and frameworks behind them.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentsindex/mcp",
+"endpoint": "https://agentsindex.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-17T09:52:22.073002Z",
+"pushed_at": "2026-10-17T09:52:22.073002Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentsindex/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentui/apps",
+"source": "mcp_registry",
+"title": "AgentUI Apps",
+"desc": "Create AgentUI data apps: define tables, read and write records, and run programs on your data.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentui/apps",
+"endpoint": "https://api.agentui.ai/mcp/apps",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-08T21:55:51.059935Z",
+"pushed_at": "2026-10-08T21:55:51.059935Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentui/apps",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agentxray/mcp",
+"source": "mcp_registry",
+"title": "ai.agentxray/mcp",
+"desc": "Amazon sellers: real per-unit profit from your own settlement data, plus drafts you approve.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agentxray/mcp",
+"endpoint": "https://agentxray.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-09-01T10:54:13.681499Z",
+"pushed_at": "2026-09-23T07:41:46.659667Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agentxray/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aginera/preconstruction",
+"source": "mcp_registry",
+"title": "Aginera",
+"desc": "Turn construction drawings into takeoffs, measured routes, schedules and estimates.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aginera/preconstruction",
+"endpoint": "https://mcp.aginera.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-09-03T22:59:05.289477Z",
+"pushed_at": "2026-09-03T22:59:05.289477Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aginera/preconstruction",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.agothe.mcp-chatgpt/agent-contract-preflight",
+"source": "mcp_registry",
+"title": "Agothe Agent Contract Preflight",
+"desc": "Deterministic MCP, JSON Schema, and SemVer preflight via Agothe's public MUV scope.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.agothe.mcp-chatgpt/agent-contract-preflight",
+"endpoint": "https://mcp-chatgpt.agothe.ai/mcp",
+"protocol": "mcp",
+"version": "0.2.0",
+"published_at": "2026-10-05T02:57:09.099626Z",
+"pushed_at": "2026-10-05T02:57:09.099626Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.agothe.mcp-chatgpt/agent-contract-preflight",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.ai-advisors/mcp",
+"source": "mcp_registry",
+"title": "AI-Advisors",
+"desc": "Read-only AI search visibility data: citations, AEO audits, and advisor insights from AI-Advisors.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.ai-advisors/mcp",
+"endpoint": "https://app.ai-advisors.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-02T18:21:16.578234Z",
+"pushed_at": "2026-08-02T18:21:16.578234Z",
+"status": "active",
+"headers_req": [
+"Bearer <personal access token>. Generate the token (aia_...) in AI-Advisors under Settings > MCP Access; tokens are revocable and scoped to your workspace."
+],
+"extra": {
+"registry_name": "ai.ai-advisors/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/ainoakari/ainoakari",
+"source": "mcp_registry",
+"title": "AIﾉアカリ☆ Agent Trust Receipt",
+"desc": "Read-only Remote MCP for externally grounded AI agent trust receipts.",
+"repo_url": "https://github.com/AInoAKARI/AInoAKARI",
+"repo_slug": "ainoakari/ainoakari",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.ai-akari/agent-trust-receipt",
+"endpoint": "https://ai-akari.ai/mcp-trust",
+"protocol": "mcp",
+"version": "1.1.0",
+"published_at": "2026-07-24T19:48:47.852003Z",
+"pushed_at": "2026-07-24T19:48:47.852003Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.ai-akari/agent-trust-receipt",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/ainoakari/arigatou-kawaii-lp",
+"source": "mcp_registry",
+"title": "AIﾉアカリ☆ One-Minute Akari",
+"desc": "A free one-minute reset for people, delivered by AI, with no account or personal data.",
+"repo_url": "https://github.com/AInoAKARI/arigatou-kawaii-lp",
+"repo_slug": "ainoakari/arigatou-kawaii-lp",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.ai-akari/one-minute-akari",
+"endpoint": "https://ai-akari.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.3",
+"published_at": "2026-07-18T04:01:27.700359Z",
+"pushed_at": "2026-07-18T04:01:27.700359Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.ai-akari/one-minute-akari",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.ai-portal/ai-portal",
+"source": "mcp_registry",
+"title": "AI-Portal — Enterprise GenAI Briefing",
+"desc": "Live AI data for agents: model releases, regulations (EU AI Act), GenAI glossary, daily news.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.ai-portal/ai-portal",
+"endpoint": "https://www.ai-portal.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-07-13T15:05:45.500333Z",
+"pushed_at": "2026-07-13T15:05:45.500333Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.ai-portal/ai-portal",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/eantoniomota/aidoo-mcp",
+"source": "mcp_registry",
+"title": "Aidoo for Odoo",
+"desc": "Query and update your Odoo ERP in plain language, under your own Odoo access rules.",
+"repo_url": "https://github.com/eantoniomota/aidoo-mcp",
+"repo_slug": "eantoniomota/aidoo-mcp",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aidoo/aidoo",
+"endpoint": "https://mcp.aidoo.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-09-22T16:55:46.749657Z",
+"pushed_at": "2026-09-22T16:55:46.749657Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aidoo/aidoo",
+"remotes_count": 2,
+"confidence": 5
+}
+},
+{
+"id": "github.com/haf/glimt",
+"source": "mcp_registry",
+"title": "ai.aient/mcp",
+"desc": "MCP-native AI SRE: ask what's broken in production, get a reviewed GitHub fix PR.",
+"repo_url": "https://github.com/haf/glimt",
+"repo_slug": "haf/glimt",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aient/mcp",
+"endpoint": "https://aient.ai/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-06-11T10:40:20.47951Z",
+"pushed_at": "2026-06-11T10:40:20.47951Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aient/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.airshelf/catalog",
+"source": "mcp_registry",
+"title": "AirShelf Catalog",
+"desc": "Cross-vendor B2B catalog for AI agents: search, compare, find equivalents, request a quote.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.airshelf/catalog",
+"endpoint": "https://mcp.airshelf.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-06-16T09:32:12.311101Z",
+"pushed_at": "2026-06-16T09:32:12.311101Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.airshelf/catalog",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aislabs/cve",
+"source": "mcp_registry",
+"title": "AIS CVE Priorities — daily exploit-ranked patch list for AI agents",
+"desc": "Daily CVE priorities ranked by real exploitation (KEV+EPSS) for AI agents; free teaser, paid full",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aislabs/cve",
+"endpoint": "https://api.aislabs.ai/cve/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-08-31T21:00:04.921147Z",
+"pushed_at": "2026-08-31T21:00:04.921147Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aislabs/cve",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aislabs/gateway",
+"source": "mcp_registry",
+"title": "AIS Gateway — CVE prioritization + Agent Flight Recorder for AI agents",
+"desc": "Daily CVE priorities (KEV+EPSS) + Agent Flight Recorder: dead-man alerts & resume for AI agents",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aislabs/gateway",
+"endpoint": "https://api.aislabs.ai/mcp",
+"protocol": "mcp",
+"version": "0.3.0",
+"published_at": "2026-08-26T23:21:38.541211Z",
+"pushed_at": "2026-08-26T23:21:38.541211Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aislabs/gateway",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aislabs/recorder",
+"source": "mcp_registry",
+"title": "AIS Agent Flight Recorder — dead-man alerts & resume for AI agents",
+"desc": "Dead-man switch for AI agents & cron jobs: heartbeat with state capsule, alerts + resume links",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aislabs/recorder",
+"endpoint": "https://api.aislabs.ai/recorder/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-08-31T20:30:22.269692Z",
+"pushed_at": "2026-08-31T20:30:22.269692Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aislabs/recorder",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aistlabs/aistlabs",
+"source": "mcp_registry",
+"title": "AISTLabs",
+"desc": "Video, image and audio generation on top AI models for agents, with an AI director built in.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aistlabs/aistlabs",
+"endpoint": "https://aistlabs.ai/mcp",
+"protocol": "mcp",
+"version": "1.40.0",
+"published_at": "2026-10-23T13:57:07.085578Z",
+"pushed_at": "2026-10-23T13:57:07.085578Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aistlabs/aistlabs",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/aitopiaai/skills",
+"source": "mcp_registry",
+"title": "AITOPIA",
+"desc": "Generate and edit images, video and audio: 300+ AI models, video tools, voice cloning, transcripts.",
+"repo_url": "https://github.com/AITOPIAai/skills",
+"repo_slug": "aitopiaai/skills",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aitopia/aitopia",
+"endpoint": "https://mcp.aitopia.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-06T16:21:58.577468Z",
+"pushed_at": "2026-10-06T16:21:58.577468Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aitopia/aitopia",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/aivikings/aivikings-mcp",
+"source": "mcp_registry",
+"title": "AiVikings.ai",
+"desc": "Find, register, and manage domains from any AI chat or agent",
+"repo_url": "https://github.com/AIvikings/aivikings-mcp",
+"repo_slug": "aivikings/aivikings-mcp",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aivikings/registrar",
+"endpoint": "https://mcp.aivikings.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.3",
+"published_at": "2026-10-24T07:37:07.635984Z",
+"pushed_at": "2026-10-24T07:37:07.635984Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aivikings/registrar",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aivonic/mcp",
+"source": "mcp_registry",
+"title": "ai.aivonic/mcp",
+"desc": "Do business with Aivonic: pricing, products, check availability, book a demo, request a quote.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aivonic/mcp",
+"endpoint": "https://mcp.aivonic.ai",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-05T14:07:36.70305Z",
+"pushed_at": "2026-08-05T14:07:36.70305Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aivonic/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.akaphone/akaphone",
+"source": "mcp_registry",
+"title": "AkaPhone",
+"desc": "Cloud Android phones for AI agents: tap, type, screenshot, install APKs, run plain-English tasks.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.akaphone/akaphone",
+"endpoint": "https://app.akaphone.ai/mcp",
+"protocol": "mcp",
+"version": "1.1.2",
+"published_at": "2026-10-28T10:33:32.467856Z",
+"pushed_at": "2026-10-28T10:33:32.467856Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.akaphone/akaphone",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.akkrudata/akkrudata",
+"source": "mcp_registry",
+"title": "AkkruData",
+"desc": "SEC filings, financial statements, metrics, insider and institutional holdings as structured data",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.akkrudata/akkrudata",
+"endpoint": "https://api.akkrudata.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-09-08T20:43:00.297171Z",
+"pushed_at": "2026-09-08T20:43:00.297171Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.akkrudata/akkrudata",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.alcock/arena",
+"source": "mcp_registry",
+"title": "Alcock Arena",
+"desc": "A forecasting gym for AI agents. Forecast real outcomes, get graded by reality, climb a leaderboard.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.alcock/arena",
+"endpoint": "https://alcock.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.2.0",
+"published_at": "2026-10-05T08:03:16.325244Z",
+"pushed_at": "2026-10-05T08:03:16.325244Z",
+"status": "active",
+"headers_req": [
+"Optional. Bearer <api key> from the register tool. Tools that need a key also accept it as api_key."
+],
+"extra": {
+"registry_name": "ai.alcock/arena",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.alphabazaar/arena",
+"source": "mcp_registry",
+"title": "Alpha Bazaar Arena",
+"desc": "Paper-trading arena for AI agents: publish stock calls, build attested track records, compete.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.alphabazaar/arena",
+"endpoint": "https://api.alphabazaar.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-12T19:11:29.854191Z",
+"pushed_at": "2026-10-12T19:11:29.854191Z",
+"status": "active",
+"headers_req": [
+"Bearer ab_live_... API key. Read tools work without it; publishing needs it. Get one free: POST https://api.alphabazaar.ai/api/agents/register"
+],
+"extra": {
+"registry_name": "ai.alphabazaar/arena",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.alphacreek/alphacreek-mcp",
+"source": "mcp_registry",
+"title": "AlphaCreek MCP",
+"desc": "Access SEC filings efficiently, save time and tokens, and get cited answers.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.alphacreek/alphacreek-mcp",
+"endpoint": "https://mcp.alphacreek.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-06-12T11:23:38.376668Z",
+"pushed_at": "2026-06-12T11:23:38.376668Z",
+"status": "active",
+"headers_req": [
+"Bearer token: OAuth access token (Claude/ChatGPT) or AlphaCreek MCP API key from dashboard"
+],
+"extra": {
+"registry_name": "ai.alphacreek/alphacreek-mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.alpic.alpix/alpix",
+"source": "mcp_registry",
+"title": "AlpiX",
+"desc": "A pixel wars MCP server: ask your agent to collaboratively draw pixels in a huge square",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.alpic.alpix/Alpix",
+"endpoint": "https://alpix.alpic.ai",
+"protocol": "mcp",
+"version": "0.0.1",
+"published_at": "2026-08-27T08:20:57.475155Z",
+"pushed_at": "2026-08-27T08:20:57.475155Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.alpic.alpix/Alpix",
+"remotes_count": 2,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.alpic.mcp/alpic-mcp",
+"source": "mcp_registry",
+"title": "Alpic",
+"desc": "Manage your projects, debug deployment, and check analytics for any MCP server you host with Alpic",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.alpic.mcp/alpic-mcp",
+"endpoint": "https://mcp.alpic.ai",
+"protocol": "mcp",
+"version": "0.0.1",
+"published_at": "2026-02-18T15:32:32.672631Z",
+"pushed_at": "2026-02-18T15:32:32.672631Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.alpic.mcp/alpic-mcp",
+"remotes_count": 2,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.alpic.test/test-mcp-server",
+"source": "mcp_registry",
+"title": "ai.alpic.test/test-mcp-server",
+"desc": "Alpic Test MCP Server - great server!",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.alpic.test/test-mcp-server",
+"endpoint": "https://test.alpic.ai/",
+"protocol": "mcp",
+"version": "0.0.1",
+"published_at": "2025-09-10T13:57:43.256739Z",
+"pushed_at": "2025-09-10T13:57:43.256739Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.alpic.test/test-mcp-server",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.alwen/alwen",
+"source": "mcp_registry",
+"title": "Alwen",
+"desc": "One memory for every AI you work with: your rules, notes and decisions in your own Git repo.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.alwen/alwen",
+"endpoint": "https://api.alwen.ai/mcp",
+"protocol": "mcp",
+"version": "0.4.0",
+"published_at": "2026-10-22T13:04:10.269136Z",
+"pushed_at": "2026-10-22T13:04:10.269136Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.alwen/alwen",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/ambix-ai/mcp",
+"source": "mcp_registry",
+"title": "Ambix",
+"desc": "Your product team's shared strategic memory — an MCP server your AI tools reason over.",
+"repo_url": "https://github.com/ambix-ai/mcp",
+"repo_slug": "ambix-ai/mcp",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.ambix/ambix",
+"endpoint": "https://mcp.ambix.ai",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-06-18T11:40:33.32243Z",
+"pushed_at": "2026-06-18T11:40:33.32243Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.ambix/ambix",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.amdahl/amdahl",
+"source": "mcp_registry",
+"title": "Amdahl",
+"desc": "Sales drafts in the sender's voice, and answers from your own customer calls, notes and CRM deals.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.amdahl/amdahl",
+"endpoint": "https://app.amdahl.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-16T13:39:52.924283Z",
+"pushed_at": "2026-10-16T13:39:52.924283Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.amdahl/amdahl",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.analyticslegends/sap-analytics",
+"source": "mcp_registry",
+"title": "Analytics Legends — SAP Analytics Intelligence",
+"desc": "AI agent for SAP analytics: firms, day rates, contract radar, news, concepts, studies",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.analyticslegends/sap-analytics",
+"endpoint": "https://analyticslegends.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-07-30T11:41:55.972984Z",
+"pushed_at": "2026-07-30T11:41:55.972984Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.analyticslegends/sap-analytics",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.anha/resolver",
+"source": "mcp_registry",
+"title": "ai.anha/resolver",
+"desc": "Resolve @handles to post-quantum-signed agent identities and transact with the brands behind them.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.anha/resolver",
+"endpoint": "https://resolver.anha.ai/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-09-13T03:16:03.080006Z",
+"pushed_at": "2026-09-13T03:16:03.080006Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.anha/resolver",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/ankimcp/anki-mcp-server",
+"source": "mcp_registry",
+"title": "Anki MCP Server",
+"desc": "MCP server for Anki flashcards: adaptive review, notes, media, and deck management via AnkiConnect.",
+"repo_url": "https://github.com/ankimcp/anki-mcp-server",
+"repo_slug": "ankimcp/anki-mcp-server",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.ankimcp/anki-mcp-server",
+"version": "0.18.4",
+"downloads": 565,
+"published_at": "2026-04-23T19:01:04.63097Z",
+"pushed_at": "2026-04-23T19:01:04.63097Z",
+"status": "active",
+"lang": "JavaScript",
+"extra": {
+"registry_name": "ai.ankimcp/anki-mcp-server",
+"remotes_count": 0,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.ankra/platform",
+"source": "mcp_registry",
+"title": "Ankra",
+"desc": "Deploy and operate Kubernetes: clusters, stacks, apps, logs, metrics and security, with OAuth.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.ankra/platform",
+"endpoint": "https://platform.ankra.app/api/v1/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-10T08:35:26.39314Z",
+"pushed_at": "2026-10-10T08:35:26.39314Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.ankra/platform",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.annsa/annsa",
+"source": "mcp_registry",
+"title": "Annsa",
+"desc": "The source of direction for your agents: what to build next, its spec and the calls you made.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.annsa/annsa",
+"endpoint": "https://app.annsa.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.3",
+"published_at": "2026-10-16T05:47:05.34641Z",
+"pushed_at": "2026-10-16T05:47:05.34641Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.annsa/annsa",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/anomalyarmor/agents",
+"source": "mcp_registry",
+"title": "AnomalyArmor",
+"desc": "Data observability tools for engineering teams: alerts, freshness, schema drift, lineage, quality.",
+"repo_url": "https://github.com/anomalyarmor/agents",
+"repo_slug": "anomalyarmor/agents",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.anomalyarmor/armor-mcp",
+"endpoint": "https://mcp.anomalyarmor.ai/mcp",
+"protocol": "mcp",
+"version": "0.6.1",
+"published_at": "2026-04-18T00:51:37.350253Z",
+"pushed_at": "2026-04-18T00:51:37.350253Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.anomalyarmor/armor-mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.anyforge/anyforge",
+"source": "mcp_registry",
+"title": "AnyForge",
+"desc": "Approve plans, track initiatives and work items, and steer AI engineering crews in AnyForge.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.anyforge/anyforge",
+"endpoint": "https://crew.anyforge.ai/api/mcp",
+"protocol": "mcp",
+"version": "3.14.2",
+"published_at": "2026-10-28T18:39:48.274568Z",
+"pushed_at": "2026-10-28T18:39:48.274568Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.anyforge/anyforge",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.anywhereintelligence/switchboard",
+"source": "mcp_registry",
+"title": "Switchboard",
+"desc": "Agent to agent calls across AI apps. Humans remain in authority.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.anywhereintelligence/switchboard",
+"endpoint": "https://switchboard.anywhereintelligence.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-09T09:53:23.549252Z",
+"pushed_at": "2026-10-09T09:53:23.549252Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.anywhereintelligence/switchboard",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.anzenna/anzenna",
+"source": "mcp_registry",
+"title": "ai.anzenna/anzenna",
+"desc": "MCP server for Anzenna",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.anzenna/anzenna",
+"endpoint": "https://mcp.anzenna.ai/sse",
+"protocol": "mcp",
+"version": "0.1",
+"published_at": "2026-02-21T23:53:55.798606Z",
+"pushed_at": "2026-02-21T23:53:55.798606Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.anzenna/anzenna",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.apatero/studio",
+"source": "mcp_registry",
+"title": "Apatero Studio",
+"desc": "AI image and video generation, talking avatars, consistent characters and photo packs from Claude.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.apatero/studio",
+"endpoint": "https://mcp.apatero.ai/mcp",
+"protocol": "mcp",
+"version": "0.2.0",
+"published_at": "2026-09-16T11:53:14.175458Z",
+"pushed_at": "2026-09-16T11:53:14.175458Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.apatero/studio",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.apiant/apiant",
+"source": "mcp_registry",
+"title": "APIANT",
+"desc": "Build, run and manage APIANT automations across hundreds of apps.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.apiant/apiant",
+"endpoint": "https://mcp.apiant.ai",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-24T18:42:59.060609Z",
+"pushed_at": "2026-10-24T18:42:59.060609Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.apiant/apiant",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.apir/verify",
+"source": "mcp_registry",
+"title": "APIR Agent Verification",
+"desc": "Check an AI agent you did not build: is it who it claims, inside its mandate, and what's its record",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.apir/verify",
+"endpoint": "https://apir.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-13T04:54:02.612664Z",
+"pushed_at": "2026-10-13T04:54:02.612664Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.apir/verify",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.appdeploy/deploy-app",
+"source": "mcp_registry",
+"title": "AppDeploy",
+"desc": "AppDeploy turns app ideas described in AI chat into live full-stack web applications",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.appdeploy/deploy-app",
+"endpoint": "https://api-v2.appdeploy.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-02-09T15:16:30.60739Z",
+"pushed_at": "2026-02-09T15:16:30.60739Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.appdeploy/deploy-app",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.appgoat/mcp",
+"source": "mcp_registry",
+"title": "AppGoat",
+"desc": "App Store and Google Play data: apps, reviews, keywords, charts, competitors, ASO playbooks.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.appgoat/mcp",
+"endpoint": "https://api.appgoat.ai/mcp",
+"protocol": "mcp",
+"version": "0.2.0",
+"published_at": "2026-10-23T17:34:02.044944Z",
+"pushed_at": "2026-10-23T17:34:02.044944Z",
+"status": "active",
+"headers_req": [
+"Optional AppGoat API key from dash.appgoat.ai; omit to sign in with OAuth"
+],
+"extra": {
+"registry_name": "ai.appgoat/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.aqta/seal",
+"source": "mcp_registry",
+"title": "ai.aqta/seal",
+"desc": "Verify Seal AI decision receipts: signed evidence anyone can check, no account needed.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.aqta/seal",
+"endpoint": "https://app.aqta.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-17T22:32:58.036357Z",
+"pushed_at": "2026-08-17T22:32:58.036357Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.aqta/seal",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.arabickeyboard/name-calligraphy",
+"source": "mcp_registry",
+"title": "Arabic Name Calligraphy",
+"desc": "Writes any name in Arabic and shows it in six calligraphy styles, with meaning and pronunciation.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.arabickeyboard/name-calligraphy",
+"endpoint": "https://arabickeyboard.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-11T21:21:21.960661Z",
+"pushed_at": "2026-10-11T21:21:21.960661Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.arabickeyboard/name-calligraphy",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.arcdeck/arcdeck",
+"source": "mcp_registry",
+"title": "Arcdeck",
+"desc": "Create consulting-style presentation decks (editable PowerPoint) from a topic or notes.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.arcdeck/arcdeck",
+"endpoint": "https://arcdeck.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-11T09:53:20.200537Z",
+"pushed_at": "2026-10-11T09:53:20.200537Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.arcdeck/arcdeck",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.archome/archome",
+"source": "mcp_registry",
+"title": "Archome AI",
+"desc": "AI virtual staging and architectural rendering: stage rooms, render interiors, exteriors, sketches.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.archome/archome",
+"endpoint": "https://archome.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-06T15:01:24.655991Z",
+"pushed_at": "2026-10-06T15:01:24.655991Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.archome/archome",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.arclan/registry",
+"source": "mcp_registry",
+"title": "Arclan MCP Registry",
+"desc": "MCP server registry — validated by live handshake, scored on reliability, monitored continuously.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.arclan/registry",
+"endpoint": "https://arclan.ai/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-05-19T16:59:50.65972Z",
+"pushed_at": "2026-05-19T16:59:50.65972Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.arclan/registry",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.arcreport/ask",
+"source": "mcp_registry",
+"title": "ARC (arcreport.ai): can an agent reach checkout?",
+"desc": "Free open check: can an AI agent reach checkout on this store? Advisory; ARC stops before payment.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.arcreport/ask",
+"endpoint": "https://www.arcreport.ai/api/ask",
+"protocol": "mcp",
+"version": "2026.10.14",
+"published_at": "2026-10-14T14:24:24.083848Z",
+"pushed_at": "2026-10-14T14:24:24.083848Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.arcreport/ask",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.arcreport/mcp",
+"source": "mcp_registry",
+"title": "ARC store checks",
+"desc": "Saved agent-checkout evidence per store, free: check_store, find_stores. Scans need OAuth.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.arcreport/mcp",
+"endpoint": "https://www.arcreport.ai/api/mcp",
+"protocol": "mcp",
+"version": "2.1.0",
+"published_at": "2026-10-12T18:55:06.786571Z",
+"pushed_at": "2026-10-12T18:55:06.786571Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.arcreport/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/andrewjgaber-commits/empire-distribution",
+"source": "mcp_registry",
+"title": "ai.argushq/enforcement-database",
+"desc": "Search Argus HQ public FDA enforcement data: warning letters, recalls, approvals, 483s.",
+"repo_url": "https://github.com/andrewjgaber-commits/empire-distribution",
+"repo_slug": "andrewjgaber-commits/empire-distribution",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.argushq/enforcement-database",
+"endpoint": "https://argushq.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-07-12T20:32:22.415073Z",
+"pushed_at": "2026-07-12T20:32:22.415073Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.argushq/enforcement-database",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.arihaan/jobs",
+"source": "mcp_registry",
+"title": "Arihaan Jobs",
+"desc": "Live job postings from employer career sites: search, count and compare jobs and companies.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.arihaan/jobs",
+"endpoint": "https://jobs-api.arihaan.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-21T12:31:14.016459Z",
+"pushed_at": "2026-10-21T12:31:14.016459Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.arihaan/jobs",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.arketo/arketo",
+"source": "mcp_registry",
+"title": "Arketo",
+"desc": "Draw your app's architecture on a live canvas and flag the bottlenecks and security gaps.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.arketo/arketo",
+"endpoint": "https://arketo.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-05T15:03:17.857696Z",
+"pushed_at": "2026-08-05T15:03:17.857696Z",
+"status": "active",
+"headers_req": [
+"Bearer <key>. Free account at https://arketo.ai/signup, then copy the key from your dashboard."
+],
+"extra": {
+"registry_name": "ai.arketo/arketo",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/arpi-ai/arpi-mcp",
+"source": "mcp_registry",
+"title": "ARPI MCP",
+"desc": "AI-powered ECG analysis: submit ECG images and receive diagnosis reports from ARPI's ECG AI.",
+"repo_url": "https://github.com/arpi-ai/arpi-mcp",
+"repo_slug": "arpi-ai/arpi-mcp",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.arpi/arpi-mcp",
+"endpoint": "https://mcp.arpi.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-07-08T04:42:03.74166Z",
+"pushed_at": "2026-07-08T04:42:03.74166Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.arpi/arpi-mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.artemisgtm/gtm-engineer",
+"source": "mcp_registry",
+"title": "ai.artemisgtm/gtm-engineer",
+"desc": "GTM engineering consulting firm for seed to Series C startups. We build and run GTM systems.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.artemisgtm/gtm-engineer",
+"endpoint": "https://artemisgtm.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-20T13:37:55.768551Z",
+"pushed_at": "2026-10-20T13:37:55.768551Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.artemisgtm/gtm-engineer",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.artidrop/artidrop",
+"source": "mcp_registry",
+"title": "ai.artidrop/artidrop",
+"desc": "The publishing layer for AI agents. Turn HTML and Markdown into shareable URLs instantly via MCP.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.artidrop/artidrop",
+"endpoint": "https://artidrop.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-04-03T15:06:01.506001Z",
+"pushed_at": "2026-04-03T15:06:01.506001Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.artidrop/artidrop",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/centricai/arvx-mcp",
+"source": "mcp_registry",
+"title": "ARVX",
+"desc": "Email for long-term client relationships: ARVX reads each person first and remembers every pair.",
+"repo_url": "https://github.com/centricai/arvx-mcp",
+"repo_slug": "centricai/arvx-mcp",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.arvx/arvx",
+"endpoint": "https://mcp.arvx.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-19T02:55:15.554192Z",
+"pushed_at": "2026-10-19T02:55:15.554192Z",
+"status": "active",
+"headers_req": [
+"Your ARVX key. A person creates it at https://api.arvx.ai/account."
+],
+"extra": {
+"registry_name": "ai.arvx/arvx",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.askatria/atria",
+"source": "mcp_registry",
+"title": "Atria",
+"desc": "US site diligence for agents: parcels, power, flood, zoning rules and more, each with its source.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.askatria/atria",
+"endpoint": "https://askatria.ai/mcp",
+"protocol": "mcp",
+"version": "1.2.0",
+"published_at": "2026-10-04T15:01:54.367203Z",
+"pushed_at": "2026-10-04T15:01:54.367203Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.askatria/atria",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/askgina/plugins",
+"source": "mcp_registry",
+"title": "Ask Gina",
+"desc": "Read-only research on tokens, Hyperliquid perps, Polymarket markets and your Ask Gina account.",
+"repo_url": "https://github.com/askgina/plugins",
+"repo_slug": "askgina/plugins",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.askgina/gina",
+"endpoint": "https://askgina.ai/ai/gina/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-20T21:00:52.497343Z",
+"pushed_at": "2026-10-20T21:00:52.497343Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.askgina/gina",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.askline/askline",
+"source": "mcp_registry",
+"title": "Askline",
+"desc": "Askline shows what ChatGPT says about a brand, then the SEO that feeds it.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.askline/askline",
+"endpoint": "https://askline.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-28T18:01:06.130676Z",
+"pushed_at": "2026-08-28T18:01:06.130676Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.askline/askline",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.askmiles/catalog",
+"source": "mcp_registry",
+"title": "ai.askmiles/catalog",
+"desc": "Miles' public credit-card catalog: facts, transfer partners, valuations. Keyless, read-only.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.askmiles/catalog",
+"endpoint": "https://api.askmiles.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-26T19:46:38.007401Z",
+"pushed_at": "2026-08-26T19:46:38.007401Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.askmiles/catalog",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.askwatch/gsc",
+"source": "mcp_registry",
+"title": "AskWatch Google Search Console MCP",
+"desc": "Ask Google Search Console in plain language. Hosted, free, no Google Cloud project.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.askwatch/gsc",
+"endpoint": "https://mcp.askwatch.ai/gsc",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-09-22T17:02:07.800881Z",
+"pushed_at": "2026-09-22T17:02:07.800881Z",
+"status": "active",
+"headers_req": [
+"Bearer <your AskWatch key>. Free, issued when you connect Google Search Console at https://askwatch.ai/free-tools/google-search-console-mcp. The key also works as a path segment: https://mcp.askwatch.ai/gsc/<key>."
+],
+"extra": {
+"registry_name": "ai.askwatch/gsc",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/ask-your-audience/askyouraudience",
+"source": "mcp_registry",
+"title": "Ask Your Audience",
+"desc": "Test concepts, messaging and ads with audience-matched digital twins in your AYA account.",
+"repo_url": "https://github.com/Ask-Your-Audience/askyouraudience",
+"repo_slug": "ask-your-audience/askyouraudience",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.askyouraudience/ask-your-audience",
+"endpoint": "https://mcp.askyouraudience.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.1",
+"published_at": "2026-10-15T13:03:19.247829Z",
+"pushed_at": "2026-10-15T13:03:19.247829Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.askyouraudience/ask-your-audience",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.asrm/asrm",
+"source": "mcp_registry",
+"title": "ASRM (AI Search Rank Monitor)",
+"desc": "Check a website's AI readiness and answer AI visibility and GEO questions from ASRM's guides.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.asrm/asrm",
+"endpoint": "https://asrm.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-01T22:03:27.105253Z",
+"pushed_at": "2026-10-01T22:03:27.105253Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.asrm/asrm",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.assetlog/assetlog",
+"source": "mcp_registry",
+"title": "AssetLog",
+"desc": "Search and manage AssetLog listings: vehicles, real estate, jobs, CVs, favorites, AI prompts.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.assetlog/assetlog",
+"endpoint": "https://api.assetlog.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-07-12T06:44:06.803244Z",
+"pushed_at": "2026-07-12T06:44:06.803244Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.assetlog/assetlog",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.assistable/assistable",
+"source": "mcp_registry",
+"title": "Assistable",
+"desc": "Give any AI agent a phone: make and answer calls, get through phone menus, and send texts.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.assistable/assistable",
+"endpoint": "https://api.assistable.ai/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-28T18:13:24.276867Z",
+"pushed_at": "2026-10-28T18:13:24.276867Z",
+"status": "active",
+"headers_req": [
+"Bearer ask_live_... key. Optional: without one, call the assistable_connect tool to sign in by code and get a key."
+],
+"extra": {
+"registry_name": "ai.assistable/assistable",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.astrofabric/mcp",
+"source": "mcp_registry",
+"title": "ai.astrofabric/mcp",
+"desc": "Agentic growth platform: a mission agent plus 70+ metered SEO, ads, outbound and CRM ops tools.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.astrofabric/mcp",
+"endpoint": "https://www.astrofabric.ai/api/mcp",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-08-19T15:38:35.380226Z",
+"pushed_at": "2026-08-19T15:38:35.380226Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.astrofabric/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+},
+{
+"id": "github.com/aiybiz/aiybiz-next",
+"source": "mcp_registry",
+"title": "Atako",
+"desc": "Remote MCP server to read and manage your Atako AI agents, messages, files, and integrations.",
+"repo_url": "https://github.com/aiybiz/aiybiz-next",
+"repo_slug": "aiybiz/aiybiz-next",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.atako/mcp",
+"endpoint": "https://api.atako.ai/mcp",
+"protocol": "mcp",
+"version": "0.1.0",
+"published_at": "2026-09-10T11:38:52.479628Z",
+"pushed_at": "2026-09-10T11:38:52.479628Z",
+"status": "active",
+"headers_req": [
+"Bearer token: an Atako API key (aik_...) from Settings → API keys. Grants the 30 authenticated read/write tools, scoped to that key's owner."
+],
+"extra": {
+"registry_name": "ai.atako/mcp",
+"remotes_count": 2,
+"confidence": 5
+}
+},
+{
+"id": "reg:ai.atalay/mcp",
+"source": "mcp_registry",
+"title": "Atalay",
+"desc": "Your business data across Atalay products: websites, domains, mail, servers, e-invoices, AI.",
+"registry_url": "https://registry.modelcontextprotocol.io/?search=ai.atalay/mcp",
+"endpoint": "https://mcp.atalay.ai",
+"protocol": "mcp",
+"version": "1.0.0",
+"published_at": "2026-10-03T12:37:40.563827Z",
+"pushed_at": "2026-10-03T12:37:40.563827Z",
+"status": "active",
+"extra": {
+"registry_name": "ai.atalay/mcp",
+"remotes_count": 1,
+"confidence": 5
+}
+}
+],
+"source_counts": {
+"mcp_registry": 280,
+"github_rest": 0,
+"npm": 1213,
+"crates": 129
+}
+}
