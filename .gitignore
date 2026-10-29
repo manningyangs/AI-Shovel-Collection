@@ -9,6 +9,3 @@ _check_*.py
 _check_*.html
 _debug_*.py
 _diag_*.py
-
-# Local scratch pipeline output (线上 Actions 会生成正确的)
-live_multi.json
