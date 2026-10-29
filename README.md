@@ -1,5 +1,13 @@
 # AI 铲子大全（AI Shovels）
 
+<div align="center">
+
+**[🇨🇳 中文](README.md)** · **[🇬🇧 English](README.en.md)**
+
+[![Views](https://hits.sh/github.com/manningyangs/AI-Shovel-Collection.svg)](https://hits.sh/github.com/manningyangs/AI-Shovel-Collection/)
+
+</div>
+
 > 面向 AI 大模型、Agent、MCP 客户端与自动化工作流的工具发现目录。目标是发现能让 AI **访问数据、操作软件、执行任务、转换文件、调用专业工具或完成行业工作**的开源项目。
 >
 > 维护方式：先收集、再分类、后核验。欢迎通过 Issue / Pull Request 补充仓库、纠正分类或标记失效项目。
