@@ -36,5 +36,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add live_multi.json
           git diff --cached --quiet || git commit -m "chore: 同步多源实时数据"
-          git pull --rebase --autostash origin main || true
-          git push origin main --rebase
+          # fetch 再 push，避开本地过期快照导致的 rejected
+          git fetch origin main
+          git pull --rebase origin main --autostash || true
+          git push origin main --force-with-lease
