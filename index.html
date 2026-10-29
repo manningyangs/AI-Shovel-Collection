@@ -325,6 +325,38 @@
     background: #f1f3f5; color: #57606a;
     border-radius: 3px; padding: 0 5px; margin-left: 6px;
   }
+  .inbox-banner {
+    display: none;
+    margin: 14px 0 10px;
+    background: linear-gradient(93deg, #e8f5ee 0%, #e8fff4 100%);
+    border: 1px solid #b9ecd9; border-radius: 10px;
+    padding: 10px 14px; font-size: 13px; color: #1a5536;
+  }
+  .inbox-banner.show { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .inbox-banner .ib-count { font-weight: 800; color: #0d7a43; font-size: 15px; }
+  .btn-inbox {
+    background: #0d7a43; color: #fff; border: none; cursor: pointer;
+    font-size: 12.5px; font-weight: 600; font-family: inherit;
+    padding: 5px 12px; border-radius: 7px;
+  }
+  .btn-inbox:hover { background: #0a6236; }
+  .cat-badge {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    background: #fff6e5; color: #92400e; border: 1px solid #fde68a;
+    border-radius: 4px; padding: 1px 7px; margin-right: 5px;
+  }
+  .conf-badge {
+    display: inline-block; font-size: 10.5px; font-weight: 700;
+    background: #eef4ff; color: #1d4ed8; border: 1px solid #cfdcf7;
+    border-radius: 4px; padding: 0 6px;
+  }
+  .btn-apply {
+    display: inline-block; font-size: 11.5px; font-weight: 600;
+    color: var(--primary); background: var(--primary-soft);
+    border: 1px solid #cadcff; border-radius: 6px; padding: 3px 9px;
+    text-decoration: none; cursor: pointer;
+  }
+  .btn-apply:hover { background: #dbe7ff; text-decoration: none; }
 
   /* ---- GitHub 全站实时搜索 ---- */
   .live-search-strip {
@@ -483,9 +515,10 @@
   <section id="candidates" class="candidates-section">
     <div class="section-head">
       <h2>🧭 自动发现的候选铲子<span class="unverified-tag">自动发现</span></h2>
-      <span class="hint">由 Pipeline 从 MCP 官方 Registry / npm / crates 自动挖到，<b>未人工核验</b></span>
+      <span class="hint">由 Pipeline 从 MCP Registry / npm / crates.io 挖到，<b>未人工核验</b></span>
     </div>
     <div class="candidates-hint">候选按 <b>MCP 官方注册 + Stars / 下载量 + 端点可调用 + 活跃状态</b> 加权排序 · 当前每轮保留 Top <b id="candidateCount">…</b> 条</div>
+    <div id="inboxBanner" class="inbox-banner"></div>
     <div class="grid" id="candidateGrid"></div>
   </section>
 
@@ -653,10 +686,15 @@
       candidateItems = [];
       return;
     }
-    // 用 catalog 的 repo_slugs 建一个 set，候选与 curated 重叠的剔除（避免重复出现）
+    // inbox 是高置信候选列表，用 id 建索引方便查 catalog_row / suggested_category
+    var inboxIndex = {};
+    if (Array.isArray(livePayload.inbox)) {
+      livePayload.inbox.forEach(function (i) { inboxIndex[i.id] = i; });
+    }
     var curatedIds = {};
     items.forEach(function (it) { curatedIds[it.slug.toLowerCase()] = true; });
     candidateItems = livePayload.candidates.map(function (e) {
+      var inbox = inboxIndex[e.id];
       var url = e.repo_url || e.registry_url || "#";
       return {
         id: e.id,
@@ -676,15 +714,69 @@
         license: e.license,
         published_at: e.published_at,
         confidence: (e.extra && e.extra.confidence) || 0,
+        suggested_category: (inbox && inbox.suggested_category) || "",
+        category_hits: (inbox && inbox.category_hits) || [],
+        catalog_row: (inbox && inbox.catalog_row) || "",
+        isInbox: !!inbox,
         isCandidate: true,
-        hay: (e.title + " " + (e.desc || "") + " " + (e.repo_slug || "") + " " + (e.source || "") + " stars" + (e.stars || 0) + " " + (e.lang || "") + " " + (e.endpoint || "")).toLowerCase()
+        hay: (e.title + " " + (e.desc || "") + " " + (e.repo_slug || "") + " " + (e.source || "") + " stars" + (e.stars || 0) + " " + (e.lang || "") + " " + (e.endpoint || "") + " " + ((inbox && inbox.suggested_category) || "")).toLowerCase()
       };
     }).filter(function (c) {
-      // 剔除与 curated 重复的
       if (c.slug && curatedIds[c.slug.toLowerCase()]) return false;
       return true;
     });
     document.getElementById("candidateCount").textContent = candidateItems.length;
+  }
+
+  // 生成预填 GitHub issue URL（候选 → 精选申请）
+  function applyIssueUrl(c) {
+    var repo = "https://github.com/manningyangs/AI-Shovel-Collection";
+    var title = "🤖 申请入精选：" + (c.title || c.id);
+    var hits = (c.category_hits || []).join(" / ");
+    var body =
+"### 候选转精选申请（Phase 2 自动发现）\n\n" +
+"**自动发现来源**: " + (c.source || "unknown") + "\n\n" +
+"**标题**: " + (c.title || "") + "\n\n" +
+"**描述**: " + (c.desc || "—") + "\n\n" +
+"**仓库/注册表**: " + (c.url || "") + "\n\n" +
+"**端点**: " + (c.endpoint || "—") + "\n\n" +
+"**Stars**: " + (c.stars != null ? c.stars : "未知") + "\n\n" +
+"**自动建议分类**: `" + (c.suggested_category || "（请人工判断）") + "`" +
+      (hits ? "（命中关键词: " + hits + "）" : "") + "\n\n" +
+"**Pipeline confidence**: " + (c.confidence || 0) + " / 9\n\n" +
+"---\n\n" +
+"### 建议 catalog.csv 行（复制后粘贴到合适位置）\n\n" +
+"```csv\n" + (c.catalog_row || c.suggested_category + "," + (c.title || "") + "," + (c.url || "")) + "\n```\n\n" +
+"---\n\n" +
+"请人类审核后决定：\n" +
+"- ✅ 接受：把上面的 catalog.csv 行手动追加到 catalog.csv 并提 PR\n" +
+"- ❌ 拒绝：在下方评论说明理由，Bot 会把此候选从 seen 中移除以便后续重新评估\n\n" +
+"_本 issue 由多源 Pipeline Phase 2 自动生成。_";
+    return repo + "/issues/new?title=" + encodeURIComponent(title) + "&body=" + encodeURIComponent(body);
+  }
+
+  function renderInboxBanner() {
+    var banner = document.getElementById("inboxBanner");
+    if (!livePayload || !Array.isArray(livePayload.inbox) || !livePayload.inbox.length) {
+      banner.classList.remove("show");
+      return;
+    }
+    var inbox = livePayload.inbox;
+    var count = inbox.length;
+    var threshold = livePayload.threshold || 7;
+    banner.innerHTML =
+      '<span class="ib-count">✨ ' + count + ' 条高置信候选</span>' +
+      '<span>满足 confidence ≥ ' + threshold + ' · 每条都带建议分类 + catalog.csv 行模板</span>' +
+      '<button class="btn-inbox" onclick="location.href=\'' + esc(applyIssueUrl(inbox[0])) + '\'">查看 inbox 汇总</button>' +
+      '<button class="btn-inbox" onclick="openInboxAll()">批量打开申请</button>';
+    banner.classList.add("show");
+  }
+
+  function openInboxAll() {
+    if (!livePayload || !Array.isArray(livePayload.inbox)) return;
+    livePayload.inbox.forEach(function (i) {
+      try { window.open(applyIssueUrl(i), "_blank", "noopener,noreferrer"); } catch (e) {}
+    });
   }
 
   function buildItems(rows) {
@@ -936,6 +1028,7 @@
 
   // 候选区块渲染（独立，不受分类 chip 影响，但受搜索词过滤）
   function renderCandidates() {
+    renderInboxBanner();
     var section = document.getElementById("candidates");
     var grid = document.getElementById("candidateGrid");
     var list = candidateItems;
@@ -947,22 +1040,34 @@
     section.style.display = "";
     grid.innerHTML = list.map(function (c) {
       var titleUrl = c.url || "#";
+      var catBadge = c.suggested_category && c.isInbox
+        ? '<span class="cat-badge" title="自动建议分类">' + esc(c.suggested_category.split(". ", 2)[0]) + "</span>"
+        : "";
+      var confBadge = c.confidence
+        ? '<span class="conf-badge" title="Pipeline confidence 评分">' + c.confidence + "/9</span>"
+        : "";
+      var applyBtn = c.repo_url || c.registry_url
+        ? '<a class="btn-apply" href="' + applyIssueUrl(c) + '" target="_blank" rel="noopener">🔍 申请入精选</a>'
+        : "";
+      var inBoxTag = c.isInbox
+        ? '<span class="unverified-tag" style="background:#0d7a43;color:#fff">✨ Inbox</span>'
+        : "";
       return '<article class="card unverified">' +
         '<div class="card-top">' +
           '<div class="card-title"><a href="' + esc(titleUrl) + '" target="_blank" rel="noopener">' +
-            highlight(c.title, query) + "</a></div>" +
+            highlight(c.title, query) + inBoxTag + "</a></div>" +
           sourceBadge(c.source) +
         "</div>" +
         (c.desc ? '<div class="card-desc">' + highlight(c.desc, query) + "</div>" : "") +
         epPill(c.endpoint) +
         liveRow(c) +
+        '<div style="margin-top:6px">' + catBadge + confBadge + "</div>" +
         '<div class="card-foot">' +
           '<span class="card-repo">' + highlight((c.slug || c.id), query) + "</span>" +
-          (c.registry_url ? '<a class="ext" href="' + esc(c.registry_url) + '" target="_blank" rel="noopener">来源 ↗</a>' : "") +
+          '<span>' + applyBtn + (c.registry_url ? '<a class="ext" href="' + esc(c.registry_url) + '" target="_blank" rel="noopener" style="margin-left:6px">来源 ↗</a>' : "") + "</span>" +
         "</div>" +
       "</article>";
     }).join("");
-    // 没有候选项或过滤后空
     if (!list.length) {
       grid.innerHTML = '<div class="empty" style="display:block">没有匹配的候选自动发现条目</div>';
     }

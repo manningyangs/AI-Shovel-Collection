@@ -29,6 +29,9 @@ from typing import Optional
 TOKEN = os.environ.get("GITHUB_TOKEN", "")
 CATALOG = "catalog.csv"
 OUTPUT = "live_multi.json"
+SEEN_STATE = "scripts/.state/seen_candidates.json"  # 持久化已处理候选主键
+INBOX_DIR = "_inbox"                              # 每轮 inbox 输出目录
+INBOX_THRESHOLD = 7                               # confidence ≥ 此值才进 inbox；线上有 token + stars 权重时大多数候选能到 7-8
 
 CANDIDATE_LIMIT = 150
 SLEEP_GITHUB = 0.18
@@ -41,6 +44,63 @@ MCP_KEYWORDS = [
 ]
 AGENT_KEYWORDS = [
     "agent-tool", "agent-skill", "ai-tool", "ai-automation",
+]
+
+# 17 分类关键词推断规则（候选 → 精选时的自动分类建议）
+CLASSIFY_RULES = [
+    ("1. 目录、Skills 与通用 AI 工具适配",
+     ["awesome", "directory", "catalog", "registry", "skill", "skills", "reference server",
+      "reference", "collection", "list", "framework", "adapter", "wrapper"]),
+    ("2. 浏览器、网页检索、抓取与自动化",
+     ["playwright", "browser", "firecrawl", "apify", "bright", "scrape", "crawler", "fetch",
+      "website", "scraper", "chromium", "puppeteer", "网页", "抓取", "浏览器", "automation"]),
+    ("3. 文件、Office、PDF、文档与出版",
+     ["pdf", "docx", "markdown", "pandoc", "unstructured", "office", "document", "doc",
+      "文件", "文档", "出版", "format", "convert", "parsing", "parser"]),
+    ("4. 编程、代码库、Git 与开发者工作流",
+     ["git", "github", "code", "coding", "compiler", "ide", "repository", "repo",
+      "devops", "terminal", "cli", "developer", "编程", "代码", "git hub"]),
+    ("5. 数据库、数据分析、BI 与可视化",
+     ["database", "sql", "postgres", "mysql", "sqlite", "clickhouse", "duckdb", "bigquery",
+      "analytics", "bi", "visualization", "plot", "chart", "dashboard", "数据库", "数据"]),
+    ("6. 云平台、DevOps、监控与基础设施",
+     ["aws", "azure", "gcp", "docker", "kubernetes", "k8s", "terraform", "ansible",
+      "cloud", "monitor", "observability", "infra", "infrastructure", "prometheus",
+      "grafana", "devops", "云", "监控", "容器"]),
+    ("7. 邮件、通信、日历与团队协作",
+     ["email", "mail", "slack", "discord", "teams", "calendar", "gmail", "outlook",
+      "im", "chat", "messenger", "邮件", "日历", "团队"]),
+    ("8. 财务、会计、投资与区块链",
+     ["finance", "accounting", "investment", "stock", "crypto", "blockchain", "bitcoin",
+      "wallet", "trading", "portfolio", "财务", "会计", "投资", "区块链"]),
+    ("9. 电商、零售、营销与社交媒体",
+     ["ecommerce", "shopify", "amazon", "woo", "retail", "marketing", "seo", "social",
+      "instagram", "tiktok", "twitter", "x.com", "linkedin", "电商", "营销", "零售"]),
+    ("9A. 中国本土平台适配（单独列出）",
+     ["wechat", "weixin", "微信", "飞书", "feishu", "douyin", "抖音", "baidu", "百度",
+      "taobao", "淘宝", "jingdong", "京东", "小红书", "zhihu", "知乎", "bilibili", "b站"]),
+    ("10. 设计、图片、视频、音频与创意生产",
+     ["image", "photo", "picture", "imagegen", "generative", "stable diffusion", "dall-e",
+      "video", "audio", "music", "design", "adobe", "figma", "midjourney", "设计", "视频", "图片"]),
+    ("11. CAD、BIM、工程、地理空间与地图",
+     ["cad", "bim", "revit", "gis", "geospatial", "map", "maps", "mapping", "autocad",
+      "engineering", "coordinate", "spatial", "cadastre", "geo", "mapbox", "openstreetmap",
+      "工程", "地图", "地理"]),
+    ("12. 医疗、健康、生物信息与实验室科研",
+     ["medical", "health", "bio", "biology", "genome", "protein", "clinical", "lab",
+      "research", "pharmaceutical", "drug", "molecular", "healthcare", "医疗", "健康", "生物"]),
+    ("13. 工业制造、PLC、IoT、硬件与机器人",
+     ["iot", "plc", "industrial", "robot", "hardware", "manufacturing", "factory",
+      "raspberry", "arduino", "microcontroller", "sensor", "device", "工业", "硬件", "机器人"]),
+    ("14. 汽车、车辆诊断与游戏开发",
+     ["automotive", "car", "vehicle", "obd", "diagnostic", "game", "unity", "unreal",
+      "godot", "bevy", "game engine", "游戏", "汽车"]),
+    ("15. 政务、法律、公共数据、专利与安全",
+     ["government", "gov", "legal", "law", "patent", "court", "public data", "compliance",
+      "security", "vulnerability", "threat", "privacy", "政务", "法律", "安全"]),
+    ("16. 物流、航空、旅游、招聘与其他垂直应用",
+     ["logistics", "airline", "travel", "booking", "hotel", "recruitment", "job", "hr",
+      "delivery", "shipping", "supply chain", "物流", "航空", "旅游", "招聘"]),
 ]
 
 
@@ -374,9 +434,15 @@ def run_pipeline() -> dict:
         except Exception as e:
             print(f"[{f.name}] 崩溃：{e}", file=sys.stderr)
 
-    # GitHub REST 只拉 catalog 精选
-    gh_entries = GitHubRESTFetcher(catalog_slugs).fetch()
-    all_entries.extend(gh_entries)
+    # GitHub REST：只有带 token 时才跑（匿名本地容易被限流 403）
+    if TOKEN:
+        print(f"\n[github_rest] 带 token 模式，拉 catalog.csv 精选 {len(catalog_slugs)} 个仓库…")
+        gh_entries = GitHubRESTFetcher(catalog_slugs).fetch()
+        all_entries.extend(gh_entries)
+    else:
+        print(f"\n[github_rest] 无 GITHUB_TOKEN，跳过 catalog 精选 REST 拉取（线上 Actions 会带 token 跑）")
+        print(f"[github_rest] 当前匿名环境下，curated 会只合并到 npm/crates/registry 能覆盖的 catalog 条目")
+        gh_entries = []
 
     # ---- 按 id 去重合并 ----
     name_pri = {f.name: f.priority for f in fetchers + [GitHubRESTFetcher([])]}
@@ -397,7 +463,25 @@ def run_pipeline() -> dict:
     curated = [e for e in merged if e.id in catalog_ids]
     candidates = [e for e in merged if e.id not in catalog_ids]
 
+    # ---- Phase 2: confidence + 分类推断 + seen 过滤 + inbox 输出 ----
+    def classify_candidate(entry: Entry) -> tuple:
+        """返回 (分类名, 分类命中分, 命中关键词列表)。最高分为第一候选分类。"""
+        hay = f"{entry.title} {entry.desc} {entry.repo_slug or ''} {entry.repo_url or ''} {entry.registry_url or ''}".lower()
+        best = None  # (score, cat_name, hits)
+        for cat_name, kws in CLASSIFY_RULES:
+            score, hits = 0, []
+            for kw in kws:
+                if kw.lower() in hay:
+                    # 长关键词权重更高
+                    score += 3 if len(kw) >= 8 else 2
+                    hits.append(kw)
+            if score > 0:
+                if best is None or score > best[0]:
+                    best = (score, cat_name, hits)
+        return (best[1], best[0], best[2]) if best else ("1. 目录、Skills 与通用 AI 工具适配", 0, [])
+
     for e in candidates:
+        # confidence 评分（保留原逻辑，略调权重）
         score = 0
         if e.source == "mcp_registry": score += 3
         if e.stars:
@@ -407,10 +491,107 @@ def run_pipeline() -> dict:
         if e.status == "active": score += 1
         if e.endpoint: score += 1
         if e.downloads: score += 1
+        # 有 GitHub 仓库比纯 npm/crates 包更可信（更容易直接进 catalog）
+        if e.repo_slug: score += 1
         e.extra["confidence"] = score
+
+        # 分类推断
+        cat_name, cat_score, hits = classify_candidate(e)
+        e.extra["suggested_category"] = cat_name
+        e.extra["category_confidence"] = cat_score
+        e.extra["category_hits"] = hits
 
     candidates.sort(key=lambda e: e.extra.get("confidence", 0), reverse=True)
     candidates = candidates[:CANDIDATE_LIMIT]
+
+    # 生成 catalog.csv 行模板（供人类审核时复制粘贴）
+    def catalog_row_template(entry: Entry, cat_name: str) -> str:
+        # 铲子名用 title；描述用 desc（截断到自然结尾）；URL 优先 repo_url，其次 registry_url
+        title = entry.title.strip()
+        desc = (entry.desc or "").strip()
+        if len(desc) > 40:
+            # 截断到最后一个自然标点
+            last_punct = max([desc.rfind(p) for p in ("。", ".", "；", ";", ",", "，")])
+            if last_punct > 25:
+                desc = desc[:last_punct + 1]
+        clean_title = re.sub(r"[（(][^）)]*[）)]", "", title).strip()  # 去括号描述
+        if clean_title:
+            clean_title = re.sub(r"^[A-Za-z0-9_\-./@]+", "", clean_title).strip(" -·")
+        display_title = f"{title}（{desc or '—'}）"
+        display_title = re.sub(r"\s+", " ", display_title).strip()
+        url = entry.repo_url or entry.registry_url or ""
+        return f"{cat_name},{display_title},{url}"
+
+    # ---- seen_candidates 持久化（Experience 2376165 教训：闭环不能拆） ----
+    seen = set()
+    if os.path.exists(SEEN_STATE):
+        try:
+            with open(SEEN_STATE, encoding="utf-8") as f:
+                seen = set(json.load(f))
+        except Exception:
+            seen = set()
+
+    new_seen = set(seen)
+
+    # ---- inbox 输出 ----
+    inbox_dir = os.path.join(os.path.dirname(OUTPUT), INBOX_DIR)
+    os.makedirs(inbox_dir, exist_ok=True)
+    inbox_entries = []
+
+    for e in candidates:
+        if e.id in seen:
+            continue  # 已经见过了，无论入精选还是 reject，不再重复上报
+        if e.extra.get("confidence", 0) < INBOX_THRESHOLD:
+            # confidence 不够但也是"新"候选，只进 seen 不进 inbox（避免噪声）
+            new_seen.add(e.id)
+            continue
+        if not (e.repo_url or e.registry_url):
+            continue  # 没有可指向的仓库或注册表，无法入精选
+        cat = e.extra.get("suggested_category", "1. 目录、Skills 与通用 AI 工具适配")
+        row = catalog_row_template(e, cat)
+        inbox_entries.append({
+            "id": e.id,
+            "source": e.source,
+            "title": e.title,
+            "repo_url": e.repo_url,
+            "repo_slug": e.repo_slug,
+            "registry_url": e.registry_url,
+            "endpoint": e.endpoint,
+            "stars": e.stars,
+            "downloads": e.downloads,
+            "confidence": e.extra.get("confidence", 0),
+            "suggested_category": cat,
+            "category_confidence": e.extra.get("category_confidence", 0),
+            "category_hits": e.extra.get("category_hits", []),
+            "catalog_row": row,
+            "human_decision": None,  # 人类 review 后填 "accept" / "reject"
+        })
+        new_seen.add(e.id)
+
+    # 写 _inbox/YYYYMMDD.json
+    if inbox_entries:
+        date_tag = time.strftime("%Y%m%d", time.gmtime())
+        inbox_path = os.path.join(inbox_dir, f"{date_tag}.json")
+        inbox_generated = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        inbox_payload = {
+            "generated_at": inbox_generated,
+            "inbox_count": len(inbox_entries),
+            "new_seen_count": len(new_seen) - len(seen),
+            "threshold": INBOX_THRESHOLD,
+            "candidates": inbox_entries,
+        }
+        with open(inbox_path, "w", encoding="utf-8") as f:
+            json.dump(inbox_payload, f, ensure_ascii=False, indent=2)
+        print(f"\n[inbox] 新候选 {len(inbox_entries)} 条（confidence ≥ {INBOX_THRESHOLD}）→ {inbox_path}")
+    else:
+        print(f"\n[inbox] 本轮无新候选（confidence ≥ {INBOX_THRESHOLD} 但 seen 全部覆盖）")
+
+    # 写 seen_candidates.json（永远更新，哪怕本轮没有 inbox 条目）
+    state_dir = os.path.dirname(SEEN_STATE)
+    os.makedirs(state_dir, exist_ok=True)
+    with open(SEEN_STATE, "w", encoding="utf-8") as f:
+        json.dump(sorted(new_seen), f, ensure_ascii=False, indent=2)
+    print(f"[seen] {len(new_seen)} 条已持久化 → {SEEN_STATE}（本轮新增 {len(new_seen) - len(seen)} 条）")
 
     now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     sc = {s: sum(1 for e in merged if e.source == s) for s in name_pri}
@@ -419,8 +600,10 @@ def run_pipeline() -> dict:
         "updated_at": now,
         "curated_count": len(curated),
         "candidates_count": len(candidates),
+        "inbox_count": len(inbox_entries),
         "curated": {e.repo_slug or e.id: e.to_json() for e in curated},
         "candidates": [e.to_json() for e in candidates],
+        "inbox": inbox_entries,  # 高置信候选（confidence ≥ THRESHOLD），含建议分类 + catalog.csv 行模板
         "source_counts": sc,
     }
     with open(OUTPUT, "w", encoding="utf-8") as f:
@@ -428,7 +611,8 @@ def run_pipeline() -> dict:
 
     print(f"\n==== Pipeline 完成 ====")
     print(f"curated 精选: {len(curated)}")
-    print(f"candidates 候选: {len(candidates)}")
+    print(f"candidates 候选: {len(candidates)}（confidence 截断 Top {CANDIDATE_LIMIT}）")
+    print(f"inbox 高置信: {len(inbox_entries)}（confidence ≥ {INBOX_THRESHOLD}）")
     for s, c in sc.items():
         print(f"  {s:20s}: {c}")
     print(f"写入 {OUTPUT}")
