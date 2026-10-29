@@ -1071,7 +1071,12 @@
       section.style.display = "none";
       return;
     }
-    section.style.display = "";
+    // 尊重用户的 hide 偏好（从 localStorage 读，因为 renderCandidates 可能在 toggle 之前/之后被多次调用）
+    if (localStorage.getItem("shovel.hideCandidates") === "1") {
+      section.style.display = "none";
+    } else {
+      section.style.display = "";
+    }
     grid.innerHTML = list.map(function (c) {
       var titleUrl = c.url || "#";
       var catBadge = c.suggested_category && c.isInbox
