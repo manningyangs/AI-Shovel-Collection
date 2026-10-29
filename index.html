@@ -212,6 +212,22 @@
     background: var(--surface); border: 1px solid var(--border); border-bottom-width: 2px;
     border-radius: 4px; padding: 0 5px; font-size: 11px; font-family: inherit;
   }
+  .btn-toggle-candidates {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-2);
+    font-size: 13px; font-family: inherit; font-weight: 500;
+    padding: 7px 14px; border-radius: 999px;
+    cursor: pointer; transition: all .15s; white-space: nowrap;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .btn-toggle-candidates:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+  .btn-toggle-candidates .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+  .btn-toggle-candidates.hide .dot { background: var(--text-3); }
+  .btn-toggle-candidates .count-badge {
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: 999px; padding: 0 7px; font-size: 11.5px; color: var(--text-3);
+  }
   .chips {
     display: flex; flex-wrap: wrap; gap: 8px; padding-top: 12px;
     max-height: 120px; overflow: hidden; opacity: 1;
@@ -496,6 +512,9 @@
         <button class="clear-btn" id="clearBtn" title="清空">&times;</button>
       </div>
       <span class="kbd-hint">按 <kbd>/</kbd> 聚焦 · 输入即过滤</span>
+      <button class="btn-toggle-candidates" id="btnToggleCandidates" title="显示/隐藏候选卡区块">
+        <span class="dot"></span><span>🧭 候选</span><span class="count-badge" id="candidateBtnCount">150</span>
+      </button>
     </div>
     <div class="chips" id="chips"></div>
   </div>
@@ -1086,6 +1105,9 @@
     if (!list.length) {
       grid.innerHTML = '<div class="empty" style="display:block">没有匹配的候选自动发现条目</div>';
     }
+    // 更新搜索行按钮上的候选数
+    var countEl = document.getElementById("candidateBtnCount");
+    if (countEl) countEl.textContent = candidateItems.length;
   }
 
   /* ================= GitHub 全站实时搜索 ================= */
@@ -1228,6 +1250,23 @@
     });
   }
   window.addEventListener("scroll", onScroll, { passive: true });
+
+  // ---- 候选卡区块 显示/隐藏 切换 ----
+  var btnToggle = document.getElementById("btnToggleCandidates");
+  var candSection = document.getElementById("candidates");
+  var candHidden = localStorage.getItem("shovel.hideCandidates") === "1";
+  function applyCandVisibility(hidden) {
+    if (candSection) candSection.style.display = hidden ? "none" : "";
+    if (btnToggle) btnToggle.classList.toggle("hide", hidden);
+  }
+  applyCandVisibility(candHidden);
+  if (btnToggle) {
+    btnToggle.addEventListener("click", function () {
+      candHidden = !candHidden;
+      localStorage.setItem("shovel.hideCandidates", candHidden ? "1" : "0");
+      applyCandVisibility(candHidden);
+    });
+  }
 
   load();
 })();
