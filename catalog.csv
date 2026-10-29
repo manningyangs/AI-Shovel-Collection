@@ -1,0 +1,192 @@
+﻿分类,铲子名称,GitHub仓库链接
+1. 目录、Skills 与通用 AI 工具适配,Awesome MCP（自动更新的 MCP 目录）,https://github.com/abordage/awesome-mcp
+1. 目录、Skills 与通用 AI 工具适配,Awesome MCP Servers（MCP 服务器总目录）,https://github.com/mcpHQ/awesome-mcp-servers
+1. 目录、Skills 与通用 AI 工具适配,Anthropic Agent Skills（官方示例 Skills，含文档、设计、开发流程）,https://github.com/anthropics/skills
+1. 目录、Skills 与通用 AI 工具适配,Awesome Hardware Skills（硬件、工业、嵌入式 Agent 工具目录）,https://github.com/chopinfeng/awesome-hardware-skills
+1. 目录、Skills 与通用 AI 工具适配,Awesome AEC MCP（建筑、工程、施工、BIM、CAD 目录）,https://github.com/Daviidro/awesome-aec-mcp
+1. 目录、Skills 与通用 AI 工具适配,Geospatial MCP Servers（GIS、地图、遥感工具目录）,https://github.com/sparkgeo/geo-mcp-servers
+1. 目录、Skills 与通用 AI 工具适配,Awesome SEO MCP Servers（SEO、营销 Skills 与 MCP 目录）,https://github.com/sharozdawa/awesome-seo-mcp-servers
+1. 目录、Skills 与通用 AI 工具适配,MCP Reference Servers（MCP 协议参考实现）,https://github.com/modelcontextprotocol/servers
+1. 目录、Skills 与通用 AI 工具适配,FastMCP（构建 MCP Server/Client 的 Python 框架）,https://github.com/PrefectHQ/fastmcp
+1. 目录、Skills 与通用 AI 工具适配,OpenAPI to MCP（把 OpenAPI API 暴露为 MCP 工具）,https://github.com/automation-ai-labs/mcp-link
+1. 目录、Skills 与通用 AI 工具适配,FastAPI MCP（把 FastAPI 接口暴露给 MCP）,https://github.com/tadata-org/fastapi_mcp
+1. 目录、Skills 与通用 AI 工具适配,WordPress MCP Adapter（把 WordPress Abilities 暴露为 MCP）,https://github.com/WordPress/mcp-adapter
+2. 浏览器、网页检索、抓取与自动化,Playwright MCP（浏览器控制与网页自动化）,https://github.com/microsoft/playwright-mcp
+2. 浏览器、网页检索、抓取与自动化,BrowserMCP（浏览器控制）,https://github.com/BrowserMCP/mcp
+2. 浏览器、网页检索、抓取与自动化,Firecrawl MCP Server（网页抓取与搜索，输出适合 LLM 的内容）,https://github.com/firecrawl/firecrawl-mcp-server
+2. 浏览器、网页检索、抓取与自动化,Apify MCP Server（网页抓取与数据提取）,https://github.com/apify/apify-mcp-server
+2. 浏览器、网页检索、抓取与自动化,Bright Data MCP（网页数据访问与抓取）,https://github.com/brightdata/brightdata-mcp
+2. 浏览器、网页检索、抓取与自动化,ScrapeGraphAI（AI 驱动的网页数据抓取）,https://github.com/ScrapeGraphAI/Scrapegraph-ai
+2. 浏览器、网页检索、抓取与自动化,Fetcher MCP（使用 Playwright 获取网页内容）,https://github.com/jae-jae/fetcher-mcp
+2. 浏览器、网页检索、抓取与自动化,MCP Read Website Fast（网页转 Markdown）,https://github.com/just-every/mcp-read-website-fast
+2. 浏览器、网页检索、抓取与自动化,Website Downloader（下载网站内容）,https://github.com/pskill9/website-downloader
+3. 文件、Office、PDF、文档与出版,Markdownify MCP（把多种内容转成 Markdown）,https://github.com/zcaceres/markdownify-mcp
+3. 文件、Office、PDF、文档与出版,Pandoc MCP（文档格式转换）,https://github.com/vivekVells/mcp-pandoc
+3. 文件、Office、PDF、文档与出版,Unstructured MCP（文档解析与结构化）,https://github.com/Unstructured-IO/UNS-MCP
+3. 文件、Office、PDF、文档与出版,PDF Tools MCP（PDF 合并、提取与处理）,https://github.com/danielkennedy1/pdf-tools-mcp
+3. 文件、Office、PDF、文档与出版,PDF Reader MCP（PDF 文本提取和搜索）,https://github.com/gpetraroli/mcp_pdf_reader
+3. 文件、Office、PDF、文档与出版,Paperless-ngx MCP（文档归档系统接口）,https://github.com/baruchiro/paperless-mcp
+3. 文件、Office、PDF、文档与出版,Typst MCP（Typst 排版与技术文档）,https://github.com/johannesbrandenburger/typst-mcp
+4. 编程、代码库、Git 与开发者工作流,GitHub MCP Server（GitHub 官方 MCP）,https://github.com/github/github-mcp-server
+4. 编程、代码库、Git 与开发者工作流,Git MCP（通过 MCP 访问 GitHub 仓库内容）,https://github.com/idosal/git-mcp
+4. 编程、代码库、Git 与开发者工作流,GitHub MCP Ingest（读取并整理 GitHub 仓库内容）,https://github.com/adhikasp/mcp-git-ingest
+4. 编程、代码库、Git 与开发者工作流,Context7（为模型提供较新的开发文档）,https://github.com/upstash/context7
+4. 编程、代码库、Git 与开发者工作流,Microsoft Learn MCP（Microsoft 技术文档检索）,https://github.com/MicrosoftDocs/mcp
+4. 编程、代码库、Git 与开发者工作流,Apple Developer Docs MCP（Apple 开发者文档）,https://github.com/kimsungwhee/apple-docs-mcp
+4. 编程、代码库、Git 与开发者工作流,Octocode（代码语义搜索与上下文生成）,https://github.com/bgauryy/octocode
+4. 编程、代码库、Git 与开发者工作流,SonarQube MCP Server（代码质量与安全检查）,https://github.com/SonarSource/sonarqube-mcp-server
+4. 编程、代码库、Git 与开发者工作流,Jupyter MCP Server（Notebook 操作）,https://github.com/datalayer/jupyter-mcp-server
+4. 编程、代码库、Git 与开发者工作流,MCP Server Chart（AI 调用图表可视化工具）,https://github.com/antvis/mcp-server-chart
+4. 编程、代码库、Git 与开发者工作流,MCP Mermaid（生成 Mermaid 图表）,https://github.com/hustcc/mcp-mermaid
+4. 编程、代码库、Git 与开发者工作流,Code Runner MCP（在 Docker 容器中运行代码）,https://github.com/axliupore/mcp-code-runner
+5. 数据库、数据分析、BI 与可视化,ClickHouse MCP（ClickHouse 数据查询）,https://github.com/ClickHouse/mcp-clickhouse
+5. 数据库、数据分析、BI 与可视化,MotherDuck / DuckDB MCP（本地与云端 DuckDB 数据访问）,https://github.com/motherduckdb/mcp-server-motherduck
+5. 数据库、数据分析、BI 与可视化,DuckDB MCP Server（DuckDB 查询工具）,https://github.com/ktanaka101/mcp-server-duckdb
+5. 数据库、数据分析、BI 与可视化,BigQuery MCP Server（Google BigQuery 数据访问）,https://github.com/ergut/mcp-bigquery-server
+5. 数据库、数据分析、BI 与可视化,Snowflake MCP（Snowflake 数据与 Cortex 能力）,https://github.com/Snowflake-Labs/mcp
+5. 数据库、数据分析、BI 与可视化,OpenMetadata MCP（数据目录与元数据管理）,https://github.com/yangkyeongmo/mcp-server-openmetadata
+5. 数据库、数据分析、BI 与可视化,Datawrapper MCP（生成数据图表）,https://github.com/palewire/datawrapper-mcp
+5. 数据库、数据分析、BI 与可视化,ECharts MCP（ECharts 图表生成）,https://github.com/hustcc/mcp-echarts
+5. 数据库、数据分析、BI 与可视化,Vega-Lite MCP（Vega-Lite 数据可视化）,https://github.com/isaacwasserman/mcp-vegalite-server
+5. 数据库、数据分析、BI 与可视化,Apache Airflow MCP（工作流编排与调度）,https://github.com/yangkyeongmo/mcp-server-apache-airflow
+6. 云平台、DevOps、监控与基础设施,AWS MCP（AWS 官方开源 MCP 服务器集合）,https://github.com/awslabs/mcp
+6. 云平台、DevOps、监控与基础设施,Terraform MCP Server（Terraform / IaC 工作流）,https://github.com/hashicorp/terraform-mcp-server
+6. 云平台、DevOps、监控与基础设施,Portainer MCP（容器管理）,https://github.com/portainer/portainer-mcp
+6. 云平台、DevOps、监控与基础设施,Kubernetes MCP Server（Kubernetes 集群管理）,https://github.com/reza-gholizade/k8s-mcp-server
+6. 云平台、DevOps、监控与基础设施,Docker Hub MCP（Docker Hub 操作）,https://github.com/docker/hub-mcp
+6. 云平台、DevOps、监控与基础设施,Grafana MCP（监控面板、数据与告警）,https://github.com/grafana/mcp-grafana
+6. 云平台、DevOps、监控与基础设施,Sentry Agentic Toolkit（错误与应用监控数据）,https://github.com/getsentry/toolkit
+6. 云平台、DevOps、监控与基础设施,Zabbix MCP Server（监控告警和运维）,https://github.com/mpeirone/zabbix-mcp-server
+6. 云平台、DevOps、监控与基础设施,VictoriaMetrics MCP（时序监控数据）,https://github.com/VictoriaMetrics/mcp-victoriametrics
+6. 云平台、DevOps、监控与基础设施,1Panel MCP（服务器面板管理）,https://github.com/1Panel-dev/mcp-1panel
+7. 邮件、通信、日历与团队协作,Inbox Zero（AI 邮件管理助手）,https://github.com/elie222/inbox-zero
+7. 邮件、通信、日历与团队协作,Fastmail MCP（Fastmail 邮件 API）,https://github.com/MadLlama25/fastmail-mcp
+7. 邮件、通信、日历与团队协作,Email MCP（带附件邮件操作，支持多个邮箱类型）,https://github.com/Shy2593666979/mcp-server-email
+7. 邮件、通信、日历与团队协作,WhatsApp MCP（WhatsApp 消息访问）,https://github.com/lharries/whatsapp-mcp
+7. 邮件、通信、日历与团队协作,Telegram MCP（Telegram 消息与会话操作）,https://github.com/chigwell/telegram-mcp
+7. 邮件、通信、日历与团队协作,LINE Bot MCP（LINE Messaging API）,https://github.com/line/line-bot-mcp-server
+7. 邮件、通信、日历与团队协作,Feishu / Lark MCP（飞书 OAuth 与文档管理）,https://github.com/ztxtxwd/open-feishu-mcp-server
+7. 邮件、通信、日历与团队协作,iMCP（macOS 信息、联系人和提醒事项）,https://github.com/mattt/iMCP
+7. 邮件、通信、日历与团队协作,Monday.com MCP（项目与工作数据）,https://github.com/mondaycom/mcp
+7. 邮件、通信、日历与团队协作,Linear MCP（工单与项目跟踪）,https://github.com/jerhadf/linear-mcp-server
+7. 邮件、通信、日历与团队协作,Asana MCP（任务与项目管理）,https://github.com/roychri/mcp-server-asana
+7. 邮件、通信、日历与团队协作,ClickUp MCP Server（项目和任务）,https://github.com/taazkareem/clickup-mcp-server
+7. 邮件、通信、日历与团队协作,Trello MCP（看板与任务管理）,https://github.com/m0xai/trello-mcp-server
+7. 邮件、通信、日历与团队协作,EduBase MCP（学习管理平台）,https://github.com/EduBase/MCP
+8. 财务、会计、投资与区块链,Xero MCP Server（云会计系统）,https://github.com/XeroAPI/xero-mcp-server
+8. 财务、会计、投资与区块链,Lunch Money MCP（个人预算与财务数据）,https://github.com/akutishevsky/lunchmoney-mcp
+8. 财务、会计、投资与区块链,hledger MCP（命令行复式记账）,https://github.com/iiAtlas/hledger-mcp
+8. 财务、会计、投资与区块链,Ledger MCP（Ledger CLI 记账）,https://github.com/minhyeoky/mcp-server-ledger
+8. 财务、会计、投资与区块链,Mifos X MCP（金融服务平台）,https://github.com/openMF/mcp-mifosx
+8. 财务、会计、投资与区块链,QuantConnect MCP（量化研究与交易工作流）,https://github.com/QuantConnect/mcp-server
+8. 财务、会计、投资与区块链,Binance MCP Server（交易所数据接口）,https://github.com/ethancod1ng/binance-mcp-server
+8. 财务、会计、投资与区块链,EVM MCP Server（EVM 区块链交互）,https://github.com/mcpdotdirect/evm-mcp-server
+8. 财务、会计、投资与区块链,Web3 Research MCP（加密资产与链上研究）,https://github.com/aaronjmars/web3-research-mcp
+9. 电商、零售、营销与社交媒体,Shopify MCP / CLI（商品、订单、客户、库存和分析）,https://github.com/callobuzz/cob-shopify-mcp
+9. 电商、零售、营销与社交媒体,E-commerce MCP Server（多个电商和市场平台的统一入口）,https://github.com/HelpCode-ai/ecommerce-mcp-server
+9. 电商、零售、营销与社交媒体,WooCommerce（电商系统；仓库内含 MCP 集成文档）,https://github.com/woocommerce/woocommerce
+9. 电商、零售、营销与社交媒体,NotFair Plugin（SEO、GEO、广告和分析工作流）,https://github.com/nowork-studio/notfair-plugin
+9. 电商、零售、营销与社交媒体,Meta Ads MCP（Facebook / Instagram 广告）,https://github.com/pipeboard-co/meta-ads-mcp
+9. 电商、零售、营销与社交媒体,Google Analytics MCP（GA4 数据访问）,https://github.com/surendranb/google-analytics-mcp
+9. 电商、零售、营销与社交媒体,Google Tag Manager MCP（GTM 管理）,https://github.com/stape-io/google-tag-manager-mcp-server
+9. 电商、零售、营销与社交媒体,SEO MCP（基于 Ahrefs 数据的 SEO 工具）,https://github.com/cnych/seo-mcp
+9. 电商、零售、营销与社交媒体,Awesome China MCP（中国本土平台适配索引）,https://github.com/zackchewa/awesome-china-mcp
+9. 电商、零售、营销与社交媒体,RedNote MCP（小红书数据访问）,https://github.com/iFurySt/RedNote-MCP
+9. 电商、零售、营销与社交媒体,Reddit MCP Buddy（Reddit 搜索和结构化数据）,https://github.com/karanb192/reddit-mcp-buddy
+9. 电商、零售、营销与社交媒体,Facebook MCP Server（帖子、评论和洞察自动化）,https://github.com/HagaiHen/facebook-mcp-server
+9. 电商、零售、营销与社交媒体,X/Twitter Scraper（搜索、资料与媒体获取）,https://github.com/Xquik-dev/x-twitter-scraper
+9. 电商、零售、营销与社交媒体,Ghost MCP（Ghost 内容管理系统）,https://github.com/MFYDev/ghost-mcp
+9. 电商、零售、营销与社交媒体,Webflow MCP Server（Webflow 网站数据接口）,https://github.com/webflow/mcp-server
+9A. 中国本土平台适配（单独列出）,中国电商 MCP（抖店、淘宝、京东、快手、小红书、微信小店等入口）,https://github.com/TonyWang-hub/mcp-cn-commerce
+9A. 中国本土平台适配（单独列出）,Lark OpenAPI MCP（飞书开放接口）,https://github.com/larksuite/lark-openapi-mcp
+9A. 中国本土平台适配（单独列出）,Yuque MCP Server（语雀知识库读写与检索）,https://github.com/yuque/yuque-mcp-server
+9A. 中国本土平台适配（单独列出）,Yuque AI Ecosystem（语雀 MCP + Skills + 插件）,https://github.com/yuque/yuque-ecosystem
+9A. 中国本土平台适配（单独列出）,Yuque AI MCP（语雀适配器）,https://github.com/yehuoshun/yuque-ai-mcp
+9A. 中国本土平台适配（单独列出）,DingTalk Docs MCP（钉钉文档相关工具）,https://github.com/hykfft/mcp-dingtalk-doc
+9A. 中国本土平台适配（单独列出）,Quick DingTalk MCP（钉钉 CLI 包装与用户身份）,https://github.com/keithyt06/quick-dingtalk-mcp
+9A. 中国本土平台适配（单独列出）,DingTalk Bot MCP（钉钉群机器人）,https://github.com/Shawyeok/mcp-dingding-bot
+9A. 中国本土平台适配（单独列出）,WeCom Bot MCP（企业微信群机器人）,https://github.com/gotoolkits/mcp-wecombot-server
+9A. 中国本土平台适配（单独列出）,WeCom Bot MCP Server（企业微信机器人，支持更多消息类型）,https://github.com/loonghao/wecom-bot-mcp-server
+9A. 中国本土平台适配（单独列出）,ZenOps（面向运维场景的钉钉、飞书、企微机器人入口）,https://github.com/opsre/ZenOps
+9A. 中国本土平台适配（单独列出）,Flomo MCP（浮墨笔记写入）,https://github.com/chatmcp/mcp-server-flomo
+9A. 中国本土平台适配（单独列出）,Wolai MCP（我来知识库读写）,https://github.com/LittlePeter52012/wolai-mcp
+9A. 中国本土平台适配（单独列出）,Rush Shimo CLI（石墨文档读取，CLI / SDK / MCP）,https://github.com/kanyun-inc/rush-shimo-cli
+9A. 中国本土平台适配（单独列出）,MCP Gitee（Gitee 仓库访问）,https://github.com/oschina/mcp-gitee
+9A. 中国本土平台适配（单独列出）,md2wechat-skill（微信公众号文章排版、图片与草稿工作流）,https://github.com/geekjourneyx/md2wechat-skill
+10. 设计、图片、视频、音频与创意生产,Figma Context MCP（向 AI 提供 Figma 设计上下文）,https://github.com/GLips/Figma-Context-MCP
+10. 设计、图片、视频、音频与创意生产,Talk to Figma MCP（Figma 与 Agent 协作）,https://github.com/grab/cursor-talk-to-figma-mcp
+10. 设计、图片、视频、音频与创意生产,Magic MCP（面向前端 UI 生成的工具）,https://github.com/21st-dev/magic-mcp
+10. 设计、图片、视频、音频与创意生产,Blender MCP（Blender 3D 软件控制）,https://github.com/ahujasid/blender-mcp
+10. 设计、图片、视频、音频与创意生产,Video Editing MCP（FFmpeg 视频编辑、字幕和导出）,https://github.com/mfortne/mcp-video-editing
+10. 设计、图片、视频、音频与创意生产,Ableton Live MCP（音乐制作软件控制）,https://github.com/Simon-Kansara/ableton-live-mcp-server
+10. 设计、图片、视频、音频与创意生产,REAPER MCP（音频工程与项目操作）,https://github.com/dschuler36/reaper-mcp-server
+10. 设计、图片、视频、音频与创意生产,Fal MCP Server（图片、视频和音乐生成 API）,https://github.com/luminarylane/fal-mcp-server
+10. 设计、图片、视频、音频与创意生产,YouTube Video Summarizer MCP（视频字幕与摘要）,https://github.com/nabid-pf/youtube-video-summarizer-mcp
+10. 设计、图片、视频、音频与创意生产,YouTube MCP（频道、视频、播放列表检索）,https://github.com/tubeagentkit/youtube-mcp
+10. 设计、图片、视频、音频与创意生产,Unsplash MCP（图片检索）,https://github.com/hellokaton/unsplash-mcp-server
+10. 设计、图片、视频、音频与创意生产,VideoDB Agent Toolkit（视频数据库工具）,https://github.com/video-db/agent-toolkit
+11. CAD、BIM、工程、地理空间与地图,Revit MCP（Revit 2023–2027 BIM 操作与校验）,https://github.com/HorizunGroup/horizun-revit-mcp
+11. CAD、BIM、工程、地理空间与地图,Revit MCP（Revit API 与 BIM/GIS 工作流）,https://github.com/zymorel/revit-mcp
+11. CAD、BIM、工程、地理空间与地图,Architectural Editor（本地 3D 建筑编辑器，含 CLI/MCP）,https://github.com/pascalorg/editor
+11. CAD、BIM、工程、地理空间与地图,QGIS MCP（QGIS 桌面 GIS 控制）,https://github.com/jjsantos01/qgis_mcp
+11. CAD、BIM、工程、地理空间与地图,GIS MCP（GIS 能力接口）,https://github.com/mahdin75/gis-mcp
+11. CAD、BIM、工程、地理空间与地图,GeoServer MCP（GeoServer 地理空间接口）,https://github.com/mahdin75/geoserver-mcp
+11. CAD、BIM、工程、地理空间与地图,GDAL MCP（地理空间数据处理）,https://github.com/JordanGunn/gdal-mcp
+11. CAD、BIM、工程、地理空间与地图,STAC MCP（遥感与地球观测数据检索）,https://github.com/BnJam/stac-mcp
+11. CAD、BIM、工程、地理空间与地图,Baidu Maps MCP（百度地图服务）,https://github.com/baidu-maps/mcp
+11. CAD、BIM、工程、地理空间与地图,Mapbox MCP（地图、地点和地理 API）,https://github.com/mapbox/mcp-server
+11. CAD、BIM、工程、地理空间与地图,OpenStreetMap MCP（开放地图数据）,https://github.com/jagan-shanmugam/open-streetmap-mcp
+11. CAD、BIM、工程、地理空间与地图,TomTom Maps MCP（地点、路线和导航）,https://github.com/tomtom-international/tomtom-maps-mcp
+11. CAD、BIM、工程、地理空间与地图,Weather MCP（天气数据）,https://github.com/isdaniel/mcp_weather_server
+12. 医疗、健康、生物信息与实验室科研,BioMCP（生物医学数据检索）,https://github.com/genomoncology/biomcp
+12. 医疗、健康、生物信息与实验室科研,Apple Health MCP（健康数据查询）,https://github.com/the-momentum/apple-health-mcp-server
+12. 医疗、健康、生物信息与实验室科研,FHIR MCP Server（医疗互操作标准接口）,https://github.com/wso2/fhir-mcp-server
+12. 医疗、健康、生物信息与实验室科研,Medical MCP（医疗数据处理工具）,https://github.com/JamesANZ/medical-mcp
+12. 医疗、健康、生物信息与实验室科研,DICOM MCP（DICOM / PACS 医学影像系统）,https://github.com/ChristianHinge/dicom-mcp
+12. 医疗、健康、生物信息与实验室科研,OMOP MCP（OMOP 医疗数据标准）,https://github.com/OHNLP/omop_mcp
+12. 医疗、健康、生物信息与实验室科研,ChatSpatial（空间转录组数据与自然语言分析）,https://github.com/cafferychen777/ChatSpatial
+12. 医疗、健康、生物信息与实验室科研,LabMate MCP（文献、化合物、合成、实验室与论文工作流）,https://github.com/JonasRackl/labmate-mcp
+12. 医疗、健康、生物信息与实验室科研,Google Scholar MCP（学术搜索）,https://github.com/mochow13/google-scholar-mcp
+12. 医疗、健康、生物信息与实验室科研,Open Nutrition MCP（营养数据检索和分析）,https://github.com/deadletterq/mcp-opennutrition
+13. 工业制造、PLC、IoT、硬件与机器人,EdgeCore（Modbus、BACnet、OPC UA 等工业边缘运行时）,https://github.com/anviod/edgeCore
+13. 工业制造、PLC、IoT、硬件与机器人,Studio 5000 MCP（Rockwell / Allen-Bradley PLC 项目解析）,https://github.com/Nodeblue-AI/studio5000-mcp-server
+13. 工业制造、PLC、IoT、硬件与机器人,Siemens TIA Portal Openness MCP（西门子工程软件接口）,https://github.com/chewcw/tia-portal-openness-mcpserver
+13. 工业制造、PLC、IoT、硬件与机器人,OPC UA MCP（工业 OPC UA 数据访问）,https://github.com/kukapay/opcua-mcp
+13. 工业制造、PLC、IoT、硬件与机器人,Modbus MCP（工业寄存器与设备数据）,https://github.com/kukapay/modbus-mcp
+13. 工业制造、PLC、IoT、硬件与机器人,CODESYS MCP Toolkit（工业自动化工程平台）,https://github.com/johannesPettersson80/codesys-mcp-toolkit
+13. 工业制造、PLC、IoT、硬件与机器人,Predictive Maintenance MCP（预测性维护与故障诊断）,https://github.com/LGDiMaggio/predictive-maintenance-mcp
+13. 工业制造、PLC、IoT、硬件与机器人,Home Assistant MCP（智能家居控制）,https://github.com/tevonsb/homeassistant-mcp
+13. 工业制造、PLC、IoT、硬件与机器人,HA MCP Server（Home Assistant 控制与状态查询）,https://github.com/driin0/ha-mcp-server
+13. 工业制造、PLC、IoT、硬件与机器人,ESP MCP（ESP32 开发与设备控制）,https://github.com/horw/esp-mcp
+13. 工业制造、PLC、IoT、硬件与机器人,ROS MCP Server（ROS 机器人控制）,https://github.com/robotmcp/ros-mcp-server
+13. 工业制造、PLC、IoT、硬件与机器人,ROS 2 MCP（ROS 2 机器人接口）,https://github.com/wise-vision/ros2_mcp
+13. 工业制造、PLC、IoT、硬件与机器人,Isaac Sim MCP（机器人仿真）,https://github.com/omni-mcp/isaac-sim-mcp
+13. 工业制造、PLC、IoT、硬件与机器人,Unitree Go2 MCP（四足机器人控制）,https://github.com/lpigeon/unitree-go2-mcp-server
+14. 汽车、车辆诊断与游戏开发,MCP-CAN（CAN、OBD-II、UDS、J1939 诊断与模拟）,https://github.com/farzadnadiri/MCP-CAN
+14. 汽车、车辆诊断与游戏开发,Peykan（虚拟车辆、CAN/OBD 与 AI 诊断）,https://github.com/farzadnadiri/peykan
+14. 汽车、车辆诊断与游戏开发,Unity MCP（操作 Unity 编辑器、场景、资源和脚本）,https://github.com/CoplayDev/unity-mcp
+14. 汽车、车辆诊断与游戏开发,GameDev MCP Server（Unity、Godot、Unreal 通用游戏开发工具）,https://github.com/IvanMurzak/GameDev-MCP-Server
+14. 汽车、车辆诊断与游戏开发,Unity MCP Integration（Unity AI 工具集成）,https://github.com/quazaai/UnityMCPIntegration
+14. 汽车、车辆诊断与游戏开发,MCP for Riot Games（Riot 游戏数据接口）,https://github.com/jifrozen0110/mcp-riot
+15. 政务、法律、公共数据、专利与安全,Civic Data MCP（公共部门与政府开放数据 API）,https://github.com/EricGrill/mcp-civic-data
+15. 政务、法律、公共数据、专利与安全,OpenDataMCP（将开放数据接入 LLM）,https://github.com/OpenDataMCP/OpenDataMCP
+15. 政务、法律、公共数据、专利与安全,US Legal MCP（美国法律与法规数据）,https://github.com/JamesANZ/us-legal-mcp
+15. 政务、法律、公共数据、专利与安全,Congress MCP（美国国会数据）,https://github.com/amurshak/congressMCP
+15. 政务、法律、公共数据、专利与安全,Patent MCP Server（专利数据检索）,https://github.com/riemannzeta/patent_mcp_server
+15. 政务、法律、公共数据、专利与安全,Burp MCP Server（Burp Suite 安全测试工具）,https://github.com/PortSwigger/mcp-server
+15. 政务、法律、公共数据、专利与安全,Shodan MCP（互联网资产与设备检索）,https://github.com/w0h1v/mcp-shodan
+15. 政务、法律、公共数据、专利与安全,CVE Search MCP（漏洞数据库查询）,https://github.com/roadwy/cve-search_mcp
+15. 政务、法律、公共数据、专利与安全,MCP Guardian（MCP 代理与安全控制）,https://github.com/eqtylab/mcp-guardian
+15. 政务、法律、公共数据、专利与安全,MCP Watch（MCP 安全扫描）,https://github.com/kapilduraphe/mcp-watch
+15. 政务、法律、公共数据、专利与安全,SecOps MCP（安全运维测试工具箱）,https://github.com/securityfortech/secops-mcp
+15. 政务、法律、公共数据、专利与安全,Wazuh MCP（SIEM / 安全告警查询）,https://github.com/gbrigandi/mcp-server-wazuh
+16. 物流、航空、旅游、招聘与其他垂直应用,AviationStack MCP（航空与航班数据）,https://github.com/Pradumnasaraf/aviationstack-mcp
+16. 物流、航空、旅游、招聘与其他垂直应用,FlightRadar24 MCP（航班跟踪数据）,https://github.com/sunsetcoder/flightradar24-mcp-server
+16. 物流、航空、旅游、招聘与其他垂直应用,DoorDash MCP（配送平台集成）,https://github.com/JordanDalton/DoorDash-MCP-Server
+16. 物流、航空、旅游、招聘与其他垂直应用,Campground MCP（露营地查询和预订）,https://github.com/campertunity/mcp-server
+16. 物流、航空、旅游、招聘与其他垂直应用,Job Searchoor（根据需求搜索职位）,https://github.com/0xDAEF0F/job-searchoor
+16. 物流、航空、旅游、招聘与其他垂直应用,Himalayas MCP（职位、候选人和薪资数据）,https://github.com/Himalayas-App/himalayas-mcp
+16. 物流、航空、旅游、招聘与其他垂直应用,CV Forge（ATS 简历、求职信与邮件）,https://github.com/thechandanbhagat/cv-forge
+16. 物流、航空、旅游、招聘与其他垂直应用,MCP Open Library（图书与作者检索）,https://github.com/8enSmith/mcp-open-library
+16. 物流、航空、旅游、招聘与其他垂直应用,Wikipedia MCP（百科数据检索）,https://github.com/Rudra-ravi/wikipedia-mcp
+16. 物流、航空、旅游、招聘与其他垂直应用,MCP Stockfish（国际象棋引擎）,https://github.com/sonirico/mcp-stockfish
