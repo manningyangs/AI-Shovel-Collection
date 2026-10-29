@@ -151,7 +151,7 @@
   .stat-label { font-size: 13px; color: var(--text-3); margin-top: 5px; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
-  /* ================= 搜索工具条（粘性） ================= */
+  /* ================= 搜索工具条（粘性 + 滚动紧凑化） ================= */
   .toolbar {
     position: sticky; top: var(--nav-h); z-index: 60;
     background: rgba(255,255,255,.85);
@@ -160,7 +160,18 @@
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     padding: 14px 20px 12px;
+    transition: padding .22s ease, box-shadow .22s ease;
   }
+  .toolbar.compact {
+    padding: 8px 20px;
+    box-shadow: 0 1px 3px rgba(31,35,40,.06);
+  }
+  .toolbar.compact .chips {
+    max-height: 0; padding-top: 0; overflow: hidden; opacity: 0;
+    transition: max-height .25s ease, opacity .18s ease, padding .18s ease;
+  }
+  .toolbar.compact .search-box input { padding: 7px 92px 7px 40px; font-size: 14px; }
+  .toolbar.compact .kbd-hint { font-size: 11px; }
   .toolbar-inner { max-width: 1180px; margin: 0 auto; }
   .search-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
   .search-box { position: relative; flex: 1; min-width: 260px; max-width: 560px; }
@@ -201,7 +212,11 @@
     background: var(--surface); border: 1px solid var(--border); border-bottom-width: 2px;
     border-radius: 4px; padding: 0 5px; font-size: 11px; font-family: inherit;
   }
-  .chips { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 12px; }
+  .chips {
+    display: flex; flex-wrap: wrap; gap: 8px; padding-top: 12px;
+    max-height: 120px; overflow: hidden; opacity: 1;
+    transition: max-height .28s ease, opacity .2s ease, padding .2s ease;
+  }
   .chip {
     border: 1px solid var(--border);
     background: var(--surface);
@@ -1199,6 +1214,20 @@
       render();
     }
   });
+
+  // ---- 滚动紧凑化：超过 120px 自动收起 chips，给卡片腾空间 ----
+  var toolbar = document.querySelector(".toolbar");
+  var ticking = false;
+  function onScroll() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      ticking = false;
+      if (window.scrollY > 120) toolbar.classList.add("compact");
+      else toolbar.classList.remove("compact");
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
 
   load();
 })();
