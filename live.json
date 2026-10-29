@@ -1,0 +1,1724 @@
+{
+"updated_at": "2026-10-29T03:27:59Z",
+"repos": {
+"0xDAEF0F/job-searchoor": {
+"stars": 65,
+"forks": 14,
+"pushed_at": "2025-04-08T22:17:50Z",
+"archived": false,
+"desc": "A simple MCP server that delivers you jobs based on your needs",
+"license": "MIT",
+"lang": "JavaScript"
+},
+"1Panel-dev/mcp-1panel": {
+"stars": 170,
+"forks": 27,
+"pushed_at": "2026-08-14T10:01:18Z",
+"archived": false,
+"desc": "mcp-1panel is an implementation of the Model Context Protocol (MCP) server for 1Panel.",
+"license": "GPL-3.0",
+"lang": "Go"
+},
+"21st-dev/magic-mcp": {
+"stars": 6294,
+"forks": 508,
+"pushed_at": "2026-09-09T20:38:22Z",
+"archived": false,
+"desc": "It's like v0, but in your Cursor / Claude Code / Windsurf: search 10,000+ React/Tailwind components, generate new UI with AI, and publish your own — right from your editor. Magic MCP is now the 21st M",
+"license": "ISC",
+"lang": "TypeScript"
+},
+"8enSmith/mcp-open-library": {
+"stars": 100,
+"forks": 26,
+"pushed_at": "2026-10-22T21:28:53Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server for the Internet Archive's Open Library API that enables AI assistants to search for book and author information.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"BnJam/stac-mcp": {
+"stars": 20,
+"forks": 10,
+"pushed_at": "2026-10-24T01:08:14Z",
+"archived": false,
+"desc": "An MCP Server for STAC requests",
+"license": "MIT",
+"lang": "Python"
+},
+"BrowserMCP/mcp": {
+"stars": 7242,
+"forks": 595,
+"pushed_at": "2026-10-28T04:51:41Z",
+"archived": false,
+"desc": "Browser MCP is a Model Context Provider (MCP) server that allows AI applications to control your browser",
+"license": "Apache-2.0",
+"lang": "TypeScript"
+},
+"ChristianHinge/dicom-mcp": {
+"stars": 104,
+"forks": 30,
+"pushed_at": "2026-10-28T06:39:00Z",
+"archived": false,
+"desc": "[top rated oral EANM'25] Model Context Protocol (MCP) for interacting with dicom servers (PACS etc.) ",
+"license": "MIT",
+"lang": "Python"
+},
+"ClickHouse/mcp-clickhouse": {
+"stars": 898,
+"forks": 210,
+"pushed_at": "2026-10-27T19:10:59Z",
+"archived": false,
+"desc": "Connect ClickHouse to your AI assistants.",
+"license": "Apache-2.0",
+"lang": "Python"
+},
+"CoplayDev/unity-mcp": {
+"stars": 15509,
+"forks": 1611,
+"pushed_at": "2026-10-19T18:48:57Z",
+"archived": false,
+"desc": "Unity MCP acts as a bridge between AI assistants and your Unity Editor. Give your LLM tools to manage assets, control scenes, edit scripts, and automate tasks within Unity.",
+"license": "MIT",
+"lang": "C#"
+},
+"Daviidro/awesome-aec-mcp": {
+"stars": 0,
+"forks": 1,
+"pushed_at": "2026-08-09T15:56:00Z",
+"archived": false,
+"desc": "Curated list of MCP servers for Architecture, Engineering, Construction, GIS and 3D workflows. 16 entries · Community-driven · MIT",
+"license": "MIT",
+"lang": null
+},
+"EduBase/MCP": {
+"stars": 28,
+"forks": 13,
+"pushed_at": "2026-10-26T14:28:33Z",
+"archived": false,
+"desc": "The EduBase MCP server enables Claude and other LLMs to interact with EduBase's comprehensive e-learning platform through the Model Context Protocol (MCP).",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"EricGrill/mcp-civic-data": {
+"stars": 3,
+"forks": 1,
+"pushed_at": "2026-07-07T03:15:01Z",
+"archived": false,
+"desc": "MCP server for free government and open data APIs",
+"license": "MIT",
+"lang": "Python"
+},
+"GLips/Figma-Context-MCP": {
+"stars": 16098,
+"forks": 1269,
+"pushed_at": "2026-10-27T05:37:12Z",
+"archived": false,
+"desc": "MCP server to provide Figma layout information to AI coding agents like Cursor",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"HagaiHen/facebook-mcp-server": {
+"stars": 232,
+"forks": 80,
+"pushed_at": "2026-04-23T19:08:42Z",
+"archived": false,
+"desc": "Facebook MCP server for automating posts, comment moderation, insights, and sentiment filtering.",
+"license": "MIT",
+"lang": "Python"
+},
+"HelpCode-ai/ecommerce-mcp-server": {
+"stars": 0,
+"forks": 0,
+"pushed_at": "2026-10-08T13:51:18Z",
+"archived": false,
+"desc": "E-commerce MCP server: connect Amazon, eBay, WooCommerce, Shopware, Kaufland, OTTO and 7 more to Claude & ChatGPT.",
+"license": "AGPL-3.0",
+"lang": "JavaScript"
+},
+"Himalayas-App/himalayas-mcp": {
+"stars": 21,
+"forks": 6,
+"pushed_at": "2026-10-21T08:04:26Z",
+"archived": false,
+"desc": "Remote jobs MCP server — search 100,000+ remote jobs, post listings, find candidates, and check salary benchmarks from Claude, ChatGPT, Cursor, and any MCP client. Free, no API key required.",
+"license": "MIT",
+"lang": null
+},
+"HorizunGroup/horizun-revit-mcp": {
+"stars": 63,
+"forks": 6,
+"pushed_at": "2026-10-22T16:03:55Z",
+"archived": false,
+"desc": "Open-source MCP for Autodesk Revit 2023–2027. Downloadable Windows installer with runtime included; no Git or .NET SDK required. Typed BIM automation, families and model verification.",
+"license": "Apache-2.0",
+"lang": "C#"
+},
+"IvanMurzak/GameDev-MCP-Server": {
+"stars": 16,
+"forks": 7,
+"pushed_at": "2026-10-28T12:54:38Z",
+"archived": false,
+"desc": "Engine-agnostic MCP server shared by Unity-MCP, Godot-MCP and Unreal-MCP",
+"license": "Apache-2.0",
+"lang": "C#"
+},
+"JamesANZ/medical-mcp": {
+"stars": 119,
+"forks": 37,
+"pushed_at": "2026-10-15T22:49:42Z",
+"archived": false,
+"desc": "An MCP server that provides comprehensive medical information by querying multiple authoritative medical APIs including FDA, WHO, PubMed, Google Scholar, and RxNorm",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"JamesANZ/us-legal-mcp": {
+"stars": 38,
+"forks": 10,
+"pushed_at": "2026-10-15T22:49:47Z",
+"archived": false,
+"desc": "An MCP server that provides comprehensive US legislation.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"JonasRackl/labmate-mcp": {
+"stars": 3,
+"forks": 0,
+"pushed_at": "2026-02-03T07:25:24Z",
+"archived": false,
+"desc": "Your AI lab companion — 78 MCP tools for literature, compounds, synthesis, benchwork, peptides & publication writing",
+"license": "MIT",
+"lang": "Python"
+},
+"JordanDalton/DoorDash-MCP-Server": {
+"stars": 25,
+"forks": 6,
+"pushed_at": "2025-04-16T23:47:33Z",
+"archived": false,
+"desc": "",
+"license": null,
+"lang": "TypeScript"
+},
+"JordanGunn/gdal-mcp": {
+"stars": 83,
+"forks": 7,
+"pushed_at": "2026-05-25T16:51:16Z",
+"archived": false,
+"desc": "Model Context Protocol server that packages GDAL-style geospatial workflows through Python-native libraries (Rasterio, GeoPandas, PyProj, etc.) to give AI agents catalog discovery, metadata intelligen",
+"license": "MIT",
+"lang": "Python"
+},
+"LGDiMaggio/predictive-maintenance-mcp": {
+"stars": 106,
+"forks": 33,
+"pushed_at": "2026-10-27T10:17:11Z",
+"archived": false,
+"desc": "An open-source MCP server that turns LLMs into condition monitoring assistants for reliability engineers. It gives your AI assistant evidence-based vibration diagnostics: machine fault detection, seve",
+"license": "MIT",
+"lang": "Python"
+},
+"LittlePeter52012/wolai-mcp": {
+"stars": 10,
+"forks": 0,
+"pushed_at": "2026-09-03T06:36:51Z",
+"archived": false,
+"desc": "MCP Server for Wolai — Connect AI agents to your Wolai knowledge base",
+"license": "MIT",
+"lang": "Python"
+},
+"MFYDev/ghost-mcp": {
+"stars": 239,
+"forks": 67,
+"pushed_at": "2026-04-27T03:50:34Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server for interacting with Ghost CMS through LLM interfaces like Claude. Allow you to control your Ghost blog by simply asking Claude etc.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"MadLlama25/fastmail-mcp": {
+"stars": 131,
+"forks": 48,
+"pushed_at": "2026-09-12T14:22:54Z",
+"archived": false,
+"desc": "Unofficial MCP server for the Fastmail JMAP API — email, contacts, and calendar tools for AI assistants. Not affiliated with Fastmail. Includes a DXT for Claude Desktop.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"MicrosoftDocs/mcp": {
+"stars": 1957,
+"forks": 278,
+"pushed_at": "2026-10-25T04:04:28Z",
+"archived": false,
+"desc": "Official Microsoft Learn MCP Server and CLI tool – powering LLMs and AI agents with real-time, trusted Microsoft docs & code samples.",
+"license": "CC-BY-4.0",
+"lang": "TypeScript"
+},
+"Nodeblue-AI/studio5000-mcp-server": {
+"stars": 25,
+"forks": 8,
+"pushed_at": "2026-09-24T18:34:59Z",
+"archived": false,
+"desc": "MCP server for Rockwell/Allen-Bradley Studio 5000 — parse L5X project exports and give AI agents structured access to PLC tags, UDTs, routines, and programs.",
+"license": "MIT",
+"lang": "Python"
+},
+"OHNLP/omop_mcp": {
+"stars": 41,
+"forks": 10,
+"pushed_at": "2026-05-11T00:10:32Z",
+"archived": false,
+"desc": "Model Context Protocol (MCP) server for mapping clinical terminology to Observational Medical Outcomes Partnership (OMOP) concepts using Large Language Models",
+"license": "NOASSERTION",
+"lang": "Python"
+},
+"OpenDataMCP/OpenDataMCP": {
+"stars": 156,
+"forks": 22,
+"pushed_at": "2024-12-20T17:37:45Z",
+"archived": false,
+"desc": "Connect any Open Data to any LLM with Model Context Protocol.",
+"license": "MIT",
+"lang": "Python"
+},
+"PortSwigger/mcp-server": {
+"stars": 1260,
+"forks": 215,
+"pushed_at": "2026-10-27T15:28:37Z",
+"archived": false,
+"desc": "MCP Server for Burp",
+"license": "GPL-3.0",
+"lang": "Kotlin"
+},
+"Pradumnasaraf/aviationstack-mcp": {
+"stars": 27,
+"forks": 12,
+"pushed_at": "2026-10-28T17:43:25Z",
+"archived": false,
+"desc": "An MCP server using the AviationStack API to fetch real-time flight data including airline flights, airport schedules, future flights and aircraft types ✈️.",
+"license": "MIT",
+"lang": "Python"
+},
+"PrefectHQ/fastmcp": {
+"stars": 28225,
+"forks": 2539,
+"pushed_at": "2026-10-29T03:20:12Z",
+"archived": false,
+"desc": "🚀 The fast, Pythonic way to build MCP servers and clients.",
+"license": "Apache-2.0",
+"lang": "Python"
+},
+"QuantConnect/mcp-server": {
+"stars": 79,
+"forks": 32,
+"pushed_at": "2026-10-26T19:34:55Z",
+"archived": false,
+"desc": "Official QuantConnect MCP Server to use AI with QuantConnect",
+"license": "Apache-2.0",
+"lang": null
+},
+"Rudra-ravi/wikipedia-mcp": {
+"stars": 302,
+"forks": 60,
+"pushed_at": "2026-05-01T03:39:08Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server that retrieves information from Wikipedia to provide context to LLMs.",
+"license": "MIT",
+"lang": "Python"
+},
+"ScrapeGraphAI/Scrapegraph-ai": {
+"stars": 32316,
+"forks": 3311,
+"pushed_at": "2026-10-06T08:27:54Z",
+"archived": false,
+"desc": "Python scraper based on AI",
+"license": "MIT",
+"lang": "Python"
+},
+"Shawyeok/mcp-dingding-bot": {
+"stars": 12,
+"forks": 5,
+"pushed_at": "2025-07-08T00:52:04Z",
+"archived": false,
+"desc": "MCP Server for send text/markdown message via dingding (aka dingtalk) group custom robot",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"Shy2593666979/mcp-server-email": {
+"stars": 81,
+"forks": 19,
+"pushed_at": "2025-04-27T14:25:02Z",
+"archived": false,
+"desc": "一个基于 MCP (Model Context Protocol) 的邮件服务，支持 LLM 发送带附件的电子邮件及在指定目录中搜索文件。提供安全的 SMTP 传输、多收件人支持和附件模式匹配搜索功能，适用于 Gmail、Outlook、Yahoo、QQ 邮箱和网易 126 邮箱等主流邮箱服务。",
+"license": "MIT",
+"lang": "Python"
+},
+"Simon-Kansara/ableton-live-mcp-server": {
+"stars": 396,
+"forks": 70,
+"pushed_at": "2025-03-26T16:05:41Z",
+"archived": false,
+"desc": "MCP Server implementation for Ableton Live OSC control",
+"license": "MIT",
+"lang": "Python"
+},
+"Snowflake-Labs/mcp": {
+"stars": 303,
+"forks": 109,
+"pushed_at": "2026-05-15T16:30:51Z",
+"archived": false,
+"desc": "MCP Server for Snowflake including Cortex AI, object management, SQL orchestration, semantic view consumption, and more",
+"license": "Apache-2.0",
+"lang": "Python"
+},
+"SonarSource/sonarqube-mcp-server": {
+"stars": 675,
+"forks": 102,
+"pushed_at": "2026-10-28T21:45:28Z",
+"archived": false,
+"desc": "Official SonarQube MCP Server for code quality and security in AI agents",
+"license": "NOASSERTION",
+"lang": "Java"
+},
+"TonyWang-hub/mcp-cn-commerce": {
+"stars": 92,
+"forks": 18,
+"pushed_at": "2026-10-26T08:44:08Z",
+"archived": false,
+"desc": "中国电商 MCP 连接器：8 个平台、155 个已注册工具。开源标准版，含能力矩阵与实际工程验收记录；真实商家联调状态逐项公开。Chinese commerce MCP connectors with documented capabilities and validation status.",
+"license": "MIT",
+"lang": "Python"
+},
+"Unstructured-IO/UNS-MCP": {
+"stars": 43,
+"forks": 18,
+"pushed_at": "2026-10-20T23:59:56Z",
+"archived": false,
+"desc": "",
+"license": null,
+"lang": "Jupyter Notebook"
+},
+"VictoriaMetrics/mcp-victoriametrics": {
+"stars": 241,
+"forks": 35,
+"pushed_at": "2026-10-25T15:05:35Z",
+"archived": false,
+"desc": "The implementation of Model Context Protocol (MCP) server for VictoriaMetrics",
+"license": "Apache-2.0",
+"lang": "Go"
+},
+"WordPress/mcp-adapter": {
+"stars": 1888,
+"forks": 226,
+"pushed_at": "2026-10-28T17:44:23Z",
+"archived": false,
+"desc": "An MCP adapter that bridges the Abilities API to the Model Context Protocol, enabling MCP clients to discover and invoke WordPress plugin, theme, and core abilities programmatically.",
+"license": "GPL-2.0",
+"lang": "PHP"
+},
+"XeroAPI/xero-mcp-server": {
+"stars": 385,
+"forks": 209,
+"pushed_at": "2026-10-26T07:23:13Z",
+"archived": false,
+"desc": "An MCP server that integrates with the MCP protocol. https://modelcontextprotocol.io/introduction",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"Xquik-dev/x-twitter-scraper": {
+"stars": 224,
+"forks": 22,
+"pushed_at": "2026-10-28T05:19:03Z",
+"archived": false,
+"desc": "X (Twitter) scraper API & Twitter MCP server to scrape tweets, profiles & followers. Not affiliated with X Corp.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"aaronjmars/web3-research-mcp": {
+"stars": 170,
+"forks": 55,
+"pushed_at": "2026-10-22T17:43:42Z",
+"archived": false,
+"desc": "Local MCP server for deep crypto token research across CoinGecko, DeFiLlama and web search. Free, no API key.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"abordage/awesome-mcp": {
+"stars": 28,
+"forks": 134,
+"pushed_at": "2026-10-28T13:35:27Z",
+"archived": false,
+"desc": "Curated list of Model Context Protocol (MCP) servers, clients, and frameworks. Automatically updated daily.",
+"license": "MIT",
+"lang": null
+},
+"adhikasp/mcp-git-ingest": {
+"stars": 314,
+"forks": 43,
+"pushed_at": "2025-01-26T10:32:13Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server that helps read GitHub repository structure and important files.",
+"license": "MIT",
+"lang": "Python"
+},
+"ahujasid/blender-mcp": {
+"stars": 32627,
+"forks": 2958,
+"pushed_at": "2026-10-28T14:34:41Z",
+"archived": false,
+"desc": "Community plugin to control Blender 3D with any LLM of your choice. Not affiliated with the official Blender Foundation.",
+"license": "MIT",
+"lang": "Python"
+},
+"akutishevsky/lunchmoney-mcp": {
+"stars": 112,
+"forks": 19,
+"pushed_at": "2026-08-03T08:08:33Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server implementation for LunchMoney, providing programmatic access to personal finance management through LunchMoney's API.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"amurshak/congressMCP": {
+"stars": 36,
+"forks": 11,
+"pushed_at": "2026-08-27T01:21:11Z",
+"archived": false,
+"desc": "An MCP server allowing AI agents and MCP clients to interface with the Congress.gov API",
+"license": "NOASSERTION",
+"lang": "Python"
+},
+"anthropics/skills": {
+"stars": 184549,
+"forks": 21815,
+"pushed_at": "2026-10-28T19:20:39Z",
+"archived": false,
+"desc": "Public repository for Agent Skills",
+"license": null,
+"lang": "Python"
+},
+"antvis/mcp-server-chart": {
+"stars": 4408,
+"forks": 422,
+"pushed_at": "2026-08-27T01:50:14Z",
+"archived": false,
+"desc": "🤖 A visualization mcp & skills contains 25+ visual charts using @antvis. Using for chart generation and data analysis.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"anviod/edgeCore": {
+"stars": 135,
+"forks": 41,
+"pushed_at": "2026-10-26T22:28:08Z",
+"archived": false,
+"desc": "EdgeCore is the core runtime of EdgeOS industrial edge platform. 部署于工业现场，支持Modbus、BACnet、OPC-UA、S7、EtherNet等协议接入，通过MQTT、OPC-UA Server、Sparkplug-B连接云端，实现工业数据采集、边缘计算与智能协同(MCP Server)。",
+"license": "NOASSERTION",
+"lang": "Go"
+},
+"apify/apify-mcp-server": {
+"stars": 13694,
+"forks": 401,
+"pushed_at": "2026-10-28T23:28:46Z",
+"archived": false,
+"desc": "The Apify MCP server enables your AI agents to extract data from social media, search engines, maps, e-commerce sites, or any other website using thousands of ready-made scrapers, crawlers, and automa",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"automation-ai-labs/mcp-link": {
+"stars": 625,
+"forks": 69,
+"pushed_at": "2025-04-03T15:48:57Z",
+"archived": false,
+"desc": "Convert Any OpenAPI V3 API to MCP Server",
+"license": "MIT",
+"lang": "Go"
+},
+"awslabs/mcp": {
+"stars": 9844,
+"forks": 1835,
+"pushed_at": "2026-10-29T02:46:38Z",
+"archived": false,
+"desc": "Open source MCP Servers for AWS",
+"license": "Apache-2.0",
+"lang": "Python"
+},
+"axliupore/mcp-code-runner": {
+"stars": 18,
+"forks": 6,
+"pushed_at": "2025-04-11T04:05:59Z",
+"archived": false,
+"desc": "",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"baidu-maps/mcp": {
+"stars": 447,
+"forks": 49,
+"pushed_at": "2025-08-22T03:30:09Z",
+"archived": false,
+"desc": "Baidu Map MCP Server",
+"license": "MIT",
+"lang": "Python"
+},
+"baruchiro/paperless-mcp": {
+"stars": 149,
+"forks": 37,
+"pushed_at": "2026-09-15T14:30:00Z",
+"archived": false,
+"desc": "An MCP (Model Context Protocol) server for interacting with a Paperless-NGX API server. This server provides tools for managing documents, tags, correspondents, and document types in your Paperless-NG",
+"license": "ISC",
+"lang": "TypeScript"
+},
+"bgauryy/octocode": {
+"stars": 956,
+"forks": 79,
+"pushed_at": "2026-10-21T15:07:46Z",
+"archived": false,
+"desc": "Code research platform for AI agents; find, understand, and prove context across your code and all of GitHub, in a fraction of the tokens. One toolset, MCP or CLI  ",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"brightdata/brightdata-mcp": {
+"stars": 2693,
+"forks": 336,
+"pushed_at": "2026-10-26T14:03:43Z",
+"archived": false,
+"desc": "A powerful Model Context Protocol (MCP) server that provides an all-in-one solution for public web access.",
+"license": "MIT",
+"lang": "JavaScript"
+},
+"cafferychen777/ChatSpatial": {
+"stars": 46,
+"forks": 14,
+"pushed_at": "2026-10-20T18:13:07Z",
+"archived": false,
+"desc": "MCP server for spatial transcriptomics analysis through natural language interfaces.",
+"license": "MIT",
+"lang": "Python"
+},
+"callobuzz/cob-shopify-mcp": {
+"stars": 18,
+"forks": 5,
+"pushed_at": "2026-10-16T23:06:53Z",
+"archived": false,
+"desc": "Production-grade MCP server and CLI tool for Shopify Admin GraphQL API — 49+ tools, YAML-extensible, dual auth, dual transport, Docker-ready",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"campertunity/mcp-server": {
+"stars": 17,
+"forks": 4,
+"pushed_at": "2026-04-15T04:22:05Z",
+"archived": false,
+"desc": "",
+"license": null,
+"lang": "TypeScript"
+},
+"chatmcp/mcp-server-flomo": {
+"stars": 58,
+"forks": 14,
+"pushed_at": "2025-05-23T01:06:37Z",
+"archived": false,
+"desc": "Write notes to Flomo",
+"license": "MIT",
+"lang": "JavaScript"
+},
+"chewcw/tia-portal-openness-mcpserver": {
+"stars": 39,
+"forks": 9,
+"pushed_at": "2026-09-13T23:32:54Z",
+"archived": false,
+"desc": "TIA Portal Openness MCP Server",
+"license": null,
+"lang": "C#"
+},
+"chigwell/telegram-mcp": {
+"stars": 1920,
+"forks": 481,
+"pushed_at": "2026-10-28T10:10:58Z",
+"archived": false,
+"desc": "Telegram MCP server powered by Telethon to let MCP clients read chats, manage groups, and send/modify messages, media, contacts, and settings.",
+"license": "Apache-2.0",
+"lang": "Python"
+},
+"chopinfeng/awesome-hardware-skills": {
+"stars": 1,
+"forks": 1,
+"pushed_at": "2026-09-21T13:29:57Z",
+"archived": false,
+"desc": "Agent Skills, MCP servers, simulators and benchmarks for AI agents that build, flash and control hardware — with a verification ladder (L0 static / L1 simulator / L2 real-hardware attestation)",
+"license": "NOASSERTION",
+"lang": "Python"
+},
+"cnych/seo-mcp": {
+"stars": 260,
+"forks": 43,
+"pushed_at": "2025-04-14T13:26:19Z",
+"archived": false,
+"desc": "A free SEO tool MCP (Model Control Protocol) service based on Ahrefs data. Includes features such as backlinks, keyword ideas, and more.",
+"license": "MIT",
+"lang": "Python"
+},
+"danielkennedy1/pdf-tools-mcp": {
+"stars": 32,
+"forks": 13,
+"pushed_at": "2025-05-17T13:05:26Z",
+"archived": false,
+"desc": "",
+"license": "MIT",
+"lang": "Python"
+},
+"datalayer/jupyter-mcp-server": {
+"stars": 1315,
+"forks": 208,
+"pushed_at": "2026-10-27T15:00:40Z",
+"archived": false,
+"desc": "🪐 🔧 Model Context Protocol (MCP) Server for Jupyter.",
+"license": "BSD-3-Clause",
+"lang": "Python"
+},
+"deadletterq/mcp-opennutrition": {
+"stars": 208,
+"forks": 31,
+"pushed_at": "2026-07-28T15:15:58Z",
+"archived": false,
+"desc": "MCP server providing access to the comprehensive OpenNutrition food database with 300,000+ food items, nutritional data, and barcode lookups",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"docker/hub-mcp": {
+"stars": 171,
+"forks": 99,
+"pushed_at": "2026-10-14T08:07:20Z",
+"archived": false,
+"desc": "Docker Hub MCP Server",
+"license": "Apache-2.0",
+"lang": "TypeScript"
+},
+"driin0/ha-mcp-server": {
+"stars": 0,
+"forks": 0,
+"pushed_at": "2026-08-30T15:21:39Z",
+"archived": false,
+"desc": "MCP server for Home Assistant: 182 tools over the REST and WebSocket APIs, with a status dashboard. Runs as a container or as a Home Assistant app.",
+"license": "AGPL-3.0",
+"lang": "Python"
+},
+"dschuler36/reaper-mcp-server": {
+"stars": 133,
+"forks": 14,
+"pushed_at": "2026-10-16T00:09:22Z",
+"archived": false,
+"desc": "An MCP Server for interacting with Reaper projects.",
+"license": "MIT",
+"lang": "Python"
+},
+"elie222/inbox-zero": {
+"stars": 12847,
+"forks": 1648,
+"pushed_at": "2026-10-29T03:15:17Z",
+"archived": false,
+"desc": "The world's best AI personal assistant for email. Open source app to help you reach inbox zero fast.",
+"license": "NOASSERTION",
+"lang": "TypeScript"
+},
+"eqtylab/mcp-guardian": {
+"stars": 202,
+"forks": 14,
+"pushed_at": "2025-08-08T01:17:20Z",
+"archived": false,
+"desc": "Manage / Proxy / Secure your MCP Servers",
+"license": "Apache-2.0",
+"lang": "Rust"
+},
+"ergut/mcp-bigquery-server": {
+"stars": 148,
+"forks": 32,
+"pushed_at": "2026-05-22T09:39:51Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server that provides secure, read-only access to BigQuery datasets. Enables Large Language Models (LLMs) to safely query and analyze data through a standardized interfac",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"ethancod1ng/binance-mcp-server": {
+"stars": 34,
+"forks": 12,
+"pushed_at": "2026-01-31T12:10:12Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server for integrating AI assistants with Binance cryptocurrency exchange APIs, enabling automated trading, market data access, and account management.",
+"license": null,
+"lang": "TypeScript"
+},
+"farzadnadiri/MCP-CAN": {
+"stars": 25,
+"forks": 4,
+"pushed_at": "2026-10-09T18:47:05Z",
+"archived": false,
+"desc": "Talk to Your Car Using AI",
+"license": "MIT",
+"lang": "Python"
+},
+"farzadnadiri/peykan": {
+"stars": 25,
+"forks": 4,
+"pushed_at": "2026-10-09T18:47:05Z",
+"archived": false,
+"desc": "Talk to Your Car Using AI",
+"license": "MIT",
+"lang": "Python"
+},
+"firecrawl/firecrawl-mcp-server": {
+"stars": 7711,
+"forks": 919,
+"pushed_at": "2026-10-29T02:55:19Z",
+"archived": false,
+"desc": "Official Firecrawl MCP server, the context API for AI agents: search, scrape, and interact with the web, plus parse, crawl, map, Agent and Monitor, from any MCP client.",
+"license": "MIT",
+"lang": "JavaScript"
+},
+"gbrigandi/mcp-server-wazuh": {
+"stars": 240,
+"forks": 61,
+"pushed_at": "2025-12-12T03:06:04Z",
+"archived": false,
+"desc": "MCP Server for Wazuh SIEM",
+"license": "MIT",
+"lang": "Rust"
+},
+"geekjourneyx/md2wechat-skill": {
+"stars": 3769,
+"forks": 419,
+"pushed_at": "2026-10-14T16:18:24Z",
+"archived": false,
+"desc": "面向 AI Agent 的微信公众号创作与发布 CLI：Markdown 排版、AI 配图、预览与草稿创建；支持由浏览器 Agent 保存知乎、CSDN、头条未发布草稿。",
+"license": "NOASSERTION",
+"lang": "Go"
+},
+"genomoncology/biomcp": {
+"stars": 668,
+"forks": 121,
+"pushed_at": "2026-10-24T00:35:02Z",
+"archived": false,
+"desc": "BioMCP: Biomedical Model Context Protocol",
+"license": "MIT",
+"lang": "Rust"
+},
+"getsentry/toolkit": {
+"stars": 949,
+"forks": 171,
+"pushed_at": "2026-10-29T03:04:18Z",
+"archived": false,
+"desc": "Agentic tooling for Sentry",
+"license": "NOASSERTION",
+"lang": "TypeScript"
+},
+"github/github-mcp-server": {
+"stars": 34048,
+"forks": 5244,
+"pushed_at": "2026-10-28T20:49:45Z",
+"archived": false,
+"desc": "GitHub's official MCP Server",
+"license": "MIT",
+"lang": "Go"
+},
+"gotoolkits/mcp-wecombot-server": {
+"stars": 36,
+"forks": 7,
+"pushed_at": "2025-01-22T15:51:29Z",
+"archived": false,
+"desc": "An MCP server application that sends various types of messages to the WeCom group robot.",
+"license": "GPL-3.0",
+"lang": "Go"
+},
+"gpetraroli/mcp_pdf_reader": {
+"stars": 32,
+"forks": 8,
+"pushed_at": "2025-07-18T08:15:14Z",
+"archived": false,
+"desc": "An MCP server to extraxt/search text from pdf",
+"license": null,
+"lang": "JavaScript"
+},
+"grab/cursor-talk-to-figma-mcp": {
+"stars": 7077,
+"forks": 783,
+"pushed_at": "2026-07-26T07:14:26Z",
+"archived": false,
+"desc": "TalkToFigma: MCP integration between AI Agent (Cursor, Claude Code, Codex) and Figma, allowing Agentic AI to communicate with Figma for reading designs and modifying them programmatically.",
+"license": "MIT",
+"lang": "JavaScript"
+},
+"grafana/mcp-grafana": {
+"stars": 3625,
+"forks": 482,
+"pushed_at": "2026-10-28T17:01:54Z",
+"archived": false,
+"desc": "MCP server for Grafana",
+"license": "Apache-2.0",
+"lang": "Go"
+},
+"hashicorp/terraform-mcp-server": {
+"stars": 1554,
+"forks": 200,
+"pushed_at": "2026-10-28T21:38:44Z",
+"archived": false,
+"desc": "The Terraform MCP Server provides seamless integration with Terraform ecosystem, enabling advanced automation and interaction capabilities for Infrastructure as Code (IaC) development.",
+"license": "MPL-2.0",
+"lang": "Go"
+},
+"hellokaton/unsplash-mcp-server": {
+"stars": 237,
+"forks": 26,
+"pushed_at": "2026-10-12T03:24:26Z",
+"archived": false,
+"desc": "🔎 A MCP server for Unsplash image search.",
+"license": "MIT",
+"lang": "Python"
+},
+"horw/esp-mcp": {
+"stars": 157,
+"forks": 21,
+"pushed_at": "2025-12-27T01:32:27Z",
+"archived": false,
+"desc": "Centralize ESP32 related commands and simplify getting started with seamless, LLM-driven interaction and help.",
+"license": null,
+"lang": "Python"
+},
+"hustcc/mcp-echarts": {
+"stars": 270,
+"forks": 40,
+"pushed_at": "2026-08-27T01:50:43Z",
+"archived": false,
+"desc": "🧬 Generate visual charts using ECharts with AI MCP dynamically, used for chart generation and data analysis.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"hustcc/mcp-mermaid": {
+"stars": 646,
+"forks": 60,
+"pushed_at": "2026-05-15T12:16:57Z",
+"archived": false,
+"desc": "❤️ Generate mermaid diagram and chart with AI MCP dynamically.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"hykfft/mcp-dingtalk-doc": {
+"stars": 56,
+"forks": 7,
+"pushed_at": "2025-12-10T08:05:58Z",
+"archived": false,
+"desc": "获取钉钉文档的MCP",
+"license": null,
+"lang": "Python"
+},
+"iFurySt/RedNote-MCP": {
+"stars": 1126,
+"forks": 186,
+"pushed_at": "2025-05-11T12:30:52Z",
+"archived": false,
+"desc": "🚀MCP server for accessing RedNote(XiaoHongShu, xhs).",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"idosal/git-mcp": {
+"stars": 8495,
+"forks": 760,
+"pushed_at": "2026-05-08T14:21:24Z",
+"archived": false,
+"desc": "Put an end to code hallucinations! GitMCP is a free, open-source, remote MCP server for any GitHub project",
+"license": "Apache-2.0",
+"lang": "TypeScript"
+},
+"iiAtlas/hledger-mcp": {
+"stars": 65,
+"forks": 6,
+"pushed_at": "2026-02-28T18:51:46Z",
+"archived": false,
+"desc": "A local MCP server for interacting with the HLedger cli",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"isaacwasserman/mcp-vegalite-server": {
+"stars": 100,
+"forks": 26,
+"pushed_at": "2025-05-16T19:44:35Z",
+"archived": false,
+"desc": "",
+"license": null,
+"lang": "Python"
+},
+"isdaniel/mcp_weather_server": {
+"stars": 60,
+"forks": 35,
+"pushed_at": "2026-09-09T12:55:20Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server that provides weather information using the Open-Meteo API.",
+"license": "Apache-2.0",
+"lang": "Python"
+},
+"jae-jae/fetcher-mcp": {
+"stars": 1088,
+"forks": 100,
+"pushed_at": "2026-01-14T07:07:21Z",
+"archived": false,
+"desc": "MCP server for fetch web page content using Playwright headless browser.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"jagan-shanmugam/open-streetmap-mcp": {
+"stars": 230,
+"forks": 53,
+"pushed_at": "2025-07-12T21:55:20Z",
+"archived": false,
+"desc": "An OpenStreetMap MCP server implementation that enhances LLM capabilities with location-based services and geospatial data.",
+"license": "MIT",
+"lang": "Python"
+},
+"jerhadf/linear-mcp-server": {
+"stars": 346,
+"forks": 57,
+"pushed_at": "2025-05-01T19:45:31Z",
+"archived": false,
+"desc": "A server that integrates Linear's project management system with the Model Context Protocol (MCP) to allow LLMs to interact with Linear.",
+"license": "MIT",
+"lang": "JavaScript"
+},
+"jifrozen0110/mcp-riot": {
+"stars": 27,
+"forks": 8,
+"pushed_at": "2025-07-05T16:14:15Z",
+"archived": false,
+"desc": "League of Legends MCP Server",
+"license": "MIT",
+"lang": "Python"
+},
+"jjsantos01/qgis_mcp": {
+"stars": 1138,
+"forks": 190,
+"pushed_at": "2025-10-01T01:23:25Z",
+"archived": false,
+"desc": "Model Context Protocol (MCP) that allows LLMs to use QGIS Desktop",
+"license": null,
+"lang": "Python"
+},
+"johannesPettersson80/codesys-mcp-toolkit": {
+"stars": 127,
+"forks": 37,
+"pushed_at": "2025-05-24T19:04:54Z",
+"archived": false,
+"desc": "Model Context Protocol server for CODESYS automation platform",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"johannesbrandenburger/typst-mcp": {
+"stars": 186,
+"forks": 20,
+"pushed_at": "2026-04-18T06:50:34Z",
+"archived": false,
+"desc": "Typst MCP Server is an MCP (Model Context Protocol) implementation that helps AI models interact with Typst, a markup-based typesetting system. The server provides tools for converting between LaTeX a",
+"license": "MIT",
+"lang": "Python"
+},
+"just-every/mcp-read-website-fast": {
+"stars": 163,
+"forks": 27,
+"pushed_at": "2026-09-29T21:11:24Z",
+"archived": false,
+"desc": "Quickly reads webpages and converts to markdown for fast, token efficient web scraping",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"kanyun-inc/rush-shimo-cli": {
+"stars": 4,
+"forks": 0,
+"pushed_at": "2026-10-14T10:53:21Z",
+"archived": false,
+"desc": "石墨文档 CLI + SDK + MCP — read Shimo documents from terminal and AI agents",
+"license": null,
+"lang": "TypeScript"
+},
+"kapilduraphe/mcp-watch": {
+"stars": 139,
+"forks": 19,
+"pushed_at": "2026-07-20T03:20:20Z",
+"archived": false,
+"desc": "A comprehensive security scanner for Model Context Protocol (MCP) servers that detects vulnerabilities and security issues in your MCP server implementations.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"karanb192/reddit-mcp-buddy": {
+"stars": 866,
+"forks": 108,
+"pushed_at": "2026-10-25T16:04:02Z",
+"archived": false,
+"desc": "Clean, LLM-optimized Reddit MCP server. Browse posts, search content, analyze users. No fluff, just Reddit data.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"keithyt06/quick-dingtalk-mcp": {
+"stars": 9,
+"forks": 3,
+"pushed_at": "2026-06-10T08:30:20Z",
+"archived": false,
+"desc": "User-identity DingTalk MCP server. Wraps the official dws CLI to expose your real DingTalk identity (not a bot) to Amazon Q Desktop / Claude Desktop / Cursor / any MCP host.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"kimsungwhee/apple-docs-mcp": {
+"stars": 1382,
+"forks": 69,
+"pushed_at": "2026-03-17T02:39:50Z",
+"archived": false,
+"desc": "MCP server for Apple Developer Documentation - Search iOS/macOS/SwiftUI/UIKit docs, WWDC videos, Swift/Objective-C APIs & code examples in Claude, Cursor & AI assistants",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"ktanaka101/mcp-server-duckdb": {
+"stars": 179,
+"forks": 21,
+"pushed_at": "2025-05-05T11:02:57Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server implementation for DuckDB, providing database interaction capabilities",
+"license": "MIT",
+"lang": "Python"
+},
+"kukapay/modbus-mcp": {
+"stars": 25,
+"forks": 10,
+"pushed_at": "2025-05-12T07:11:37Z",
+"archived": false,
+"desc": "An MCP server that standardizes and contextualizes industrial Modbus data.",
+"license": "MIT",
+"lang": "Python"
+},
+"kukapay/opcua-mcp": {
+"stars": 31,
+"forks": 13,
+"pushed_at": "2025-10-29T23:52:25Z",
+"archived": false,
+"desc": "An MCP server that connects to OPC UA-enabled industrial systems.",
+"license": "MIT",
+"lang": "Python"
+},
+"larksuite/lark-openapi-mcp": {
+"stars": 852,
+"forks": 122,
+"pushed_at": "2025-08-14T05:39:18Z",
+"archived": false,
+"desc": "飞书/Lark官方 OpenAPI MCP",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"lharries/whatsapp-mcp": {
+"stars": 6757,
+"forks": 1457,
+"pushed_at": "2025-07-13T17:22:00Z",
+"archived": false,
+"desc": "WhatsApp MCP server",
+"license": "MIT",
+"lang": "Go"
+},
+"line/line-bot-mcp-server": {
+"stars": 793,
+"forks": 156,
+"pushed_at": "2026-10-28T02:16:12Z",
+"archived": false,
+"desc": "MCP server that integrates the LINE Messaging API to connect an AI Agent to the LINE Official Account.",
+"license": "Apache-2.0",
+"lang": "TypeScript"
+},
+"loonghao/wecom-bot-mcp-server": {
+"stars": 106,
+"forks": 20,
+"pushed_at": "2026-10-28T01:21:52Z",
+"archived": false,
+"desc": "A Python server implementation for WeCom (WeChat Work) bot that follows the Model Context Protocol (MCP). This server provides a standardized interface for handling automated messaging and context-awa",
+"license": "MIT",
+"lang": "Python"
+},
+"lpigeon/unitree-go2-mcp-server": {
+"stars": 87,
+"forks": 13,
+"pushed_at": "2026-06-10T07:34:11Z",
+"archived": false,
+"desc": "The Unitree Go2 MCP Server is a server built on the MCP that enables users to control the Unitree Go2 robot using natural language commands interpreted by a LLM.",
+"license": "Apache-2.0",
+"lang": "Python"
+},
+"luminarylane/fal-mcp-server": {
+"stars": 61,
+"forks": 16,
+"pushed_at": "2026-05-04T07:32:30Z",
+"archived": false,
+"desc": "MCP server for Fal.ai - Generate images, videos, music and audio with Claude",
+"license": "MIT",
+"lang": "Python"
+},
+"m0xai/trello-mcp-server": {
+"stars": 54,
+"forks": 42,
+"pushed_at": "2026-06-18T09:50:16Z",
+"archived": false,
+"desc": "A simple yet powerful MCP server for Trello. ",
+"license": null,
+"lang": "Python"
+},
+"mahdin75/geoserver-mcp": {
+"stars": 96,
+"forks": 27,
+"pushed_at": "2026-08-16T12:14:22Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server implementation that connects LLMs to the GeoServer REST API",
+"license": "MIT",
+"lang": "Java"
+},
+"mahdin75/gis-mcp": {
+"stars": 201,
+"forks": 55,
+"pushed_at": "2026-08-21T06:27:40Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server implementation that connects Large Language Models (LLMs) to GIS operations using GIS libraries, enabling AI assistants to perform geospatial operations and trans",
+"license": "MIT",
+"lang": "Python"
+},
+"mapbox/mcp-server": {
+"stars": 363,
+"forks": 45,
+"pushed_at": "2026-10-28T21:26:45Z",
+"archived": false,
+"desc": "Mapbox Model Context Protocol (MCP) server",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"mattt/iMCP": {
+"stars": 1904,
+"forks": 131,
+"pushed_at": "2026-10-29T01:58:44Z",
+"archived": false,
+"desc": "A macOS app that provides an MCP server to your Messages, Contacts, Reminders and more",
+"license": "MIT",
+"lang": "Swift"
+},
+"mcpHQ/awesome-mcp-servers": {
+"stars": 186,
+"forks": 361,
+"pushed_at": "2026-10-28T18:22:59Z",
+"archived": false,
+"desc": "A curated catalog of Model Context Protocol (MCP) servers for discovering and integrating AI tools, data sources, and services. Explore MCP servers across databases, developer tools, web automation, c",
+"license": "MIT",
+"lang": "JavaScript"
+},
+"mcpdotdirect/evm-mcp-server": {
+"stars": 379,
+"forks": 106,
+"pushed_at": "2026-10-03T16:56:41Z",
+"archived": false,
+"desc": "MCP server that provides LLMs with tools for interacting with EVM networks",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"mfortne/mcp-video-editing": {
+"stars": 2,
+"forks": 0,
+"pushed_at": "2026-06-08T09:24:58Z",
+"archived": false,
+"desc": "Guardrailed video editing MCP server for AI agents. FFmpeg, Hyperframes, repurposing tools, Python client, and CLI. Local, fast, free.",
+"license": "Apache-2.0",
+"lang": null
+},
+"microsoft/playwright-mcp": {
+"stars": 38778,
+"forks": 3341,
+"pushed_at": "2026-10-22T17:43:26Z",
+"archived": false,
+"desc": "Playwright MCP server",
+"license": "Apache-2.0",
+"lang": "TypeScript"
+},
+"minhyeoky/mcp-server-ledger": {
+"stars": 51,
+"forks": 9,
+"pushed_at": "2025-10-19T05:15:07Z",
+"archived": false,
+"desc": "A Model Context Protocol server for interacting with Ledger CLI, a powerful double-entry accounting system. This server enables Large Language Models to query and analyze financial data through a stan",
+"license": null,
+"lang": "Python"
+},
+"mochow13/google-scholar-mcp": {
+"stars": 25,
+"forks": 7,
+"pushed_at": "2025-08-18T18:36:48Z",
+"archived": false,
+"desc": "An MCP server for Google Scholar written in TypeScript with Streamable HTTP",
+"license": null,
+"lang": "TypeScript"
+},
+"modelcontextprotocol/servers": {
+"stars": 91651,
+"forks": 11880,
+"pushed_at": "2026-10-29T02:40:26Z",
+"archived": false,
+"desc": "Model Context Protocol Servers",
+"license": "NOASSERTION",
+"lang": "TypeScript"
+},
+"mondaycom/mcp": {
+"stars": 436,
+"forks": 104,
+"pushed_at": "2026-10-28T11:24:30Z",
+"archived": false,
+"desc": "Enable AI agents to work reliably - giving them secure access to structured data, tools to take action, and the context needed to make smart decisions.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"motherduckdb/mcp-server-motherduck": {
+"stars": 536,
+"forks": 90,
+"pushed_at": "2026-10-26T07:57:06Z",
+"archived": false,
+"desc": "Local MCP server for DuckDB and MotherDuck",
+"license": "MIT",
+"lang": "Python"
+},
+"mpeirone/zabbix-mcp-server": {
+"stars": 260,
+"forks": 81,
+"pushed_at": "2026-05-10T12:29:29Z",
+"archived": false,
+"desc": "🔌 Complete MCP server for Zabbix integration — Connect AI assistants to Zabbix monitoring with a single unified tool covering 100% of Zabbix APIs. Includes read-only mode and documentation tools for s",
+"license": "GPL-3.0",
+"lang": "Python"
+},
+"nabid-pf/youtube-video-summarizer-mcp": {
+"stars": 62,
+"forks": 10,
+"pushed_at": "2026-01-31T20:45:57Z",
+"archived": false,
+"desc": "",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"nowork-studio/notfair-plugin": {
+"stars": 4077,
+"forks": 511,
+"pushed_at": "2026-10-23T02:34:25Z",
+"archived": false,
+"desc": "Open-source SEO, GEO, and marketing skills for AI agents.",
+"license": "MIT",
+"lang": "Python"
+},
+"omni-mcp/isaac-sim-mcp": {
+"stars": 197,
+"forks": 68,
+"pushed_at": "2026-10-13T13:03:52Z",
+"archived": false,
+"desc": "Isaac Simulation MCP Extension and Server",
+"license": "MIT",
+"lang": "Python"
+},
+"openMF/mcp-mifosx": {
+"stars": 27,
+"forks": 53,
+"pushed_at": "2026-10-29T03:09:02Z",
+"archived": false,
+"desc": "Model Context Protocol - MCP for Mifos X",
+"license": "MPL-2.0",
+"lang": "Java"
+},
+"opsre/ZenOps": {
+"stars": 164,
+"forks": 20,
+"pushed_at": "2026-06-25T02:34:15Z",
+"archived": false,
+"desc": "🧘 通过钉钉、飞书、企微智能机器人用自然语言查询运维资源的工具。",
+"license": "Apache-2.0",
+"lang": "Go"
+},
+"oschina/mcp-gitee": {
+"stars": 66,
+"forks": 16,
+"pushed_at": "2026-09-07T02:53:38Z",
+"archived": false,
+"desc": "mcp-gitee is a Model Context Protocol (MCP) server implementation for Gitee. It provides a set of tools that interact with Gitee's API, allowing AI assistants to manage repository, issues, pull reques",
+"license": "MIT",
+"lang": "Go"
+},
+"palewire/datawrapper-mcp": {
+"stars": 60,
+"forks": 13,
+"pushed_at": "2026-10-01T02:54:54Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server and app for creating Datawrapper charts using AI assistants.",
+"license": "MIT",
+"lang": "Python"
+},
+"pascalorg/editor": {
+"stars": 25177,
+"forks": 3132,
+"pushed_at": "2026-10-28T20:02:56Z",
+"archived": false,
+"desc": "Open-source 3D architectural editor with a local CLI, MCP tools, and practical workflows for humans and AI agents.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"pipeboard-co/meta-ads-mcp": {
+"stars": 1337,
+"forks": 282,
+"pushed_at": "2026-10-20T13:58:42Z",
+"archived": false,
+"desc": "Meta Ads (Facebook/Instagram) MCP server for Claude, ChatGPT, Perplexity & Cursor — the Meta node of Pipeboard’s 5-platform family (+ Google, TikTok, Snap, Reddit). Hosted remote MCP, badged Meta Busi",
+"license": "NOASSERTION",
+"lang": "Python"
+},
+"portainer/portainer-mcp": {
+"stars": 239,
+"forks": 48,
+"pushed_at": "2026-10-23T01:00:05Z",
+"archived": false,
+"desc": "Official Portainer MCP server",
+"license": "MIT",
+"lang": "Python"
+},
+"pskill9/website-downloader": {
+"stars": 157,
+"forks": 32,
+"pushed_at": "2024-12-24T20:29:17Z",
+"archived": false,
+"desc": "MCP server to download entire websites",
+"license": null,
+"lang": "JavaScript"
+},
+"quazaai/UnityMCPIntegration": {
+"stars": 157,
+"forks": 34,
+"pushed_at": "2025-04-15T07:20:09Z",
+"archived": false,
+"desc": "Enable AI Agents to Control Unity",
+"license": "MIT",
+"lang": "C#"
+},
+"reza-gholizade/k8s-mcp-server": {
+"stars": 187,
+"forks": 45,
+"pushed_at": "2026-10-21T14:34:28Z",
+"archived": false,
+"desc": "Manage Your Kubernetes Cluster with k8s mcp-server",
+"license": "MIT",
+"lang": "Go"
+},
+"riemannzeta/patent_mcp_server": {
+"stars": 85,
+"forks": 26,
+"pushed_at": "2026-10-26T19:03:23Z",
+"archived": false,
+"desc": "MCP Server for USPTO data",
+"license": "MIT",
+"lang": "Python"
+},
+"roadwy/cve-search_mcp": {
+"stars": 108,
+"forks": 15,
+"pushed_at": "2025-07-26T14:17:29Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server for querying the CVE-Search API",
+"license": "MIT",
+"lang": "Python"
+},
+"robotmcp/ros-mcp-server": {
+"stars": 1508,
+"forks": 220,
+"pushed_at": "2026-10-28T14:41:32Z",
+"archived": false,
+"desc": "Connect AI models like Claude & GPT with robots using MCP and ROS.",
+"license": "Apache-2.0",
+"lang": "Python"
+},
+"roychri/mcp-server-asana": {
+"stars": 149,
+"forks": 70,
+"pushed_at": "2026-05-10T14:47:21Z",
+"archived": false,
+"desc": "",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"securityfortech/secops-mcp": {
+"stars": 217,
+"forks": 36,
+"pushed_at": "2025-09-17T14:57:39Z",
+"archived": false,
+"desc": "All-in-one security testing toolbox that brings together popular open source tools through a single MCP interface. Connected to an AI agent, it enables tasks like pentesting, bug bounty hunting, threa",
+"license": "MIT",
+"lang": "Python"
+},
+"sharozdawa/awesome-seo-mcp-servers": {
+"stars": 5,
+"forks": 10,
+"pushed_at": "2026-03-21T18:44:46Z",
+"archived": false,
+"desc": "A curated list of MCP servers, agent skills, and AI-powered tools for SEO professionals",
+"license": "MIT",
+"lang": null
+},
+"sonirico/mcp-stockfish": {
+"stars": 16,
+"forks": 8,
+"pushed_at": "2025-06-29T12:25:00Z",
+"archived": false,
+"desc": "🐟 MCP server connecting AI systems to Stockfish chess engine ",
+"license": "MIT",
+"lang": "Go"
+},
+"sparkgeo/geo-mcp-servers": {
+"stars": 244,
+"forks": 36,
+"pushed_at": "2026-10-27T07:42:31Z",
+"archived": false,
+"desc": "A curated, tracked list of Model Context Protocol (MCP) servers for geospatial, GIS, mapping, and earth-observation work — geocoding, routing, PostGIS, STAC/imagery, QGIS/ArcGIS, weather, and the comm",
+"license": "MIT",
+"lang": "Python"
+},
+"stape-io/google-tag-manager-mcp-server": {
+"stars": 240,
+"forks": 65,
+"pushed_at": "2026-10-28T16:23:34Z",
+"archived": false,
+"desc": "MCP server for Google Tag Manager",
+"license": "Apache-2.0",
+"lang": "TypeScript"
+},
+"sunsetcoder/flightradar24-mcp-server": {
+"stars": 47,
+"forks": 6,
+"pushed_at": "2025-01-29T15:17:02Z",
+"archived": false,
+"desc": "Model Context Protocol server for Flight Tracking",
+"license": "MIT",
+"lang": "JavaScript"
+},
+"surendranb/google-analytics-mcp": {
+"stars": 243,
+"forks": 49,
+"pushed_at": "2026-10-28T10:48:52Z",
+"archived": false,
+"desc": "Google Analytics 4 data to AI agents, agentic workflows, and MCP clients. Give agents analysis-ready access to website traffic, user behavior, and performance data with schema discovery, server-side a",
+"license": "MIT",
+"lang": "Python"
+},
+"taazkareem/clickup-mcp-server": {
+"stars": 53,
+"forks": 7,
+"pushed_at": "2026-10-28T23:44:54Z",
+"archived": false,
+"desc": "ClickUp MCP Server - Integrate ClickUp project management with AI through Model Context Protocol",
+"license": "NOASSERTION",
+"lang": "Dockerfile"
+},
+"tadata-org/fastapi_mcp": {
+"stars": 12023,
+"forks": 968,
+"pushed_at": "2025-11-24T14:51:54Z",
+"archived": false,
+"desc": "Expose your FastAPI endpoints as Model Context Protocol (MCP) tools, with Auth!",
+"license": "MIT",
+"lang": "Python"
+},
+"tevonsb/homeassistant-mcp": {
+"stars": 576,
+"forks": 56,
+"pushed_at": "2026-01-25T20:52:22Z",
+"archived": false,
+"desc": "A MCP server for Home Assistant",
+"license": "Apache-2.0",
+"lang": "TypeScript"
+},
+"the-momentum/apple-health-mcp-server": {
+"stars": 281,
+"forks": 25,
+"pushed_at": "2026-07-09T10:57:10Z",
+"archived": false,
+"desc": "MCP server for querying Apple Health data with natural language using DuckDB under the hood.",
+"license": "MIT",
+"lang": "Python"
+},
+"thechandanbhagat/cv-forge": {
+"stars": 30,
+"forks": 9,
+"pushed_at": "2025-12-19T07:45:54Z",
+"archived": false,
+"desc": "MCP server that generates ATS-friendly CVs, cover letters, and email templates tailored to any job description",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"tomtom-international/tomtom-maps-mcp": {
+"stars": 59,
+"forks": 26,
+"pushed_at": "2026-10-28T22:23:24Z",
+"archived": false,
+"desc": "A Model Context Protocol (MCP) server providing TomTom's location services, search, routing, and traffic data to AI agents.",
+"license": "Apache-2.0",
+"lang": "TypeScript"
+},
+"tubeagentkit/youtube-mcp": {
+"stars": 22,
+"forks": 1,
+"pushed_at": "2026-10-27T06:53:36Z",
+"archived": false,
+"desc": "YouTube MCP server: get YouTube video transcripts, search YouTube, browse channels and playlists from Claude, ChatGPT, Cursor and VS Code. Remote, free tier.",
+"license": "MIT",
+"lang": "JavaScript"
+},
+"upstash/context7": {
+"stars": 63870,
+"forks": 3166,
+"pushed_at": "2026-10-28T20:26:24Z",
+"archived": false,
+"desc": "Context7 Platform -- Up-to-date docs for AI agents",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"video-db/agent-toolkit": {
+"stars": 50,
+"forks": 11,
+"pushed_at": "2026-03-26T11:05:28Z",
+"archived": false,
+"desc": "An open-source agent toolkit that auto-syncs SDK versions, docs, and examples—built for seamless integration with LLMs, and AI agents ( MCP compatible).",
+"license": null,
+"lang": "Python"
+},
+"vivekVells/mcp-pandoc": {
+"stars": 584,
+"forks": 63,
+"pushed_at": "2026-08-15T21:24:55Z",
+"archived": false,
+"desc": "MCP server for document format conversion using pandoc.",
+"license": "MIT",
+"lang": "Python"
+},
+"w0h1v/mcp-shodan": {
+"stars": 182,
+"forks": 30,
+"pushed_at": "2026-10-26T06:02:08Z",
+"archived": false,
+"desc": "MCP server for Shodan — search internet-connected devices, IP reconnaissance, DNS lookups, and CVE/CPE vulnerability intelligence. Works with Claude Code, Codex, Gemini CLI, and Claude Desktop.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"webflow/mcp-server": {
+"stars": 140,
+"forks": 37,
+"pushed_at": "2026-10-27T00:16:37Z",
+"archived": false,
+"desc": "Model Context Protocol (MCP) server for the Webflow Data API.",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"wise-vision/ros2_mcp": {
+"stars": 97,
+"forks": 18,
+"pushed_at": "2026-10-21T13:26:29Z",
+"archived": false,
+"desc": "ROS2 MCP: the MCP server that lets AI agents see, understand and operate ROS 2 robots. MPL-2.0.",
+"license": "MPL-2.0",
+"lang": "Python"
+},
+"woocommerce/woocommerce": {
+"stars": 10571,
+"forks": 10662,
+"pushed_at": "2026-10-29T02:39:40Z",
+"archived": false,
+"desc": "A customizable, open-source ecommerce platform built on WordPress. Build any commerce solution you can imagine.",
+"license": "GPL-2.0",
+"lang": "PHP"
+},
+"wso2/fhir-mcp-server": {
+"stars": 137,
+"forks": 59,
+"pushed_at": "2026-10-12T09:41:28Z",
+"archived": false,
+"desc": "FHIR MCP Server – helping you expose any FHIR Server or API as a MCP Server.",
+"license": "Apache-2.0",
+"lang": "Python"
+},
+"yangkyeongmo/mcp-server-apache-airflow": {
+"stars": 181,
+"forks": 48,
+"pushed_at": "2026-03-03T13:24:59Z",
+"archived": false,
+"desc": "",
+"license": "MIT",
+"lang": "Python"
+},
+"yangkyeongmo/mcp-server-openmetadata": {
+"stars": 24,
+"forks": 18,
+"pushed_at": "2025-08-26T04:30:53Z",
+"archived": false,
+"desc": "",
+"license": "MIT",
+"lang": "Python"
+},
+"yehuoshun/yuque-ai-mcp": {
+"stars": 7,
+"forks": 1,
+"pushed_at": "2026-10-16T10:28:44Z",
+"archived": false,
+"desc": "语雀 AI MCP Server — 62 个工具，覆盖文档/知识库/搜索/回收站/上传/画板/统计/笔记/用户/团队/RSS/爬虫/KV 全功能",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"yuque/yuque-ecosystem": {
+"stars": 238,
+"forks": 20,
+"pushed_at": "2026-07-15T04:10:20Z",
+"archived": false,
+"desc": "Yuque AI Ecosystem — MCP Server, Skills & Plugin for Yuque (语雀)",
+"license": null,
+"lang": "TypeScript"
+},
+"yuque/yuque-mcp-server": {
+"stars": 258,
+"forks": 28,
+"pushed_at": "2026-07-15T03:00:57Z",
+"archived": false,
+"desc": "Yuque MCP Server - Model Context Protocol server for Yuque API",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"zackchewa/awesome-china-mcp": {
+"stars": 54,
+"forks": 20,
+"pushed_at": "2026-10-28T03:44:43Z",
+"archived": false,
+"desc": "Curated index of MCP servers for Chinese apps — connect your AI agent to 高德地图, 12306, 小红书, 飞书, 语雀, A股 and more. The open-source 'Composio for China'.",
+"license": "CC0-1.0",
+"lang": null
+},
+"zcaceres/markdownify-mcp": {
+"stars": 2996,
+"forks": 256,
+"pushed_at": "2026-10-26T05:51:27Z",
+"archived": false,
+"desc": "A Model Context Protocol server for converting almost anything to Markdown",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"ztxtxwd/open-feishu-mcp-server": {
+"stars": 87,
+"forks": 15,
+"pushed_at": "2026-01-27T15:00:41Z",
+"archived": false,
+"desc": "",
+"license": "MIT",
+"lang": "TypeScript"
+},
+"zymorel/revit-mcp": {
+"stars": 2,
+"forks": 0,
+"pushed_at": "2026-07-02T08:50:59Z",
+"archived": false,
+"desc": "MCP Server for Revit 2026 — BIM/GIS tools for Claude Desktop (GEOX3D)",
+"license": null,
+"lang": "C#"
+}
+}
+}
