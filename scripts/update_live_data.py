@@ -31,7 +31,7 @@ CATALOG = "catalog.csv"
 OUTPUT = "live_multi.json"
 SEEN_STATE = "scripts/.state/seen_candidates.json"  # 持久化已处理候选主键
 INBOX_DIR = "_inbox"                              # 每轮 inbox 输出目录
-INBOX_THRESHOLD = 7                               # confidence ≥ 此值才进 inbox；线上有 token + stars 权重时大多数候选能到 7-8
+INBOX_THRESHOLD = 6                               # confidence ≥ 此值才进 inbox；candidates 不反查 GitHub stars，封顶 6-7 分
 
 CANDIDATE_LIMIT = 150
 SLEEP_GITHUB = 0.18
@@ -493,6 +493,11 @@ def run_pipeline() -> dict:
         if e.downloads: score += 1
         # 有 GitHub 仓库比纯 npm/crates 包更可信（更容易直接进 catalog）
         if e.repo_slug: score += 1
+        # 综合 bonus：四要素齐全（官方 Registry 源 + 活跃 + 有端点 + 有 GitHub 仓库）
+        # 这是候选能直接进 catalog 的最强信号，+1 把封顶推到 7
+        if (e.source == "mcp_registry" and e.status == "active"
+                and e.endpoint and e.repo_slug):
+            score += 1
         e.extra["confidence"] = score
 
         # 分类推断

@@ -4,7 +4,11 @@ scripts/.state/
 scripts/__pycache__/
 *.pyc
 
-# Local scratch scripts (Phase 2 调试临时文件)
+# Local scratch scripts (调试临时文件)
 _check_*.py
 _check_*.html
 _debug_*.py
+_diag_*.py
+
+# Local scratch pipeline output (线上 Actions 会生成正确的)
+live_multi.json
