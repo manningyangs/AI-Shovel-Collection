@@ -23,6 +23,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field, asdict
 from typing import Optional
 
@@ -38,6 +39,10 @@ SLEEP_GITHUB = 0.18
 SLEEP_REGISTRY = 0.05
 SLEEP_INDEX = 0.35
 HTTP_TIMEOUT = 25
+
+# 端点可调用性实测（MCP Streamable HTTP initialize 握手）
+VERIFY_TIMEOUT = 8        # 单端点超时（秒）
+VERIFY_WORKERS = 10       # 并发数：142 端点最坏 ~2min，不影响 8min workflow 上限
 
 MCP_KEYWORDS = [
     "mcp-server", "modelcontextprotocol", "model-context-protocol",
@@ -404,6 +409,60 @@ class CratesFetcher(FetcherBase):
         return entries
 
 
+# ---------- 端点可调用性实测 ----------
+def _verify_one(url: str) -> dict:
+    """对 MCP Streamable HTTP 端点做一次 initialize 握手。
+    返回 endpoint_status: ok / auth / fail，附 http 码与原因。"""
+    body = json.dumps({
+        "jsonrpc": "2.0", "id": 1, "method": "initialize",
+        "params": {
+            "protocolVersion": "2025-06-18",
+            "capabilities": {},
+            "clientInfo": {"name": "ai-shovel-verifier", "version": "1.0"},
+        },
+    }).encode("utf-8")
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/event-stream",
+        "User-Agent": "AI-Shovel-Collection-verifier/1.0",
+    }
+    try:
+        req = urllib.request.Request(url, data=body, headers=headers, method="POST")
+        with urllib.request.urlopen(req, timeout=VERIFY_TIMEOUT) as r:
+            code = r.getcode()
+            txt = r.read(8192).decode("utf-8", "ignore")
+        if 200 <= code < 300 and ("jsonrpc" in txt or '"result"' in txt or "data:" in txt):
+            return {"endpoint_status": "ok", "endpoint_http": code}
+        # 200 但响应体不像 MCP → 可能是网关/落地页，仍算可疑
+        return {"endpoint_status": "ok" if 200 <= code < 300 else "fail",
+                "endpoint_http": code,
+                "endpoint_note": "响应体非 MCP 协议" if 200 <= code < 300 else f"HTTP {code}"}
+    except urllib.error.HTTPError as e:
+        if e.code in (401, 403):
+            # 端点存活但要鉴权 —— 用户填 API Key 就能用，不算挂
+            return {"endpoint_status": "auth", "endpoint_http": e.code}
+        return {"endpoint_status": "fail", "endpoint_http": e.code, "endpoint_note": f"HTTP {e.code}"}
+    except Exception as ex:  # 超时 / 连接拒绝 / DNS 失败
+        return {"endpoint_status": "fail", "endpoint_note": type(ex).__name__}
+
+
+def verify_endpoints(entries: list) -> None:
+    """批量实测带 endpoint 的条目，结果写回 entry.extra（随 to_json 输出）。"""
+    targets = [e for e in entries if e.endpoint]
+    if not targets:
+        return
+    print(f"\n[verify] 端点实测 {len(targets)} 个（并发 {VERIFY_WORKERS}，单个超时 {VERIFY_TIMEOUT}s）…")
+    checked_at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    with ThreadPoolExecutor(max_workers=VERIFY_WORKERS) as tp:
+        results = list(tp.map(lambda e: _verify_one(e.endpoint), targets))
+    counts = {"ok": 0, "auth": 0, "fail": 0}
+    for e, res in zip(targets, results):
+        e.extra.update(res)
+        e.extra["verified_at"] = checked_at
+        counts[res["endpoint_status"]] = counts.get(res["endpoint_status"], 0) + 1
+    print(f"[verify] 结果：可用 {counts['ok']} / 需鉴权 {counts['auth']} / 无响应 {counts['fail']}")
+
+
 # ---------- Pipeline ----------
 def load_catalog() -> tuple:
     slugs, ids = set(), set()
@@ -463,6 +522,9 @@ def run_pipeline() -> dict:
     curated = [e for e in merged if e.id in catalog_ids]
     candidates = [e for e in merged if e.id not in catalog_ids]
 
+    # ---- 端点可调用性实测（在 confidence 评分之前，结果影响评分） ----
+    verify_endpoints(candidates + curated)
+
     # ---- Phase 2: confidence + 分类推断 + seen 过滤 + inbox 输出 ----
     def classify_candidate(entry: Entry) -> tuple:
         """返回 (分类名, 分类命中分, 命中关键词列表)。最高分为第一候选分类。"""
@@ -490,6 +552,8 @@ def run_pipeline() -> dict:
             if e.stars >= 2000: score += 1
         if e.status == "active": score += 1
         if e.endpoint: score += 1
+        # 端点实测可用（MCP initialize 握手成功）—— 最强的"能跑"信号
+        if e.extra.get("endpoint_status") == "ok": score += 1
         if e.downloads: score += 1
         # 有 GitHub 仓库比纯 npm/crates 包更可信（更容易直接进 catalog）
         if e.repo_slug: score += 1
@@ -562,6 +626,9 @@ def run_pipeline() -> dict:
             "repo_slug": e.repo_slug,
             "registry_url": e.registry_url,
             "endpoint": e.endpoint,
+            "endpoint_status": e.extra.get("endpoint_status"),
+            "endpoint_http": e.extra.get("endpoint_http"),
+            "verified_at": e.extra.get("verified_at"),
             "stars": e.stars,
             "downloads": e.downloads,
             "confidence": e.extra.get("confidence", 0),

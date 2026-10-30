@@ -319,6 +319,12 @@
   .chip.active { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 500; }
   .chip .n { opacity: .7; font-size: 12px; margin-left: 3px; }
   .chip.active .n { opacity: .9; }
+  /* 🆕 近 7 天更新 特殊 chip：绿色点缀，与普通分类区分 */
+  .chip-recent { border-style: dashed; }
+  .chip-recent.active { background: #0d7a43; border-color: #0d7a43; }
+  .chip-recent .n { color: inherit; }
+  .chip-recent:not(.active) { color: #0d7a43; border-color: #7fc9a4; background: #f0fbf5; }
+  .chip-recent:not(.active):hover { border-color: #0d7a43; }
 
   /* ================= 主体 ================= */
   main { max-width: 1180px; margin: 0 auto; padding: 26px 20px 70px; }
@@ -383,14 +389,24 @@
   .card-live .fresh.warm { color: var(--orange); }
   .card-live .fresh.cold { color: var(--text-3); }
   /* 活跃度徽章 */
-  .act-badge {
+  .act-badge,
+  .vfy {
     border-radius: 999px; padding: 0 8px; font-size: 11.5px; font-weight: 700;
     border: 1px solid transparent; white-space: nowrap;
   }
+  /* 端点实测徽章：✅ 验证可用 / 🔑 需鉴权 / ❌ 无响应 */
+  .vfy.ok   { background: #dcfce7; color: #15803d; border-color: #86efac; }
+  .vfy.auth { background: #dbeafe; color: #1d4ed8; border-color: #93c5fd; }
+  .vfy.fail { background: #fee2e2; color: #b91c1c; border-color: #fca5a5; }
   .act-badge.hot  { background: #e7f8f1; color: #047857; border-color: #9fe8cd; }
   .act-badge.mid  { background: #fff8db; color: #a16207; border-color: #f3dc8a; }
   .act-badge.cold { background: #fff1f0; color: #b91c1c; border-color: #f7c1bd; }
   .act-badge.dead { background: #f1f3f5; color: #6c757d; border-color: #dee2e6; }
+  /* 🆕 新增标签（候选 7 天内新发布） */
+  .card-title .vfy.new {
+    background: #dcfce7; color: #15803d; border-color: #86efac;
+    font-size: 11px; padding: 0 6px;
+  }
   /* 配置块按钮 + 弹窗 */
   .btn-cfg {
     border: 1px solid var(--primary); background: #fff; color: var(--primary);
@@ -933,6 +949,10 @@
         license: e.license,
         published_at: e.published_at,
         confidence: (e.extra && e.extra.confidence) || 0,
+        endpoint_status: (e.extra && e.extra.endpoint_status) || "",
+        endpoint_http: (e.extra && e.extra.endpoint_http) || null,
+        endpoint_note: (e.extra && e.extra.endpoint_note) || "",
+        verified_at: (e.extra && e.extra.verified_at) || "",
         suggested_category: (inbox && inbox.suggested_category) || "",
         category_hits: (inbox && inbox.category_hits) || [],
         catalog_row: (inbox && inbox.catalog_row) || "",
@@ -962,7 +982,8 @@
 "**Stars**: " + (c.stars != null ? c.stars : "未知") + "\n\n" +
 "**自动建议分类**: `" + (c.suggested_category || "（请人工判断）") + "`" +
       (hits ? "（命中关键词: " + hits + "）" : "") + "\n\n" +
-"**Pipeline confidence**: " + (c.confidence || 0) + " / 9\n\n" +
+"**Pipeline confidence**: " + (c.confidence || 0) + " / 10\n\n" +
+"**端点实测**: " + (c.endpoint_status === "ok" ? "✅ 验证可用" : c.endpoint_status === "auth" ? "🔑 需鉴权" : c.endpoint_status === "fail" ? "❌ 无响应（" + (c.endpoint_note || "失败") + "）" : "未实测（无远程端点）") + "\n\n" +
 "---\n\n" +
 "### 建议 catalog.csv 行（复制后粘贴到合适位置）\n\n" +
 "```csv\n" + (c.catalog_row || c.suggested_category + "," + (c.title || "") + "," + (c.url || "")) + "\n```\n\n" +
@@ -1142,8 +1163,31 @@
 
   /* ================= 渲染 ================= */
 
+  /* ================= 更新信号（⑦）：近 7 天新增/更新视图 ================= */
+
+  var RECENT_DAYS = 7;
+
+  function daysAgo(iso) {
+    if (!iso) return Infinity;
+    var t = Date.parse(iso);
+    return isNaN(t) ? Infinity : (Date.now() - t) / 86400000;
+  }
+
+  // 已收录条目：7 天内有提交/发布 = "近 7 天更新"
+  function isRecentCurated(it) {
+    var live = it.live || {};
+    return daysAgo(live.pushed_at || live.published_at) <= RECENT_DAYS;
+  }
+
+  // 候选条目：7 天内首次发布 = "近 7 天新增"（published_at 对 npm/crates 是发布时间）
+  function isRecentCandidate(c) {
+    return daysAgo(c.published_at || c.pushed_at) <= RECENT_DAYS;
+  }
+
   function renderChips() {
-    var html = '<button class="chip active" data-cat="all">全部<span class="n">' + items.length + "</span></button>";
+    var recentN = items.filter(isRecentCurated).length;
+    var html = '<button class="chip active" data-cat="all">全部<span class="n">' + items.length + "</span></button>" +
+      '<button class="chip chip-recent" data-cat="__recent" title="最近 7 天内有提交/新发布的工具，每 6 小时同步后自动更新">🆕 近 7 天更新<span class="n">' + recentN + "</span></button>";
     html += cats.map(function (c) {
       return '<button class="chip" data-cat="' + esc(c.key) + '" title="' + esc(c.key) + '">' +
         esc(c.label) + '<span class="n">' + c.count + "</span></button>";
@@ -1231,7 +1275,11 @@
   }
 
   function matches(it) {
-    if (activeCat !== "all" && it.cat !== activeCat) return false;
+    if (activeCat !== "all") {
+      if (activeCat === "__recent") {
+        if (!isRecentCurated(it)) return false;
+      } else if (it.cat !== activeCat) return false;
+    }
     if (query && it.hay.indexOf(query) === -1) return false;
     if (!matchesMeta(it)) return false;
     return true;
@@ -1249,10 +1297,28 @@
     return '<span class="act-badge cold" title="超过 1 年未提交，可能已停止维护">● 沉寂</span>';
   }
 
+  // 端点实测徽章：Pipeline 每 6h 对 endpoint 做一次 MCP initialize 握手
+  function verifyBadge(live) {
+    if (!live) return "";
+    var ex = live.extra || live; // curated 走 extra 嵌套，候选为扁平字段
+    var st = live.endpoint_status || ex.endpoint_status;
+    if (!st) return "";
+    var at = live.verified_at || ex.verified_at || "";
+    var rel = at ? relTime(at) : null;
+    var when = rel ? " · " + rel.text : "";
+    var abs = at ? at.replace("T", " ").slice(0, 16) + " UTC" : "";
+    if (st === "ok") return '<span class="vfy ok" title="MCP initialize 握手实测通过，验证于 ' + abs + '">✅ 验证可用' + when + "</span>";
+    if (st === "auth") return '<span class="vfy auth" title="端点存活但需要 API Key（HTTP 401/403），填密钥即可用 · 验证于 ' + abs + '">🔑 需鉴权' + when + "</span>";
+    var note = live.endpoint_note || ex.endpoint_note || "";
+    return '<span class="vfy fail" title="' + esc(note || "连接失败或超时") + ' · 验证于 ' + abs + '">❌ 端点无响应' + when + "</span>";
+  }
+
   // liveRow 统一：接受 Entry 风格对象（curated 来自 Pipeline、GitHub 全站实时搜索来自 Search API）
   function liveRow(live) {
     if (!live) return "";
     var bits = [];
+    var vfy = verifyBadge(live);
+    if (vfy) bits.push(vfy);
     var act = actBadge(live);
     if (act) bits.push(act);
     if (typeof live.stars === "number") bits.push('<span class="stars">★ ' + fmtStars(live.stars) + "</span>");
@@ -1495,7 +1561,7 @@
         ? '<span class="cat-badge" title="自动建议分类">' + esc(c.suggested_category.split(". ", 2)[0]) + "</span>"
         : "";
       var confBadge = c.confidence
-        ? '<span class="conf-badge" title="Pipeline confidence 评分">' + c.confidence + "/9</span>"
+        ? '<span class="conf-badge" title="Pipeline confidence 评分（含端点实测加分）">' + c.confidence + "/10</span>"
         : "";
       var applyBtn = c.repo_url || c.registry_url
         ? '<a class="btn-apply" href="' + applyIssueUrl(c) + '" target="_blank" rel="noopener">🔍 申请入精选</a>'
@@ -1503,10 +1569,13 @@
       var inBoxTag = c.isInbox
         ? '<span class="unverified-tag" style="background:#0d7a43;color:#fff">✨ Inbox</span>'
         : "";
+      var newTag = isRecentCandidate(c)
+        ? '<span class="vfy new" title="7 天内首次发布的工具（每 6 小时同步）">🆕 新增</span>'
+        : "";
       return '<article class="card unverified">' +
         '<div class="card-top">' +
           '<div class="card-title"><a href="' + esc(titleUrl) + '" target="_blank" rel="noopener">' +
-            highlight(c.title, query) + inBoxTag + "</a></div>" +
+            highlight(c.title, query) + inBoxTag + newTag + "</a></div>" +
           sourceBadge(c.source) +
         "</div>" +
         (c.desc ? '<div class="card-desc">' + highlight(c.desc, query) + "</div>" : "") +

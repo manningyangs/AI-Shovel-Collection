@@ -15,7 +15,7 @@ permissions:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12   # Phase 3: +端点实测（142 端点并发 10，最坏 ~2min）
     steps:
       - name: Checkout
         uses: actions/checkout@v4
