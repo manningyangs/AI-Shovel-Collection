@@ -382,6 +382,70 @@
   .card-live .fresh.ok { color: var(--green); }
   .card-live .fresh.warm { color: var(--orange); }
   .card-live .fresh.cold { color: var(--text-3); }
+  /* 活跃度徽章 */
+  .act-badge {
+    border-radius: 999px; padding: 0 8px; font-size: 11.5px; font-weight: 700;
+    border: 1px solid transparent; white-space: nowrap;
+  }
+  .act-badge.hot  { background: #e7f8f1; color: #047857; border-color: #9fe8cd; }
+  .act-badge.mid  { background: #fff8db; color: #a16207; border-color: #f3dc8a; }
+  .act-badge.cold { background: #fff1f0; color: #b91c1c; border-color: #f7c1bd; }
+  .act-badge.dead { background: #f1f3f5; color: #6c757d; border-color: #dee2e6; }
+  /* 配置块按钮 + 弹窗 */
+  .btn-cfg {
+    border: 1px solid var(--primary); background: #fff; color: var(--primary);
+    font-family: inherit; font-size: 12.5px; font-weight: 600;
+    padding: 4px 10px; border-radius: 999px; cursor: pointer; margin-right: 6px;
+    transition: background .15s, color .15s;
+  }
+  .btn-cfg:hover { background: var(--primary); color: #fff; }
+  .cfg-mask {
+    position: fixed; inset: 0; background: rgba(15,23,42,.55);
+    display: none; align-items: center; justify-content: center;
+    z-index: 300; padding: 24px;
+  }
+  .cfg-mask.show { display: flex; }
+  .cfg-box {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 14px; width: min(680px, 100%); max-height: 88vh;
+    display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: 0 24px 60px rgba(15,23,42,.35);
+  }
+  .cfg-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+  }
+  .cfg-head b { font-size: 15px; }
+  .cfg-close {
+    border: 0; background: transparent; font-size: 22px; line-height: 1;
+    color: var(--text-3); cursor: pointer; padding: 2px 6px;
+  }
+  .cfg-close:hover { color: var(--text); }
+  .cfg-body { padding: 16px 18px; overflow: auto; }
+  .cfg-warn {
+    background: #fff8db; border: 1px solid #eed77a; color: #92400e;
+    font-size: 12.5px; border-radius: 8px; padding: 8px 12px; margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .cfg-sec { margin-bottom: 16px; }
+  .cfg-sec .cfg-label {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; font-weight: 700; margin-bottom: 6px;
+  }
+  .cfg-path { color: var(--text-3); font-weight: 400; font-size: 12px; font-family: ui-monospace, Consolas, monospace; }
+  .cfg-code {
+    background: #0f172a; color: #d7e3f4; border-radius: 10px;
+    padding: 12px 14px; font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 12.5px; line-height: 1.6; white-space: pre; overflow-x: auto;
+    margin: 0;
+  }
+  .cfg-copy {
+    border: 1px solid var(--border); background: var(--surface); color: var(--text-2);
+    font-family: inherit; font-size: 12px; padding: 3px 10px; border-radius: 7px;
+    cursor: pointer;
+  }
+  .cfg-copy:hover { border-color: var(--primary); color: var(--primary); }
+  .cfg-copy.ok { border-color: var(--green); color: var(--green); background: #e7f8f1; }
   .card-live .archived {
     background: #f1f3f5; color: #6c757d; border: 1px solid #dee2e6;
     border-radius: 999px; padding: 0 8px; font-size: 11.5px; font-weight: 600;
@@ -681,6 +745,17 @@
     <div id="updated"></div>
   </div>
 </footer>
+
+<!-- 配置块弹窗：选中工具 → 复制到 Claude Desktop / Cursor / VS Code -->
+<div class="cfg-mask" id="cfgMask" role="dialog" aria-modal="true" aria-labelledby="cfgTitle">
+  <div class="cfg-box">
+    <div class="cfg-head">
+      <b id="cfgTitle">📋 安装配置</b>
+      <button class="cfg-close" id="cfgClose" aria-label="关闭配置弹窗">&times;</button>
+    </div>
+    <div class="cfg-body" id="cfgBody"></div>
+  </div>
+</div>
 
 <script>
 (function () {
@@ -1162,15 +1237,28 @@
     return true;
   }
 
+  // 活跃度徽章：基于最近提交时间的显性信号（90天内=活跃 / 1年内=转凉 / 超1年=沉寂 / 已归档）
+  function actBadge(live) {
+    if (!live) return "";
+    if (live.status === "archived" || live.archived) return '<span class="act-badge dead" title="仓库已归档，停止维护">🪦 归档</span>';
+    var iso = live.pushed_at || live.published_at;
+    if (!iso) return "";
+    var days = (Date.now() - new Date(iso).getTime()) / 86400000;
+    if (days < 90) return '<span class="act-badge hot" title="最近 90 天内有提交，维护活跃">● 活跃</span>';
+    if (days < 365) return '<span class="act-badge mid" title="最近 90 天内无提交，仍在年内更新">● 转凉</span>';
+    return '<span class="act-badge cold" title="超过 1 年未提交，可能已停止维护">● 沉寂</span>';
+  }
+
   // liveRow 统一：接受 Entry 风格对象（curated 来自 Pipeline、GitHub 全站实时搜索来自 Search API）
   function liveRow(live) {
     if (!live) return "";
     var bits = [];
+    var act = actBadge(live);
+    if (act) bits.push(act);
     if (typeof live.stars === "number") bits.push('<span class="stars">★ ' + fmtStars(live.stars) + "</span>");
     if (typeof live.downloads === "number" && live.downloads > 0) bits.push('<span class="fresh ok">↧ ' + fmtStars(live.downloads) + "/wk</span>");
     var rel = relTime(live.pushed_at || live.published_at);
     if (rel) bits.push('<span class="fresh ' + rel.cls + '">' + rel.text + "</span>");
-    if (live.status === "archived" || live.archived) bits.push('<span class="archived">已归档</span>');
     if (live.lang) bits.push('<span class="lang-pill">' + esc(live.lang) + "</span>");
     if (!bits.length) return "";
     return '<div class="card-live">' + bits.join("") + "</div>";
@@ -1187,10 +1275,149 @@
     return '<div class="ep-pill" title="MCP Server 端点 · 点击复制" onclick="navigator.clipboard.writeText(this.textContent)">📡 ' + esc(ep) + "</div>";
   }
 
+  /* ================= 配置块弹窗 ================= */
+
+  var cfgStore = []; // 渲染时收集条目 payload，卡片按钮用 data-cfg 索引引用
+
+  function cfgPayload(o) {
+    var slug = o.repo_slug || o.slug || String(o.id || "").replace("github.com/", "");
+    return {
+      title: o.title || slug,
+      endpoint: o.endpoint || null,
+      pkg: (slug.split("/").pop() || o.title || "server").toLowerCase(),
+      lang: o.lang || "",
+      headers: o.headers_req || null
+    };
+  }
+
+  // 生成三端配置片段：endpoint 型 → streamable HTTP；无 endpoint → stdio（npx/uvx 推断）
+  function cfgSnippets(p) {
+    var name = p.pkg;
+    var remote = p.endpoint;
+    var out = [];
+
+    if (remote) {
+      out.push({
+        label: "Claude Desktop / Claude Code",
+        path: "claude_desktop_config.json",
+        code: JSON.stringify({ mcpServers: { [name]: { type: "http", url: remote } } }, null, 2)
+      });
+      out.push({
+        label: "Cursor / Windsurf / 通用 (mcp.json)",
+        path: ".cursor/mcp.json",
+        code: JSON.stringify({ mcpServers: { [name]: { url: remote } } }, null, 2)
+      });
+      out.push({
+        label: "VS Code (Agent 模式)",
+        path: ".vscode/mcp.json",
+        code: JSON.stringify({ servers: { [name]: { type: "http", url: remote } } }, null, 2)
+      });
+      return out;
+    }
+
+    // stdio：按语言推断启动器
+    var launcher = p.lang === "Python" ? "uvx" : "npx";
+    var args = launcher === "uvx" ? [p.pkg] : ["-y", p.pkg];
+    var stdio = { command: launcher, args: args };
+    out.push({
+      label: "Claude Desktop / Claude Code",
+      path: "claude_desktop_config.json",
+      code: JSON.stringify({ mcpServers: { [name]: stdio } }, null, 2)
+    });
+    out.push({
+      label: "Cursor / Windsurf / 通用 (mcp.json)",
+      path: ".cursor/mcp.json",
+      code: JSON.stringify({ mcpServers: { [name]: stdio } }, null, 2)
+    });
+    out.push({
+      label: "VS Code (Agent 模式)",
+      path: ".vscode/mcp.json",
+      code: JSON.stringify({ servers: { [name]: stdio } }, null, 2)
+    });
+    return out;
+  }
+
+  function openCfg(idx) {
+    var p = cfgStore[idx];
+    if (!p) return;
+    var mask = document.getElementById("cfgMask");
+    var body = document.getElementById("cfgBody");
+    var warn = p.endpoint
+      ? "这是 <b>远程 MCP 端点</b>（免安装，粘贴即用）。若端点要求鉴权，需在配置中补 <code>headers</code>，密钥别提交到公开仓库。"
+      : "本条目<b>没有登记远程端点</b>，以下按仓库名推断的 <code>" + (p.lang === "Python" ? "uvx" : "npx") + " " + esc(p.pkg) + "</code> 生成 —— 实际包名与启动参数<b>以项目 README 为准</b>（Python 项目多为 uvx，Node 项目为 npx，命令行工具可能是 docker/binary）。";
+    if (p.headers && p.headers.length) {
+      warn += "<br>⚠️ 登记信息提示：" + esc(String(p.headers[0]).slice(0, 160));
+    }
+    var html = '<div class="cfg-warn">' + warn + "</div>";
+    cfgSnippets(p).forEach(function (s, i) {
+      html += '<div class="cfg-sec">' +
+        '<div class="cfg-label"><span>' + esc(s.label) + "</span>" +
+        '<button class="cfg-copy" data-code="' + i + '">复制 JSON</button></div>' +
+        '<div class="cfg-path">' + esc(s.path) + "</div>" +
+        '<pre class="cfg-code" data-idx="' + i + '">' + esc(s.code) + "</pre>" +
+        "</div>";
+    });
+    body.innerHTML = html;
+    body._codes = cfgSnippets(p).map(function (s) { return s.code; });
+    mask.classList.add("show");
+    document.getElementById("cfgClose").focus();
+  }
+
+  function closeCfg() {
+    document.getElementById("cfgMask").classList.remove("show");
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest(".btn-cfg");
+    if (btn) {
+      var i = parseInt(btn.getAttribute("data-cfg"), 10);
+      if (!isNaN(i)) openCfg(i);
+      return;
+    }
+    if (e.target.closest("#cfgClose")) { closeCfg(); return; }
+    if (e.target.id === "cfgMask") closeCfg();
+    var cp = e.target.closest(".cfg-copy");
+    if (cp) {
+      var body = document.getElementById("cfgBody");
+      var code = (body._codes || [])[parseInt(cp.getAttribute("data-code"), 10)];
+      if (!code) return;
+      function flash(txt, ok) {
+        cp.textContent = txt;
+        cp.classList.toggle("ok", !!ok);
+        setTimeout(function () { cp.textContent = "复制 JSON"; cp.classList.remove("ok"); }, 1600);
+      }
+      var done = function () { flash("✓ 已复制", true); };
+      var fail = function () {
+        // clipboard 被拒（焦点/非可信手势）→ 降级：选中代码块让用户手动 Ctrl+C
+        try {
+          var pre = body.querySelector('.cfg-code[data-idx="' + cp.getAttribute("data-code") + '"]');
+          if (pre) {
+            var r = document.createRange();
+            r.selectNodeContents(pre);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(r);
+          }
+        } catch (ignore) {}
+        flash("已选中，Ctrl+C 复制", false);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(done, fail);
+      } else {
+        fail();
+      }
+      return;
+    }
+  });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeCfg();
+  });
+
   function render() {
     var list = items.filter(matches);
     var grid = document.getElementById("grid");
     var empty = document.getElementById("empty");
+    cfgStore = []; // 每轮渲染重建配置弹窗索引
 
     grid.innerHTML = list.map(function (it) {
       var live = it.live || {};
@@ -1209,7 +1436,8 @@
         liveRow(live) +
         sourceBadge(it.source) +
         '<div class="card-foot"><span class="card-repo">' + highlight((live.repo_slug || it.slug), query) + "</span>" +
-          '<a class="ext" href="' + esc(it.url) + '" target="_blank" rel="noopener">GitHub ↗</a></div>' +
+          '<span><button class="btn-cfg" data-cfg="' + (cfgStore.push(cfgPayload(Object.assign({ title: it.title }, live))) - 1) + '" title="生成 Claude Desktop / Cursor / VS Code 配置片段">📋 配置</button>' +
+          '<a class="ext" href="' + esc(it.url) + '" target="_blank" rel="noopener">GitHub ↗</a></span></div>' +
       "</article>";
     }).join("");
 
@@ -1287,7 +1515,8 @@
         '<div style="margin-top:6px">' + catBadge + confBadge + "</div>" +
         '<div class="card-foot">' +
           '<span class="card-repo">' + highlight((c.slug || c.id), query) + "</span>" +
-          '<span>' + applyBtn + (c.registry_url ? '<a class="ext" href="' + esc(c.registry_url) + '" target="_blank" rel="noopener" style="margin-left:6px">来源 ↗</a>' : "") + "</span>" +
+          '<span><button class="btn-cfg" data-cfg="' + (cfgStore.push(cfgPayload(c)) - 1) + '" title="生成 Claude Desktop / Cursor / VS Code 配置片段">📋 配置</button>' +
+          applyBtn + (c.registry_url ? '<a class="ext" href="' + esc(c.registry_url) + '" target="_blank" rel="noopener" style="margin-left:6px">来源 ↗</a>' : "") + "</span>" +
         "</div>" +
       "</article>";
     }).join("");
