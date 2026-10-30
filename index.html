@@ -177,21 +177,6 @@
   }
   .stat-legend b { color: var(--text-2); font-weight: 600; }
 
-  /* 任务导向入口：「你希望 AI 帮你完成什么工作？」 */
-  .task-bar { border-bottom: 1px solid var(--border); background: var(--surface); padding: 12px 20px; }
-  .task-inner { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .task-title { font-weight: 700; font-size: 14px; color: var(--text-2); white-space: nowrap; }
-  .task-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-  .task-chip {
-    font: inherit; font-size: 13px; cursor: pointer;
-    padding: 5px 12px; border-radius: 999px;
-    border: 1px solid var(--border); background: var(--bg); color: var(--text-2);
-    transition: all .15s ease;
-  }
-  .task-chip:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
-  .task-chip.active { background: var(--primary); border-color: var(--primary); color: #fff; font-weight: 600; }
-  .task-hint { font-size: 12px; color: var(--text-3); }
-
   /* JS 禁用 / 加载失败时的静态兜底提示 */
   .noscript-note {
     max-width: 980px; margin: 16px auto 0; padding: 14px 18px;
@@ -214,9 +199,9 @@
     padding: 8px 20px;
     box-shadow: 0 1px 3px rgba(31,35,40,.06);
   }
+  /* toolbar.compact 不再自动折叠 chips —— chips 由独立的 .chips-collapsed 控制 */
   .toolbar.compact .chips {
-    max-height: 0; padding-top: 0; overflow: hidden; opacity: 0;
-    transition: max-height .25s ease, opacity .18s ease, padding .18s ease;
+    max-height: 120px; opacity: 1; padding-top: 12px; overflow: hidden;
   }
   .toolbar.compact .search-box input { padding: 7px 118px 7px 40px; font-size: 14px; }
   .toolbar.compact .kbd-hint { font-size: 11px; }
@@ -266,20 +251,20 @@
     background: var(--surface); border: 1px solid var(--border); border-bottom-width: 2px;
     border-radius: 4px; padding: 0 5px; font-size: 11px; font-family: inherit;
   }
-  .btn-toggle-candidates {
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text-2);
-    font-size: 13px; font-family: inherit; font-weight: 500;
-    padding: 7px 14px; border-radius: 999px;
-    cursor: pointer; transition: all .15s; white-space: nowrap;
-    display: inline-flex; align-items: center; gap: 5px;
+  .chip-chip-toggle {
+    flex-shrink: 0;
+    /* 继承 .chip 的 padding/font-size/border-radius —— 完全对齐 */
   }
-  .btn-toggle-candidates:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
-  .btn-toggle-candidates.on { background: var(--primary); border-color: var(--primary); color: #fff; }
-  /* 手动展开 chips：覆盖 compact 自动折叠 */
-  .toolbar.force-expand .chips {
-    max-height: 120px !important; opacity: 1 !important; padding-top: 12px !important;
+  .chip-chip-toggle:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+  /* chips-bar：按钮 + chips 精确对齐 */
+  .chips-bar { display: flex; align-items: center; gap: 8px; padding-top: 10px; }
+  .chips-bar .chip-toggle { flex-shrink: 0; margin: 0; }
+  .chips-bar .chips { flex: 1; padding-top: 0 !important; margin: 0; }
+  .toolbar.compact .chips-bar { padding-top: 6px; }
+
+  /* chips 折叠态：仅由手动按钮控制 */
+  .chips.chips-collapsed {
+    max-height: 0 !important; opacity: 0 !important; padding-top: 0 !important;
   }
   /* 元数据组合筛选行 */
   .meta-filters {
@@ -648,6 +633,186 @@
   }
   .footer-inner { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 7px; }
 
+  /* ================= Hero 搜索框（放大居中） ================= */
+  .hero-search {
+    position: relative;
+    max-width: 720px; margin: 28px auto 0;
+    display: flex; flex-direction: column; align-items: center; gap: 10px;
+  }
+  .hero-search .search-box {
+    max-width: 720px; width: 100%;
+  }
+  .hero-search .search-box input {
+    padding: 14px 130px 14px 48px;
+    font-size: 17px;
+    background: var(--surface);
+    box-shadow: 0 4px 24px rgba(37,99,235,.12);
+    border-radius: 14px;
+    transition: box-shadow .2s, border-color .2s;
+  }
+  .hero-search .search-box input:focus {
+    box-shadow: 0 6px 32px rgba(37,99,235,.22);
+  }
+  .hero-search .search-box > svg { width: 20px; height: 20px; left: 16px; }
+  .search-examples {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 6px; margin-top: 2px;
+  }
+  .se-label { font-size: 12.5px; color: var(--text-3); margin-right: 2px; }
+  .se-chip {
+    font: inherit; font-size: 12.5px; cursor: pointer;
+    padding: 3px 11px; border-radius: 999px;
+    border: 1px solid var(--border); background: rgba(255,255,255,.8);
+    color: var(--text-2); transition: all .15s ease;
+  }
+  .se-chip:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+
+  /* 任务入口卡片化（在 hero 内，融入渐变背景） */
+  .task-bar {
+    position: relative; z-index: 2;
+    max-width: 1100px; margin: 24px auto 0; padding: 0 16px;
+    border: none; background: transparent;
+  }
+  .task-inner { display: flex; flex-direction: column; gap: 12px; }
+  .task-header { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .task-title { font-weight: 700; font-size: 14px; color: var(--text-2); }
+  .task-hint { font-size: 12px; color: var(--text-3); }
+  .task-chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+  .task-chip {
+    display: flex; align-items: center; gap: 10px; text-align: left;
+    font: inherit; font-size: 13.5px; cursor: pointer;
+    padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--bg); color: var(--text);
+    transition: all .15s ease; line-height: 1.4;
+  }
+  .task-chip .tc-icon {
+    width: 32px; height: 32px; flex: none;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 18px; border-radius: 8px; background: var(--primary-soft);
+  }
+  .task-chip .tc-text { font-weight: 500; }
+  .task-chip .tc-desc { font-size: 11.5px; color: var(--text-3); display: block; margin-top: 1px; font-weight: 400; }
+  .task-chip:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37,99,235,.12); }
+  .task-chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .task-chip.active .tc-icon { background: rgba(255,255,255,.2); }
+  .task-chip.active .tc-desc { color: rgba(255,255,255,.8); }
+
+  /* Tab 切换（精选/候选/实时搜索） */
+  .list-tabs {
+    display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 4px;
+  }
+  .list-tab {
+    font: inherit; font-size: 14px; font-weight: 600; cursor: pointer;
+    padding: 10px 18px; border: none; background: none; color: var(--text-2);
+    border-bottom: 2px solid transparent; transition: all .15s;
+  }
+  .list-tab:hover { color: var(--primary); }
+  .list-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+  .list-tab .tab-count { font-size: 12px; font-weight: 500; color: var(--text-3); margin-left: 4px; }
+  .list-tab.active .tab-count { color: var(--primary); opacity: .85; }
+
+  /* 排序下拉 */
+  .sort-bar {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .sort-bar .mf-label { font-size: 12.5px; color: var(--text-3); }
+  .sort-bar select {
+    font-family: inherit; font-size: 12.5px; color: var(--text-2);
+    background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 5px 24px 5px 9px; cursor: pointer; outline: none;
+  }
+  .sort-bar select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37,99,235,.16); }
+
+  /* 详情抽屉 */
+  .drawer-mask {
+    position: fixed; inset: 0; background: rgba(15,23,42,.45);
+    display: none; z-index: 200;
+    transition: opacity .2s;
+  }
+  .drawer-mask.show { display: block; opacity: 1; }
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: min(520px, 100%); max-width: 100vw;
+    background: var(--surface); border-left: 1px solid var(--border);
+    box-shadow: -8px 0 30px rgba(15,23,42,.15);
+    z-index: 201; display: flex; flex-direction: column;
+    transform: translateX(100%); transition: transform .25s ease;
+  }
+  .drawer.show { transform: translateX(0); }
+  .drawer-head {
+    padding: 18px 22px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  }
+  .drawer-title { font-size: 17px; font-weight: 800; line-height: 1.35; }
+  .drawer-sub { font-size: 13px; color: var(--text-2); margin-top: 4px; }
+  .drawer-close {
+    border: 0; background: transparent; font-size: 22px; line-height: 1;
+    color: var(--text-3); cursor: pointer; padding: 2px 6px;
+  }
+  .drawer-close:hover { color: var(--text); }
+  .drawer-body { flex: 1; overflow: auto; padding: 18px 22px; }
+  .drawer-section { margin-bottom: 20px; }
+  .drawer-section h4 {
+    font-size: 13px; font-weight: 700; color: var(--text-3);
+    text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px;
+  }
+  .drawer-do { list-style: none; padding: 0; }
+  .drawer-do li { font-size: 13.5px; color: var(--text-2); padding: 4px 0 4px 18px; position: relative; }
+  .drawer-do li::before {
+    content: "✓"; position: absolute; left: 0; color: var(--green); font-weight: 700; font-size: 12px;
+  }
+  .drawer-info {
+    display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 13px;
+  }
+  .drawer-info dt { color: var(--text-3); white-space: nowrap; }
+  .drawer-info dd { color: var(--text); font-weight: 500; }
+  .drawer-actions {
+    padding: 14px 22px; border-top: 1px solid var(--border);
+    display: flex; gap: 10px; flex-wrap: wrap; background: var(--bg);
+  }
+  .drawer-actions .btn-cfg { font-size: 13px; padding: 8px 16px; }
+  .btn-gh {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    padding: 8px 16px; border-radius: 9px; cursor: pointer; text-decoration: none;
+    transition: all .15s;
+  }
+  .btn-gh:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* 手机端汉堡菜单 */
+  .nav-hamburger {
+    display: none; border: 0; background: none; cursor: pointer;
+    padding: 6px; color: var(--text-2); font-size: 18px;
+  }
+  .nav-mobile-menu {
+    display: none; position: fixed; top: var(--nav-h); left: 0; right: 0;
+    background: var(--surface); border-bottom: 1px solid var(--border);
+    z-index: 99; padding: 8px 16px 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  }
+  .nav-mobile-menu.show { display: block; }
+  .nav-mobile-menu a {
+    display: block; padding: 10px 12px; color: var(--text);
+    font-weight: 500; border-radius: 8px; font-size: 15px;
+  }
+  .nav-mobile-menu a:hover { background: var(--primary-soft); color: var(--primary); }
+
+  /* 卡片上的「详情」按钮 */
+  .btn-detail {
+    border: 1px solid var(--border); background: var(--surface); color: var(--text-2);
+    font-family: inherit; font-size: 11.5px; font-weight: 500;
+    padding: 2px 9px; border-radius: 6px; cursor: pointer;
+    transition: all .12s;
+  }
+  .btn-detail:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* chips 折叠态：滚动超过 260px 自动收起 */
+  .chips.chips-collapsed {
+    max-height: 0 !important; opacity: 0 !important; padding-top: 0 !important;
+  }
+
   @media (max-width: 760px) {
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .grid { grid-template-columns: 1fr; }
@@ -655,6 +820,12 @@
     .nav-links a:not(.gh) { display: none; }
     .kbd-hint { display: none; }
     .live-updated { display: none; }
+    .nav-hamburger { display: inline-flex; }
+    .task-chips { grid-template-columns: 1fr 1fr; }
+    .hero-search { margin-top: 20px; }
+    .hero-search .search-box input { font-size: 15px; padding: 12px 120px 12px 44px; }
+    .drawer { width: 100%; }
+    .list-tab { padding: 8px 12px; font-size: 13px; }
   }
 </style>
 </head>
@@ -673,15 +844,62 @@
         <img class="hits-badge" src="https://hits.sh/manningyangs.github.io/AI-Shovel-Collection.svg?view=1&style=flat-square&label=Visitors&labelColor=2563eb&color=2563eb" alt="访问量统计 — 点击查看历史曲线">
       </span>
       <a class="gh" href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">GitHub ↗<span class="sr-only">（在新标签页打开）</span></a>
+      <button class="nav-hamburger" id="navHamburger" aria-label="打开导航菜单" aria-expanded="false">☰</button>
     </div>
   </div>
 </nav>
+
+<div class="nav-mobile-menu" id="navMobileMenu">
+  <a href="#hero">🏠 首页</a>
+  <a href="#tools">📦 已收录</a>
+  <a href="#candidates">🧭 候选</a>
+  <a href="#domains">🌍 领域检索</a>
+  <a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">🐙 GitHub 仓库 ↗</a>
+</div>
 
 <header class="hero" id="hero">
   <div class="hero-inner">
     <span class="eyebrow">⛏️ 面向 AI 大模型 · Agent · MCP 的工具发现目录</span>
     <h1>发现让 AI 真正<span class="grad">动手干活</span>的铲子</h1>
     <p class="sub">覆盖 <b id="heroCount">191</b> 个开源项目，横跨 MCP Server、Agent Skills、CLI/SDK、自动化工作流与专业文件工具五大类型，<b>本地实时过滤</b> + <b>GitHub 全站实时搜索</b>双引擎，仓库 stars 与更新状态每 6 小时同步。</p>
+  </div>
+  <div class="hero-search">
+    <div class="search-box" id="searchBox">
+      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg>
+      <input type="text" id="searchInput" placeholder="你想让 AI 做什么？搜索工具或具体任务……" autocomplete="off" spellcheck="false" aria-label="搜索已收录的工具" aria-describedby="count">
+      <span class="count" id="count" aria-live="polite" role="status"></span>
+      <button class="clear-btn" id="clearBtn" title="清空" aria-label="清空搜索框">&times;</button>
+    </div>
+    <div class="search-examples">
+      <span class="se-label">试试：</span>
+      <button class="se-chip" type="button" data-q="PPT">自动制作 PPT</button>
+      <button class="se-chip" type="button" data-q="Excel">分析 Excel</button>
+      <button class="se-chip" type="button" data-q="CAD">画 CAD / 3D</button>
+      <button class="se-chip" type="button" data-q="Docker">部署 Docker</button>
+      <button class="se-chip" type="button" data-q="浏览器">浏览器自动化</button>
+      <button class="se-chip" type="button" data-q="飞书">接飞书 / 钉钉</button>
+    </div>
+  </div>
+  <!-- 任务导向入口：搜索框下方紧跟任务卡片 -->
+  <div class="task-bar" id="taskBar">
+    <div class="task-inner">
+      <div class="task-header">
+        <span class="task-title">🙋 你希望 AI 帮你完成什么工作？</span>
+        <span class="task-hint">按任务跳转对应分类，不需要先懂 MCP</span>
+      </div>
+      <div class="task-chips" id="taskChips" role="group" aria-label="按任务筛选工具">
+        <button class="task-chip" data-pre="3." type="button"><span class="tc-icon">📝</span><span><span class="tc-text">写文档 / 做 PPT</span><span class="tc-desc">Word · Excel · PDF</span></span></button>
+        <button class="task-chip" data-pre="5." type="button"><span class="tc-icon">📊</span><span><span class="tc-text">查数据库 · 数据分析</span><span class="tc-desc">SQL · BI · ETL</span></span></button>
+        <button class="task-chip" data-pre="2." type="button"><span class="tc-icon">🌐</span><span><span class="tc-text">浏览器自动化</span><span class="tc-desc">抓网页 · 点按钮 · 填表</span></span></button>
+        <button class="task-chip" data-pre="6." type="button"><span class="tc-icon">🚀</span><span><span class="tc-text">部署运维</span><span class="tc-desc">Docker · 服务器 · CI/CD</span></span></button>
+        <button class="task-chip" data-pre="10." type="button"><span class="tc-icon">🎨</span><span><span class="tc-text">图片 · 视频 · 音频</span><span class="tc-desc">设计素材 · 媒体生成</span></span></button>
+        <button class="task-chip" data-pre="11." type="button"><span class="tc-icon">🗺️</span><span><span class="tc-text">CAD · 3D · 地图</span><span class="tc-desc">工程制图 · GIS</span></span></button>
+        <button class="task-chip" data-pre="8." type="button"><span class="tc-icon">💰</span><span><span class="tc-text">财务 · 会计</span><span class="tc-desc">区块链 · 交易</span></span></button>
+        <button class="task-chip" data-pre="13." type="button"><span class="tc-icon">🤖</span><span><span class="tc-text">机器人 · IoT · 硬件</span><span class="tc-desc">PLC · 传感器</span></span></button>
+        <button class="task-chip" data-pre="7." type="button"><span class="tc-icon">📧</span><span><span class="tc-text">邮件 · 日历 · 协作</span><span class="tc-desc">Teams · Slack</span></span></button>
+        <button class="task-chip" data-pre="9A." type="button"><span class="tc-icon">💬</span><span><span class="tc-text">飞书 · 钉钉 · 微信</span><span class="tc-desc">企业 IM 接入</span></span></button>
+      </div>
+    </div>
   </div>
   <div class="stats-grid">
     <div class="stat-card" title="catalog.csv 中的人工精选行数（目录收录口径）"><div class="stat-num c1" id="statCurated" data-target="191">191</div><div class="stat-label">已收录工具（目录）</div></div>
@@ -697,19 +915,6 @@
 
 <div class="toolbar">
   <div class="toolbar-inner">
-    <div class="search-row">
-      <div class="search-box" id="searchBox">
-        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg>
-        <input type="text" id="searchInput" placeholder="实时搜索：工具名、用途、分类、stars、GitHub 链接…" autocomplete="off" spellcheck="false" aria-label="搜索已收录的工具" aria-describedby="count">
-        <span class="count" id="count" aria-live="polite" role="status"></span>
-        <button class="clear-btn" id="clearBtn" title="清空" aria-label="清空搜索框">&times;</button>
-      </div>
-      <span class="kbd-hint">按 <kbd>/</kbd> 聚焦 · 输入即过滤</span>
-      <button class="btn-toggle-candidates" id="btnToggleChips" title="手动展开/收起分类筛选（滚动进入紧凑态后可用）" aria-expanded="true" aria-controls="chips">
-        <span aria-hidden="true">🏷️</span> 分类
-      </button>
-    </div>
-    <div class="chips" id="chips"></div>
     <div class="meta-filters" id="metaFilters" role="group" aria-label="按元数据进一步筛选">
       <label class="mf-item">
         <span class="mf-label">语言</span>
@@ -741,31 +946,34 @@
       <button class="mf-reset" id="fReset" type="button" aria-label="清空全部筛选条件">↺ 重置</button>
       <span class="mf-hint">组合筛选只作用于「已收录」列表</span>
     </div>
-  </div>
-</div>
-
-<!-- 任务导向入口：不懂 MCP/Skills 也能按「想让 AI 做什么」找到工具 -->
-<div class="task-bar" id="taskBar">
-  <div class="task-inner">
-    <span class="task-title">🙋 你希望 AI 帮你完成什么工作？</span>
-    <div class="task-chips" id="taskChips" role="group" aria-label="按任务筛选工具">
-      <button class="task-chip" data-pre="3." type="button">写文档 / 做 PPT / 处理 PDF</button>
-      <button class="task-chip" data-pre="5." type="button">查数据库、做数据分析</button>
-      <button class="task-chip" data-pre="2." type="button">自动操作浏览器、抓网页</button>
-      <button class="task-chip" data-pre="6." type="button">部署运维 Docker / 服务器</button>
-      <button class="task-chip" data-pre="10." type="button">设计图片、视频与音频</button>
-      <button class="task-chip" data-pre="11." type="button">画 CAD / 3D、查地图</button>
-      <button class="task-chip" data-pre="8." type="button">财务、会计与区块链</button>
-      <button class="task-chip" data-pre="13." type="button">控制机器人、IoT 与硬件</button>
-      <button class="task-chip" data-pre="7." type="button">邮件、日历与团队协作</button>
-      <button class="task-chip" data-pre="9A." type="button">接飞书、钉钉、微信</button>
+    <div class="chips-bar">
+      <button class="chip chip-toggle" id="btnToggleChips" title="手动展开/收起分类筛选" aria-expanded="true" aria-controls="chips" type="button"></button>
+      <div class="chips" id="chips"></div>
     </div>
-    <span class="task-hint">按任务跳转对应分类，不需要先懂 MCP</span>
   </div>
 </div>
 
 <main>
-  <section id="tools">
+  <!-- Tab 切换：精选 / 候选 / 实时搜索 -->
+  <div class="list-tabs" id="listTabs" role="tablist">
+    <button class="list-tab active" data-tab="curated" type="button" role="tab" aria-selected="true">📦 精选工具<span class="tab-count" id="tabCuratedCount">191</span></button>
+    <button class="list-tab" data-tab="candidates" type="button" role="tab" aria-selected="false">🧭 自动发现<span class="tab-count" id="tabCandidateCount">150</span></button>
+    <button class="list-tab" data-tab="live" type="button" role="tab" aria-selected="false">🌐 GitHub 实时搜索</button>
+  </div>
+
+  <!-- 排序条 -->
+  <div class="sort-bar" id="sortBar">
+    <span class="mf-label">排序：</span>
+    <select id="sortSelect" aria-label="排序方式">
+      <option value="default">综合推荐</option>
+      <option value="stars">Stars 最高</option>
+      <option value="recent">最近更新</option>
+      <option value="verified">已核验优先</option>
+    </select>
+  </div>
+
+  <!-- 精选 Tab -->
+  <section id="tools" data-tabpanel="curated">
     <div class="section-head">
       <h2>📦 已收录的铲子<span class="unverified-tag" style="background:#eef2ff;color:#3730a3" title="人工筛选入库：仓库存在、用途明确、分类经人工确认；尚未逐项功能实测">👤 人工筛选</span></h2>
       <span class="hint">分类不是质量排名，收录不代表背书 · <b>已收录 = 人工筛选入库</b>（未逐项功能实测）</span>
@@ -774,23 +982,10 @@
 
     <div class="grid" id="grid"></div>
     <div class="empty" id="empty"></div>
-
-    <div class="live-search-strip" id="liveStrip">
-      <span class="txt" id="liveStripText"></span>
-      <button class="btn-live" id="btnLive">🌐 立即实时搜索 GitHub 全站</button>
-      <span class="live-status" id="liveStatus"></span>
-    </div>
-
-    <div id="liveSection">
-      <div class="section-head">
-        <h2>🌐 GitHub 全站实时搜索结果</h2>
-        <span class="hint">由 GitHub Search API 实时返回，按 Stars 排序，已收录的仓库自动去重</span>
-      </div>
-      <div class="grid" id="liveGrid"></div>
-    </div>
   </section>
 
-  <section id="candidates" class="candidates-section">
+  <!-- 候选 Tab -->
+  <section id="candidates" class="candidates-section" data-tabpanel="candidates" style="display:none">
     <div class="section-head">
       <h2>🧭 自动发现的候选铲子<span class="unverified-tag" title="机器检索入库：分类与可用性未经人工核验，confidence 评分不等于质量背书">🤖 自动发现</span></h2>
       <span class="hint">由 Pipeline 从 MCP Registry / npm / crates.io 挖到，<b>未人工核验</b> · ✅ 端点实测仅代表 MCP 握手在线，<b>不代表功能完整可用</b></span>
@@ -798,6 +993,20 @@
     <div class="candidates-hint">候选按 <b>MCP 官方注册 + Stars / 下载量 + 端点可调用 + 活跃状态</b> 加权排序 · 当前每轮保留 Top <b id="candidateCount">…</b> 条</div>
     <div id="inboxBanner" class="inbox-banner"></div>
     <div class="grid" id="candidateGrid"></div>
+  </section>
+
+  <!-- GitHub 实时搜索 Tab -->
+  <section id="liveTab" data-tabpanel="live" style="display:none">
+    <div class="section-head">
+      <h2>🌐 GitHub 全站实时搜索</h2>
+      <span class="hint">由 GitHub Search API 实时返回，按 Stars 排序，已收录的仓库自动去重</span>
+    </div>
+    <div class="live-search-strip show" id="liveStrip">
+      <span class="txt" id="liveStripText">点击下方按钮在 GitHub 全站几十亿级仓库中搜索</span>
+      <button class="btn-live" id="btnLive">🌐 立即实时搜索 GitHub 全站</button>
+      <span class="live-status" id="liveStatus"></span>
+    </div>
+    <div class="grid" id="liveGrid2"></div>
   </section>
 
   <section id="domains">
@@ -828,6 +1037,24 @@
   </div>
 </div>
 
+<!-- 详情抽屉：展示工具的它能做什么、基本信息、配置入口 -->
+<div class="drawer-mask" id="drawerMask" role="dialog" aria-modal="true" aria-label="工具详情抽屉"></div>
+<aside class="drawer" id="drawer" aria-label="工具详情">
+  <div class="drawer-head">
+    <div>
+      <div class="drawer-title" id="drawerTitle">—</div>
+      <div class="drawer-sub" id="drawerSub">—</div>
+    </div>
+    <button class="drawer-close" id="drawerClose" aria-label="关闭详情抽屉">&times;</button>
+  </div>
+  <div class="drawer-body" id="drawerBody">
+    <!-- JS 动态填充 -->
+  </div>
+  <div class="drawer-actions" id="drawerActions">
+    <!-- JS 动态填充 -->
+  </div>
+</aside>
+
 <script>
 (function () {
   "use strict";
@@ -836,6 +1063,8 @@
   var cats = [];
   var activeCat = "all";
   var query = "";
+  var activeTab = "curated";
+  var sortMode = "default";
   var liveMap = null;       // deprecated — 保留给安全引用
   var livePayload = null;   // live_multi.json 完整内容 { updated_at, curated, candidates }
   var candidateItems = [];  // 候选条目（标准化后）
@@ -1311,6 +1540,8 @@
         document.getElementById("searchInput").value = "";
         hideLiveSection();
       }
+      // 自动切到精选 tab 展示过滤结果
+      switchTab("curated");
       document.querySelectorAll(".chip").forEach(function (c) {
         c.classList.toggle("active", c.getAttribute("data-cat") === activeCat);
       });
@@ -1460,6 +1691,7 @@
   /* ================= 配置块弹窗 ================= */
 
   var cfgStore = []; // 渲染时收集条目 payload，卡片按钮用 data-cfg 索引引用
+  var drawerStore = []; // 渲染时收集条目用于详情抽屉
 
   function cfgPayload(o) {
     var slug = o.repo_slug || o.slug || String(o.id || "").replace("github.com/", "");
@@ -1595,17 +1827,43 @@
     if (e.key === "Escape") closeCfg();
   });
 
+  function applySort(list) {
+    var arr = list.slice();
+    if (sortMode === "stars") {
+      arr.sort(function (a, b) {
+        var sa = (a.live && a.live.stars) || 0;
+        var sb = (b.live && b.live.stars) || 0;
+        return sb - sa;
+      });
+    } else if (sortMode === "recent") {
+      arr.sort(function (a, b) {
+        var ta = (a.live && a.live.pushed_at) || "";
+        var tb = (b.live && b.live.pushed_at) || "";
+        return tb.localeCompare(ta);
+      });
+    } else if (sortMode === "verified") {
+      arr.sort(function (a, b) {
+        // 已核验 = curated source 优先，其次有 live 数据
+        var ca = a.source === "catalog" ? 2 : (a.live ? 1 : 0);
+        var cb = b.source === "catalog" ? 2 : (b.live ? 1 : 0);
+        return cb - ca;
+      });
+    }
+    return arr;
+  }
+
   function render() {
-    var list = items.filter(matches);
+    var raw = items.filter(matches);
+    var list = applySort(raw);
     var grid = document.getElementById("grid");
     var empty = document.getElementById("empty");
     cfgStore = []; // 每轮渲染重建配置弹窗索引
 
     grid.innerHTML = list.map(function (it) {
       var live = it.live || {};
-      // curated 卡：优先显示 live.endpoint，否则显示 registry_url 端点（来自 live_multi.json.curated）
       var ep = live.endpoint || (live.remotes && live.remotes[0] && live.remotes[0].url);
       var titleUrl = live.repo_url || live.registry_url || it.url;
+      var drawIdx = drawerStore.push({ kind: "curated", item: it, live: live }) - 1;
       return '<article class="card">' +
         '<div class="card-top">' +
           '<div class="card-title"><a href="' + esc(titleUrl) + '" target="_blank" rel="noopener">' +
@@ -1618,21 +1876,22 @@
         liveRow(live) +
         sourceBadge(it.source) +
         '<div class="card-foot"><span class="card-repo">' + highlight((live.repo_slug || it.slug), query) + "</span>" +
-          '<span><button class="btn-cfg" data-cfg="' + (cfgStore.push(cfgPayload(Object.assign({ title: it.title }, live))) - 1) + '" title="生成 Claude Desktop / Cursor / VS Code 配置片段">📋 配置</button>' +
+          '<span><button class="btn-detail" data-draw="' + drawIdx + '" type="button" title="查看详情">详情</button>' +
+          '<button class="btn-cfg" data-cfg="' + (cfgStore.push(cfgPayload(Object.assign({ title: it.title }, live))) - 1) + '" title="生成 Claude Desktop / Cursor / VS Code 配置片段">📋 配置</button>' +
           '<a class="ext" href="' + esc(it.url) + '" target="_blank" rel="noopener">GitHub ↗</a></span></div>' +
       "</article>";
     }).join("");
 
     if (!list.length) {
       empty.style.display = "block";
-      empty.innerHTML = "本地目录没有匹配 <b>" + esc(query || activeCat) + "</b> 的工具 —— 试试下方 GitHub 全站实时搜索？";
+      empty.innerHTML = "本地目录没有匹配 <b>" + esc(query || activeCat) + "</b> 的工具 —— 试试切换到「自动发现」Tab 或「GitHub 实时搜索」Tab？";
     } else {
       empty.style.display = "none";
     }
 
     var countEl = document.getElementById("count");
     var metaOn = fState.lang || fState.minStars > 0 || fState.freshDays > 0;
-    if (list.length === items.length && !query && !metaOn) {
+    if (list.length === items.length && !query && !metaOn && sortMode === "default") {
       countEl.textContent = items.length + " 条";
       countEl.classList.remove("hit");
     } else {
@@ -1640,22 +1899,8 @@
       countEl.classList.toggle("hit", list.length > 0);
     }
     document.getElementById("heroCount").textContent = items.length;
+    document.getElementById("tabCuratedCount").textContent = items.length;
 
-    var strip = document.getElementById("liveStrip");
-    if (query && query.length >= 2 && activeCat === "all") {
-      strip.classList.add("show");
-      document.getElementById("liveStripText").innerHTML =
-        "本地已收录 <b>" + list.length + "</b> 条结果" +
-        (list.length === 0 ? "，自动发现区和 GitHub 全站还有？" : " · 自动发现 <b>" + candidateItems.filter(function(c){return c.hay.indexOf(query)!==-1}).length + "</b> 条匹配候选") +
-        " · 还想在 GitHub <b>几十亿级仓库</b>里继续搜「<b>" + esc(query) + "</b>」？";
-      if (liveFetchedFor !== query) {
-        document.getElementById("liveStatus").textContent = "";
-        document.getElementById("btnLive").disabled = false;
-      }
-    } else {
-      strip.classList.remove("show");
-      if (query !== liveFetchedFor) hideLiveSection();
-    }
     renderCandidates();
   }
 
@@ -1664,13 +1909,15 @@
     renderInboxBanner();
     var section = document.getElementById("candidates");
     var grid = document.getElementById("candidateGrid");
-    var list = candidateItems;
-    if (query) list = list.filter(function (c) { return c.hay.indexOf(query) !== -1; });
+    var raw = candidateItems;
+    if (query) raw = raw.filter(function (c) { return c.hay.indexOf(query) !== -1; });
+    var list = applySort(raw);
     if (!candidateItems.length) {
       section.style.display = "none";
       return;
     }
     section.style.display = "";
+    document.getElementById("tabCandidateCount").textContent = candidateItems.length;
     grid.innerHTML = list.map(function (c) {
       var titleUrl = c.url || "#";
       var catBadge = c.suggested_category && c.isInbox
@@ -1688,6 +1935,7 @@
       var newTag = isRecentCandidate(c)
         ? '<span class="vfy new" title="7 天内首次发布的工具（每 6 小时同步）">🆕 新增</span>'
         : "";
+      var drawIdx = drawerStore.push({ kind: "candidate", item: c, live: c }) - 1;
       return '<article class="card unverified">' +
         '<div class="card-top">' +
           '<div class="card-title"><a href="' + esc(titleUrl) + '" target="_blank" rel="noopener">' +
@@ -1700,7 +1948,8 @@
         '<div style="margin-top:6px">' + catBadge + confBadge + "</div>" +
         '<div class="card-foot">' +
           '<span class="card-repo">' + highlight((c.slug || c.id), query) + "</span>" +
-          '<span><button class="btn-cfg" data-cfg="' + (cfgStore.push(cfgPayload(c)) - 1) + '" title="生成 Claude Desktop / Cursor / VS Code 配置片段">📋 配置</button>' +
+          '<span><button class="btn-detail" data-draw="' + drawIdx + '" type="button" title="查看详情">详情</button>' +
+          '<button class="btn-cfg" data-cfg="' + (cfgStore.push(cfgPayload(c)) - 1) + '" title="生成 Claude Desktop / Cursor / VS Code 配置片段">📋 配置</button>' +
           applyBtn + (c.registry_url ? '<a class="ext" href="' + esc(c.registry_url) + '" target="_blank" rel="noopener" style="margin-left:6px">来源 ↗</a>' : "") + "</span>" +
         "</div>" +
       "</article>";
@@ -1713,15 +1962,21 @@
   /* ================= GitHub 全站实时搜索 ================= */
 
   function hideLiveSection() {
-    document.getElementById("liveSection").classList.remove("show");
+    // liveSection 已废弃，改为 liveTab — 此函数保留兼容
     liveResults = [];
     liveFetchedFor = "";
+    var g = document.getElementById("liveGrid2");
+    if (g) g.innerHTML = "";
   }
 
   function renderLive(list, total) {
-    var grid = document.getElementById("liveGrid");
+    var grid = document.getElementById("liveGrid2");
     grid.innerHTML = list.map(function (r) {
       var lang = r.language ? '<span class="lang-pill">' + esc(r.language) + "</span>" : "";
+      var drawIdx = drawerStore.push({
+        kind: "gh",
+        gh: r
+      }) - 1;
       return '<article class="card">' +
         '<div class="card-top">' +
           '<div class="card-title"><a href="' + esc(r.html_url) + '" target="_blank" rel="noopener">' +
@@ -1736,19 +1991,18 @@
           lang +
         "</div>" +
         '<div class="card-foot"><span class="card-repo">' + esc(r.full_name) + "</span>" +
-          '<a class="ext" href="' + esc(r.html_url) + '" target="_blank" rel="noopener">GitHub ↗</a></div>' +
+          '<span><button class="btn-detail" data-draw="' + drawIdx + '" type="button" title="查看详情">详情</button>' +
+          '<a class="ext" href="' + esc(r.html_url) + '" target="_blank" rel="noopener">GitHub ↗</a></span></div>' +
       "</article>";
     }).join("");
-    document.getElementById("liveSection").classList.add("show");
-    document.querySelector("#liveSection .hint").textContent =
-      "GitHub Search API 实时返回共 " + (total > 1000 ? "1000+" : total) + " 条，按 Stars 排序展示前 " + list.length + " 条";
   }
 
   function runLiveSearch(auto) {
     var q = query;
     if (!q || q.length < 2) return;
+    if (activeTab !== "live") switchTab("live");
     if (liveFetchedFor === q && liveResults.length) {
-      document.getElementById("liveSection").classList.add("show");
+      renderLive(liveResults, 0);
       return;
     }
     var btn = document.getElementById("btnLive");
@@ -1759,7 +2013,6 @@
     if (liveAbort) liveAbort.abort();
     liveAbort = new AbortController();
 
-    // 排除本地已收录仓库：GitHub 搜索语法不支持批量排除，改为结果侧去重
     var seen = {};
     items.forEach(function (it) { seen[it.slug.toLowerCase()] = true; });
 
@@ -1780,14 +2033,12 @@
       liveResults = repos;
       liveFetchedFor = q;
       btn.disabled = false;
-      status.textContent = "";
       if (!repos.length) {
-        document.getElementById("liveSection").classList.remove("show");
         status.textContent = "GitHub 全站也没有更多未收录的匹配结果";
         return;
       }
+      status.textContent = "共 " + (data.total_count > 1000 ? "1000+" : data.total_count) + " 条，展示前 " + repos.length + " 条";
       renderLive(repos, data.total_count);
-      if (!auto) document.getElementById("liveSection").scrollIntoView({ behavior: "smooth", block: "start" });
     }).catch(function (err) {
       if (err.name === "AbortError") return;
       btn.disabled = false;
@@ -1806,6 +2057,8 @@
   input.addEventListener("input", function () {
     query = input.value.trim().toLowerCase();
     box.classList.toggle("has-text", !!query);
+    // 有搜索词时自动切到精选 tab 展示过滤结果
+    if (query && activeTab !== "curated") switchTab("curated");
     render();
     // 停顿 700ms 后：若本地过滤 0 结果，自动触发 GitHub 全站实时搜索（防抖保护限流额度）
     clearTimeout(debounceTimer);
@@ -1837,36 +2090,204 @@
     }
   });
 
-  // ---- 滚动紧凑化：超过 120px 自动收起 chips，给卡片腾空间 ----
-  //      如果用户手动 force-expand，滚动不再自动折叠
+  // ---- 滚动紧凑化：超过 120px toolbar 紧凑，超过 260px chips 收起 ----
+  //      如果用户手动 force-expand，滚动不再自动折叠 chips
   var toolbar = document.querySelector(".toolbar");
+  var chips = document.querySelector(".chips");
   var ticking = false;
   function onScroll() {
     if (ticking) return;
     ticking = true;
     requestAnimationFrame(function () {
       ticking = false;
-      if (toolbar.classList.contains("force-expand")) return; // 手动展开中，跳过
-      var c = window.scrollY > 120;
-      toolbar.classList.toggle("compact", c);
-      if (btnChips) btnChips.setAttribute("aria-expanded", String(!c));
+      var y = window.scrollY;
+      // toolbar 紧凑化（padding 变小），chips 折叠只由手动按钮控制
+      toolbar.classList.toggle("compact", y > 120);
     });
   }
   window.addEventListener("scroll", onScroll, { passive: true });
 
-  // ---- 分类筛选 chips 手动展开/收起 ----
+  // ---- 分类筛选 chips 手动展开/收起（按钮 toggle，不再跟滚动绑定）----
   var btnChips = document.getElementById("btnToggleChips");
-  if (btnChips) {
+  if (btnChips && chips) {
+    function syncBtnText() {
+      var collapsed = chips.classList.contains("chips-collapsed");
+      btnChips.textContent = (collapsed ? '📂 分类展示' : '🏷️ 分类折叠');
+    }
+    syncBtnText();
     btnChips.addEventListener("click", function () {
-      var on = toolbar.classList.toggle("force-expand");
-      btnChips.classList.toggle("on", on);
-      btnChips.setAttribute("aria-expanded", String(on));
-      if (on) toolbar.classList.remove("compact"); // 展开时立即解除 compact
+      var nowCollapsed = !chips.classList.contains("chips-collapsed");
+      chips.classList.toggle("chips-collapsed", nowCollapsed);
+      btnChips.classList.toggle("active", nowCollapsed);
+      btnChips.setAttribute("aria-expanded", String(!nowCollapsed));
+      syncBtnText();
     });
   }
 
   bindTaskChips();
   load();
+  var domainsEl = document.getElementById("domains");
+  // 初始状态：只显示 curated tab
+  switchTab("curated");
+
+  /* ================= Tab 切换 ================= */
+  function switchTab(name) {
+    activeTab = name;
+    var tabs = document.querySelectorAll(".list-tab");
+    var panels = document.querySelectorAll("[data-tabpanel]");
+    tabs.forEach(function (t) {
+      var on = t.getAttribute("data-tab") === name;
+      t.classList.toggle("active", on);
+      t.setAttribute("aria-selected", String(on));
+    });
+    panels.forEach(function (p) {
+      p.style.display = p.getAttribute("data-tabpanel") === name ? "" : "none";
+    });
+    // domains：只在 live tab 下显示，curated / candidates 隐藏
+    if (domainsEl) domainsEl.style.display = (name === "live") ? "" : "none";
+    // 切换到 liveTab 且有搜索词时自动搜索
+    if (name === "live" && query.length >= 2 && liveFetchedFor !== query) {
+      runLiveSearch(true);
+    }
+  }
+  document.addEventListener("click", function (e) {
+    var tab = e.target.closest(".list-tab");
+    if (tab) {
+      switchTab(tab.getAttribute("data-tab"));
+      e.preventDefault();
+    }
+  });
+
+  /* ================= 排序 ================= */
+  var sortSelect = document.getElementById("sortSelect");
+  if (sortSelect) {
+    sortSelect.addEventListener("change", function () {
+      sortMode = sortSelect.value;
+      // 重置 drawerStore + cfgStore 避免索引越界
+      drawerStore = [];
+      cfgStore = [];
+      if (activeTab === "curated") render();
+      else if (activeTab === "candidates") renderCandidates();
+    });
+  }
+
+  /* ================= 搜索示例 chips ================= */
+  document.addEventListener("click", function (e) {
+    var chip = e.target.closest(".se-chip");
+    if (chip) {
+      var q = chip.getAttribute("data-q");
+      input.value = q;
+      query = q.toLowerCase();
+      box.classList.add("has-text");
+      switchTab("curated");
+      render();
+      input.focus();
+      e.preventDefault();
+    }
+  });
+
+  /* ================= 详情抽屉 ================= */
+  function openDrawer(idx) {
+    var data = drawerStore[idx];
+    if (!data) return;
+    var mask = document.getElementById("drawerMask");
+    var drawer = document.getElementById("drawer");
+    var title = document.getElementById("drawerTitle");
+    var sub = document.getElementById("drawerSub");
+    var body = document.getElementById("drawerBody");
+    var actions = document.getElementById("drawerActions");
+
+    var item = data.item || data.gh || {};
+    var live = data.live || {};
+    var gh = data.gh || {};
+
+    // 标题 + 副标题
+    title.textContent = item.title || gh.full_name || "—";
+    var desc = item.desc || gh.description || "";
+    sub.textContent = desc ? desc.slice(0, 120) + (desc.length > 120 ? "…" : "") : "";
+
+    // 构造"它能做什么"列表（从分类+描述推断）
+    var doList = [];
+    if (item.cat) doList.push("属于「" + item.catLabel + "」分类的 AI 工具");
+    if (gh.language) doList.push("主要语言：" + gh.language);
+    if (gh.stargazers_count != null) doList.push("GitHub Stars：" + gh.stargazers_count + "，社区关注度" + (gh.stargazers_count >= 1000 ? "高" : gh.stargazers_count >= 100 ? "中" : "基础"));
+    if (gh.archived) doList.push("⚠️ 该仓库已标记归档，可能不再维护");
+    var days = gh.pushed_at ? Math.floor((Date.now() - new Date(gh.pushed_at).getTime()) / 86400000) : null;
+    if (days != null && days >= 0 && !gh.archived) {
+      if (days < 30) doList.push("近 " + days + " 天内有更新，活跃维护中");
+      else if (days < 180) doList.push("最近更新于 " + days + " 天前");
+      else doList.push("最近更新于 " + days + " 天前，维护节奏较慢");
+    }
+
+    // 基本信息
+    var infoHtml = "";
+    if (item.cat || data.catLabel) infoHtml += "<dt>分类</dt><dd>" + esc(item.catLabel || item.cat) + "</dd>";
+    if (live.source && data.kind !== "gh") infoHtml += "<dt>数据来源</dt><dd>" + (SOURCE_LABEL[live.source] || live.source) + "</dd>";
+    if (item.endpoint || live.endpoint) infoHtml += "<dt>远程端点</dt><dd style='word-break:break-all'>" + esc(item.endpoint || live.endpoint) + "</dd>";
+    if (live.license || gh.license) infoHtml += "<dt>许可证</dt><dd>" + esc((live.license || gh.license || {}).spdx_id || live.license || "") + "</dd>";
+    if (live.lang || gh.language) infoHtml += "<dt>语言</dt><dd>" + esc(live.lang || gh.language) + "</dd>";
+    if (live.stars != null || gh.stargazers_count != null) infoHtml += "<dt>Stars</dt><dd>★ " + esc(fmtStars(live.stars != null ? live.stars : gh.stargazers_count)) + "</dd>";
+
+    var html = "";
+    if (doList.length) {
+      html += '<div class="drawer-section"><h4>它能做什么</h4><ul class="drawer-do">';
+      doList.forEach(function (t) { html += "<li>" + esc(t) + "</li>"; });
+      html += "</ul></div>";
+    }
+    if (infoHtml) {
+      html += '<div class="drawer-section"><h4>基本信息</h4><dl class="drawer-info">' + infoHtml + "</dl></div>";
+    }
+    if (data.kind === "candidate") {
+      html += '<div class="drawer-section"><h4>核验状态</h4><p style="font-size:13px;color:var(--text-2)">此条目由 Pipeline 自动发现，<b>未经过人工核验</b>。Confidence 评分 ' + esc(item.confidence || "") + '/10 代表自动推断的可信度，不是质量背书。</p></div>';
+    }
+    body.innerHTML = html || '<p style="color:var(--text-3);font-size:13px">暂无更多信息</p>';
+
+    // 底部操作按钮
+    var repoUrl = live.repo_url || item.url || gh.html_url || item.registry_url || "#";
+    var cfgIdx = cfgStore.push(cfgPayload(Object.assign({ title: item.title || gh.full_name || "" }, live))) - 1;
+    actions.innerHTML =
+      '<a class="btn-gh" href="' + esc(repoUrl) + '" target="_blank" rel="noopener">🐙 查看 GitHub ↗</a>' +
+      (data.kind === "gh" ? "" :
+        '<button class="btn-cfg" data-cfg="' + cfgIdx + '" type="button">📋 复制配置</button>');
+
+    mask.classList.add("show");
+    drawer.classList.add("show");
+    document.getElementById("drawerClose").focus();
+  }
+
+  function closeDrawer() {
+    document.getElementById("drawerMask").classList.remove("show");
+    document.getElementById("drawer").classList.remove("show");
+  }
+
+  document.addEventListener("click", function (e) {
+    var btn = e.target.closest(".btn-detail");
+    if (btn) {
+      var i = parseInt(btn.getAttribute("data-draw"), 10);
+      if (!isNaN(i)) openDrawer(i);
+      return;
+    }
+    if (e.target.closest("#drawerClose")) { closeDrawer(); return; }
+    if (e.target.id === "drawerMask") closeDrawer();
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeDrawer();
+  });
+
+  /* ================= 汉堡菜单 ================= */
+  var hamburger = document.getElementById("navHamburger");
+  var mobileMenu = document.getElementById("navMobileMenu");
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener("click", function () {
+      var on = mobileMenu.classList.toggle("show");
+      hamburger.setAttribute("aria-expanded", String(on));
+    });
+    // 点击移动端菜单项后自动收起
+    mobileMenu.addEventListener("click", function (e) {
+      if (e.target.tagName === "A") mobileMenu.classList.remove("show");
+    });
+  }
 })();
 </script>
 </body>
