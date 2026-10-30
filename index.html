@@ -143,7 +143,7 @@
   .stats-grid {
     position: relative;
     max-width: 980px; margin: 36px auto 0;
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
   }
   .stat-card {
     background: var(--surface);
@@ -157,6 +157,8 @@
   .stat-card:nth-child(2) { animation-delay: .07s; }
   .stat-card:nth-child(3) { animation-delay: .14s; }
   .stat-card:nth-child(4) { animation-delay: .21s; }
+  .stat-card:nth-child(5) { animation-delay: .28s; }
+  .stat-card:nth-child(6) { animation-delay: .35s; }
   .stat-num {
     font-size: clamp(24px, 3vw, 32px);
     font-weight: 900; letter-spacing: -.5px; line-height: 1.2;
@@ -167,6 +169,35 @@
   .stat-num.c4 { background: linear-gradient(93deg, #d97706, #f59e0b); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
   .stat-label { font-size: 13px; color: var(--text-3); margin-top: 5px; }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* 统计口径说明：四个数字来自不同口径，明示避免误读 */
+  .stat-legend {
+    max-width: 980px; margin: 10px auto 0; font-size: 12.5px;
+    color: var(--text-3); text-align: center; line-height: 1.7;
+  }
+  .stat-legend b { color: var(--text-2); font-weight: 600; }
+
+  /* 任务导向入口：「你希望 AI 帮你完成什么工作？」 */
+  .task-bar { border-bottom: 1px solid var(--border); background: var(--surface); padding: 12px 20px; }
+  .task-inner { max-width: 1180px; margin: 0 auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .task-title { font-weight: 700; font-size: 14px; color: var(--text-2); white-space: nowrap; }
+  .task-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .task-chip {
+    font: inherit; font-size: 13px; cursor: pointer;
+    padding: 5px 12px; border-radius: 999px;
+    border: 1px solid var(--border); background: var(--bg); color: var(--text-2);
+    transition: all .15s ease;
+  }
+  .task-chip:hover { border-color: var(--brand); color: var(--brand); transform: translateY(-1px); }
+  .task-chip.active { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 600; }
+  .task-hint { font-size: 12px; color: var(--text-3); }
+
+  /* JS 禁用 / 加载失败时的静态兜底提示 */
+  .noscript-note {
+    max-width: 980px; margin: 16px auto 0; padding: 14px 18px;
+    background: #fffbeb; border: 1px solid #fde68a; border-radius: var(--radius);
+    font-size: 14px; color: #92400e; line-height: 1.7;
+  }
 
   /* ================= 搜索工具条（粘性 + 滚动紧凑化） ================= */
   .toolbar {
@@ -653,11 +684,15 @@
     <p class="sub">覆盖 <b id="heroCount">191</b> 个开源项目，横跨 MCP Server、Agent Skills、CLI/SDK、自动化工作流与专业文件工具五大类型，<b>本地实时过滤</b> + <b>GitHub 全站实时搜索</b>双引擎，仓库 stars 与更新状态每 6 小时同步。</p>
   </div>
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-num c1" data-target="191">0</div><div class="stat-label">已收录工具</div></div>
-    <div class="stat-card"><div class="stat-num c2" data-target="17">0</div><div class="stat-label">细分分类</div></div>
-    <div class="stat-card"><div class="stat-num c3" data-target="43">0</div><div class="stat-label">领域检索入口</div></div>
-    <div class="stat-card"><div class="stat-num c4" id="statStars">…</div><div class="stat-label">累计 GitHub Stars</div></div>
+    <div class="stat-card" title="catalog.csv 中的人工精选行数（目录收录口径）"><div class="stat-num c1" id="statCurated" data-target="191">191</div><div class="stat-label">已收录工具（目录）</div></div>
+    <div class="stat-card" title="live_multi.json 中成功同步 GitHub 元数据的条目数，可能略少于目录行数"><div class="stat-num c2" id="statSynced" data-target="189">189</div><div class="stat-label">已同步 GitHub 元数据</div></div>
+    <div class="stat-card" title="Pipeline 从 MCP Registry / npm / crates.io 自动发现的候选条目"><div class="stat-num c3" id="statCand" data-target="150">150</div><div class="stat-label">自动发现候选</div></div>
+    <div class="stat-card" title="MCP initialize 握手实测通过的端点数（仅代表端点在线，非功能实测）"><div class="stat-num c1" id="statVfy">—</div><div class="stat-label">端点实测通过</div></div>
+    <div class="stat-card" title="已收录仓库的 GitHub Stars 累加，每 6 小时同步"><div class="stat-num c4" id="statStars">…</div><div class="stat-label">累计 GitHub Stars</div></div>
+    <div class="stat-card" title="目录内的细分工具类型"><div class="stat-num c3" data-target="17">17</div><div class="stat-label">细分分类</div></div>
   </div>
+  <p class="stat-legend" id="statLegend">统计口径：<b>目录收录 191</b>（catalog.csv 行数）· <b>已同步元数据 189</b> · <b>候选 150</b> · <b>端点实测 —</b>，四个数字口径不同，全部随数据文件动态计算。</p>
+  <noscript><div class="noscript-note">⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（191 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。</div></noscript>
 </header>
 
 <div class="toolbar">
@@ -709,11 +744,31 @@
   </div>
 </div>
 
+<!-- 任务导向入口：不懂 MCP/Skills 也能按「想让 AI 做什么」找到工具 -->
+<div class="task-bar" id="taskBar">
+  <div class="task-inner">
+    <span class="task-title">🙋 你希望 AI 帮你完成什么工作？</span>
+    <div class="task-chips" id="taskChips" role="group" aria-label="按任务筛选工具">
+      <button class="task-chip" data-pre="3." type="button">写文档 / 做 PPT / 处理 PDF</button>
+      <button class="task-chip" data-pre="5." type="button">查数据库、做数据分析</button>
+      <button class="task-chip" data-pre="2." type="button">自动操作浏览器、抓网页</button>
+      <button class="task-chip" data-pre="6." type="button">部署运维 Docker / 服务器</button>
+      <button class="task-chip" data-pre="10." type="button">设计图片、视频与音频</button>
+      <button class="task-chip" data-pre="11." type="button">画 CAD / 3D、查地图</button>
+      <button class="task-chip" data-pre="8." type="button">财务、会计与区块链</button>
+      <button class="task-chip" data-pre="13." type="button">控制机器人、IoT 与硬件</button>
+      <button class="task-chip" data-pre="7." type="button">邮件、日历与团队协作</button>
+      <button class="task-chip" data-pre="9A." type="button">接飞书、钉钉、微信</button>
+    </div>
+    <span class="task-hint">按任务跳转对应分类，不需要先懂 MCP</span>
+  </div>
+</div>
+
 <main>
   <section id="tools">
     <div class="section-head">
-      <h2>📦 已收录的铲子</h2>
-      <span class="hint">分类不是质量排名，收录不代表背书</span>
+      <h2>📦 已收录的铲子<span class="unverified-tag" style="background:#eef2ff;color:#3730a3" title="人工筛选入库：仓库存在、用途明确、分类经人工确认；尚未逐项功能实测">👤 人工筛选</span></h2>
+      <span class="hint">分类不是质量排名，收录不代表背书 · <b>已收录 = 人工筛选入库</b>（未逐项功能实测）</span>
       <span class="live-updated" id="liveUpdated" title="仓库 stars / 更新时间由 GitHub Actions 每 6 小时同步">实时数据同步中…</span>
     </div>
 
@@ -737,8 +792,8 @@
 
   <section id="candidates" class="candidates-section">
     <div class="section-head">
-      <h2>🧭 自动发现的候选铲子<span class="unverified-tag">自动发现</span></h2>
-      <span class="hint">由 Pipeline 从 MCP Registry / npm / crates.io 挖到，<b>未人工核验</b></span>
+      <h2>🧭 自动发现的候选铲子<span class="unverified-tag" title="机器检索入库：分类与可用性未经人工核验，confidence 评分不等于质量背书">🤖 自动发现</span></h2>
+      <span class="hint">由 Pipeline 从 MCP Registry / npm / crates.io 挖到，<b>未人工核验</b> · ✅ 端点实测仅代表 MCP 握手在线，<b>不代表功能完整可用</b></span>
     </div>
     <div class="candidates-hint">候选按 <b>MCP 官方注册 + Stars / 下载量 + 端点可调用 + 活跃状态</b> 加权排序 · 当前每轮保留 Top <b id="candidateCount">…</b> 条</div>
     <div id="inboxBanner" class="inbox-banner"></div>
@@ -1141,6 +1196,30 @@
       });
     }
     document.getElementById("statStars").textContent = total == null ? "…" : fmtStars(total) + "+";
+
+    // 统计口径统一：四个数字各自来源、动态计算，不写死在 HTML
+    var curatedN = items.length;                                    // 目录收录（catalog.csv 行数）
+    var syncedN = livePayload && livePayload.curated_count != null
+      ? livePayload.curated_count
+      : (livePayload && livePayload.curated ? Object.keys(livePayload.curated).length : null);
+    var candN = livePayload && livePayload.candidates_count != null
+      ? livePayload.candidates_count
+      : (livePayload && livePayload.candidates ? livePayload.candidates.length : null);
+    var okN = 0, epN = 0;
+    if (livePayload && livePayload.candidates) {
+      livePayload.candidates.forEach(function (c) {
+        if (c && c.endpoint) { epN++; if (c.endpoint_status === "ok") okN++; }
+      });
+    }
+    if (curatedN) document.getElementById("statCurated").textContent = curatedN;
+    if (syncedN != null) document.getElementById("statSynced").textContent = syncedN;
+    if (candN != null) document.getElementById("statCand").textContent = candN;
+    document.getElementById("statVfy").textContent = epN ? okN + "/" + epN : "—";
+    document.getElementById("statLegend").innerHTML =
+      "统计口径：<b>目录收录 " + curatedN + "</b>（catalog.csv 行数）" +
+      " · <b>已同步元数据 " + (syncedN == null ? "—" : syncedN) + "</b>（live_multi.json）" +
+      " · <b>候选 " + (candN == null ? "—" : candN) + "</b>" +
+      " · <b>端点实测 " + (epN ? okN + "/" + epN : "—") + "</b>，四个数字口径不同，全部随数据文件动态计算。";
   }
 
   /* ================= 统计数字滚动 ================= */
@@ -1200,7 +1279,44 @@
       activeCat = btn.getAttribute("data-cat");
       document.querySelectorAll(".chip").forEach(function (c) { c.classList.remove("active"); });
       btn.classList.add("active");
+      syncTaskChips();
       render();
+    });
+  }
+
+  // 任务导向入口：按「想让 AI 做什么」跳到对应分类（前缀匹配分类编号），再点一次取消
+  function catKeyByPrefix(pre) {
+    for (var i = 0; i < cats.length; i++) if (cats[i].key.indexOf(pre) === 0) return cats[i].key;
+    return null;
+  }
+
+  function syncTaskChips() {
+    document.querySelectorAll(".task-chip").forEach(function (b) {
+      var k = catKeyByPrefix(b.getAttribute("data-pre"));
+      b.classList.toggle("active", k !== null && activeCat === k);
+    });
+  }
+
+  function bindTaskChips() {
+    document.getElementById("taskChips").addEventListener("click", function (e) {
+      var btn = e.target.closest(".task-chip");
+      if (!btn) return;
+      var key = catKeyByPrefix(btn.getAttribute("data-pre"));
+      if (!key) return;
+      // 再点一次同一任务 = 取消，回到「全部」
+      activeCat = (activeCat === key) ? "all" : key;
+      // 任务与关键词搜索互斥，切任务时清空搜索词，保证结果与 chip 一致
+      if (query) {
+        query = "";
+        document.getElementById("searchInput").value = "";
+        hideLiveSection();
+      }
+      document.querySelectorAll(".chip").forEach(function (c) {
+        c.classList.toggle("active", c.getAttribute("data-cat") === activeCat);
+      });
+      syncTaskChips();
+      render();
+      document.getElementById("tools").scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }
 
@@ -1307,7 +1423,7 @@
     var rel = at ? relTime(at) : null;
     var when = rel ? " · " + rel.text : "";
     var abs = at ? at.replace("T", " ").slice(0, 16) + " UTC" : "";
-    if (st === "ok") return '<span class="vfy ok" title="MCP initialize 握手实测通过，验证于 ' + abs + '">✅ 验证可用' + when + "</span>";
+    if (st === "ok") return '<span class="vfy ok" title="MCP initialize 握手实测通过，验证于 ' + abs + '（仅验证端点在线，非功能实测）">✅ 验证可用' + when + "</span>";
     if (st === "auth") return '<span class="vfy auth" title="端点存活但需要 API Key（HTTP 401/403），填密钥即可用 · 验证于 ' + abs + '">🔑 需鉴权' + when + "</span>";
     var note = live.endpoint_note || ex.endpoint_note || "";
     return '<span class="vfy fail" title="' + esc(note || "连接失败或超时") + ' · 验证于 ' + abs + '">❌ 端点无响应' + when + "</span>";
@@ -1749,6 +1865,7 @@
     });
   }
 
+  bindTaskChips();
   load();
 })();
 </script>
