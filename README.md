@@ -162,6 +162,7 @@
 - [Zabbix MCP Server（监控告警和运维）](https://github.com/mpeirone/zabbix-mcp-server)
 - [VictoriaMetrics MCP（时序监控数据）](https://github.com/VictoriaMetrics/mcp-victoriametrics)
 - [1Panel MCP（服务器面板管理）](https://github.com/1Panel-dev/mcp-1panel)
+- [Kilobat CLI（Mac 本机网络诊断与应用流量）](https://github.com/seifip/kilobat-cli) — CLI / MCP，本地运行，GPL-3.0-only，macOS 14+；可定位代理、DNS、IP 或服务器连接问题；部分工具可修改网络设置，调用前需确认，流量阻断需单独的闭源桌面应用。
 
 ### 7. 邮件、通信、日历与团队协作
 
