@@ -20,6 +20,7 @@
 2. 浏览器、网页检索、抓取与自动化,Fetcher MCP（使用 Playwright 获取网页内容）,https://github.com/jae-jae/fetcher-mcp
 2. 浏览器、网页检索、抓取与自动化,MCP Read Website Fast（网页转 Markdown）,https://github.com/just-every/mcp-read-website-fast
 2. 浏览器、网页检索、抓取与自动化,Website Downloader（下载网站内容）,https://github.com/pskill9/website-downloader
+2. 浏览器、网页检索、抓取与自动化,agent-qa（自然语言网页/移动端 QA；持久记忆与证据门控自我改进；可控制浏览器/设备；FSL-1.1-ALv2，模型与可选设备费用另计）,https://github.com/vostride/agent-qa
 3. 文件、Office、PDF、文档与出版,Markdownify MCP（把多种内容转成 Markdown）,https://github.com/zcaceres/markdownify-mcp
 3. 文件、Office、PDF、文档与出版,Pandoc MCP（文档格式转换）,https://github.com/vivekVells/mcp-pandoc
 3. 文件、Office、PDF、文档与出版,Unstructured MCP（文档解析与结构化）,https://github.com/Unstructured-IO/UNS-MCP
