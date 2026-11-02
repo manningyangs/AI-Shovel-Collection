@@ -284,7 +284,63 @@
       'zh-CN': '被收录不代表项目安全、活跃、可商用或质量已背书；使用前请自行检查许可证、维护状态、权限和数据安全。欢迎通过 Issue / PR 补充与纠错。',
       'en': 'Inclusion does not imply safety, activity, fitness for commercial use, or quality endorsement. Check license, maintenance, permissions yourself. Contributions welcome.',
       'zh-TW': '被收錄不代表專案安全、活躍、可商用或質量已背書；使用前請自行檢查許可證、維護狀態、權限和資料安全。歡迎透過 Issue / PR 補充與糾錯。'
-    }
+    },
+
+    // === Submit page ===
+    'submit.title': { 'zh-CN': '提交收录 · AI 铲子大全', 'en': 'Submit · AI Shovel Collection', 'zh-TW': '提交收錄 · AI 鏟子大全' },
+    'submit.back': { 'zh-CN': '← 返回首页', 'en': '← Back to home', 'zh-TW': '← 返回首頁' },
+    'submit.h1': { 'zh-CN': '📥 提交收录一个工具', 'en': '📥 Submit a Tool for Curation', 'zh-TW': '📥 提交收錄一個工具' },
+    'submit.sub': {
+      'zh-CN': '输入一个 GitHub 仓库链接，我帮你自动拉取元数据、自动分类、生成 catalog.csv 行和 GitHub issue。<br>收录范围：<b>MCP Server、Agent Skill、CLI/SDK、API 适配器、自动化工作流、专业文件工具</b>。<br><b>不收录</b>：纯概念验证 demo、已归档超过 1 年、无明确 MCP/Agent 支持说明的普通库。',
+      'en': 'Paste a GitHub repo URL — we auto-fetch metadata, auto-classify, and generate a catalog.csv row + GitHub issue.<br><b>Scope</b>: MCP Servers, Agent Skills, CLI/SDKs, API adapters, automation workflows, specialist file tools.<br><b>Not accepted</b>: pure PoC demos, archived > 1 year, generic libs without MCP/Agent support.',
+      'zh-TW': '輸入一個 GitHub 倉庫連結，我幫你自動拉取元資料、自動分類、生成 catalog.csv 行和 GitHub issue。<br>收錄範圍：<b>MCP Server、Agent Skill、CLI/SDK、API 適配器、自動化工作流、專業檔案工具</b>。<br><b>不收錄</b>：純概念驗證 demo、已歸檔超過 1 年、無明確 MCP/Agent 支援說明的普通庫。'
+    },
+    'submit.s1.title': { 'zh-CN': '① 输入仓库链接', 'en': '① Enter Repo URL', 'zh-TW': '① 輸入倉庫連結' },
+    'submit.s1.label': { 'zh-CN': 'GitHub 仓库 URL', 'en': 'GitHub Repository URL', 'zh-TW': 'GitHub 倉庫 URL' },
+    'submit.s1.placeholder': { 'zh-CN': 'https://github.com/用户名/仓库名', 'en': 'https://github.com/owner/repo', 'zh-TW': 'https://github.com/用戶名/倉庫名' },
+    'submit.s1.btn': { 'zh-CN': '🔍 自动识别', 'en': '🔍 Auto-detect', 'zh-TW': '🔍 自動識別' },
+    'submit.s1.hint': { 'zh-CN': '示例：https://github.com/PlaywrightMCP/playwright-mcp', 'en': 'Example: https://github.com/PlaywrightMCP/playwright-mcp', 'zh-TW': '範例：https://github.com/PlaywrightMCP/playwright-mcp' },
+    'submit.s1.recognizing': { 'zh-CN': '识别中…', 'en': 'Detecting…', 'zh-TW': '識別中…' },
+    'submit.s2.title': { 'zh-CN': '② 自动识别结果', 'en': '② Detection Results', 'zh-TW': '② 自動識別結果' },
+    'submit.s2.catTitle': { 'zh-CN': '🤖 建议分类（点击右侧下拉可改）', 'en': '🤖 Suggested Category (edit via dropdown)', 'zh-TW': '🤖 建議分類（點擊下拉可改）' },
+    'submit.s2.catSuggest': {
+      'zh-CN': '建议分类：<b>{cat}</b><span class="score">匹配分 {score}（{hits} 个关键词命中）</span>{hits_html}',
+      'en': 'Suggested category: <b>{cat}</b><span class="score">Score {score} ({hits} keyword matches)</span>{hits_html}',
+      'zh-TW': '建議分類：<b>{cat}</b><span class="score">匹配分 {score}（{hits} 個關鍵詞命中）</span>{hits_html}'
+    },
+    'submit.s2.noHits': { 'zh-CN': '未命中任何关键词，默认归入「目录」分类，请人工判断', 'en': 'No keywords matched — defaulted to "Directory" category, please review', 'zh-TW': '未命中任何關鍵詞，預設歸入「目錄」分類，請人工判斷' },
+    'submit.s2.nameTitle': { 'zh-CN': '✏️ 工具中文名（可修改）', 'en': '✏️ Tool Display Name (editable)', 'zh-TW': '✏️ 工具中文名稱（可修改）' },
+    'submit.s2.namePlaceholder': { 'zh-CN': '例如：Playwright MCP（浏览器自动化）', 'en': 'e.g. Playwright MCP (browser automation)', 'zh-TW': '例如：Playwright MCP（瀏覽器自動化）' },
+    'submit.s2.nameHint': { 'zh-CN': '格式建议：英文名（一句话说明括号）—— 方便读者快速知道它做什么', 'en': 'Recommended: English name (one-line description in parens) — helps readers', 'zh-TW': '格式建議：英文名（一句話說明括號）—— 方便讀者快速知道它做什麼' },
+    'submit.s2.urlTitle': { 'zh-CN': '🔗 仓库链接', 'en': '🔗 Repository Link', 'zh-TW': '🔗 倉庫連結' },
+    'submit.s3.title': { 'zh-CN': '③ 生成提交物', 'en': '③ Generate Submission', 'zh-TW': '③ 生成提交物' },
+    'submit.s3.csvTitle': { 'zh-CN': 'A. catalog.csv 行（粘贴到 catalog.csv 末尾）', 'en': 'A. catalog.csv Row (paste at end of catalog.csv)', 'zh-TW': 'A. catalog.csv 行（貼到 catalog.csv 末尾）' },
+    'submit.s3.copyCsv': { 'zh-CN': '📋 复制这行', 'en': '📋 Copy Row', 'zh-TW': '📋 複製這行' },
+    'submit.s3.issueTitle': { 'zh-CN': 'B. 一键创建 GitHub Issue（推荐）', 'en': 'B. Create GitHub Issue (recommended)', 'zh-TW': 'B. 一鍵建立 GitHub Issue（推薦）' },
+    'submit.s3.issueHint': { 'zh-CN': '点击按钮自动跳转到 GitHub issue 提交页，所有字段已预填。Issue 会被自动审核后合并进精选。', 'en': 'Click to open GitHub issue with all fields pre-filled. Auto-moderated before merging.', 'zh-TW': '點擊按鈕自動跳轉到 GitHub issue 頁，所有欄位已預填。Issue 會被自動審核後合併進精選。' },
+    'submit.s3.btnIssue': { 'zh-CN': '🚀 打开 Issue 预填页', 'en': '🚀 Open Issue Pre-fill', 'zh-TW': '🚀 打開 Issue 預填頁' },
+    'submit.s3.copyIssue': { 'zh-CN': '📋 复制 Issue 内容', 'en': '📋 Copy Issue Body', 'zh-TW': '📋 複製 Issue 內容' },
+    'submit.s3.prTitle': { 'zh-CN': 'C. 直接开 PR（高级）', 'en': 'C. Direct PR (advanced)', 'zh-TW': 'C. 直接開 PR（進階）' },
+    'submit.s3.prHint': { 'zh-CN': '适合想直接改 catalog.csv 的贡献者。下面是一个完整 PR 模板。', 'en': 'For contributors who prefer editing catalog.csv directly. Full PR template below.', 'zh-TW': '適合想直接改 catalog.csv 的貢獻者。下面是一個完整 PR 範本。' },
+    'submit.s3.copyPr': { 'zh-CN': '📋 复制 PR 模板', 'en': '📋 Copy PR Template', 'zh-TW': '📋 複製 PR 範本' },
+    'submit.err.title': { 'zh-CN': '⚠️ 无法自动识别', 'en': '⚠️ Auto-detect Failed', 'zh-TW': '⚠️ 無法自動識別' },
+    'submit.err.manual': { 'zh-CN': '你仍然可以 <a href="https://github.com/manningyangs/AI-Shovel-Collection/issues/new?template=submit-tool.yml" target="_blank" rel="noopener">手动开一个 Issue</a>，说明工具地址、用途和推荐分类。', 'en': 'You can still <a href="https://github.com/manningyangs/AI-Shovel-Collection/issues/new?template=submit-tool.yml" target="_blank" rel="noopener">open an Issue manually</a> with the repo URL, purpose, and suggested category.', 'zh-TW': '你仍然可以 <a href="https://github.com/manningyangs/AI-Shovel-Collection/issues/new?template=submit-tool.yml" target="_blank" rel="noopener">手動開一個 Issue</a>，說明工具地址、用途和推薦分類。' },
+    'submit.footer': {
+      'zh-CN': '由前端静态页直接调用 GitHub REST API 自动生成 · 无后端 · 开源仓库欢迎贡献 →',
+      'en': 'Generated client-side via GitHub REST API · No backend · Contributions welcome →',
+      'zh-TW': '由前端靜態頁直接調用 GitHub REST API 自動生成 · 無後端 · 開源倉庫歡迎貢獻 →'
+    },
+    'submit.badArchived': { 'zh-CN': '⚠️ 已归档', 'en': '⚠️ Archived', 'zh-TW': '⚠️ 已歸檔' },
+    'submit.apiFallback': { 'zh-CN': '📡 HTML fallback（REST API 不通）', 'en': '📡 HTML fallback (REST API blocked)', 'zh-TW': '📡 HTML fallback（REST API 不通）' },
+    'submit.ok': { 'zh-CN': '✅ GitHub 识别成功', 'en': '✅ GitHub Detected', 'zh-TW': '✅ GitHub 識別成功' },
+    'submit.langUnknown': { 'zh-CN': '未识别', 'en': 'Unknown', 'zh-TW': '未識別' },
+    'submit.licenseNone': { 'zh-CN': '未声明', 'en': 'Not declared', 'zh-TW': '未聲明' },
+    'submit.descNone': { 'zh-CN': '（仓库未填 description）', 'en': '(No description in repo)', 'zh-TW': '（倉庫未填 description）' },
+    'submit.fallbackHint': { 'zh-CN': 'REST API 可能被限流/网络屏蔽，已自动 fallback 到 GitHub 页面抓取。Stars/语言等字段可能略有误差。', 'en': 'REST API may be rate-limited/blocked — auto-fell back to scraping github.com. Stars/lang may be slightly off.', 'zh-TW': 'REST API 可能被限流/網路屏蔽，已自動 fallback 到 GitHub 頁面抓取。Stars/語言等欄位可能略有誤差。' },
+    'submit.errUrl': { 'zh-CN': 'URL 格式不正确，请粘贴 https://github.com/用户名/仓库名', 'en': 'Invalid URL format — paste https://github.com/owner/repo', 'zh-TW': 'URL 格式不正確，請貼上 https://github.com/用戶名/倉庫名' },
+    'submit.errRateLimit': { 'zh-CN': 'GitHub API 限流（60 次/小时/IP）', 'en': 'GitHub API rate-limited (60 req/hour/IP)', 'zh-TW': 'GitHub API 限流（60 次/小時/IP）' },
+    'submit.errNotFound': { 'zh-CN': '仓库不存在或无法访问', 'en': 'Repository not found or inaccessible', 'zh-TW': '倉庫不存在或無法訪問' },
+    'submit.copyOk': { 'zh-CN': '✓ 已复制', 'en': '✓ Copied', 'zh-TW': '✓ 已複製' }
   };
 
   // -------- 核心 --------
