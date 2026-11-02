@@ -810,6 +810,15 @@
   }
   .btn-gh:hover { border-color: var(--primary); color: var(--primary); }
 
+  /* 语言切换 select */
+  .nav-lang {
+    border: 1px solid var(--border); background: var(--surface);
+    color: var(--text); border-radius: 6px; padding: 4px 8px;
+    font-size: 13px; cursor: pointer; height: 30px;
+    margin-left: 4px;
+  }
+  .nav-lang:hover { border-color: var(--primary); }
+
   /* 手机端汉堡菜单 */
   .nav-hamburger {
     display: none; border: 0; background: none; cursor: pointer;
@@ -877,20 +886,25 @@
 </head>
 <body>
 
-<a class="skip-link" href="#tools">跳到主要内容</a>
-<nav class="navbar" aria-label="主导航">
+<a class="skip-link" href="#tools" data-i18n="nav.skip">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航" data-i18n-attr="aria-label" data-i18n="nav.aria">
   <div class="navbar-inner">
-    <div class="logo"><span class="dot" aria-hidden="true"></span>AI Shovel Collection<span class="live-badge">LIVE</span></div>
+    <div class="logo"><span class="dot" aria-hidden="true"></span><span data-i18n="nav.brand">AI Shovel Collection</span><span class="live-badge">LIVE</span></div>
     <div class="nav-links">
-      <a href="#hero">🏠 首页</a>
-      <a href="#tools">📦 已收录</a>
-      <a href="#candidates">🧭 候选</a>
-      <a href="#domains">🌍 领域检索</a>
-      <a href="submit.html" style="color:var(--primary);font-weight:600">📥 提交收录</a>
+      <a href="#hero" data-i18n="nav.home">🏠 首页</a>
+      <a href="#tools" data-i18n="nav.curated">📦 已收录</a>
+      <a href="#candidates" data-i18n="nav.candidates">🧭 候选</a>
+      <a href="#domains" data-i18n="nav.domains">🌍 领域检索</a>
+      <a href="submit.html" style="color:var(--primary);font-weight:600" data-i18n="nav.submit">📥 提交收录</a>
       <span class="hits-badge-wrap">
         <img class="hits-badge" src="https://hits.sh/manningyangs.github.io/AI-Shovel-Collection.svg?view=1&style=flat-square&label=Visitors&labelColor=2563eb&color=2563eb" alt="访问量统计 — 点击查看历史曲线">
       </span>
       <a class="gh" href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">GitHub ↗<span class="sr-only">（在新标签页打开）</span></a>
+      <select class="nav-lang" id="langSelect" title="语言 / Language / 語言" aria-label="选择语言">
+        <option value="zh-CN">🌐 简体中文</option>
+        <option value="en">🌐 English</option>
+        <option value="zh-TW">🌐 繁體中文</option>
+      </select>
       <button class="nav-hamburger" id="navHamburger" aria-label="打开导航菜单" aria-expanded="false">☰</button>
     </div>
   </div>
@@ -1110,6 +1124,7 @@
   </div>
 </aside>
 
+<script src="i18n.js"></script>
 <script>
 (function () {
   "use strict";
@@ -1938,16 +1953,16 @@
     }
     // 更新弹窗标题
     if (head) {
-      if (tier === "ok") head.textContent = "✅ 已验证配置";
-      else if (tier === "auth") head.textContent = "🔑 端点需鉴权";
-      else if (tier === "fail") head.textContent = "❌ 端点无响应";
-      else head.textContent = "⚠️ 自动推断配置（请核对 README）";
+      if (tier === "ok") head.textContent = _t('cfg.tier.ok');
+      else if (tier === "auth") head.textContent = _t('cfg.tier.auth');
+      else if (tier === "fail") head.textContent = _t('cfg.tier.fail');
+      else head.textContent = _t('cfg.tier.auto');
     }
     var html = '<div class="' + warnClass + '">' + warnTxt + "</div>";
     cfgSnippets(p).forEach(function (s, i) {
       html += '<div class="cfg-sec">' +
         '<div class="cfg-label"><span>' + esc(s.label) + "</span>" +
-        '<button class="cfg-copy" data-code="' + i + '">复制 JSON</button></div>' +
+        '<button class="cfg-copy" data-code="' + i + '">' + _t('cfg.copyJson') + '</button></div>' +
         '<div class="cfg-path">' + esc(s.path) + "</div>" +
         '<pre class="cfg-code" data-idx="' + i + '">' + esc(s.code) + "</pre>" +
         "</div>";
@@ -2073,7 +2088,7 @@
 
     if (!list.length) {
       empty.style.display = "block";
-      empty.innerHTML = "本地目录没有匹配 <b>" + esc(query || activeCat) + "</b> 的工具 —— 试试切换到「自动发现」Tab 或「GitHub 实时搜索」Tab？";
+      empty.innerHTML = _t('empty.curated', { q: esc(query || activeCat) });
     } else {
       empty.style.display = "none";
     }
@@ -2081,10 +2096,10 @@
     var countEl = document.getElementById("count");
     var metaOn = fState.lang || fState.minStars > 0 || fState.freshDays > 0;
     if (list.length === items.length && !query && !metaOn && sortMode === "default") {
-      countEl.textContent = items.length + " 条";
+      countEl.textContent = items.length + " " + _t('count.all');
       countEl.classList.remove("hit");
     } else {
-      countEl.textContent = list.length === 0 ? "无结果" : "找到 " + list.length + " 条";
+      countEl.textContent = list.length === 0 ? _t('count.zero') : _t('count.found', { n: list.length });
       countEl.classList.toggle("hit", list.length > 0);
     }
     document.getElementById("heroCount").textContent = items.length;
@@ -2356,6 +2371,22 @@
 
   bindTaskChips();
   load();
+
+  // ===== 语言切换 =====
+  (function () {
+    var sel = document.getElementById("langSelect");
+    if (sel) {
+      sel.value = I18n.currentLang;
+      sel.addEventListener("change", function () {
+        I18n.setLang(sel.value);
+        // 重新渲染所有卡片（分类名等在 render 里用 tCategory 翻译）
+        if (typeof render === "function") render();
+        if (typeof renderCandidates === "function") renderCandidates();
+        if (typeof renderChips === "function") renderChips();
+      });
+    }
+  })();
+
   var domainsEl = document.getElementById("domains");
   // 初始状态：只显示 curated tab
   switchTab("curated");
