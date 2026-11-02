@@ -1,0 +1,17 @@
+{
+  "name": "astro-shovel-collection",
+  "type": "module",
+  "version": "2.0.0-alpha",
+  "engines": {
+    "node": ">=18.17.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "4.16.19"
+  }
+}

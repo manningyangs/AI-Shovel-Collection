@@ -1,0 +1,47 @@
+---
+// Base layout: HTML shell + meta + nav + footer
+const {
+  title = 'AI Shovel Collection — 开放的 AI 工具与能力目录',
+  description = '社区精选 + Pipeline 自动发现 + 端点实测的开放 AI 工具目录',
+  ogImage = '/AI-Shovel-Collection/og-image.jpg',
+  canonical = '',
+  lang = 'zh-CN'
+} = Astro.props;
+
+const site = 'https://manningyangs.github.io';
+const base = '/AI-Shovel-Collection';
+const canonicalUrl = canonical ? (canonical.startsWith('http') ? canonical : site + base + canonical) : site + base + '/';
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content={description} />
+  <link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+  <link rel="icon" type="image/x-icon" href={`${base}/favicon.ico`} />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="AI Shovel Collection" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage.startsWith('http') ? ogImage : site + ogImage} />
+  <meta property="og:url" content={canonicalUrl} />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage.startsWith('http') ? ogImage : site + ogImage} />
+
+  <!-- Canonical -->
+  <link rel="canonical" href={canonicalUrl} />
+
+  <title>{title}</title>
+</head>
+<body>
+  <slot />
+</body>
+</html>

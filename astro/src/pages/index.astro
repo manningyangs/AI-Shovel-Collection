@@ -1,0 +1,217 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/main.css';
+import fs from 'fs';
+const appJs = fs.readFileSync(new URL('../scripts/app.js', import.meta.url), 'utf8');
+---
+
+<Base
+  title="AI 铲子大全 · AI Shovel Collection — 开放的 AI 工具与能力目录"
+  description="AI Shovel Collection — 社区精选 + Pipeline 自动发现 + 端点实测的开放 AI 工具目录。发现让 AI 动手干活的 MCP Server、Agent Skills、CLI 与自动化工具，每 6 小时同步元数据与端点状态。"
+  ogImage="https://manningyangs.github.io/AI-Shovel-Collection/og-image.jpg"
+  canonical="/"
+  lang="zh-CN"
+>
+
+<a class="skip-link" href="#tools">跳到主要内容</a>
+<nav class="navbar" aria-label="主导航">
+  <div class="navbar-inner">
+    <div class="logo"><span class="dot" aria-hidden="true"></span>AI Shovel Collection<span class="live-badge">LIVE</span></div>
+    <div class="nav-links">
+      <a href="#hero">🏠 首页</a>
+      <a href="#tools">📦 已收录</a>
+      <a href="#candidates">🧭 候选</a>
+      <a href="#domains">🌍 领域检索</a>
+      <a href="submit.html" style="color:var(--primary);font-weight:600">📥 提交收录</a>
+      <span class="hits-badge-wrap">
+        <img class="hits-badge" src="https://hits.sh/manningyangs.github.io/AI-Shovel-Collection.svg?view=1&style=flat-square&label=Visitors&labelColor=2563eb&color=2563eb" alt="访问量统计 — 点击查看历史曲线">
+      </span>
+      <a class="gh" href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">GitHub ↗<span class="sr-only">（在新标签页打开）</span></a>
+      <button class="nav-hamburger" id="navHamburger" aria-label="打开导航菜单" aria-expanded="false">☰</button>
+    </div>
+  </div>
+</nav>
+
+<div class="nav-mobile-menu" id="navMobileMenu">
+  <a href="#hero">🏠 首页</a>
+  <a href="#tools">📦 已收录</a>
+  <a href="#candidates">🧭 候选</a>
+  <a href="#domains">🌍 领域检索</a>
+  <a href="submit.html">📥 提交收录</a>
+  <a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">🐙 GitHub 仓库 ↗</a>
+</div>
+
+<header class="hero" id="hero">
+  <div class="hero-inner">
+    <span class="eyebrow">⛏️ Discover · Verify · Community — 开放的 AI 工具与能力目录</span>
+    <h1>发现让 AI 真正<span class="grad">动手干活</span>的铲子</h1>
+    <p class="sub">社区精选 <b id="heroCount">191</b> 条 + Pipeline 自动发现候选 · 端点实测验证（ok / fail / 鉴权） · 每 6 小时同步 stars、更新时间、语言与端点状态 · <b>本地实时过滤</b> + <b>GitHub 全站实时搜索</b>双引擎。</p>
+  </div>
+  <div class="hero-search">
+    <div class="search-box" id="searchBox">
+      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg>
+      <input type="text" id="searchInput" placeholder="你想让 AI 做什么？搜索工具或具体任务……" autocomplete="off" spellcheck="false" aria-label="搜索已收录的工具" aria-describedby="count">
+      <span class="count" id="count" aria-live="polite" role="status"></span>
+      <button class="clear-btn" id="clearBtn" title="清空" aria-label="清空搜索框">&times;</button>
+    </div>
+    <div class="search-examples">
+      <span class="se-label">试试：</span>
+      <button class="se-chip" type="button" data-pre="3." data-q="PPT">自动制作 PPT</button>
+      <button class="se-chip" type="button" data-pre="3." data-q="Excel">分析 Excel</button>
+      <button class="se-chip" type="button" data-pre="11." data-q="CAD">画 CAD / 3D</button>
+      <button class="se-chip" type="button" data-pre="6." data-q="Docker">部署 Docker</button>
+      <button class="se-chip" type="button" data-pre="2." data-q="浏览器">浏览器自动化</button>
+      <button class="se-chip" type="button" data-pre="9A." data-q="飞书">接飞书 / 钉钉</button>
+    </div>
+  </div>
+  <div class="task-bar" id="taskBar">
+    <div class="task-inner">
+      <div class="task-header">
+        <span class="task-title">🙋 你希望 AI 帮你完成什么工作？</span>
+        <span class="task-hint">按任务跳转对应分类，不需要先懂 MCP</span>
+      </div>
+      <div class="task-chips" id="taskChips" role="group" aria-label="按任务筛选工具">
+        <button class="task-chip" data-pre="3." type="button"><span class="tc-icon">📝</span><span><span class="tc-text">写文档 / 做 PPT</span><span class="tc-desc">Word · Excel · PDF</span></span></button>
+        <button class="task-chip" data-pre="5." type="button"><span class="tc-icon">📊</span><span><span class="tc-text">查数据库 · 数据分析</span><span class="tc-desc">SQL · BI · ETL</span></span></button>
+        <button class="task-chip" data-pre="2." type="button"><span class="tc-icon">🌐</span><span><span class="tc-text">浏览器自动化</span><span class="tc-desc">抓网页 · 点按钮 · 填表</span></span></button>
+        <button class="task-chip" data-pre="6." type="button"><span class="tc-icon">🚀</span><span><span class="tc-text">部署运维</span><span class="tc-desc">Docker · 服务器 · CI/CD</span></span></button>
+        <button class="task-chip" data-pre="10." type="button"><span class="tc-icon">🎨</span><span><span class="tc-text">图片 · 视频 · 音频</span><span class="tc-desc">设计素材 · 媒体生成</span></span></button>
+        <button class="task-chip" data-pre="11." type="button"><span class="tc-icon">🗺️</span><span><span class="tc-text">CAD · 3D · 地图</span><span class="tc-desc">工程制图 · GIS</span></span></button>
+        <button class="task-chip" data-pre="8." type="button"><span class="tc-icon">💰</span><span><span class="tc-text">财务 · 会计</span><span class="tc-desc">区块链 · 交易</span></span></button>
+        <button class="task-chip" data-pre="13." type="button"><span class="tc-icon">🤖</span><span><span class="tc-text">机器人 · IoT · 硬件</span><span class="tc-desc">PLC · 传感器</span></span></button>
+        <button class="task-chip" data-pre="7." type="button"><span class="tc-icon">📧</span><span><span class="tc-text">邮件 · 日历 · 协作</span><span class="tc-desc">Teams · Slack</span></span></button>
+        <button class="task-chip" data-pre="9A." type="button"><span class="tc-icon">💬</span><span><span class="tc-text">飞书 · 钉钉 · 微信</span><span class="tc-desc">企业 IM 接入</span></span></button>
+      </div>
+    </div>
+  </div>
+  <div class="stats-grid-wrap" id="statsGridWrap">
+    <div class="stats-grid">
+      <div class="stat-card" title="catalog.csv 中的人工精选行数（目录收录口径）"><div class="stat-num c1" id="statCurated" data-target="191">191</div><div class="stat-label">已收录工具（目录）</div></div>
+      <div class="stat-card" title="live_multi.json 中成功同步 GitHub 元数据的条目数，可能略少于目录行数"><div class="stat-num c2" id="statSynced" data-target="189">189</div><div class="stat-label">已同步 GitHub 元数据</div></div>
+      <div class="stat-card" title="Pipeline 从 MCP Registry / npm / crates.io 自动发现的候选条目"><div class="stat-num c3" id="statCand" data-target="150">150</div><div class="stat-label">自动发现候选</div></div>
+      <div class="stat-card" title="MCP initialize 握手实测通过的端点数（仅代表端点在线，非功能实测）"><div class="stat-num c1" id="statVfy">—</div><div class="stat-label">端点实测通过</div></div>
+      <div class="stat-card" title="已收录仓库的 GitHub Stars 累加，每 6 小时同步"><div class="stat-num c4" id="statStars">…</div><div class="stat-label">累计 GitHub Stars</div></div>
+      <div class="stat-card" title="目录内的细分工具类型"><div class="stat-num c3" data-target="17">17</div><div class="stat-label">细分分类</div></div>
+    </div>
+    <p class="stat-legend" id="statLegend">统计口径：<b>目录收录 191</b>（catalog.csv 行数）· <b>已同步元数据 189</b> · <b>候选 150</b> · <b>端点实测 —</b>，四个数字口径不同，全部随数据文件动态计算。</p>
+  </div>
+  <button class="stats-toggle" id="btnToggleStats" type="button" aria-expanded="true" aria-controls="statsGridWrap">— 收起统计数字</button>
+  <noscript><div class="noscript-note">⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（191 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。</div></noscript>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="meta-row">
+      <div class="meta-filters" id="metaFilters" role="group" aria-label="按元数据进一步筛选">
+        <label class="mf-item">
+          <span class="mf-label">语言</span>
+          <select id="fLang" aria-label="按编程语言筛选"><option value="">全部</option></select>
+        </label>
+        <label class="mf-item">
+          <span class="mf-label">Stars</span>
+          <select id="fStars" aria-label="按 GitHub Stars 数量筛选">
+            <option value="0">不限</option><option value="100">≥ 100</option><option value="500">≥ 500</option>
+            <option value="1000">≥ 1k</option><option value="5000">≥ 5k</option><option value="10000">≥ 10k</option>
+          </select>
+        </label>
+        <label class="mf-item">
+          <span class="mf-label">更新</span>
+          <select id="fFresh" aria-label="按最近更新时间筛选">
+            <option value="0">不限</option><option value="1">24 小时内</option><option value="7">7 天内</option>
+            <option value="30">30 天内</option><option value="180">半年内</option>
+          </select>
+        </label>
+        <button class="mf-reset" id="fReset" type="button" aria-label="清空全部筛选条件">↺ 重置</button>
+        <span class="mf-hint">组合筛选只作用于「已收录」列表</span>
+      </div>
+      <button class="chip chip-toggle" id="btnToggleChips" title="手动展开/收起分类筛选" aria-expanded="true" aria-controls="chips" type="button"></button>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+</div>
+
+<main>
+  <div class="list-tabs" id="listTabs" role="tablist">
+    <button class="list-tab active" data-tab="curated" type="button" role="tab" aria-selected="true">📦 精选工具<span class="tab-count" id="tabCuratedCount">191</span></button>
+    <button class="list-tab" data-tab="candidates" type="button" role="tab" aria-selected="false">🧭 自动发现<span class="tab-count" id="tabCandidateCount">150</span></button>
+    <button class="list-tab" data-tab="live" type="button" role="tab" aria-selected="false">🌐 GitHub 实时搜索</button>
+  </div>
+  <div class="sort-bar" id="sortBar">
+    <span class="mf-label">排序：</span>
+    <select id="sortSelect" aria-label="排序方式">
+      <option value="default">综合推荐</option><option value="stars">Stars 最高</option>
+      <option value="recent">最近更新</option><option value="verified">已核验优先</option>
+    </select>
+  </div>
+  <section id="tools" data-tabpanel="curated">
+    <div class="section-head">
+      <h2>📦 已收录的铲子<span class="unverified-tag" style="background:#eef2ff;color:#3730a3" title="人工筛选入库：仓库存在、用途明确、分类经人工确认；尚未逐项功能实测">👤 人工筛选</span></h2>
+      <span class="hint">分类不是质量排名，收录不代表背书 · <b>已收录 = 人工筛选入库</b>（未逐项功能实测）</span>
+      <span class="live-updated" id="liveUpdated" title="仓库 stars / 更新时间由 GitHub Actions 每 6 小时同步">实时数据同步中…</span>
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty"></div>
+  </section>
+  <section id="candidates" class="candidates-section" data-tabpanel="candidates" style="display:none">
+    <div class="section-head">
+      <h2>🧭 自动发现的候选铲子<span class="unverified-tag" title="机器检索入库：分类与可用性未经人工核验。confidence 是自动匹配分（算法推断可信度），不是工具质量评分">🤖 自动发现</span></h2>
+      <span class="hint">由 Pipeline 从 MCP Registry / npm / crates.io 挖到，<b>未人工核验</b> · ✅ 端点实测仅代表 MCP 握手在线，<b>不代表功能完整可用</b></span>
+    </div>
+    <div class="candidates-hint">候选按 <b>MCP 官方注册 + Stars / 下载量 + 端点可调用 + 活跃状态</b> 加权排序 · 当前每轮保留 Top <b id="candidateCount">…</b> 条</div>
+    <div id="inboxBanner" class="inbox-banner"></div>
+    <div class="grid" id="candidateGrid"></div>
+  </section>
+  <section id="liveTab" data-tabpanel="live" style="display:none">
+    <div class="section-head">
+      <h2>🌐 GitHub 全站实时搜索</h2>
+      <span class="hint">由 GitHub Search API 实时返回，按 Stars 排序，已收录的仓库自动去重</span>
+    </div>
+    <div class="live-search-strip show" id="liveStrip">
+      <span class="txt" id="liveStripText">点击下方按钮在 GitHub 全站几十亿级仓库中搜索</span>
+      <button class="btn-live" id="btnLive">🌐 立即实时搜索 GitHub 全站</button>
+      <span class="live-status" id="liveStatus"></span>
+    </div>
+    <div class="grid" id="liveGrid2"></div>
+  </section>
+  <section id="domains">
+    <div class="section-head">
+      <h2>🌍 按行业 / 领域实时检索 GitHub</h2>
+      <span class="hint">关键词实时检索入口，查看该领域最新公开仓库</span>
+    </div>
+    <div class="domain-table" id="domainTable"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>数据来源：<a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">manningyangs/AI-Shovel-Collection</a> · 机器可读清单 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv" target="_blank" rel="noopener">catalog.csv</a> · 多源聚合 <a href="live_multi.json">live_multi.json</a>（MCP Registry / GitHub REST / npm / crates.io）</div>
+    <div>被收录不代表项目安全、活跃、可商用或质量已背书；使用前请自行检查许可证、维护状态、权限和数据安全。欢迎通过 Issue / PR 补充与纠错。</div>
+    <div id="updated"></div>
+  </div>
+</footer>
+
+<div class="cfg-mask" id="cfgMask" role="dialog" aria-modal="true" aria-labelledby="cfgTitle">
+  <div class="cfg-box">
+    <div class="cfg-head">
+      <b id="cfgTitle">📋 安装配置</b>
+      <button class="cfg-close" id="cfgClose" aria-label="关闭配置弹窗">&times;</button>
+    </div>
+    <div class="cfg-body" id="cfgBody"></div>
+  </div>
+</div>
+
+<div class="drawer-mask" id="drawerMask" role="dialog" aria-modal="true" aria-label="工具详情抽屉"></div>
+<aside class="drawer" id="drawer" aria-label="工具详情">
+  <div class="drawer-head">
+    <div>
+      <div class="drawer-title" id="drawerTitle">—</div>
+      <div class="drawer-sub" id="drawerSub">—</div>
+    </div>
+    <button class="drawer-close" id="drawerClose" aria-label="关闭详情抽屉">&times;</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-actions" id="drawerActions"></div>
+</aside>
+
+<script set:html={appJs}></script>
+</Base>
