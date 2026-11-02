@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import '../styles/main.css';
+
+// Use Astro's glob for SSG-safe static data loading
+const csvMod = import.meta.glob('../../public/catalog.csv', { as: 'raw', eager: true });
+const liveMod = import.meta.glob('../../public/live_multi.json', { as: 'json', eager: true });
+
+const csvRaw = csvMod['../../public/catalog.csv'] || '';
+const liveData = liveMod['../../public/live_multi.json'] || { curated: [] };
+const curated = liveData.curated;
+const curatedArr = Array.isArray(curated) ? curated : Object.values(curated || {});
+const liveByRepoSlug = {};
+curatedArr.forEach(c => {
+  const slug = (c.repo_url || '').replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\.git$/, '');
+  if (slug) liveByRepoSlug[slug] = c;
+});
+
+const rows = csvRaw.replace(/^\uFEFF/, '').split(/\r?\n/).filter(l => l.trim() && !l.startsWith('分类'));
+
+let trending = rows.map(row => {
+  const parts = row.split(',');
+  const cat = parts[0] || '', title = parts[1] || '', url = parts[2] || '';
+  const repoSlug = url.replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\.git$/, '');
+  const live = liveByRepoSlug[repoSlug] || {};
+  return { rank: 0, title, repo_url: url, stars: live.stars || 0, lang: live.lang || '', category: cat };
+})
+  .filter(c => c.stars > 0)
+  .sort((a, b) => b.stars - a.stars)
+  .slice(0, 20)
+  .map((t, i) => ({ ...t, rank: i + 1 }));
+---
+
+<Base
+  title="🔥 Trending — AI 工具 Stars 排行榜 · AI Shovel Collection"
+  description="精选 AI 工具 GitHub Stars 排行榜，实时追踪最受欢迎的 MCP Server、Agent Skills、CLI 与自动化工具。"
+  canonical="/trending/"
+  lang="zh-CN"
+>
+
+<nav class="navbar" aria-label="主导航">
+  <div class="navbar-inner">
+    <div class="logo"><span class="dot" aria-hidden="true"></span><a href="/AI-Shovel-Collection/" style="color:inherit;text-decoration:none">AI Shovel Collection</a><span class="live-badge">LIVE</span></div>
+    <div class="nav-links">
+      <a href="/AI-Shovel-Collection/">🏠 首页</a>
+      <a href="/AI-Shovel-Collection/trending/">🔥 Trending</a>
+      <a href="/AI-Shovel-Collection/submit/">📥 提交收录</a>
+      <a class="gh" href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<div class="trending-page" style="max-width:960px;margin:0 auto;padding:48px 24px">
+  <h1 style="font-size:36px;font-weight:700;margin-bottom:8px">🔥 Trending — AI 工具排行榜</h1>
+  <p style="color:var(--text-2);margin-bottom:32px">基于 GitHub Stars 实时排名 · 每 6 小时同步 · <a href="https://github.com/manningyangs/AI-Shovel-Collection">manningyangs/AI-Shovel-Collection</a></p>
+
+  {trending.length === 0 ? (
+    <p style="color:var(--text-3)">数据加载中…</p>
+  ) : (
+    <table style="width:100%;border-collapse:collapse;font-size:15px">
+      <thead>
+        <tr style="border-bottom:2px solid var(--border);text-align:left">
+          <th style="padding:12px 8px;width:50px">#</th>
+          <th style="padding:12px 8px">工具名称</th>
+          <th style="padding:12px 8px;width:120px">Stars</th>
+          <th style="padding:12px 8px;width:100px">语言</th>
+          <th style="padding:12px 8px;width:240px">分类</th>
+        </tr>
+      </thead>
+      <tbody>
+        {trending.map(t => (
+          <tr style="border-bottom:1px solid var(--border-light)">
+            <td style="padding:12px 8px;font-weight:700;color:{t.rank <= 3 ? '#f59e0b' : 'var(--text-3)'}">{t.rank}</td>
+            <td style="padding:12px 8px">
+              <a href={t.repo_url} target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+            </td>
+            <td style="padding:12px 8px;font-variant-numeric:tabular-nums">⭐ {t.stars.toLocaleString()}</td>
+            <td style="padding:12px 8px;color:var(--text-2)">{t.lang || '—'}</td>
+            <td style="padding:12px 8px;color:var(--text-2);font-size:13px">{t.category}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
+</div>
+</Base>

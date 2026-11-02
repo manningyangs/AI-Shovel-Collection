@@ -1,0 +1,94 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getStaticPaths } from 'astro';
+
+// Astro import.meta.glob — SSG-safe
+const csvMod = import.meta.glob('../../../public/catalog.csv', { as: 'raw', eager: true });
+const liveMod = import.meta.glob('../../../public/live_multi.json', { as: 'json', eager: true });
+
+export function getStaticPaths() {
+  const csvMod = import.meta.glob('../../../public/catalog.csv', { as: 'raw', eager: true });
+  const liveMod = import.meta.glob('../../../public/live_multi.json', { as: 'json', eager: true });
+  const csvRaw = csvMod['../../../public/catalog.csv'] || '';
+  const liveData = liveMod['../../../public/live_multi.json'] || { curated: {} };
+  const rows = csvRaw.replace(/^\uFEFF/, '').split(/\r?\n/).filter(l => l.trim() && !l.startsWith('分类'));
+  const liveCurated = liveData.curated || {};
+  const liveMap = typeof liveCurated === 'object' && !Array.isArray(liveCurated) ? liveCurated : {};
+  return rows.map(row => {
+    const parts = row.split(',');
+    const cat = parts[0] || '', name = parts[1] || '', url = parts[2] || '';
+    const slug = url.replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\.git$/, '').replace(/\//g, '-');
+    const repoSlug = url.replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\.git$/, '');
+    const liveEntry = liveMap[repoSlug] || {};
+    return { params: { slug }, props: { item: { cat, name, url, slug, live: liveEntry } } };
+  });
+}
+
+const { item } = Astro.props;
+const ogImage = 'https://manningyangs.github.io/AI-Shovel-Collection/og-image.jpg';
+---
+
+<Base
+  title={`${item.name} — AI 工具详情 | AI Shovel Collection`}
+  description={`${item.name} — ${item.cat}。Stars ${item.live.stars ?? '—'} · 语言 ${item.live.lang ?? '—'} · 端点 ${item.live.endpoint_status ?? '未实测'}`}
+  ogImage={ogImage}
+  canonical={`/tools/${item.slug}/`}
+  lang="zh-CN"
+>
+
+<nav class="navbar" aria-label="主导航">
+  <div class="navbar-inner">
+    <div class="logo"><span class="dot" aria-hidden="true"></span><a href="/AI-Shovel-Collection/" style="color:inherit;text-decoration:none">AI Shovel Collection</a></div>
+    <div class="nav-links">
+      <a href="/AI-Shovel-Collection/">🏠 首页</a>
+      <a href="/AI-Shovel-Collection/trending/">🔥 Trending</a>
+      <a class="gh" href={item.url} target="_blank" rel="noopener">🐙 GitHub ↗</a>
+    </div>
+  </div>
+</nav>
+
+<div style="max-width:720px;margin:0 auto;padding:48px 24px">
+  <div style="margin-bottom:16px">
+    <a href="/AI-Shovel-Collection/" style="color:var(--text-3);text-decoration:none;font-size:14px">← 返回目录</a>
+  </div>
+  <h1 style="font-size:32px;font-weight:700;margin-bottom:8px">{item.name}</h1>
+  <div style="color:var(--text-2);margin-bottom:24px;font-size:14px">
+    <span style="background:var(--bg-2);padding:4px 10px;border-radius:12px;margin-right:8px">{item.cat}</span>
+    {item.live.lang ? <span style="color:var(--text-3)">{item.live.lang}</span> : ''}
+    {item.live.stars ? <span style="color:var(--text-3);margin-left:8px">⭐ {item.live.stars.toLocaleString()}</span> : ''}
+  </div>
+  <div style="margin-bottom:32px">
+    <a href={item.url} target="_blank" rel="noopener" style="color:var(--primary);font-size:14px;word-break:break-all">{item.url}</a>
+  </div>
+  {item.live.desc && (
+    <div style="margin-bottom:32px;line-height:1.8;color:var(--text-1)">{item.live.desc}</div>
+  )}
+  <dl style="border-top:1px solid var(--border);padding-top:24px">
+    <div style="display:flex;padding:8px 0;border-bottom:1px solid var(--border-light)">
+      <dt style="width:100px;color:var(--text-2);font-size:14px">分类</dt><dd style="flex:1">{item.cat}</dd>
+    </div>
+    <div style="display:flex;padding:8px 0;border-bottom:1px solid var(--border-light)">
+      <dt style="width:100px;color:var(--text-2);font-size:14px">Stars</dt><dd style="flex:1">{item.live.stars ?? '—'}</dd>
+    </div>
+    <div style="display:flex;padding:8px 0;border-bottom:1px solid var(--border-light)">
+      <dt style="width:100px;color:var(--text-2);font-size:14px">语言</dt><dd style="flex:1">{item.live.lang ?? '—'}</dd>
+    </div>
+    <div style="display:flex;padding:8px 0;border-bottom:1px solid var(--border-light)">
+      <dt style="width:100px;color:var(--text-2);font-size:14px">最后更新</dt><dd style="flex:1">{item.live.pushed_at ?? '—'}</dd>
+    </div>
+    {item.live.endpoint && (
+      <div style="display:flex;padding:8px 0;border-bottom:1px solid var(--border-light)">
+        <dt style="width:100px;color:var(--text-2);font-size:14px">MCP 端点</dt>
+        <dd style="flex:1;word-break:break-all">{item.live.endpoint}
+          {item.live.endpoint_status === 'ok' ? <span style="color:#16a34a;margin-left:8px">✓ 在线</span> : ''}
+          {item.live.endpoint_status === 'auth' ? <span style="color:#d97706;margin-left:8px">🔑 需鉴权</span> : ''}
+          {item.live.endpoint_status === 'fail' ? <span style="color:#dc2626;margin-left:8px">✗ 不可用</span> : ''}
+        </dd>
+      </div>
+    )}
+  </dl>
+  <div style="margin-top:32px;padding:16px;background:var(--bg-2);border-radius:8px;font-size:13px;color:var(--text-3)">
+    💡 数据来源：<a href="https://github.com/manningyangs/AI-Shovel-Collection">AI-Shovel-Collection</a> · 每 6 小时同步
+  </div>
+</div>
+</Base>

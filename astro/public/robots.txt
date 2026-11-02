@@ -1,0 +1,10 @@
+---
+// robots.txt — allows all crawlers
+const today = new Date().toISOString().slice(0, 10);
+---
+
+User-agent: *
+Allow: /
+Sitemap: https://manningyangs.github.io/AI-Shovel-Collection/sitemap.xml
+
+# Last sync: {today}
