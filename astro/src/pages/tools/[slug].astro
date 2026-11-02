@@ -47,34 +47,23 @@ if (item.live.endpoint) {
   mcpConfigJson = JSON.stringify(configObj, null, 2);
 }
 
-// JSON-LD SoftwareApplication structured data
+// JSON-LD SoftwareSourceCode — 真实、可证伪的字段，不虚构评分/价格
+const repoUrl = item.url;
+const repoOwner = repoUrl ? (() => { try { return repoUrl.replace(/.*github\.com\//, '').split('/')[0]; } catch { return ''; } })() : '';
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'SoftwareApplication',
+  '@type': 'SoftwareSourceCode',
   name: item.name,
-  applicationCategory: 'DeveloperApplication',
-  operatingSystem: 'Web',
   description: item.live.desc || `${item.cat} — ${item.name}`,
-  url: item.url,
-  image: ogImage,
-  author: item.url ? {
-    '@type': 'Organization',
-    name: (() => { try { return item.url.replace(/.*github\.com\//, '').split('/')[0]; } catch { return 'Unknown'; } })(),
-    url: (() => { try { return 'https://github.com/' + item.url.replace(/.*github\.com\//, '').split('/')[0]; } catch { return ''; } })(),
-  } : undefined,
-  offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'USD',
-  },
-  ...(item.live.stars ? { aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.5',
-    ratingCount: item.live.stars,
-    bestRating: '5',
-    worstRating: '1',
-  }} : {}),
-  keywords: [item.cat, 'MCP Server', 'AI Tool', item.live.lang].filter(Boolean).join(', '),
+  codeRepository: repoUrl,
+  url: `/AI-Shovel-Collection/tools/${item.slug}/`,
+  programmingLanguage: item.live.lang || undefined,
+  keywords: [item.cat, 'MCP Server', 'AI Tool'].filter(Boolean).join(', '),
+  ...(repoOwner ? {
+    author: { '@type': 'Organization', name: repoOwner, url: `https://github.com/${repoOwner}` },
+  } : {}),
+  ...(item.live.pushed_at ? { dateModified: item.live.pushed_at } : {}),
+  ...(item.live.license ? { license: typeof item.live.license === 'string' ? item.live.license : (item.live.license.spdx_id || item.live.license.name || undefined) } : {}),
 };
 const jsonLdString = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
 ---

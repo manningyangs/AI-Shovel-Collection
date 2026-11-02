@@ -730,27 +730,31 @@
     };
   }
 
-  // 生成三端配置片段：endpoint 型 → streamable HTTP；无 endpoint → stdio（npx/uvx 推断）
+  // 生成三端配置片段：endpoint 型 → HTTP（有 headers 为已验证配置，无 headers 为参考配置）；无 endpoint → stdio（npx/uvx 推断）
   function cfgSnippets(p) {
     var name = p.pkg;
     var remote = p.endpoint;
+    var authHeaders = p.headers && p.headers.length ? p.headers[0] : null;
     var out = [];
 
     if (remote) {
+      // HTTP 型：MCP streamable-http 传输
+      var baseServer = { type: "http", url: remote };
+      if (authHeaders) baseServer.headers = authHeaders;
       out.push({
-        label: "Claude Desktop / Claude Code",
+        label: "Claude Desktop / Claude Code" + (authHeaders ? " ✅" : " 参考"),
         path: "claude_desktop_config.json",
-        code: JSON.stringify({ mcpServers: { [name]: { type: "http", url: remote } } }, null, 2)
+        code: JSON.stringify({ mcpServers: { [name]: baseServer } }, null, 2)
       });
       out.push({
-        label: "Cursor / Windsurf / 通用 (mcp.json)",
+        label: "Cursor / Windsurf / 通用 (mcp.json)" + (authHeaders ? " ✅" : " 参考"),
         path: ".cursor/mcp.json",
-        code: JSON.stringify({ mcpServers: { [name]: { url: remote } } }, null, 2)
+        code: JSON.stringify({ mcpServers: { [name]: Object.assign({ url: remote }, authHeaders ? { headers: authHeaders } : {}) } }, null, 2)
       });
       out.push({
-        label: "VS Code (Agent 模式)",
+        label: "VS Code (Agent 模式)" + (authHeaders ? " ✅" : " 参考"),
         path: ".vscode/mcp.json",
-        code: JSON.stringify({ servers: { [name]: { type: "http", url: remote } } }, null, 2)
+        code: JSON.stringify({ servers: { [name]: Object.assign({ type: "http", url: remote }, authHeaders ? { headers: authHeaders } : {}) } }, null, 2)
       });
       return out;
     }
@@ -798,7 +802,7 @@
       } else if (verifStatus === "auth") {
         tier = "auth";
         warnClass = "cfg-warn";
-        warnTxt = "🔑 <b>端点需鉴权</b> — Pipeline 实测端点在线但返回 401/403，请在配置中补 <code>headers</code> 填入 API Key（密钥别提交到公开仓库）。";
+        warnTxt = "🔑 <b>端点需鉴权</b> — Pipeline 实测端点在线但返回 401/403，请在下面配置的 <code>headers</code> 字段填入 API Key。<br><small style='color:var(--text-3)'>⚠️ MCP 未强制鉴权方案：常见为 <code>Authorization: Bearer YOUR_KEY</code>，也可能是 API Key 头或自定义 Cookie。请查阅项目 README 确认真实鉴权方式。</small>";
       } else if (verifStatus === "fail") {
         tier = "fail";
         warnClass = "cfg-warn danger";
@@ -928,12 +932,32 @@
     return arr;
   }
 
+  var firstRenderSkipped = false; // Astro 预渲染卡片已在 HTML 中，首次默认态跳过 innerHTML
+
   function render() {
     var raw = items.filter(matches);
     var list = applySort(raw);
     var grid = document.getElementById("grid");
     var empty = document.getElementById("empty");
+    var countEl = document.getElementById("count");
     cfgStore = []; // 每轮渲染重建配置弹窗索引
+
+    // Astro 预渲染：首次默认态跳过 innerHTML 重写，保留构建时已渲染的 193 张卡片
+    var metaOn = fState.lang || fState.minStars > 0 || fState.freshDays > 0;
+    var isDefaultState = activeTab === "curated" && !query && !metaOn && sortMode === "default";
+    if (grid && grid.dataset.pre === "1" && !firstRenderSkipped && isDefaultState) {
+      firstRenderSkipped = true;
+      // 只更新统计数字 + 新鲜度标签，保留预渲染卡片 HTML
+      countEl.textContent = items.length + " 条";
+      countEl.classList.remove("hit");
+      document.getElementById("heroCount").textContent = items.length;
+      document.getElementById("tabCuratedCount").textContent = items.length;
+      empty.style.display = "none";
+      // 绑定预渲染卡片上的 drawer/cfg 事件委托
+      bindPreRenderCardEvents();
+      renderCandidates();
+      return;
+    }
 
     grid.innerHTML = list.map(function (it) {
       var live = it.live || {};
@@ -965,8 +989,6 @@
       empty.style.display = "none";
     }
 
-    var countEl = document.getElementById("count");
-    var metaOn = fState.lang || fState.minStars > 0 || fState.freshDays > 0;
     if (list.length === items.length && !query && !metaOn && sortMode === "default") {
       countEl.textContent = items.length + " 条";
       countEl.classList.remove("hit");
@@ -978,6 +1000,21 @@
     document.getElementById("tabCuratedCount").textContent = items.length;
 
     renderCandidates();
+  }
+
+  // Astro 预渲染卡片事件委托：填新鲜度时间戳 + 绑定任何卡片内事件
+  function bindPreRenderCardEvents() {
+    var freshEls = document.querySelectorAll('.grid[data-pre="1"] .fresh[data-pushed]');
+    freshEls.forEach(function (el) {
+      var pushed = el.getAttribute("data-pushed");
+      var rt = relTime(pushed);
+      if (rt) { el.textContent = rt.text; el.className = "fresh " + rt.cls; }
+    });
+    // liveUpdated 时间戳
+    var lu = document.getElementById("liveUpdated");
+    if (lu && livePayload && livePayload.updated_at) {
+      lu.textContent = "最后同步：" + new Date(livePayload.updated_at).toLocaleString("zh-CN");
+    }
   }
 
   // 候选区块渲染（独立，不受分类 chip 影响，但受搜索词过滤）

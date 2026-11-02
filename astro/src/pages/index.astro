@@ -3,6 +3,50 @@ import Base from '../layouts/Base.astro';
 import '../styles/main.css';
 import fs from 'fs';
 const appJs = fs.readFileSync(new URL('../scripts/app.js', import.meta.url), 'utf8');
+
+// Astro SSG: 构建时读取 catalog.csv + live_multi.json，预渲染 curated 卡片到 HTML
+const csvMod = import.meta.glob('../../public/catalog.csv', { as: 'raw', eager: true });
+const liveMod = import.meta.glob('../../public/live_multi.json', { as: 'json', eager: true });
+const csvRaw = csvMod['../../public/catalog.csv'] || '';
+const liveData = liveMod['../../public/live_multi.json'] || { curated: {} };
+
+// 解析 catalog.csv → [{ cat, name, url, slug, catLabel }]
+function parseCatalog(raw) {
+  const rows = raw.replace(/^\uFEFF/, '').split(/\r?\n/).filter(l => l.trim() && !l.startsWith('分类'));
+  return rows.map(row => {
+    const parts = row.split(',');
+    const cat = (parts[0] || '').trim();
+    const full = (parts[1] || '').trim();
+    const url = (parts[2] || '').trim();
+    const name = full.replace(/^\d+[A-Za-z]?\.\s*/, '');
+    const slug = url.replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\.git$/, '').replace(/\/$/, '');
+    const catLabel = cat.replace(/^\d+[A-Za-z]?\.\s*/, '');
+    return { cat, catLabel, name, url, slug };
+  });
+}
+
+// curated: object → array
+const curatedArr = Array.isArray(liveData.curated) ? liveData.curated : Object.values(liveData.curated || {});
+const liveBySlug = {};
+curatedArr.forEach(c => { const s = (c.repo_url || '').replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\.git$/, ''); if (s) liveBySlug[s] = c; });
+
+const catalogItems = parseCatalog(csvRaw);
+const colorPalette = ['#eef2ff', '#c7d2fe', '#4f46e5', '#fef3c7', '#fbbf24', '#f59e0b', '#fef9c3', '#f0fdf4', '#22c55e', '#86efac', '#fce7f3', '#f9a8d4'];
+const colorOf = {};
+const seenCats = {};
+catalogItems.forEach(it => {
+  if (!seenCats[it.cat]) { seenCats[it.cat] = Object.keys(seenCats).length; }
+  colorOf[it.cat] = colorPalette[seenCats[it.cat] % colorPalette.length];
+});
+function colorStyle(cat) {
+  const bg = colorOf[cat] || '#eef2ff';
+  return `--badge-bg:${bg};--badge-fg:#3730a3;--badge-bd:${bg}`;
+}
+
+function esc(s) { return String(s || '').replace(/[<>&"]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c])); }
+function detailHref(s) { return `/AI-Shovel-Collection/tools/${(s || '').replace(/\//g, '-')}/`; }
+function fmtStars(n) { return (n == null || n === '' ? '' : Number(n).toLocaleString()); }
+function starsStyle(n) { return n > 10000 ? 'color:#dc2626' : n > 1000 ? 'color:#ea580c' : ''; }
 ---
 
 <Base
@@ -151,7 +195,39 @@ const appJs = fs.readFileSync(new URL('../scripts/app.js', import.meta.url), 'ut
       <span class="hint">分类不是质量排名，收录不代表背书 · <b>已收录 = 人工筛选入库</b>（未逐项功能实测）</span>
       <span class="live-updated" id="liveUpdated" title="仓库 stars / 更新时间由 GitHub Actions 每 6 小时同步">实时数据同步中…</span>
     </div>
-    <div class="grid" id="grid"></div>
+    <div class="grid" id="grid" data-pre="1">
+      {catalogItems.map(it => {
+        const live = liveBySlug[it.slug] || {};
+        const desc = live.desc || '';
+        const stars = live.stars || 0;
+        const lang = live.lang || '';
+        const endpoint = live.endpoint || '';
+        const epSt = live.endpoint_status || '';
+        return (
+          <article class="card" data-slug={it.slug}>
+            <div class="card-top">
+              <div class="card-title"><a href={detailHref(it.slug)}>{esc(it.name)}</a></div>
+              <span class="badge" style={colorStyle(it.cat)} title={esc(it.cat)}>{esc(it.catLabel)}</span>
+            </div>
+            {desc ? <div class="card-desc">{esc(desc.slice(0, 180))}</div> : null}
+            {endpoint ? <span class="ep-pill" style={epSt === 'ok' ? 'background:#ecfdf5;color:#059669;border:1px solid #6ee7b7' : epSt === 'fail' ? 'background:#fef2f2;color:#dc2626;border:1px solid #fca5a5' : epSt === 'auth' ? 'background:#fffbeb;color:#d97706;border:1px solid #fcd34d' : ''} title={esc(endpoint + (epSt ? ' — ' + epSt : ''))}>🔗</span> : null}
+            <div class="card-live">
+              {stars ? <span class="badge" style="--badge-bg:#fffbeb;--badge-fg:#b45309;--badge-bd:#fde68a">⭐ {fmtStars(stars)}</span> : null}
+              {lang ? <span class="lang-pill">{esc(lang)}</span> : null}
+              {live.source && live.source !== 'github_rest' ? <span class="badge" style="--badge-bg:#f0fdf4;--badge-fg:#059669;--badge-bd:#86efac">{esc(live.source)}</span> : null}
+              {live.pushed_at ? <span class="fresh" data-pushed={live.pushed_at}></span> : null}
+            </div>
+            <div class="card-foot">
+              <span class="card-repo">{esc(it.slug)}</span>
+              <span>
+                <a class="ext" href={it.url} target="_blank" rel="noopener">GitHub ↗</a>
+                <a class="ext" href={detailHref(it.slug)}>详情</a>
+              </span>
+            </div>
+          </article>
+        );
+      })}
+    </div>
     <div class="empty" id="empty"></div>
   </section>
   <section id="candidates" class="candidates-section" data-tabpanel="candidates" style="display:none">

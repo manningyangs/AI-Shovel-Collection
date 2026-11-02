@@ -67,6 +67,9 @@ const starsList = enrichWithCategory(topStars);
 const growth7dList = enrichWithCategory(topGrowth7d);
 const growth30dList = enrichWithCategory(topGrowth30d);
 const activityList = enrichWithCategory(topActivity);
+
+// repo_slug "owner/repo" → 详情页 slug "owner-repo"
+const toDetailSlug = s => (s || '').replace(/\//g, '-');
 ---
 
 <Base
@@ -97,7 +100,7 @@ const activityList = enrichWithCategory(topActivity);
     <button class="tab-btn active" data-tab="stars" style="padding:10px 18px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:600;border-bottom:2px solid var(--primary);color:var(--primary)">⭐ Stars 总榜</button>
     <button class="tab-btn" data-tab="growth7d" style="padding:10px 18px;border:none;background:none;cursor:pointer;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent">📈 7 天增长 {growth7dReady ? '' : '⏳'}</button>
     <button class="tab-btn" data-tab="growth30d" style="padding:10px 18px;border:none;background:none;cursor:pointer;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent">📈 30 天增长 {growth30dReady ? '' : '⏳'}</button>
-    <button class="tab-btn" data-tab="activity" style="padding:10px 18px;border:none;background:none;cursor:pointer;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent">🔥 活跃榜</button>
+    <button class="tab-btn" data-tab="activity" style="padding:10px 18px;border:none;background:none;cursor:pointer;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent">📅 近期更新</button>
   </div>
 
   <!-- Stars Tab -->
@@ -120,7 +123,8 @@ const activityList = enrichWithCategory(topActivity);
             <tr style="border-bottom:1px solid var(--border-light)">
               <td style="padding:12px 8px;font-weight:700;color:{t.rank <= 3 ? '#f59e0b' : 'var(--text-3)'}">{t.rank}</td>
               <td style="padding:12px 8px">
-                <a href={t.repo_url} target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+                <a href={`/AI-Shovel-Collection/tools/${toDetailSlug(t.repo_slug)}/`} style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+                <a href={t.repo_url} target="_blank" rel="noopener" style="margin-left:6px;color:var(--text-3);text-decoration:none;font-size:13px" title="打开 GitHub 仓库">↗</a>
               </td>
               <td style="padding:12px 8px;font-variant-numeric:tabular-nums">⭐ {(t.stars || 0).toLocaleString()}</td>
               <td style="padding:12px 8px;color:var(--text-2)">{t.lang || '—'}</td>
@@ -158,7 +162,8 @@ const activityList = enrichWithCategory(topActivity);
             <tr style="border-bottom:1px solid var(--border-light)">
               <td style="padding:12px 8px;font-weight:700;color:{t.rank <= 3 ? '#10b981' : 'var(--text-3)'}">{t.rank}</td>
               <td style="padding:12px 8px">
-                <a href={t.repo_url} target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+                <a href={`/AI-Shovel-Collection/tools/${toDetailSlug(t.repo_slug)}/`} style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+                <a href={t.repo_url} target="_blank" rel="noopener" style="margin-left:6px;color:var(--text-3);text-decoration:none;font-size:13px" title="打开 GitHub 仓库">↗</a>
               </td>
               <td style="padding:12px 8px;font-variant-numeric:tabular-nums;font-weight:700;color:#10b981">+{(t.stars_growth || 0).toLocaleString()}</td>
               <td style="padding:12px 8px;font-variant-numeric:tabular-nums;color:var(--text-2)">⭐ {(t.stars || 0).toLocaleString()}</td>
@@ -196,7 +201,8 @@ const activityList = enrichWithCategory(topActivity);
             <tr style="border-bottom:1px solid var(--border-light)">
               <td style="padding:12px 8px;font-weight:700;color:{t.rank <= 3 ? '#10b981' : 'var(--text-3)'}">{t.rank}</td>
               <td style="padding:12px 8px">
-                <a href={t.repo_url} target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+                <a href={`/AI-Shovel-Collection/tools/${toDetailSlug(t.repo_slug)}/`} style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+                <a href={t.repo_url} target="_blank" rel="noopener" style="margin-left:6px;color:var(--text-3);text-decoration:none;font-size:13px" title="打开 GitHub 仓库">↗</a>
               </td>
               <td style="padding:12px 8px;font-variant-numeric:tabular-nums;font-weight:700;color:#10b981">+{(t.stars_growth || 0).toLocaleString()}</td>
               <td style="padding:12px 8px;font-variant-numeric:tabular-nums;color:var(--text-2)">⭐ {(t.stars || 0).toLocaleString()}</td>
@@ -219,7 +225,7 @@ const activityList = enrichWithCategory(topActivity);
             <th style="padding:12px 8px;width:50px">#</th>
             <th style="padding:12px 8px">工具名称</th>
             <th style="padding:12px 8px;width:130px">Stars</th>
-            <th style="padding:12px 8px;width:120px">活跃度</th>
+            <th style="padding:12px 8px;width:120px">最近推送</th>
             <th style="padding:12px 8px;width:220px">分类</th>
           </tr>
         </thead>
@@ -228,13 +234,12 @@ const activityList = enrichWithCategory(topActivity);
             <tr style="border-bottom:1px solid var(--border-light)">
               <td style="padding:12px 8px;font-weight:700;color:{t.rank <= 3 ? '#ef4444' : 'var(--text-3)'}">{t.rank}</td>
               <td style="padding:12px 8px">
-                <a href={t.repo_url} target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+                <a href={`/AI-Shovel-Collection/tools/${toDetailSlug(t.repo_slug)}/`} style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+                <a href={t.repo_url} target="_blank" rel="noopener" style="margin-left:6px;color:var(--text-3);text-decoration:none;font-size:13px" title="打开 GitHub 仓库">↗</a>
               </td>
               <td style="padding:12px 8px;font-variant-numeric:tabular-nums">⭐ {(t.stars || 0).toLocaleString()}</td>
               <td style="padding:12px 8px">
-                <div style="height:6px;background:var(--bg-2);border-radius:3px;overflow:hidden;width:100%">
-                  <div style="height:100%;background:linear-gradient(90deg,#ef4444,#f59e0b);width:{Math.min(100, Math.round((t.activity_score || 0) / 5 * 100))}%"></div>
-                </div>
+                <div style="font-size:13px;color:var(--text-2)">{t.pushed_at ? new Date(t.pushed_at).toLocaleDateString('zh-CN') : '—'}</div>
               </td>
               <td style="padding:12px 8px;color:var(--text-2);font-size:13px">{t.category}</td>
             </tr>
@@ -245,7 +250,7 @@ const activityList = enrichWithCategory(topActivity);
   </div>
 
   <div style="margin-top:40px;padding:16px;background:var(--bg-2);border-radius:8px;font-size:13px;color:var(--text-3);line-height:1.7">
-    💡 <b>榜单说明</b>：Stars 总榜实时同步 GitHub Stars；增长榜基于累积的 stars 历史快照计算（每 6 小时快照一次，需积累 7/30 天以上才会有数据）；活跃榜基于最近 commit 推送时间 + Stars 加权。
+    💡 <b>榜单说明</b>：Stars 总榜实时同步 GitHub Stars；增长榜基于累积的 stars 历史快照计算（每 6 小时快照一次，需积累 7/30 天以上才会有数据）；📅 近期更新按最近 push 时间 + Stars 加权排序，不是开发者活跃度。
   </div>
 </div>
 
