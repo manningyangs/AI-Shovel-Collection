@@ -162,6 +162,7 @@ Below is the seed list from the initial round of discovery. Names use "project /
 - [Zabbix MCP Server (monitoring alerts & ops)](https://github.com/mpeirone/zabbix-mcp-server)
 - [VictoriaMetrics MCP (time-series monitoring)](https://github.com/VictoriaMetrics/mcp-victoriametrics)
 - [1Panel MCP (server panel management)](https://github.com/1Panel-dev/mcp-1panel)
+- [Kilobat CLI (local Mac network diagnostics and per-app traffic)](https://github.com/seifip/kilobat-cli) — CLI / MCP, local, GPL-3.0-only, macOS 14+; diagnoses proxy, DNS, IP and server connection problems; some tools change network settings and require confirmation, while traffic blocking needs the separate proprietary desktop app.
 
 ### 7. Email, Messaging, Calendar & Team Collaboration
 
