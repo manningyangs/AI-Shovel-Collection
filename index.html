@@ -921,25 +921,25 @@
 
 <header class="hero" id="hero">
   <div class="hero-inner">
-    <span class="eyebrow">⛏️ Discover · Verify · Community — 开放的 AI 工具与能力目录</span>
-    <h1>发现让 AI 真正<span class="grad">动手干活</span>的铲子</h1>
-    <p class="sub">社区精选 <b id="heroCount">191</b> 条 + Pipeline 自动发现候选 · 端点实测验证（ok / fail / 鉴权） · 每 6 小时同步 stars、更新时间、语言与端点状态 · <b>本地实时过滤</b> + <b>GitHub 全站实时搜索</b>双引擎。</p>
+    <span class="eyebrow" data-i18n="hero.eyebrow">⛏️ Discover · Verify · Community — 开放的 AI 工具与能力目录</span>
+    <h1 data-i18n-html="true" data-i18n="hero.h1">发现让 AI 真正<span class="grad">动手干活</span>的铲子</h1>
+    <p class="sub" data-i18n-html="true" data-i18n="hero.sub">社区精选 <b id="heroCount">{count}</b> 条 + Pipeline 自动发现候选 · 端点实测验证（ok / fail / 鉴权） · 每 6 小时同步 stars、更新时间、语言与端点状态 · <b>本地实时过滤</b> + <b>GitHub 全站实时搜索</b>双引擎。</p>
   </div>
   <div class="hero-search">
     <div class="search-box" id="searchBox">
       <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10.68 11.74a6 6 0 0 1-7.922-8.982 6 6 0 0 1 8.982 7.922l3.04 3.04a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215ZM11.5 7a4.499 4.499 0 1 0-8.997 0A4.499 4.499 0 0 0 11.5 7Z"></path></svg>
-      <input type="text" id="searchInput" placeholder="你想让 AI 做什么？搜索工具或具体任务……" autocomplete="off" spellcheck="false" aria-label="搜索已收录的工具" aria-describedby="count">
+      <input type="text" id="searchInput" data-i18n="hero.searchPlaceholder" data-i18n-attr="placeholder" placeholder="你想让 AI 做什么？搜索工具或具体任务……" autocomplete="off" spellcheck="false" aria-label="搜索已收录的工具" aria-describedby="count">
       <span class="count" id="count" aria-live="polite" role="status"></span>
-      <button class="clear-btn" id="clearBtn" title="清空" aria-label="清空搜索框">&times;</button>
+      <button class="clear-btn" id="clearBtn" data-i18n="hero.clear" data-i18n-attr="title" title="清空" aria-label="清空搜索框">&times;</button>
     </div>
-    <div class="search-examples">
-      <span class="se-label">试试：</span>
-      <button class="se-chip" type="button" data-pre="3." data-q="PPT">自动制作 PPT</button>
-      <button class="se-chip" type="button" data-pre="3." data-q="Excel">分析 Excel</button>
-      <button class="se-chip" type="button" data-pre="11." data-q="CAD">画 CAD / 3D</button>
-      <button class="se-chip" type="button" data-pre="6." data-q="Docker">部署 Docker</button>
-      <button class="se-chip" type="button" data-pre="2." data-q="浏览器">浏览器自动化</button>
-      <button class="se-chip" type="button" data-pre="9A." data-q="飞书">接飞书 / 钉钉</button>
+    <div class="search-examples" id="searchExamples">
+      <span class="se-label" data-i18n="hero.tryIt">试试：</span>
+      <button class="se-chip" type="button" data-pre="3." data-q="PPT" data-i18n="hero.ex1">自动制作 PPT</button>
+      <button class="se-chip" type="button" data-pre="3." data-q="Excel" data-i18n="hero.ex2">分析 Excel</button>
+      <button class="se-chip" type="button" data-pre="11." data-q="CAD" data-i18n="hero.ex3">画 CAD / 3D</button>
+      <button class="se-chip" type="button" data-pre="6." data-q="Docker" data-i18n="hero.ex4">部署 Docker</button>
+      <button class="se-chip" type="button" data-pre="2." data-q="浏览器" data-i18n="hero.ex5">浏览器自动化</button>
+      <button class="se-chip" type="button" data-pre="9A." data-q="飞书" data-i18n="hero.ex6">接飞书 / 钉钉</button>
     </div>
   </div>
   <!-- 任务导向入口：搜索框下方紧跟任务卡片 -->
@@ -1025,9 +1025,9 @@
 <main>
   <!-- Tab 切换：精选 / 候选 / 实时搜索 -->
   <div class="list-tabs" id="listTabs" role="tablist">
-    <button class="list-tab active" data-tab="curated" type="button" role="tab" aria-selected="true">📦 精选工具<span class="tab-count" id="tabCuratedCount">191</span></button>
-    <button class="list-tab" data-tab="candidates" type="button" role="tab" aria-selected="false">🧭 自动发现<span class="tab-count" id="tabCandidateCount">150</span></button>
-    <button class="list-tab" data-tab="live" type="button" role="tab" aria-selected="false">🌐 GitHub 实时搜索</button>
+    <button class="list-tab active" data-tab="curated" type="button" role="tab" aria-selected="true"><span data-i18n="tab.curated">📦 精选工具</span><span class="tab-count" id="tabCuratedCount">191</span></button>
+    <button class="list-tab" data-tab="candidates" type="button" role="tab" aria-selected="false"><span data-i18n="tab.candidates">🧭 自动发现</span><span class="tab-count" id="tabCandidateCount">150</span></button>
+    <button class="list-tab" data-tab="live" type="button" role="tab" aria-selected="false"><span data-i18n="tab.live">🌐 GitHub 实时搜索</span></button>
   </div>
 
   <!-- 排序条 -->
@@ -1483,6 +1483,9 @@
   }
 
   function renderLiveMeta() {
+    // heroCount 同步（data-i18n-html 会把 {count} 占位符写进 DOM，这里覆盖真实数字）
+    var heroCount = document.getElementById("heroCount");
+    if (heroCount && typeof items !== "undefined") heroCount.textContent = items.length;
     // ===== P0-1 LIVE 状态动态化 =====
     var diffHours = null;
     var liveBadge = document.querySelector(".live-badge");
@@ -1778,32 +1781,30 @@
     return true;
   }
 
-  // 活跃度徽章：基于最近提交时间的显性信号（90天内=活跃 / 1年内=转凉 / 超1年=沉寂 / 已归档）
+  // 活跃度徽章
   function actBadge(live) {
     if (!live) return "";
-    if (live.status === "archived" || live.archived) return '<span class="act-badge dead" title="仓库已归档，停止维护">🪦 归档</span>';
+    if (live.status === "archived" || live.archived) return '<span class="act-badge dead">' + _t('act.archived') + '</span>';
     var iso = live.pushed_at || live.published_at;
     if (!iso) return "";
     var days = (Date.now() - new Date(iso).getTime()) / 86400000;
-    if (days < 90) return '<span class="act-badge hot" title="最近 90 天内有提交，维护活跃">● 活跃</span>';
-    if (days < 365) return '<span class="act-badge mid" title="最近 90 天内无提交，仍在年内更新">● 转凉</span>';
-    return '<span class="act-badge cold" title="超过 1 年未提交，可能已停止维护">● 沉寂</span>';
+    if (days < 90) return '<span class="act-badge hot">' + _t('act.active') + '</span>';
+    if (days < 365) return '<span class="act-badge mid">' + _t('act.warm') + '</span>';
+    return '<span class="act-badge cold">' + _t('act.cold') + '</span>';
   }
 
-  // 端点实测徽章：Pipeline 每 6h 对 endpoint 做一次 MCP initialize 握手
+  // 端点实测徽章
   function verifyBadge(live) {
     if (!live) return "";
-    var ex = live.extra || live; // curated 走 extra 嵌套，候选为扁平字段
+    var ex = live.extra || live;
     var st = live.endpoint_status || ex.endpoint_status;
     if (!st) return "";
     var at = live.verified_at || ex.verified_at || "";
     var rel = at ? relTime(at) : null;
     var when = rel ? " · " + rel.text : "";
-    var abs = at ? at.replace("T", " ").slice(0, 16) + " UTC" : "";
-    if (st === "ok") return '<span class="vfy ok" title="MCP initialize 握手实测通过，验证于 ' + abs + '（仅验证端点在线，非功能实测）">✅ 验证可用' + when + "</span>";
-    if (st === "auth") return '<span class="vfy auth" title="端点存活但需要 API Key（HTTP 401/403），填密钥即可用 · 验证于 ' + abs + '">🔑 需鉴权' + when + "</span>";
-    var note = live.endpoint_note || ex.endpoint_note || "";
-    return '<span class="vfy fail" title="' + esc(note || "连接失败或超时") + ' · 验证于 ' + abs + '">❌ 端点无响应' + when + "</span>";
+    if (st === "ok") return '<span class="vfy ok">✅ ' + _t('ep.ok') + when + "</span>";
+    if (st === "auth") return '<span class="vfy auth">🔑 ' + _t('ep.auth') + when + "</span>";
+    return '<span class="vfy fail">❌ ' + _t('ep.fail') + when + "</span>";
   }
 
   // liveRow 统一：接受 Entry 风格对象（curated 来自 Pipeline、GitHub 全站实时搜索来自 Search API）
@@ -1825,13 +1826,13 @@
 
   function sourceBadge(src) {
     if (!src || src === "catalog") return "";
-    var label = SOURCE_LABEL[src] || src;
-    return '<span class="source-badge src-' + esc(src) + '" title="数据来源：' + esc(label) + '">' + esc(label) + "</span>";
+    var label = _t('src.' + src.replace('mcp_registry','registry').replace('github_rest','github')) || src;
+    return '<span class="source-badge src-' + esc(src) + '">' + esc(label) + "</span>";
   }
 
   function epPill(ep) {
     if (!ep) return "";
-    return '<div class="ep-pill" title="MCP Server 端点 · 点击复制" onclick="navigator.clipboard.writeText(this.textContent)">📡 ' + esc(ep) + "</div>";
+    return '<div class="ep-pill" title="' + _t('drawer.endpoint') + ' · ' + _t('drawer.endpointClickCopy') + '" onclick="navigator.clipboard.writeText(this.textContent)">📡 ' + esc(ep) + "</div>";
   }
 
   /* ================= 配置块弹窗 ================= */
@@ -2503,11 +2504,11 @@
 
     // 基本信息
     var infoHtml = "";
-    if (item.cat || data.catLabel) infoHtml += "<dt>分类</dt><dd>" + esc(item.catLabel || item.cat) + "</dd>";
-    if (live.source && data.kind !== "gh") infoHtml += "<dt>数据来源</dt><dd>" + (SOURCE_LABEL[live.source] || live.source) + "</dd>";
-    if (item.endpoint || live.endpoint) infoHtml += "<dt>远程端点</dt><dd style='word-break:break-all'>" + esc(item.endpoint || live.endpoint) + "</dd>";
-    if (live.license || gh.license) infoHtml += "<dt>许可证</dt><dd>" + esc((live.license || gh.license || {}).spdx_id || live.license || "") + "</dd>";
-    if (live.lang || gh.language) infoHtml += "<dt>语言</dt><dd>" + esc(live.lang || gh.language) + "</dd>";
+    if (item.cat || data.catLabel) infoHtml += "<dt>" + _t('drawer.category') + "</dt><dd>" + tCategory(item.cat || data.catLabel, I18n.currentLang) + "</dd>";
+    if (live.source && data.kind !== "gh") infoHtml += "<dt>" + _t('drawer.source') + "</dt><dd>" + (_t('src.' + live.source.replace('mcp_registry','registry').replace('github_rest','github')) || live.source) + "</dd>";
+    if (item.endpoint || live.endpoint) infoHtml += "<dt>" + _t('drawer.endpoint') + "</dt><dd style='word-break:break-all'>" + esc(item.endpoint || live.endpoint) + "</dd>";
+    if (live.license || gh.license) infoHtml += "<dt>" + _t('drawer.license') + "</dt><dd>" + esc((live.license || gh.license || {}).spdx_id || live.license || "") + "</dd>";
+    if (live.lang || gh.language) infoHtml += "<dt>" + _t('drawer.lang') + "</dt><dd>" + esc(live.lang || gh.language) + "</dd>";
     if (live.stars != null || gh.stargazers_count != null) infoHtml += "<dt>Stars</dt><dd>★ " + esc(fmtStars(live.stars != null ? live.stars : gh.stargazers_count)) + "</dd>";
 
     // ===== P1-1 新增：部署方式 / API Key 提示（基于现有字段推断，不动 Pipeline） =====
@@ -2517,14 +2518,15 @@
     var lang = live.lang || gh.language || item.lang || "";
     var hasLiveData = !!(live.stars || live.pushed_at || ep || live.license || live.source);
     // 部署方式
+    var depLbl = _t('drawer.deployMethod');
     if (ep) {
-      deployHtml += "<dt>部署方式</dt><dd>🖥️ 远程端点（免安装，粘贴配置即用）</dd>";
+      deployHtml += "<dt>" + depLbl + "</dt><dd>" + _t('drawer.deployRemote') + "</dd>";
     } else if (lang === "Python") {
-      deployHtml += "<dt>部署方式</dt><dd>💻 本地（uvx / uv） — 无远程端点，需在本机运行</dd>";
+      deployHtml += "<dt>" + depLbl + "</dt><dd>" + _t('drawer.deployLocalPy') + "</dd>";
     } else if (lang) {
-      deployHtml += "<dt>部署方式</dt><dd>💻 本地（按 README，通常 npx）</dd>";
+      deployHtml += "<dt>" + depLbl + "</dt><dd>" + _t('drawer.deployLocalNpx') + "</dd>";
     } else if (item.url) {
-      deployHtml += "<dt>部署方式</dt><dd>💻 本地（请查看项目 README）</dd>";
+      deployHtml += "<dt>" + depLbl + "</dt><dd>" + _t('drawer.deployLocalUnknown') + "</dd>";
     }
     // 端点实测状态（从配置推断）
     if (ep && epSt) {
