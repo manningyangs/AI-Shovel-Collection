@@ -1,6 +1,8 @@
 # Runtime state — Pipeline 运行产物，不入库
 _inbox/
-scripts/.state/
+scripts/.state/*
+!scripts/.state/stars-history.json
+!scripts/.state/seen_candidates.json
 scripts/__pycache__/
 *.pyc
 
