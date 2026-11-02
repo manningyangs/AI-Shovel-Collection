@@ -47,6 +47,37 @@ function esc(s) { return String(s || '').replace(/[<>&"]/g, c => ({'<':'&lt;','>
 function detailHref(s) { return `/AI-Shovel-Collection/tools/${(s || '').replace(/\//g, '-')}/`; }
 function fmtStars(n) { return (n == null || n === '' ? '' : Number(n).toLocaleString()); }
 function starsStyle(n) { return n > 10000 ? 'color:#dc2626' : n > 1000 ? 'color:#ea580c' : ''; }
+
+// V2.1: Trending Top 3（按 Stars 排序，实时）
+const withStars = catalogItems
+  .map(it => ({ ...it, live: liveBySlug[it.slug] || {} }))
+  .filter(it => it.live.stars > 0)
+  .sort((a, b) => (b.live.stars || 0) - (a.live.stars || 0));
+const trendingTop3 = withStars.slice(0, 3);
+
+// V2.1: Domains 简洁入口（取前 8 条）
+const domainMod = import.meta.glob('../../public/README.md', { as: 'raw', eager: true });
+const readmeRaw = domainMod['../../public/README.md'] || '';
+const domainRows = (() => {
+  if (!readmeRaw) return [];
+  const lines = readmeRaw.split(/\r?\n/);
+  let inSection = false, rows = [];
+  for (const line of lines) {
+    if (line.indexOf('## ') === 0) { inSection = line.indexOf('按行业/领域检索') !== -1; continue; }
+    if (!inSection) continue;
+    if (line.indexOf('|') !== 0) { if (rows.length && line.trim() === '') break; continue; }
+    const cells = line.split('|');
+    if (cells.length < 4) continue;
+    const name = cells[1].trim();
+    if (!name || name === '领域' || /^-+$/.test(name)) continue;
+    const linksCell = cells[2];
+    const firstLink = (linksCell.match(/\[([^\]]+)\]\(([^)]+)\)/) || [])[2];
+    rows.push({ name, url: firstLink || '#' });
+  }
+  return rows;
+})();
+const domainsTop8 = domainRows.slice(0, 8);
+const domainsTotal = domainRows.length;
 ---
 
 <Base
@@ -88,10 +119,9 @@ function starsStyle(n) { return n > 10000 ? 'color:#dc2626' : n > 1000 ? 'color:
 </div>
 
 <header class="hero" id="hero">
-  <div class="hero-inner">
-    <span class="eyebrow">⛏️ Discover · Verify · Community — 开放的 AI 工具与能力目录</span>
+  <div class="hero-inner hero-v21">
     <h1>发现让 AI 真正<span class="grad">动手干活</span>的铲子</h1>
-    <p class="sub">社区精选 <b id="heroCount">191</b> 条 + Pipeline 自动发现候选 · 端点实测验证（ok / fail / 鉴权） · 每 6 小时同步 stars、更新时间、语言与端点状态 · <b>本地实时过滤</b> + <b>GitHub 全站实时搜索</b>双引擎。</p>
+    <p class="sub">社区精选 + Pipeline 自动发现 · 端点实测验证 · 每 6 小时同步</p>
   </div>
   <div class="hero-search">
     <div class="search-box" id="searchBox">
@@ -110,38 +140,58 @@ function starsStyle(n) { return n > 10000 ? 'color:#dc2626' : n > 1000 ? 'color:
       <button class="se-chip" type="button" data-pre="9A." data-q="飞书">接飞书 / 钉钉</button>
     </div>
   </div>
-  <div class="task-bar" id="taskBar">
+
+  <!-- V2.1: 任务入口 6 个 + 更多按钮 -->
+  <div class="task-bar task-v21" id="taskBar">
     <div class="task-inner">
-      <div class="task-header">
-        <span class="task-title">🙋 你希望 AI 帮你完成什么工作？</span>
-        <span class="task-hint">按任务跳转对应分类，不需要先懂 MCP</span>
-      </div>
       <div class="task-chips" id="taskChips" role="group" aria-label="按任务筛选工具">
-        <button class="task-chip" data-pre="3." type="button"><span class="tc-icon">📝</span><span><span class="tc-text">写文档 / 做 PPT</span><span class="tc-desc">Word · Excel · PDF</span></span></button>
-        <button class="task-chip" data-pre="5." type="button"><span class="tc-icon">📊</span><span><span class="tc-text">查数据库 · 数据分析</span><span class="tc-desc">SQL · BI · ETL</span></span></button>
-        <button class="task-chip" data-pre="2." type="button"><span class="tc-icon">🌐</span><span><span class="tc-text">浏览器自动化</span><span class="tc-desc">抓网页 · 点按钮 · 填表</span></span></button>
-        <button class="task-chip" data-pre="6." type="button"><span class="tc-icon">🚀</span><span><span class="tc-text">部署运维</span><span class="tc-desc">Docker · 服务器 · CI/CD</span></span></button>
-        <button class="task-chip" data-pre="10." type="button"><span class="tc-icon">🎨</span><span><span class="tc-text">图片 · 视频 · 音频</span><span class="tc-desc">设计素材 · 媒体生成</span></span></button>
-        <button class="task-chip" data-pre="11." type="button"><span class="tc-icon">🗺️</span><span><span class="tc-text">CAD · 3D · 地图</span><span class="tc-desc">工程制图 · GIS</span></span></button>
-        <button class="task-chip" data-pre="8." type="button"><span class="tc-icon">💰</span><span><span class="tc-text">财务 · 会计</span><span class="tc-desc">区块链 · 交易</span></span></button>
-        <button class="task-chip" data-pre="13." type="button"><span class="tc-icon">🤖</span><span><span class="tc-text">机器人 · IoT · 硬件</span><span class="tc-desc">PLC · 传感器</span></span></button>
-        <button class="task-chip" data-pre="7." type="button"><span class="tc-icon">📧</span><span><span class="tc-text">邮件 · 日历 · 协作</span><span class="tc-desc">Teams · Slack</span></span></button>
-        <button class="task-chip" data-pre="9A." type="button"><span class="tc-icon">💬</span><span><span class="tc-text">飞书 · 钉钉 · 微信</span><span class="tc-desc">企业 IM 接入</span></span></button>
+        <button class="task-chip" data-pre="3." type="button"><span class="tc-icon">📝</span><span class="tc-text">写文档 / 做 PPT</span></button>
+        <button class="task-chip" data-pre="2." type="button"><span class="tc-icon">🌐</span><span class="tc-text">浏览器自动化</span></button>
+        <button class="task-chip" data-pre="6." type="button"><span class="tc-icon">🚀</span><span class="tc-text">部署运维</span></button>
+        <button class="task-chip" data-pre="11." type="button"><span class="tc-icon">🗺️</span><span class="tc-text">CAD · 3D · 地图</span></button>
+        <button class="task-chip" data-pre="9A." type="button"><span class="tc-icon">💬</span><span class="tc-text">飞书 · 钉钉 · 微信</span></button>
+        <button class="task-chip task-more" id="btnTaskMore" type="button"><span class="tc-icon">⋯</span><span class="tc-text">更多</span></button>
+        <!-- 隐藏：点击「更多」展开 -->
+        <button class="task-chip task-hidden" data-pre="5." type="button" hidden><span class="tc-icon">📊</span><span class="tc-text">查数据库 · 数据分析</span></button>
+        <button class="task-chip task-hidden" data-pre="10." type="button" hidden><span class="tc-icon">🎨</span><span class="tc-text">图片 · 视频 · 音频</span></button>
+        <button class="task-chip task-hidden" data-pre="8." type="button" hidden><span class="tc-icon">💰</span><span class="tc-text">财务 · 会计</span></button>
+        <button class="task-chip task-hidden" data-pre="13." type="button" hidden><span class="tc-icon">🤖</span><span class="tc-text">机器人 · IoT · 硬件</span></button>
+        <button class="task-chip task-hidden" data-pre="7." type="button" hidden><span class="tc-icon">📧</span><span class="tc-text">邮件 · 日历 · 协作</span></button>
       </div>
     </div>
   </div>
-  <div class="stats-grid-wrap" id="statsGridWrap">
-    <div class="stats-grid">
-      <div class="stat-card" title="catalog.csv 中的人工精选行数（目录收录口径）"><div class="stat-num c1" id="statCurated" data-target="191">191</div><div class="stat-label">已收录工具（目录）</div></div>
-      <div class="stat-card" title="live_multi.json 中成功同步 GitHub 元数据的条目数，可能略少于目录行数"><div class="stat-num c2" id="statSynced" data-target="189">189</div><div class="stat-label">已同步 GitHub 元数据</div></div>
-      <div class="stat-card" title="Pipeline 从 MCP Registry / npm / crates.io 自动发现的候选条目"><div class="stat-num c3" id="statCand" data-target="150">150</div><div class="stat-label">自动发现候选</div></div>
-      <div class="stat-card" title="MCP initialize 握手实测通过的端点数（仅代表端点在线，非功能实测）"><div class="stat-num c1" id="statVfy">—</div><div class="stat-label">端点实测通过</div></div>
-      <div class="stat-card" title="已收录仓库的 GitHub Stars 累加，每 6 小时同步"><div class="stat-num c4" id="statStars">…</div><div class="stat-label">累计 GitHub Stars</div></div>
-      <div class="stat-card" title="目录内的细分工具类型"><div class="stat-num c3" data-target="17">17</div><div class="stat-label">细分分类</div></div>
+
+  <!-- V2.1: Trending Top 3 横排区块 -->
+  {trendingTop3.length > 0 ? (
+  <section class="trending-top-v21" aria-label="🔥 Trending Top 3">
+    <div class="ttv21-head">
+      <span class="ttv21-badge">🔥 LIVE</span>
+      <span class="ttv21-title">本周 Stars 冠军</span>
+      <a href="/AI-Shovel-Collection/trending/" class="ttv21-all">完整榜单 →</a>
     </div>
-    <p class="stat-legend" id="statLegend">统计口径：<b>目录收录 191</b>（catalog.csv 行数）· <b>已同步元数据 189</b> · <b>候选 150</b> · <b>端点实测 —</b>，四个数字口径不同，全部随数据文件动态计算。</p>
+    <div class="ttv21-row">
+      {trendingTop3.map((t, i) => (
+        <a href={detailHref(t.slug)} class="ttv21-card" style={i === 0 ? '--ttv21-rank:#f59e0b' : i === 1 ? '--ttv21-rank:#94a3b8' : '--ttv21-rank:#d97706'}>
+          <span class="ttv21-rank">#{i + 1}</span>
+          <span class="ttv21-name">{esc(t.name)}</span>
+          <span class="ttv21-meta">
+            <span class="ttv21-stars">⭐ {fmtStars(t.live.stars)}</span>
+            {t.live.lang ? <span class="ttv21-lang">{esc(t.live.lang)}</span> : null}
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+  ) : null}
+
+  <!-- V2.1: 统计 4 个（原来 6 个，去掉"已同步元数据"和"细分分类"） -->
+  <div class="stats-grid stats-v21" id="statsGrid" role="region" aria-label="核心数据统计">
+    <div class="stat-card" title="catalog.csv 中的人工精选行数"><div class="stat-num c1" id="statCurated">—</div><div class="stat-label">精选工具</div></div>
+    <div class="stat-card" title="Pipeline 自动发现的候选条目"><div class="stat-num c3" id="statCand">—</div><div class="stat-label">发现候选</div></div>
+    <div class="stat-card" title="MCP initialize 握手实测通过的端点数"><div class="stat-num c1" id="statVfy">—</div><div class="stat-label">端点实测 OK</div></div>
+    <div class="stat-card" title="已收录仓库的 GitHub Stars 累加"><div class="stat-num c4" id="statStars">—</div><div class="stat-label">累计 GitHub Stars</div></div>
   </div>
-  <button class="stats-toggle" id="btnToggleStats" type="button" aria-expanded="true" aria-controls="statsGridWrap">— 收起统计数字</button>
+
   <noscript><div class="noscript-note">⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（191 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。</div></noscript>
 </header>
 
@@ -251,14 +301,35 @@ function starsStyle(n) { return n > 10000 ? 'color:#dc2626' : n > 1000 ? 'color:
     </div>
     <div class="grid" id="liveGrid2"></div>
   </section>
-  <section id="domains">
-    <div class="section-head">
-      <h2>🌍 按行业 / 领域实时检索 GitHub</h2>
-      <span class="hint">关键词实时检索入口，查看该领域最新公开仓库</span>
-    </div>
-    <div class="domain-table" id="domainTable"></div>
-  </section>
 </main>
+
+<!-- V2.1: 底部简洁入口：行业目录 + 开放数据 + 社区贡献 -->
+<section class="footer-links-v21" aria-label="更多入口">
+  <div class="flv21-col">
+    <h4>🌍 行业目录</h4>
+    <div class="flv21-domains">
+      {domainsTop8.map(d => (
+        <a href={d.url} target="_blank" rel="noopener">{esc(d.name)}</a>
+      ))}
+    </div>
+    {domainsTotal > 8 ? <p class="flv21-more">共 {domainsTotal} 个领域 · <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/README.md" target="_blank" rel="noopener">完整列表 ↗</a></p> : null}
+  </div>
+  <div class="flv21-col">
+    <h4>📦 开放数据</h4>
+    <p><a href="catalog.csv">catalog.csv</a> — {catalogItems.length} 条精选清单</p>
+    <p><a href="live_multi.json">live_multi.json</a> — Pipeline 聚合数据</p>
+    <p><a href="trending.json">trending.json</a> — Stars 榜单历史</p>
+  </div>
+  <div class="flv21-col">
+    <h4>🤝 社区贡献</h4>
+    <p><a href="https://github.com/manningyangs/AI-Shovel-Collection/issues/new?labels=improvement&template=request.yml" target="_blank" rel="noopener">提交新工具</a></p>
+    <p><a href="submit.html">在线提交表单</a></p>
+    <p><a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">GitHub ↗</a></p>
+  </div>
+</section>
+
+<!-- 隐藏的 domainTable — app.js buildDomains() 仍渲染到这里，默认隐藏供 live tab 或 future 展开 -->
+<div id="domainTable" style="display:none"></div>
 
 <footer>
   <div class="footer-inner">

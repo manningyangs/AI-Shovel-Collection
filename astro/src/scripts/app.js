@@ -442,7 +442,7 @@
     }
     if (syncedN != null) {
       var elS = document.getElementById("statSynced");
-      elS.textContent = syncedN; elS.setAttribute("data-target", syncedN);
+      if (elS) { elS.textContent = syncedN; elS.setAttribute("data-target", syncedN); }
     }
     if (candN != null) {
       var elCd = document.getElementById("statCand");
@@ -548,6 +548,12 @@
     document.getElementById("taskChips").addEventListener("click", function (e) {
       var btn = e.target.closest(".task-chip");
       if (!btn) return;
+      // 更多按钮：展开隐藏的 task chips
+      if (btn.id === "btnTaskMore") {
+        document.querySelectorAll(".task-hidden").forEach(function (c) { c.hidden = false; });
+        btn.hidden = true;
+        return;
+      }
       var key = catKeyByPrefix(btn.getAttribute("data-pre"));
       if (!key) return;
       // 再点一次同一任务 = 取消，回到「全部」
@@ -950,7 +956,7 @@
       // 只更新统计数字 + 新鲜度标签，保留预渲染卡片 HTML
       countEl.textContent = items.length + " 条";
       countEl.classList.remove("hit");
-      document.getElementById("heroCount").textContent = items.length;
+      var hc1 = document.getElementById("heroCount"); if (hc1) hc1.textContent = items.length;
       document.getElementById("tabCuratedCount").textContent = items.length;
       empty.style.display = "none";
       // 绑定预渲染卡片上的 drawer/cfg 事件委托
@@ -996,8 +1002,8 @@
       countEl.textContent = list.length === 0 ? "无结果" : "找到 " + list.length + " 条";
       countEl.classList.toggle("hit", list.length > 0);
     }
-    document.getElementById("heroCount").textContent = items.length;
     document.getElementById("tabCuratedCount").textContent = items.length;
+    var hc2 = document.getElementById("heroCount"); if (hc2) hc2.textContent = items.length;
 
     renderCandidates();
   }
@@ -1280,7 +1286,6 @@
 
   bindTaskChips();
   load();
-  var domainsEl = document.getElementById("domains");
   // 初始状态：只显示 curated tab
   switchTab("curated");
 
@@ -1297,8 +1302,6 @@
     panels.forEach(function (p) {
       p.style.display = p.getAttribute("data-tabpanel") === name ? "" : "none";
     });
-    // domains：只在 live tab 下显示，curated / candidates 隐藏
-    if (domainsEl) domainsEl.style.display = (name === "live") ? "" : "none";
     // 切换到 liveTab 且有搜索词时自动搜索
     if (name === "live" && query.length >= 2 && liveFetchedFor !== query) {
       runLiveSearch(true);

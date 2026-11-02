@@ -850,3 +850,86 @@
   .back-to-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
   .back-to-top:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
   .back-to-top:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+  /* ================= V2.1 首页重构 ================= */
+
+  /* Hero 紧凑化：去掉 eyebrow，标题更小，副标题一行 */
+  .hero-v21 h1 { font-size: clamp(22px, 3.5vw, 32px); font-weight: 800; margin-bottom: 6px; }
+  .hero-v21 .sub { font-size: 14px; max-width: 480px; margin: 0 auto; }
+
+  /* 任务入口 6 个横排：去掉 desc，更紧凑 */
+  .task-v21 { margin-top: 16px; padding: 0 16px; }
+  .task-v21 .task-chips {
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  }
+  .task-v21 .task-chip {
+    padding: 8px 14px; font-size: 13px; gap: 8px; border-radius: 999px;
+  }
+  .task-v21 .task-chip .tc-icon { width: 22px; height: 22px; font-size: 13px; border-radius: 6px; }
+  .task-v21 .task-chip .tc-text { font-weight: 500; }
+  .task-v21 .task-more { border-style: dashed; color: var(--text-3); }
+
+  /* Trending Top 3 横排区块 */
+  .trending-top-v21 {
+    max-width: 980px; margin: 28px auto 0; padding: 20px 24px;
+    background: linear-gradient(135deg, #fef9c3, #fef3c7);
+    border: 1px solid #fde68a; border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .ttv21-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .ttv21-badge {
+    background: var(--orange); color: #fff; font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 4px; letter-spacing: .5px;
+  }
+  .ttv21-title { font-weight: 700; font-size: 15px; color: #92400e; }
+  .ttv21-all { margin-left: auto; font-size: 13px; color: #92400e; text-decoration: underline; }
+  .ttv21-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .ttv21-card {
+    display: block; padding: 14px 16px; background: #fff;
+    border: 1px solid #fde68a; border-radius: 10px;
+    text-decoration: none; transition: all .15s ease;
+  }
+  .ttv21-card:hover { border-color: var(--orange); transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+  .ttv21-rank {
+    font-weight: 900; font-size: 16px; color: var(--ttv21-rank, #f59e0b);
+    margin-right: 8px;
+  }
+  .ttv21-name { font-weight: 600; color: var(--text); font-size: 14px; }
+  .ttv21-meta { display: flex; gap: 10px; margin-top: 4px; font-size: 12px; color: var(--text-3); }
+  .ttv21-stars { color: #b45309; }
+  @media (max-width: 640px) {
+    .ttv21-row { grid-template-columns: 1fr; }
+  }
+
+  /* 统计 4 个紧凑版 */
+  .stats-v21 {
+    max-width: 680px; margin: 24px auto 0;
+    grid-template-columns: repeat(4, 1fr); gap: 12px;
+  }
+  .stats-v21 .stat-card { padding: 14px 8px; }
+  .stats-v21 .stat-num { font-size: clamp(18px, 2.2vw, 24px); }
+  .stats-v21 .stat-label { font-size: 12px; margin-top: 3px; }
+  @media (max-width: 520px) {
+    .stats-v21 { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* 底部简洁入口 */
+  .footer-links-v21 {
+    max-width: 1100px; margin: 40px auto 20px; padding: 24px 16px;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  }
+  .flv21-col h4 { font-size: 13px; font-weight: 700; color: var(--text-2); margin-bottom: 10px; letter-spacing: .5px; }
+  .flv21-col p { font-size: 13px; color: var(--text-2); margin: 4px 0; }
+  .flv21-col p a { color: var(--primary); text-decoration: none; }
+  .flv21-col p a:hover { text-decoration: underline; }
+  .flv21-domains { display: flex; flex-wrap: wrap; gap: 6px; }
+  .flv21-domains a {
+    font-size: 12px; padding: 3px 10px; border-radius: 999px;
+    background: var(--primary-soft); color: var(--primary); text-decoration: none;
+  }
+  .flv21-domains a:hover { background: #d5e3ff; }
+  .flv21-more { font-size: 12px; color: var(--text-3); margin-top: 8px; }
+  @media (max-width: 700px) {
+    .footer-links-v21 { grid-template-columns: 1fr; }
+  }
