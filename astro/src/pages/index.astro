@@ -360,5 +360,5 @@ const domainsTotal = domainRows.length;
   <div class="drawer-actions" id="drawerActions"></div>
 </aside>
 
-<script set:html={appJs.replace(/<\/script>/gi, '<\\/script>')}></script>
+<script is:inline>{appJs}</script>
 </Base>
