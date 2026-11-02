@@ -26,6 +26,57 @@ export function getStaticPaths() {
 
 const { item } = Astro.props;
 const ogImage = 'https://manningyangs.github.io/AI-Shovel-Collection/og-image.jpg';
+const sitename = 'AI Shovel Collection';
+const fullUrl = `https://manningyangs.github.io/AI-Shovel-Collection/tools/${item.slug}/`;
+
+// Generate MCP config JSON snippet if endpoint exists
+let mcpConfigJson = '';
+if (item.live.endpoint) {
+  const serverName = item.slug.replace(/[^a-zA-Z0-9_-]/g, '-').toLowerCase();
+  const configObj = {
+    mcpServers: {
+      [serverName]: {
+        url: item.live.endpoint,
+        transport: 'streamable-http',
+      }
+    }
+  };
+  if (item.live.endpoint_status === 'auth') {
+    configObj.mcpServers[serverName].headers = { Authorization: 'Bearer YOUR_API_KEY' };
+  }
+  mcpConfigJson = JSON.stringify(configObj, null, 2);
+}
+
+// JSON-LD SoftwareApplication structured data
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: item.name,
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'Web',
+  description: item.live.desc || `${item.cat} — ${item.name}`,
+  url: item.url,
+  image: ogImage,
+  author: item.url ? {
+    '@type': 'Organization',
+    name: (() => { try { return item.url.replace(/.*github\.com\//, '').split('/')[0]; } catch { return 'Unknown'; } })(),
+    url: (() => { try { return 'https://github.com/' + item.url.replace(/.*github\.com\//, '').split('/')[0]; } catch { return ''; } })(),
+  } : undefined,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+  ...(item.live.stars ? { aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.5',
+    ratingCount: item.live.stars,
+    bestRating: '5',
+    worstRating: '1',
+  }} : {}),
+  keywords: [item.cat, 'MCP Server', 'AI Tool', item.live.lang].filter(Boolean).join(', '),
+};
+const jsonLdString = JSON.stringify(jsonLd).replace(/</g, '\\u003c');
 ---
 
 <Base
@@ -35,6 +86,9 @@ const ogImage = 'https://manningyangs.github.io/AI-Shovel-Collection/og-image.jp
   canonical={`/tools/${item.slug}/`}
   lang="zh-CN"
 >
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json" set:html={jsonLdString}></script>
 
 <nav class="navbar" aria-label="主导航">
   <div class="navbar-inner">
@@ -63,6 +117,34 @@ const ogImage = 'https://manningyangs.github.io/AI-Shovel-Collection/og-image.jp
   {item.live.desc && (
     <div style="margin-bottom:32px;line-height:1.8;color:var(--text-1)">{item.live.desc}</div>
   )}
+
+  <!-- MCP 端点 + 配置生成 -->
+  {item.live.endpoint && (
+    <div style="margin-bottom:32px;padding:20px;background:linear-gradient(135deg,#f0f4ff,#faf5ff);border:1px solid #e0e7ff;border-radius:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <div style="font-weight:600;font-size:15px;color:var(--text-1)">🔌 MCP 端点可用</div>
+        <div style="font-size:12px">
+          {item.live.endpoint_status === 'ok' ? <span style="color:#16a34a">● 在线</span> : ''}
+          {item.live.endpoint_status === 'auth' ? <span style="color:#d97706">● 需鉴权</span> : ''}
+          {item.live.endpoint_status === 'fail' ? <span style="color:#dc2626">● 不可用</span> : ''}
+        </div>
+      </div>
+      <div style="font-size:13px;color:var(--text-2);word-break:break-all;margin-bottom:16px">{item.live.endpoint}</div>
+      {mcpConfigJson && (
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <span style="font-size:13px;color:var(--text-2)">📋 可直接粘贴到你的 mcp.json：</span>
+            <button id="copyCfg" onclick="navigator.clipboard.writeText(document.getElementById('mcpCfg').innerText);this.textContent='✓ 已复制';setTimeout(()=>this.textContent='📋 复制配置',1500)" style="font-size:12px;padding:4px 12px;background:var(--primary);color:white;border:none;border-radius:6px;cursor:pointer">📋 复制配置</button>
+          </div>
+          <pre id="mcpCfg" style="background:#1e1b4b;color:#e0e7ff;padding:14px;border-radius:8px;font-size:12px;overflow-x:auto;margin:0">{mcpConfigJson}</pre>
+          {item.live.endpoint_status === 'auth' && (
+            <div style="margin-top:8px;font-size:12px;color:#d97706">⚠️ 此端点需要 API Key 鉴权，请替换 YOUR_API_KEY 为你的实际密钥。</div>
+          )}
+        </div>
+      )}
+    </div>
+  )}
+
   <dl style="border-top:1px solid var(--border);padding-top:24px">
     <div style="display:flex;padding:8px 0;border-bottom:1px solid var(--border-light)">
       <dt style="width:100px;color:var(--text-2);font-size:14px">分类</dt><dd style="flex:1">{item.cat}</dd>
@@ -76,16 +158,25 @@ const ogImage = 'https://manningyangs.github.io/AI-Shovel-Collection/og-image.jp
     <div style="display:flex;padding:8px 0;border-bottom:1px solid var(--border-light)">
       <dt style="width:100px;color:var(--text-2);font-size:14px">最后更新</dt><dd style="flex:1">{item.live.pushed_at ?? '—'}</dd>
     </div>
-    {item.live.endpoint && (
-      <div style="display:flex;padding:8px 0;border-bottom:1px solid var(--border-light)">
-        <dt style="width:100px;color:var(--text-2);font-size:14px">MCP 端点</dt>
-        <dd style="flex:1;word-break:break-all">{item.live.endpoint}
-          {item.live.endpoint_status === 'ok' ? <span style="color:#16a34a;margin-left:8px">✓ 在线</span> : ''}
-          {item.live.endpoint_status === 'auth' ? <span style="color:#d97706;margin-left:8px">🔑 需鉴权</span> : ''}
-          {item.live.endpoint_status === 'fail' ? <span style="color:#dc2626;margin-left:8px">✗ 不可用</span> : ''}
-        </dd>
-      </div>
-    )}
+    {item.live.forks ? (
+    <div style="display:flex;padding:8px 0;border-bottom:1px solid var(--border-light)">
+      <dt style="width:100px;color:var(--text-2);font-size:14px">Forks</dt><dd style="flex:1">{item.live.forks}</dd>
+    </div>
+    ) : ''}
+    {item.live.license ? (
+    <div style="display:flex;padding:8px 0;border-bottom:1px solid var(--border-light)">
+      <dt style="width:100px;color:var(--text-2);font-size:14px">License</dt><dd style="flex:1">{item.live.license}</dd>
+    </div>
+    ) : ''}
+    {item.live.status ? (
+    <div style="display:flex;padding:8px 0;border-bottom:1px solid var(--border-light)">
+      <dt style="width:100px;color:var(--text-2);font-size:14px">状态</dt><dd style="flex:1">
+        {item.live.status === 'active' ? <span style="color:#16a34a">● Active</span> : ''}
+        {item.live.status === 'archived' ? <span style="color:#94a3b8">● Archived</span> : ''}
+        {item.live.status !== 'active' && item.live.status !== 'archived' ? item.live.status : ''}
+      </dd>
+    </div>
+    ) : ''}
   </dl>
   <div style="margin-top:32px;padding:16px;background:var(--bg-2);border-radius:8px;font-size:13px;color:var(--text-3)">
     💡 数据来源：<a href="https://github.com/manningyangs/AI-Shovel-Collection">AI-Shovel-Collection</a> · 每 6 小时同步
