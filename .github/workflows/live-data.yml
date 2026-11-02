@@ -30,13 +30,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python scripts/update_live_data.py
 
-      - name: Commit live_multi.json
+      - name: Sync data to astro/public
+        run: |
+          mkdir -p astro/public
+          cp live_multi.json astro/public/
+          cp trending.json astro/public/ 2>/dev/null || true
+
+      - name: Commit data updates
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add live_multi.json
-          git diff --cached --quiet || git commit -m "chore: 同步多源实时数据"
-          # fetch 再 push，避开本地过期快照导致的 rejected
+          git add live_multi.json trending.json scripts/.state/stars-history.json astro/public/live_multi.json astro/public/trending.json
+          git diff --cached --quiet || git commit -m "chore: 同步实时数据 + trending 榜单"
           git fetch origin main
           git pull --rebase origin main --autostash || true
           git push origin main --force-with-lease

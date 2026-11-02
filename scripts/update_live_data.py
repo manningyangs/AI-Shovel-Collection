@@ -34,6 +34,11 @@ SEEN_STATE = "scripts/.state/seen_candidates.json"  # 持久化已处理候选�
 INBOX_DIR = "_inbox"                              # 每轮 inbox 输出目录
 INBOX_THRESHOLD = 6                               # confidence ≥ 此值才进 inbox；candidates 不反查 GitHub stars，封顶 6-7 分
 
+# ---------- Trending 数据系统 ----------
+STARS_HISTORY = "scripts/.state/stars-history.json"  # stars 时间序列快照
+TRENDING_OUTPUT = "trending.json"                     # 最终 trending 榜单输出
+HISTORY_RETENTION_DAYS = 30                           # 保留最近 30 天快照
+
 CANDIDATE_LIMIT = 150
 SLEEP_GITHUB = 0.18
 SLEEP_REGISTRY = 0.05
@@ -681,14 +686,192 @@ def run_pipeline() -> dict:
     with open(OUTPUT, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=0)
 
+    # ---- Trending: stars-history 累积 + trending.json 生成 ----
+    update_trending(curated, now)
+
     print(f"\n==== Pipeline 完成 ====")
     print(f"curated 精选: {len(curated)}")
     print(f"candidates 候选: {len(candidates)}（confidence 截断 Top {CANDIDATE_LIMIT}）")
     print(f"inbox 高置信: {len(inbox_entries)}（confidence ≥ {INBOX_THRESHOLD}）")
     for s, c in sc.items():
         print(f"  {s:20s}: {c}")
-    print(f"写入 {OUTPUT}")
+    print(f"写入 {OUTPUT} + {TRENDING_OUTPUT}")
     return payload
+
+
+def update_trending(curated: list, now_iso: str) -> None:
+    """累积 stars 历史快照，生成 trending.json（Stars 总榜 / 7d / 30d 增长 / 活跃榜）。"""
+    # 1) 加载已有 stars-history
+    history = {}
+    if os.path.exists(STARS_HISTORY):
+        try:
+            with open(STARS_HISTORY, encoding="utf-8") as f:
+                history = json.load(f)
+        except Exception:
+            history = {}
+
+    # 2) 本轮快照：按 UTC 日期 + 小时 作 key（避免过于密集的 key 膨胀）
+    now_dt = time.strptime(now_iso, "%Y-%m-%dT%H:%M:%SZ")
+    day_key = time.strftime("%Y-%m-%d", now_dt)
+    hour_key = day_key + "T" + time.strftime("%H", now_dt)
+
+    # 把当前 curated stars 写进小时级快照
+    current_snapshot = {}
+    for e in curated:
+        if e.repo_slug and e.stars is not None:
+            current_snapshot[e.repo_slug] = e.stars
+
+    if current_snapshot:
+        history[hour_key] = current_snapshot
+
+    # 3) 清理过期（超过 RETENTION_DAYS 的快照）
+    cutoff_ts = time.time() - HISTORY_RETENTION_DAYS * 86400
+    kept = {}
+    for key, snap in history.items():
+        # key 形如 "2026-11-02T03" 或 "2026-11-02"
+        try:
+            if "T" in key:
+                t = time.strptime(key, "%Y-%m-%dT%H")
+            else:
+                t = time.strptime(key, "%Y-%m-%d")
+            if time.mktime(t) >= cutoff_ts:
+                kept[key] = snap
+        except ValueError:
+            continue
+    history = kept
+
+    # 写回 stars-history
+    state_dir = os.path.dirname(STARS_HISTORY)
+    os.makedirs(state_dir, exist_ok=True)
+    with open(STARS_HISTORY, "w", encoding="utf-8") as f:
+        json.dump(history, f, ensure_ascii=False, indent=0)
+
+    # 4) 计算增长榜 —— 找 7 天前 / 30 天前最接近的快照
+    def find_snapshot(target_days_ago: int) -> dict:
+        target_ts = time.time() - target_days_ago * 86400
+        best_key, best_delta = None, float("inf")
+        for key in history:
+            try:
+                if "T" in key:
+                    t = time.strptime(key, "%Y-%m-%dT%H")
+                else:
+                    t = time.strptime(key, "%Y-%m-%d")
+                delta = abs(time.mktime(t) - target_ts)
+                if delta < best_delta:
+                    best_delta = delta
+                    best_key = key
+            except ValueError:
+                continue
+        return history.get(best_key, {}) if best_key else {}
+
+    snap_7d = find_snapshot(7)
+    snap_30d = find_snapshot(30)
+    current_map = current_snapshot  # {repo_slug: stars}
+
+    # 5) 活跃榜 —— 基于 pushed_at（近 30 天推一次记 1 分，近 7 天 +2）
+    def activity_score(entry) -> float:
+        pa = entry.pushed_at
+        if not pa:
+            return 0.0
+        try:
+            pushed_ts = time.mktime(time.strptime(pa, "%Y-%m-%dT%H:%M:%SZ"))
+        except ValueError:
+            return 0.0
+        days_ago = (time.time() - pushed_ts) / 86400
+        if days_ago < 7:
+            return 3.0
+        elif days_ago < 30:
+            return 1.5
+        elif days_ago < 90:
+            return 0.5
+        return 0.0
+
+    # 6) 组装 trending 数据
+    curated_map = {e.repo_slug: e for e in curated if e.repo_slug}
+
+    def make_rankings(entries: list, top_n: int = 20) -> list:
+        """把 [{repo_slug, ...}] 转成 {rank, repo_slug, title, stars, ...} 榜单。"""
+        result = []
+        for i, item in enumerate(entries[:top_n], 1):
+            slug = item["repo_slug"]
+            entry = curated_map.get(slug)
+            result.append({
+                "rank": i,
+                "repo_slug": slug,
+                "repo_url": f"https://github.com/{slug}",
+                "title": entry.title if entry else slug,
+                "stars": item.get("stars"),
+                "stars_growth": item.get("stars_growth"),
+                "lang": entry.lang if entry else None,
+                "pushed_at": entry.pushed_at if entry else None,
+                **({"activity_score": item["activity_score"]} if "activity_score" in item else {}),
+            })
+        return result
+
+    # Stars 总榜
+    by_stars_raw = [
+        {"repo_slug": s, "stars": v}
+        for s, v in current_map.items() if v is not None
+    ]
+    by_stars_raw.sort(key=lambda x: x["stars"], reverse=True)
+
+    # 7 天增长
+    by_growth_7d_raw = []
+    for s, cur_stars in current_map.items():
+        old_stars = snap_7d.get(s)
+        if old_stars is not None and cur_stars >= old_stars:
+            by_growth_7d_raw.append({"repo_slug": s, "stars": cur_stars,
+                                      "stars_growth": cur_stars - old_stars})
+    by_growth_7d_raw.sort(key=lambda x: x["stars_growth"], reverse=True)
+
+    # 30 天增长
+    by_growth_30d_raw = []
+    for s, cur_stars in current_map.items():
+        old_stars = snap_30d.get(s)
+        if old_stars is not None and cur_stars >= old_stars:
+            by_growth_30d_raw.append({"repo_slug": s, "stars": cur_stars,
+                                       "stars_growth": cur_stars - old_stars})
+    by_growth_30d_raw.sort(key=lambda x: x["stars_growth"], reverse=True)
+
+    # 活跃榜（有 stars 阈值才上榜，避免小仓库噪音）
+    by_activity_raw = []
+    for entry in curated:
+        if not entry.repo_slug or not entry.stars or entry.stars < 3:
+            continue
+        sc = activity_score(entry)
+        if sc > 0:
+            by_activity_raw.append({
+                "repo_slug": entry.repo_slug,
+                "stars": entry.stars,
+                "activity_score": sc * (1 + min(entry.stars, 5000) / 1000),  # stars 加权
+            })
+    by_activity_raw.sort(key=lambda x: x["activity_score"], reverse=True)
+
+    trending = {
+        "updated_at": now_iso,
+        "data_points": len(history),
+        "history_days_covered": len({k[:10] for k in history.keys()}),
+        "top_stars": make_rankings(by_stars_raw),
+        "top_growth_7d": make_rankings(by_growth_7d_raw),
+        "top_growth_30d": make_rankings(by_growth_30d_raw),
+        "top_activity": make_rankings(by_activity_raw),
+        "growth_7d_available": bool(snap_7d),
+        "growth_30d_available": bool(snap_30d),
+    }
+
+    with open(TRENDING_OUTPUT, "w", encoding="utf-8") as f:
+        json.dump(trending, f, ensure_ascii=False, indent=2)
+
+    print(f"\n[trending] stars-history: {len(history)} 快照 ({trending['history_days_covered']} 天覆盖)")
+    print(f"[trending] by_stars Top 3: {[t['repo_slug'] for t in trending['top_stars'][:3]]}")
+    if trending["growth_7d_available"]:
+        print(f"[trending] by_growth_7d Top 3: {[t['repo_slug'] + '(+' + str(t['stars_growth']) + ')' for t in trending['top_growth_7d'][:3]]}")
+    else:
+        print("[trending] growth_7d: 数据积累中（需要至少 7 天快照）")
+    if trending["growth_30d_available"]:
+        print(f"[trending] by_growth_30d Top 3: {[t['repo_slug'] + '(+' + str(t['stars_growth']) + ')' for t in trending['top_growth_30d'][:3]]}")
+    else:
+        print("[trending] growth_30d: 数据积累中（需要至少 30 天快照）")
 
 
 if __name__ == "__main__":

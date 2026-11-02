@@ -2,12 +2,16 @@
 import Base from '../layouts/Base.astro';
 import '../styles/main.css';
 
-// Use Astro's glob for SSG-safe static data loading
+// Load data via Astro glob (SSG-safe)
 const csvMod = import.meta.glob('../../public/catalog.csv', { as: 'raw', eager: true });
 const liveMod = import.meta.glob('../../public/live_multi.json', { as: 'json', eager: true });
+const trendingMod = import.meta.glob('../../public/trending.json', { as: 'json', eager: true });
 
 const csvRaw = csvMod['../../public/catalog.csv'] || '';
 const liveData = liveMod['../../public/live_multi.json'] || { curated: [] };
+const trendingData = trendingMod['../../public/trending.json'] || null;
+
+// Build live lookup by repo_slug
 const curated = liveData.curated;
 const curatedArr = Array.isArray(curated) ? curated : Object.values(curated || {});
 const liveByRepoSlug = {};
@@ -16,19 +20,53 @@ curatedArr.forEach(c => {
   if (slug) liveByRepoSlug[slug] = c;
 });
 
+// Build catalog lookup for category
 const rows = csvRaw.replace(/^\uFEFF/, '').split(/\r?\n/).filter(l => l.trim() && !l.startsWith('分类'));
-
-let trending = rows.map(row => {
+const catBySlug = {};
+rows.forEach(row => {
   const parts = row.split(',');
-  const cat = parts[0] || '', title = parts[1] || '', url = parts[2] || '';
+  const url = parts[2] || '';
   const repoSlug = url.replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\.git$/, '');
-  const live = liveByRepoSlug[repoSlug] || {};
-  return { rank: 0, title, repo_url: url, stars: live.stars || 0, lang: live.lang || '', category: cat };
-})
-  .filter(c => c.stars > 0)
-  .sort((a, b) => b.stars - a.stars)
-  .slice(0, 20)
-  .map((t, i) => ({ ...t, rank: i + 1 }));
+  if (repoSlug) catBySlug[repoSlug] = parts[0] || '';
+});
+
+// Fallback ranking (always available, reads stars from live_multi.json)
+function fallbackRanking() {
+  return rows.map(row => {
+    const parts = row.split(',');
+    const url = parts[2] || '';
+    const repoSlug = url.replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\.git$/, '');
+    const live = liveByRepoSlug[repoSlug] || {};
+    return { repo_slug: repoSlug, title: parts[1] || repoSlug, repo_url: url, stars: live.stars || 0, lang: live.lang || '', category: parts[0] || '' };
+  })
+    .filter(c => c.stars > 0)
+    .sort((a, b) => b.stars - a.stars)
+    .slice(0, 20)
+    .map((t, i) => ({ ...t, rank: i + 1 }));
+}
+
+// If trending.json exists, use it; otherwise fallback
+const hasTrendingFile = !!trendingData && trendingData.top_stars;
+const topStars = hasTrendingFile ? trendingData.top_stars : fallbackRanking();
+const topGrowth7d = hasTrendingFile ? trendingData.top_growth_7d || [] : [];
+const topGrowth30d = hasTrendingFile ? trendingData.top_growth_30d || [] : [];
+const topActivity = hasTrendingFile ? trendingData.top_activity || [] : [];
+const growth7dReady = hasTrendingFile ? trendingData.growth_7d_available : false;
+const growth30dReady = hasTrendingFile ? trendingData.growth_30d_available : false;
+const trendingUpdatedAt = hasTrendingFile ? trendingData.updated_at : liveData.updated_at;
+
+// Enrich trending entries with category from catalog (fallback entries have it natively)
+function enrichWithCategory(items) {
+  return items.map(t => ({
+    ...t,
+    category: t.category || catBySlug[t.repo_slug] || '—',
+  }));
+}
+
+const starsList = enrichWithCategory(topStars);
+const growth7dList = enrichWithCategory(topGrowth7d);
+const growth30dList = enrichWithCategory(topGrowth30d);
+const activityList = enrichWithCategory(topActivity);
 ---
 
 <Base
@@ -52,35 +90,186 @@ let trending = rows.map(row => {
 
 <div class="trending-page" style="max-width:960px;margin:0 auto;padding:48px 24px">
   <h1 style="font-size:36px;font-weight:700;margin-bottom:8px">🔥 Trending — AI 工具排行榜</h1>
-  <p style="color:var(--text-2);margin-bottom:32px">基于 GitHub Stars 实时排名 · 每 6 小时同步 · <a href="https://github.com/manningyangs/AI-Shovel-Collection">manningyangs/AI-Shovel-Collection</a></p>
+  <p style="color:var(--text-2);margin-bottom:24px">每 6 小时同步 · 数据更新 {trendingUpdatedAt ? new Date(trendingUpdatedAt).toLocaleString('zh-CN', { hour12: false }) : '—'} · <a href="https://github.com/manningyangs/AI-Shovel-Collection">GitHub ↗</a></p>
 
-  {trending.length === 0 ? (
-    <p style="color:var(--text-3)">数据加载中…</p>
-  ) : (
-    <table style="width:100%;border-collapse:collapse;font-size:15px">
-      <thead>
-        <tr style="border-bottom:2px solid var(--border);text-align:left">
-          <th style="padding:12px 8px;width:50px">#</th>
-          <th style="padding:12px 8px">工具名称</th>
-          <th style="padding:12px 8px;width:120px">Stars</th>
-          <th style="padding:12px 8px;width:100px">语言</th>
-          <th style="padding:12px 8px;width:240px">分类</th>
-        </tr>
-      </thead>
-      <tbody>
-        {trending.map(t => (
-          <tr style="border-bottom:1px solid var(--border-light)">
-            <td style="padding:12px 8px;font-weight:700;color:{t.rank <= 3 ? '#f59e0b' : 'var(--text-3)'}">{t.rank}</td>
-            <td style="padding:12px 8px">
-              <a href={t.repo_url} target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
-            </td>
-            <td style="padding:12px 8px;font-variant-numeric:tabular-nums">⭐ {t.stars.toLocaleString()}</td>
-            <td style="padding:12px 8px;color:var(--text-2)">{t.lang || '—'}</td>
-            <td style="padding:12px 8px;color:var(--text-2);font-size:13px">{t.category}</td>
+  <!-- Tabs -->
+  <div class="trending-tabs" style="display:flex;gap:4px;margin-bottom:28px;border-bottom:1px solid var(--border)">
+    <button class="tab-btn active" data-tab="stars" style="padding:10px 18px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:600;border-bottom:2px solid var(--primary);color:var(--primary)">⭐ Stars 总榜</button>
+    <button class="tab-btn" data-tab="growth7d" style="padding:10px 18px;border:none;background:none;cursor:pointer;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent">📈 7 天增长 {growth7dReady ? '' : '⏳'}</button>
+    <button class="tab-btn" data-tab="growth30d" style="padding:10px 18px;border:none;background:none;cursor:pointer;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent">📈 30 天增长 {growth30dReady ? '' : '⏳'}</button>
+    <button class="tab-btn" data-tab="activity" style="padding:10px 18px;border:none;background:none;cursor:pointer;font-size:14px;color:var(--text-2);border-bottom:2px solid transparent">🔥 活跃榜</button>
+  </div>
+
+  <!-- Stars Tab -->
+  <div class="tab-panel" data-panel="stars">
+    {starsList.length === 0 ? (
+      <p style="color:var(--text-3)">数据加载中…</p>
+    ) : (
+      <table style="width:100%;border-collapse:collapse;font-size:15px">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border);text-align:left">
+            <th style="padding:12px 8px;width:50px">#</th>
+            <th style="padding:12px 8px">工具名称</th>
+            <th style="padding:12px 8px;width:130px">Stars</th>
+            <th style="padding:12px 8px;width:100px">语言</th>
+            <th style="padding:12px 8px;width:220px">分类</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
-  )}
+        </thead>
+        <tbody>
+          {starsList.map(t => (
+            <tr style="border-bottom:1px solid var(--border-light)">
+              <td style="padding:12px 8px;font-weight:700;color:{t.rank <= 3 ? '#f59e0b' : 'var(--text-3)'}">{t.rank}</td>
+              <td style="padding:12px 8px">
+                <a href={t.repo_url} target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+              </td>
+              <td style="padding:12px 8px;font-variant-numeric:tabular-nums">⭐ {(t.stars || 0).toLocaleString()}</td>
+              <td style="padding:12px 8px;color:var(--text-2)">{t.lang || '—'}</td>
+              <td style="padding:12px 8px;color:var(--text-2);font-size:13px">{t.category}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+
+  <!-- Growth 7d Tab -->
+  <div class="tab-panel" data-panel="growth7d" style="display:none">
+    {!growth7dReady ? (
+      <div style="padding:40px;text-align:center;color:var(--text-3)">
+        <div style="font-size:40px;margin-bottom:12px">⏳</div>
+        <p>数据积累中 —— 需要至少 7 天的 stars 快照才能计算增长榜。</p>
+        <p style="font-size:13px;margin-top:8px">当前已自动追踪 <b>{trendingData?.history_days_covered || 0}</b> 天历史，每 6 小时累积一次。</p>
+      </div>
+    ) : growth7dList.length === 0 ? (
+      <p style="color:var(--text-3)">暂无增长数据…</p>
+    ) : (
+      <table style="width:100%;border-collapse:collapse;font-size:15px">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border);text-align:left">
+            <th style="padding:12px 8px;width:50px">#</th>
+            <th style="padding:12px 8px">工具名称</th>
+            <th style="padding:12px 8px;width:130px">7 天增长</th>
+            <th style="padding:12px 8px;width:130px">当前 Stars</th>
+            <th style="padding:12px 8px;width:220px">分类</th>
+          </tr>
+        </thead>
+        <tbody>
+          {growth7dList.map(t => (
+            <tr style="border-bottom:1px solid var(--border-light)">
+              <td style="padding:12px 8px;font-weight:700;color:{t.rank <= 3 ? '#10b981' : 'var(--text-3)'}">{t.rank}</td>
+              <td style="padding:12px 8px">
+                <a href={t.repo_url} target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+              </td>
+              <td style="padding:12px 8px;font-variant-numeric:tabular-nums;font-weight:700;color:#10b981">+{(t.stars_growth || 0).toLocaleString()}</td>
+              <td style="padding:12px 8px;font-variant-numeric:tabular-nums;color:var(--text-2)">⭐ {(t.stars || 0).toLocaleString()}</td>
+              <td style="padding:12px 8px;color:var(--text-2);font-size:13px">{t.category}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+
+  <!-- Growth 30d Tab -->
+  <div class="tab-panel" data-panel="growth30d" style="display:none">
+    {!growth30dReady ? (
+      <div style="padding:40px;text-align:center;color:var(--text-3)">
+        <div style="font-size:40px;margin-bottom:12px">⏳</div>
+        <p>数据积累中 —— 需要至少 30 天的 stars 快照才能计算月度增长。</p>
+        <p style="font-size:13px;margin-top:8px">当前已自动追踪 <b>{trendingData?.history_days_covered || 0}</b> 天历史，每 6 小时累积一次。</p>
+      </div>
+    ) : growth30dList.length === 0 ? (
+      <p style="color:var(--text-3)">暂无增长数据…</p>
+    ) : (
+      <table style="width:100%;border-collapse:collapse;font-size:15px">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border);text-align:left">
+            <th style="padding:12px 8px;width:50px">#</th>
+            <th style="padding:12px 8px">工具名称</th>
+            <th style="padding:12px 8px;width:130px">30 天增长</th>
+            <th style="padding:12px 8px;width:130px">当前 Stars</th>
+            <th style="padding:12px 8px;width:220px">分类</th>
+          </tr>
+        </thead>
+        <tbody>
+          {growth30dList.map(t => (
+            <tr style="border-bottom:1px solid var(--border-light)">
+              <td style="padding:12px 8px;font-weight:700;color:{t.rank <= 3 ? '#10b981' : 'var(--text-3)'}">{t.rank}</td>
+              <td style="padding:12px 8px">
+                <a href={t.repo_url} target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+              </td>
+              <td style="padding:12px 8px;font-variant-numeric:tabular-nums;font-weight:700;color:#10b981">+{(t.stars_growth || 0).toLocaleString()}</td>
+              <td style="padding:12px 8px;font-variant-numeric:tabular-nums;color:var(--text-2)">⭐ {(t.stars || 0).toLocaleString()}</td>
+              <td style="padding:12px 8px;color:var(--text-2);font-size:13px">{t.category}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+
+  <!-- Activity Tab -->
+  <div class="tab-panel" data-panel="activity" style="display:none">
+    {activityList.length === 0 ? (
+      <p style="color:var(--text-3)">暂无活跃数据…</p>
+    ) : (
+      <table style="width:100%;border-collapse:collapse;font-size:15px">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border);text-align:left">
+            <th style="padding:12px 8px;width:50px">#</th>
+            <th style="padding:12px 8px">工具名称</th>
+            <th style="padding:12px 8px;width:130px">Stars</th>
+            <th style="padding:12px 8px;width:120px">活跃度</th>
+            <th style="padding:12px 8px;width:220px">分类</th>
+          </tr>
+        </thead>
+        <tbody>
+          {activityList.map(t => (
+            <tr style="border-bottom:1px solid var(--border-light)">
+              <td style="padding:12px 8px;font-weight:700;color:{t.rank <= 3 ? '#ef4444' : 'var(--text-3)'}">{t.rank}</td>
+              <td style="padding:12px 8px">
+                <a href={t.repo_url} target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-weight:500">{t.title}</a>
+              </td>
+              <td style="padding:12px 8px;font-variant-numeric:tabular-nums">⭐ {(t.stars || 0).toLocaleString()}</td>
+              <td style="padding:12px 8px">
+                <div style="height:6px;background:var(--bg-2);border-radius:3px;overflow:hidden;width:100%">
+                  <div style="height:100%;background:linear-gradient(90deg,#ef4444,#f59e0b);width:{Math.min(100, Math.round((t.activity_score || 0) / 5 * 100))}%"></div>
+                </div>
+              </td>
+              <td style="padding:12px 8px;color:var(--text-2);font-size:13px">{t.category}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    )}
+  </div>
+
+  <div style="margin-top:40px;padding:16px;background:var(--bg-2);border-radius:8px;font-size:13px;color:var(--text-3);line-height:1.7">
+    💡 <b>榜单说明</b>：Stars 总榜实时同步 GitHub Stars；增长榜基于累积的 stars 历史快照计算（每 6 小时快照一次，需积累 7/30 天以上才会有数据）；活跃榜基于最近 commit 推送时间 + Stars 加权。
+  </div>
 </div>
+
+<script is:inline>
+  // Tab switching
+  (function() {
+    const buttons = document.querySelectorAll('.trending-tabs .tab-btn');
+    const panels = document.querySelectorAll('.tab-panel');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.dataset.tab;
+        buttons.forEach(b => {
+          b.classList.remove('active');
+          b.style.borderBottom = '2px solid transparent';
+          b.style.color = 'var(--text-2)';
+        });
+        btn.classList.add('active');
+        btn.style.borderBottom = '2px solid var(--primary)';
+        btn.style.color = 'var(--primary)';
+        panels.forEach(p => {
+          p.style.display = p.dataset.panel === tab ? 'block' : 'none';
+        });
+      });
+    });
+  })();
+</script>
 </Base>
