@@ -110,6 +110,7 @@
 - [Fetcher MCP（使用 Playwright 获取网页内容）](https://github.com/jae-jae/fetcher-mcp)
 - [MCP Read Website Fast（网页转 Markdown）](https://github.com/just-every/mcp-read-website-fast)
 - [Website Downloader（下载网站内容）](https://github.com/pskill9/website-downloader)
+- [agent-qa（自然语言网页与移动端 QA）](https://github.com/vostride/agent-qa) — 本地 CLI/stdio MCP，结合 memidex 持久记忆与证据门控自我改进（[vostride](https://vostride.com)）；FSL-1.1-ALv2 限制竞争性商业用途，模型与可选设备费用另计；权限：浏览器/设备控制、本地证据写入。
 
 ### 3. 文件、Office、PDF、文档与出版
 

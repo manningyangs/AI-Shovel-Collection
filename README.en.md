@@ -110,6 +110,7 @@ Below is the seed list from the initial round of discovery. Names use "project /
 - [Fetcher MCP (Playwright-based web content retrieval)](https://github.com/jae-jae/fetcher-mcp)
 - [MCP Read Website Fast (web-to-markdown)](https://github.com/just-every/mcp-read-website-fast)
 - [Website Downloader (download website content)](https://github.com/pskill9/website-downloader)
+- [agent-qa (natural-language web and mobile QA)](https://github.com/vostride/agent-qa) — Local CLI/stdio MCP with memidex persistent memory and evidence-gated self-improvement ([vostride](https://vostride.com)); FSL-1.1-ALv2 restricts competing commercial use. Model and optional device costs are extra. Permissions: browser/device control and local evidence writes.
 
 ### 3. Files, Office, PDF, Documents & Publishing
 
