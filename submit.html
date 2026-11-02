@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>提交收录工具 · AI Shovels</title>
+<style>
+  :root {
+    --primary: #4f46e5;
+    --primary-h: #4338ca;
+    --text: #0f172a;
+    --text-2: #475569;
+    --text-3: #94a3b8;
+    --border: #e2e8f0;
+    --surface: #ffffff;
+    --bg: #f8fafc;
+    --green: #10b981;
+    --red: #dc2626;
+    --amber: #d97706;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+      "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.6;
+  }
+  .nav {
+    background: #fff; border-bottom: 1px solid var(--border);
+    padding: 14px 24px; display: flex; align-items: center; gap: 16px;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .nav .logo { font-weight: 800; font-size: 16px; color: var(--primary); }
+  .nav a { color: var(--text-2); text-decoration: none; font-size: 14px; }
+  .nav a:hover { color: var(--primary); }
+  .container { max-width: 780px; margin: 36px auto; padding: 0 20px; }
+  h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+  .sub { color: var(--text-2); margin-bottom: 28px; font-size: 14.5px; }
+
+  .card {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px 22px; margin-bottom: 18px;
+  }
+  .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
+  label {
+    display: block; font-size: 13px; font-weight: 600; color: var(--text-2);
+    margin-bottom: 6px;
+  }
+  input[type="url"], input[type="text"], select {
+    width: 100%; padding: 10px 12px; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 14px; font-family: inherit; color: var(--text);
+    background: #fff; transition: border-color .15s;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--primary); }
+  button {
+    background: var(--primary); color: #fff; border: 0; border-radius: 8px;
+    padding: 10px 20px; font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: background .15s;
+  }
+  button:hover { background: var(--primary-h); }
+  button.secondary {
+    background: #fff; color: var(--text); border: 1.5px solid var(--border);
+  }
+  button.secondary:hover { border-color: var(--primary); color: var(--primary); }
+  button:disabled { opacity: .55; cursor: not-allowed; }
+
+  .row { display: flex; gap: 12px; }
+  .row > * { flex: 1; }
+  .mt { margin-top: 14px; }
+  .hint { font-size: 12.5px; color: var(--text-3); margin-top: 6px; }
+  .spinner {
+    display: inline-block; width: 14px; height: 14px; border: 2px solid #e2e8f0;
+    border-top-color: var(--primary); border-radius: 50%;
+    animation: spin .7s linear infinite; vertical-align: middle; margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .result-row { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: #f1f5f9; border-radius: 999px; padding: 3px 10px;
+    font-size: 12.5px; color: var(--text-2);
+  }
+  .pill.ok { background: #ecfdf5; color: #065f46; }
+  .pill.warn { background: #fff7e6; color: #b45309; }
+
+  textarea {
+    width: 100%; padding: 12px; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 13.5px; font-family: ui-monospace, Consolas, monospace;
+    resize: vertical; min-height: 90px; background: #fafbfd;
+  }
+  textarea:focus { outline: none; border-color: var(--primary); background: #fff; }
+
+  .cat-suggest {
+    background: #f1f5f9; border-radius: 8px; padding: 10px 12px;
+    font-size: 13.5px; margin-bottom: 12px;
+  }
+  .cat-suggest b { color: var(--primary); }
+  .cat-suggest .score { color: var(--text-3); font-size: 12px; margin-left: 8px; }
+  .cat-suggest .hits { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+
+  .section { border-top: 1px solid var(--border); padding-top: 18px; margin-top: 18px; }
+  .section h4 { font-size: 13.5px; font-weight: 700; margin-bottom: 10px; color: var(--text-2); }
+
+  .preview-bad {
+    background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;
+    font-size: 12.5px; border-radius: 8px; padding: 10px 14px; margin-bottom: 14px;
+    line-height: 1.55;
+  }
+  .preview-bad.good {
+    background: #ecfdf5; border-color: #bbf7d0; color: #065f46; font-weight: 600;
+  }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 620px) {
+    .two-col { grid-template-columns: 1fr; }
+    .row { flex-direction: column; }
+  }
+
+  footer {
+    text-align: center; color: var(--text-3); font-size: 12.5px;
+    margin: 40px 0 20px;
+  }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <span class="logo">⛏️ AI Shovels</span>
+  <a href="./">← 返回首页</a>
+  <a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">GitHub 仓库 ↗</a>
+</nav>
+<div class="container">
+  <h1>📥 提交收录一个工具</h1>
+  <p class="sub">
+    输入一个 GitHub 仓库链接，我帮你自动拉取元数据、自动分类、生成 catalog.csv 行和 GitHub issue。<br>
+    收录范围：<b>MCP Server、Agent Skill、CLI/SDK、API 适配器、自动化工作流、专业文件工具</b>。<br>
+    <b>不收录</b>：纯概念验证 demo、已归档超过 1 年、无明确 MCP/Agent 支持说明的普通库。
+  </p>
+
+  <!-- Step 1: 输入 GitHub URL -->
+  <div class="card">
+    <h3>① 输入仓库链接</h3>
+    <label for="ghUrl">GitHub 仓库 URL</label>
+    <div class="row">
+      <input type="url" id="ghUrl" placeholder="https://github.com/用户名/仓库名"
+        value="" autocomplete="off" spellcheck="false"
+        onkeydown="if(event.key==='Enter') fetchRepo()">
+      <button onclick="fetchRepo()" id="btnFetch">🔍 自动识别</button>
+    </div>
+    <p class="hint">示例：https://github.com/PlaywrightMCP/playwright-mcp 或 https://github.com/modelcontextprotocol/servers</p>
+  </div>
+
+  <!-- Step 2: 自动识别结果 -->
+  <div class="card" id="cardResult" style="display:none">
+    <h3>② 自动识别结果</h3>
+    <div id="repoInfo"></div>
+
+    <div class="section">
+      <h4>🤖 建议分类（点击右侧下拉可改）</h4>
+      <div class="cat-suggest" id="catSuggest"></div>
+      <div class="row">
+        <select id="catManual"></select>
+      </div>
+    </div>
+
+    <div class="section">
+      <h4>✏️ 工具中文名（可修改）</h4>
+      <input type="text" id="nameCn" placeholder="例如：Playwright MCP（浏览器自动化）">
+      <p class="hint">格式建议：英文名（一句话说明括号）—— 方便读者快速知道它做什么</p>
+    </div>
+
+    <div class="section">
+      <h4>🔗 仓库链接</h4>
+      <input type="url" id="urlFinal">
+    </div>
+  </div>
+
+  <!-- Step 3: 生成提交物 -->
+  <div class="card" id="cardGen" style="display:none">
+    <h3>③ 生成提交物</h3>
+
+    <div class="section">
+      <h4>A. catalog.csv 行（粘贴到 catalog.csv 末尾）</h4>
+      <textarea id="csvRow" readonly onclick="selectText(this)" rows="1"></textarea>
+      <button class="secondary mt" onclick="copyText('csvRow')">📋 复制这行</button>
+    </div>
+
+    <div class="section">
+      <h4>B. 一键创建 GitHub Issue（推荐）</h4>
+      <p class="hint">点击按钮自动跳转到 GitHub issue 提交页，所有字段已预填，只需确认后提交。Issue 会被自动审核后合并进精选。</p>
+      <div class="row">
+        <button onclick="openIssue()" id="btnIssue">🚀 打开 Issue 预填页</button>
+        <button class="secondary" onclick="copyText('issueBody')">📋 复制 Issue 内容</button>
+      </div>
+      <textarea id="issueBody" readonly onclick="selectText(this)" rows="10" style="margin-top:12px"></textarea>
+    </div>
+
+    <div class="section">
+      <h4>C. 直接开 PR（高级）</h4>
+      <p class="hint">适合想直接改 catalog.csv 的贡献者。下面是一个完整 PR 模板。</p>
+      <textarea id="prBody" readonly onclick="selectText(this)" rows="8"></textarea>
+      <button class="secondary mt" onclick="copyText('prBody')">📋 复制 PR 模板</button>
+    </div>
+  </div>
+
+  <!-- 错误面板 -->
+  <div class="card" id="cardError" style="display:none">
+    <h3>⚠️ 无法自动识别</h3>
+    <div id="errMsg" class="preview-bad"></div>
+    <p style="font-size:13px;color:var(--text-2)">
+      你仍然可以
+      <a href="https://github.com/manningyangs/AI-Shovel-Collection/issues/new?template=submit-tool.yml" target="_blank" rel="noopener">手动开一个 Issue</a>
+      ，说明工具地址、用途和你推荐的分类。
+    </p>
+  </div>
+</div>
+
+<footer>
+  由前端静态页直接调用 GitHub REST API 自动生成 · 无后端 · 开源仓库欢迎贡献 →
+  <a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">manningyangs/AI-Shovel-Collection</a>
+</footer>
+
+<script>
+/* ==========================================================
+ *  AI Shovels 提交收录工具 — 静态页单文件实现
+ *  直接调 GitHub REST API 拿 metadata + 前端复跑 Pipeline 分类规则
+ * ========================================================== */
+
+// ---- 17 分类规则（与 Python Pipeline 保持同步） ----
+const CLASSIFY_RULES = [
+  ["1. 目录、Skills 与通用 AI 工具适配",
+   ["awesome","directory","catalog","registry","skill","skills","reference server",
+    "reference","collection","list","framework","adapter","wrapper"]],
+  ["2. 浏览器、网页检索、抓取与自动化",
+   ["playwright","browser","firecrawl","apify","bright","scrape","crawler","fetch",
+    "website","scraper","chromium","puppeteer","网页","抓取","浏览器","automation"]],
+  ["3. 文件、Office、PDF、文档与出版",
+   ["pdf","docx","markdown","pandoc","unstructured","office","document","doc",
+    "文件","文档","出版","format","convert","parsing","parser"]],
+  ["4. 编程、代码库、Git 与开发者工作流",
+   ["git","github","code","coding","compiler","ide","repository","repo",
+    "devops","terminal","cli","developer","编程","代码","git hub"]],
+  ["5. 数据库、数据分析、BI 与可视化",
+   ["database","sql","postgres","mysql","sqlite","clickhouse","duckdb","bigquery",
+    "analytics","bi","visualization","plot","chart","dashboard","数据库","数据"]],
+  ["6. 云平台、DevOps、监控与基础设施",
+   ["aws","azure","gcp","docker","kubernetes","k8s","terraform","ansible",
+    "cloud","monitor","observability","infra","infrastructure","prometheus",
+    "grafana","devops","云","监控","容器"]],
+  ["7. 邮件、通信、日历与团队协作",
+   ["email","mail","slack","discord","teams","calendar","gmail","outlook",
+    "im","chat","messenger","邮件","日历","团队"]],
+  ["8. 财务、会计、投资与区块链",
+   ["finance","accounting","investment","stock","crypto","blockchain","bitcoin",
+    "wallet","trading","portfolio","财务","会计","投资","区块链"]],
+  ["9. 电商、零售、营销与社交媒体",
+   ["ecommerce","shopify","amazon","woo","retail","marketing","seo","social",
+    "instagram","tiktok","twitter","x.com","linkedin","电商","营销","零售"]],
+  ["9A. 中国本土平台适配（单独列出）",
+   ["wechat","weixin","微信","飞书","feishu","douyin","抖音","baidu","百度",
+    "taobao","淘宝","jingdong","京东","小红书","zhihu","知乎","bilibili","b站"]],
+  ["10. 设计、图片、视频、音频与创意生产",
+   ["image","photo","picture","imagegen","generative","stable diffusion","dall-e",
+    "video","audio","music","design","adobe","figma","midjourney","设计","视频","图片"]],
+  ["11. CAD、BIM、工程、地理空间与地图",
+   ["cad","bim","revit","gis","geospatial","map","maps","mapping","autocad",
+    "engineering","coordinate","spatial","cadastre","geo","mapbox","openstreetmap",
+    "工程","地图","地理"]],
+  ["12. 医疗、健康、生物信息与实验室科研",
+   ["medical","health","bio","biology","genome","protein","clinical","lab",
+    "research","pharmaceutical","drug","molecular","healthcare","医疗","健康","生物"]],
+  ["13. 工业制造、PLC、IoT、硬件与机器人",
+   ["iot","plc","industrial","robot","hardware","manufacturing","factory",
+    "raspberry","arduino","microcontroller","sensor","device","工业","硬件","机器人"]],
+  ["14. 汽车、车辆诊断与游戏开发",
+   ["automotive","car","vehicle","obd","diagnostic","game","unity","unreal",
+    "godot","bevy","game engine","游戏","汽车"]],
+  ["15. 政务、法律、公共数据、专利与安全",
+   ["government","gov","legal","law","patent","court","public data","compliance",
+    "security","vulnerability","threat","privacy","政务","法律","安全"]],
+  ["16. 物流、航空、旅游、招聘与其他垂直应用",
+   ["logistics","airline","travel","booking","hotel","recruitment","job","hr",
+    "delivery","shipping","supply chain","物流","航空","旅游","招聘"]],
+];
+
+// ---- 工具函数 ----
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]); }
+function selectText(el) { el.focus(); el.select(); }
+async function copyText(id) {
+  const el = document.getElementById(id);
+  if (!el || !el.value) return;
+  try {
+    await navigator.clipboard.writeText(el.value);
+    const old = el.title; el.title = "✓ 已复制";
+    setTimeout(() => { el.title = old; }, 1500);
+  } catch (e) { selectText(el); }
+}
+
+// 从 URL 提取 owner/repo
+function parseRepoUrl(url) {
+  const m = (url || "").match(/github\.com[\/:]([^\/]+)\/([^\/?#]+)/i);
+  if (!m) return null;
+  return { owner: m[1], repo: m[2].replace(/\.git$/i, "") };
+}
+
+// GitHub REST API（匿名调用，60 req/h 限制）
+async function ghApi(path) {
+  const resp = await fetch("https://api.github.com" + path, {
+    headers: { "Accept": "application/vnd.github+json", "User-Agent": "ai-shovels-submit/1.0" }
+  });
+  if (!resp.ok) {
+    if (resp.status === 403 || resp.status === 429) throw new Error("GitHub API 限流（60 次/小时/IP）");
+    if (resp.status === 404) throw new Error("仓库不存在或无法访问");
+    throw new Error("GitHub API HTTP " + resp.status);
+  }
+  return resp.json();
+}
+
+// Fallback：从 github.com HTML 页面爬 meta 标签（当 REST API 不通时）
+async function ghFallback(owner, repo) {
+  const resp = await fetch(`https://github.com/${owner}/${repo}`, {
+    headers: { "User-Agent": "Mozilla/5.0 (ai-shovels-submit)" }
+  });
+  if (!resp.ok) throw new Error("GitHub 页面访问失败 (HTTP " + resp.status + ")");
+  const html = await resp.text();
+  const doc = new DOMParser().parseFromString(html, "text/html");
+
+  // og:title / og:description
+  const ogTitle = doc.querySelector('meta[property="og:title"]')?.content || repo;
+  const ogDesc = doc.querySelector('meta[property="og:description"]')?.content || "";
+
+  // Stars — 找含 "stars" 的 aria-label 或 data-view-component
+  let stars = 0;
+  const starLinks = doc.querySelectorAll('a[href$="/stargazers"], a[href*="/stargazers"]');
+  for (const a of starLinks) {
+    const txt = a.textContent.trim().replace(/[^\d.kKmM]/g, "");
+    const n = parseStarStr(txt);
+    if (n > stars) stars = n;
+  }
+
+  // Archived
+  const archived = !!doc.querySelector('article.Publication, div.AppHeader span:has-text("Archived")') ||
+    /\barchived\b/i.test(html.slice(0, 3000));
+
+  // Language pill
+  let language = "";
+  const langPill = doc.querySelector('span[itemprop="programmingLanguage"]');
+  if (langPill) language = langPill.textContent.trim();
+
+  // Last push date
+  let pushed_at = "";
+  const timeEls = doc.querySelectorAll('relative-time[datetime]');
+  if (timeEls.length) pushed_at = timeEls[timeEls.length - 1].getAttribute("datetime") || "";
+
+  return {
+    name: repo, full_name: `${owner}/${repo}`,
+    description: ogDesc, html_url: `https://github.com/${owner}/${repo}`,
+    stargazers_count: stars, language, archived,
+    pushed_at, topics: [], license: null, _fallback: true
+  };
+}
+function parseStarStr(s) {
+  if (!s) return 0;
+  s = s.trim().toLowerCase();
+  const m = s.match(/^([\d.]+)\s*([kmb]?)$/);
+  if (!m) return 0;
+  let n = parseFloat(m[1]);
+  const u = m[2];
+  if (u === "k") n *= 1000;
+  if (u === "m") n *= 1000000;
+  if (u === "b") n *= 1000000000;
+  return Math.round(n);
+}
+
+// 统一入口：先 REST API，失败 fallback HTML 抓取
+async function fetchRepoMeta(owner, repo) {
+  try {
+    const [data, topicsResp] = await Promise.all([
+      ghApi(`/repos/${owner}/${repo}`),
+      ghApi(`/repos/${owner}/${repo}/topics`).catch(() => ({ names: [] }))
+    ]);
+    data.topics = topicsResp.names || [];
+    return { data, source: "api" };
+  } catch (e1) {
+    try {
+      const data = await ghFallback(owner, repo);
+      return { data, source: "html", fallback: true };
+    } catch (e2) {
+      throw new Error("REST API 失败：" + e1.message + "；HTML fallback 也失败：" + e2.message);
+    }
+  }
+}
+
+// 分类推断（与 Pipeline Python 版本一致）
+function classify(text) {
+  const hay = (text || "").toLowerCase();
+  let best = null, bestScore = 0, bestHits = [];
+  CLASSIFY_RULES.forEach(([cat, kws]) => {
+    let score = 0, hits = [];
+    kws.forEach(kw => {
+      if (hay.includes(kw)) {
+        score += kw.length; // 长关键词加权
+        hits.push(kw);
+      }
+    });
+    if (score > bestScore) {
+      bestScore = score; best = cat; bestHits = hits;
+    }
+  });
+  return { category: best || "1. 目录、Skills 与通用 AI 工具适配", score: bestScore, hits: bestHits };
+}
+
+// 主流程：fetch → 显示 → 生成
+async function fetchRepo() {
+  const url = document.getElementById("ghUrl").value.trim();
+  const parsed = parseRepoUrl(url);
+  if (!parsed) {
+    showError("URL 格式不正确，请粘贴 https://github.com/用户名/仓库名");
+    return;
+  }
+  const btn = document.getElementById("btnFetch");
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>识别中…';
+  document.getElementById("cardError").style.display = "none";
+  document.getElementById("cardResult").style.display = "none";
+  document.getElementById("cardGen").style.display = "none";
+
+  try {
+    const { data: repo, source, fallback } = await fetchRepoMeta(parsed.owner, parsed.repo);
+    const topics = repo.topics || [];
+    const hay = [repo.name, repo.description || "", (repo.topics || []).join(" "), topics.join(" "), parsed.owner, parsed.repo].join(" ");
+    const cls = classify(hay);
+
+    // 填充仓库信息面板
+    const info = document.getElementById("repoInfo");
+    const stars = repo.stargazers_count || 0;
+    const archived = repo.archived ? '<span class="pill warn">⚠️ 已归档</span>' : '';
+    const pushedAt = repo.pushed_at ? repo.pushed_at.slice(0, 10) : "—";
+    const license = repo.license && repo.license.spdx_id ? repo.license.spdx_id : (repo.license || "未声明");
+    const srcBadge = fallback ? '<span class="pill warn">📡 HTML fallback（REST API 不通）</span>' : '';
+    info.innerHTML = `
+      <div class="result-row">
+        <span class="pill ok">✅ GitHub 识别成功</span>
+        ${srcBadge}
+        ${archived}
+        <span class="pill">★ ${stars.toLocaleString()} Stars</span>
+        <span class="pill">💻 ${repo.language || "未识别"}</span>
+        <span class="pill">📄 ${license}</span>
+        <span class="pill">🕐 ${pushedAt}</span>
+      </div>
+      <p style="margin-top:10px;font-size:13.5px;color:var(--text-2)">${esc(repo.description || "（仓库未填 description）")}</p>
+      ${topics.length ? `<p style="margin-top:6px;font-size:12.5px;color:var(--text-3)">🏷️ topics: ${topics.map(t=>'<span class="pill" style="margin-right:4px">'+esc(t)+'</span>').join(" ")}</p>` : ""}
+      ${fallback ? '<p class="hint">REST API 可能被限流/网络屏蔽，已自动 fallback 到 GitHub 页面抓取。Stars/语言等字段可能略有误差。</p>' : ""}
+    `;
+
+    // 分类建议
+    document.getElementById("catSuggest").innerHTML = `
+      建议分类：<b>${esc(cls.category)}</b>
+      <span class="score">匹配分 ${cls.score}（${cls.hits.length} 个关键词命中）</span>
+      ${cls.hits.length ? `<div class="hits">命中关键词：${cls.hits.map(h=>'<code style="background:#e2e8f0;padding:1px 6px;border-radius:4px;margin-right:4px">'+esc(h)+'</code>').join(" ")}</div>` : '<div class="hits">未命中任何关键词，默认归入「目录」分类，请人工判断</div>'}
+    `;
+    // 分类下拉
+    const sel = document.getElementById("catManual");
+    sel.innerHTML = CLASSIFY_RULES.map(([c]) => `<option${c === cls.category ? ' selected' : ''}>${c}</option>`).join("");
+
+    // 默认名：repo.name 或 repo.name（中文括号说明）
+    const defaultName = cls.hits.length > 0
+      ? `${repo.name}（${cls.hits.slice(0, 3).join(" · ")}）`
+      : repo.name;
+    document.getElementById("nameCn").value = defaultName;
+    document.getElementById("urlFinal").value = repo.html_url;
+
+    // 生成所有产出物
+    generateAll(repo, cls);
+
+    document.getElementById("cardResult").style.display = "";
+    document.getElementById("cardGen").style.display = "";
+  } catch (e) {
+    showError(e.message || String(e));
+  } finally {
+    btn.disabled = false; btn.textContent = "🔍 自动识别";
+  }
+}
+
+function showError(msg) {
+  document.getElementById("errMsg").textContent = msg;
+  document.getElementById("cardError").style.display = "";
+}
+
+function generateAll(repo, cls) {
+  const catSel = document.getElementById("catManual");
+  const nameInput = document.getElementById("nameCn");
+  const urlInput = document.getElementById("urlFinal");
+  const cat = catSel.value;
+  const name = nameInput.value.trim();
+  const url = urlInput.value.trim();
+  const shortName = repo.name;
+  const stars = (repo.stargazers_count || 0).toLocaleString();
+  const desc = repo.description || "";
+  const license = repo.license
+    ? (typeof repo.license === "string" ? repo.license : repo.license.spdx_id || "未声明")
+    : "未声明";
+  const lang = repo.language || "未指定";
+  const archived = repo.archived || false;
+  const pushed = (repo.pushed_at || "—").slice(0, 10);
+
+  // catalog.csv 行
+  const csv = `${cat},${name || shortName},${url}`;
+  document.getElementById("csvRow").value = csv;
+
+  // GitHub Issue（用 URL 编码 body 预填）
+  const issueTitle = `收录申请：${name || shortName}`;
+  const issueBody =
+`### 📦 工具名称
+
+${name || shortName}
+
+### 🔗 仓库地址
+
+${url}
+
+### 🏷️ 建议分类
+
+**${cat}**
+
+_由前端自动分类生成，可人工调整_
+
+### 📝 工具做什么
+
+${desc || "（请从 GitHub description 或 README 摘录 1-2 句说明这个工具的核心用途）"}
+
+### 🤖 自动识别的元数据
+
+| 字段 | 值 |
+|---|---|
+| Stars | ${stars} |
+| 语言 | ${lang} |
+| 许可证 | ${license} |
+| 最近更新 | ${pushed} |
+| 归档状态 | ${archived ? "⚠️ 已归档" : "活跃"} |
+| Topics | ${(repo.topics || []).join(", ") || "无"} |
+
+### ✅ 我确认的事项（请勾选）
+
+- [ ] 这不是纯概念验证 demo
+- [ ] 仓库有明确的 README / 使用说明
+- [ ] 我已检查仓库不涉及恶意代码
+
+### 🔧 Pipeline 自动匹配
+
+自动分类命中关键词：${cls.hits.join(", ") || "无"} · 匹配分：${cls.score}
+
+---
+_由 submit.html 前端自动生成，请确认后再提交_`;
+
+  document.getElementById("issueBody").value = issueBody;
+  document.getElementById("btnIssue").onclick = function () {
+    const titleE = encodeURIComponent(issueTitle);
+    const bodyE = encodeURIComponent(issueBody);
+    window.open(`https://github.com/manningyangs/AI-Shovel-Collection/issues/new?template=submit-tool.yml&title=${titleE}&body=${bodyE}`, "_blank", "noopener");
+  };
+
+  // PR 模板
+  const prBody =
+`## 📥 收录申请：${name || shortName}
+
+### 变更说明
+- 新增一行到 catalog.csv
+- 分类：**${cat}**
+- 工具：[${shortName}](${url})
+
+### catalog.csv 变更
+在末尾添加：
+\`\`\`csv
+${csv}
+\`\`\`
+
+### 自动识别元数据
+- Stars: ${stars} · 语言: ${lang} · 许可证: ${license} · 最近更新: ${pushed}
+- 建议分类：${cat}（关键词：${cls.hits.join(", ") || "无"}，匹配分 ${cls.score}）
+- 归档状态：${archived ? "⚠️ 已归档（请确认仍在维护）" : "活跃"}
+
+### Checklist
+- [ ] 仓库有 README 和使用说明
+- [ ] 确认这个项目是 AI Agent / MCP 生态工具
+- [ ] 分类判断合理（非纯随机匹配）
+- [ ] 已跑过 \`python scripts/update_live_data.py\` 验证 Pipeline 正常`;
+
+  document.getElementById("prBody").value = prBody;
+
+  // 监听输入变化 → 实时刷新
+  catSel.onchange = () => generateAll(repo, cls);
+  nameInput.oninput = () => generateAll(repo, cls);
+  urlInput.oninput = () => generateAll(repo, cls);
+}
+</script>
+</body>
+</html>

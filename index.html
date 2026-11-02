@@ -886,6 +886,7 @@
       <a href="#tools">📦 已收录</a>
       <a href="#candidates">🧭 候选</a>
       <a href="#domains">🌍 领域检索</a>
+      <a href="submit.html" style="color:var(--primary);font-weight:600">📥 提交收录</a>
       <span class="hits-badge-wrap">
         <img class="hits-badge" src="https://hits.sh/manningyangs.github.io/AI-Shovel-Collection.svg?view=1&style=flat-square&label=Visitors&labelColor=2563eb&color=2563eb" alt="访问量统计 — 点击查看历史曲线">
       </span>
@@ -900,6 +901,7 @@
   <a href="#tools">📦 已收录</a>
   <a href="#candidates">🧭 候选</a>
   <a href="#domains">🌍 领域检索</a>
+  <a href="submit.html">📥 提交收录</a>
   <a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">🐙 GitHub 仓库 ↗</a>
 </div>
 
@@ -1242,6 +1244,9 @@
       render();
       renderCandidates();
       renderMeta(res[1]);
+      // 注意顺序：animateStats() 内部用 requestAnimationFrame 异步调度，
+      // 所以必须在 renderLiveMeta() 之后调用，确保 data-target 已被更新为动态值
+      // （renderLiveMeta 会同步更新 textContent + data-target，animateStats 才会读到正确的 192）
       renderLiveMeta();
       animateStats();
     }).catch(function (err) {
@@ -1544,9 +1549,19 @@
       var st = c.endpoint_status || (c.extra && c.extra.endpoint_status) || "";
       if (st === "ok") okN++;
     });
-    if (curatedN) document.getElementById("statCurated").textContent = curatedN;
-    if (syncedN != null) document.getElementById("statSynced").textContent = syncedN;
-    if (candN != null) document.getElementById("statCand").textContent = candN;
+    if (curatedN) {
+      var elC = document.getElementById("statCurated");
+      elC.textContent = curatedN; elC.setAttribute("data-target", curatedN);
+    }
+    if (syncedN != null) {
+      var elS = document.getElementById("statSynced");
+      elS.textContent = syncedN; elS.setAttribute("data-target", syncedN);
+    }
+    if (candN != null) {
+      var elCd = document.getElementById("statCand");
+      elCd.textContent = candN; elCd.setAttribute("data-target", candN);
+    }
+    // statVfy 是 "108/149" 字符串，不是纯数字，不能用 data-target 动画 — 跳过
     document.getElementById("statVfy").textContent = epN ? okN + "/" + epN : "—";
 
     // 统计口径行：带上 LIVE 状态

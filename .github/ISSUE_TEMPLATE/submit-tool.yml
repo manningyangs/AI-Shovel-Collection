@@ -1,0 +1,74 @@
+name: 收录一个新工具
+description: 申请把一个 GitHub 仓库加入 AI Shovels 精选目录（catalog.csv）
+title: "收录申请：<工具名称>"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 📥 收录申请
+
+        请填写下面的信息。**如果不方便填全，也可以只用 submit.html 自动生成**：
+        https://manningyangs.github.io/AI-Shovel-Collection/submit.html
+
+  - type: input
+    id: repo_url
+    attributes:
+      label: 🔗 仓库地址
+      description: GitHub URL，如 https://github.com/user/repo
+      placeholder: https://github.com/PlaywrightMCP/playwright-mcp
+    validations:
+      required: true
+
+  - type: input
+    id: name_cn
+    attributes:
+      label: 📦 工具中文名
+      description: 建议格式：英文名（一句话说明）
+      placeholder: Playwright MCP（浏览器自动化）
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 🏷️ 建议分类
+      description: 如果不确定，先用前端 submit.html 自动识别
+      options:
+        - "1. 目录、Skills 与通用 AI 工具适配"
+        - "2. 浏览器、网页检索、抓取与自动化"
+        - "3. 文件、Office、PDF、文档与出版"
+        - "4. 编程、代码库、Git 与开发者工作流"
+        - "5. 数据库、数据分析、BI 与可视化"
+        - "6. 云平台、DevOps、监控与基础设施"
+        - "7. 邮件、通信、日历与团队协作"
+        - "8. 财务、会计、投资与区块链"
+        - "9. 电商、零售、营销与社交媒体"
+        - "9A. 中国本土平台适配（单独列出）"
+        - "10. 设计、图片、视频、音频与创意生产"
+        - "11. CAD、BIM、工程、地理空间与地图"
+        - "12. 医疗、健康、生物信息与实验室科研"
+        - "13. 工业制造、PLC、IoT、硬件与机器人"
+        - "14. 汽车、车辆诊断与游戏开发"
+        - "15. 政务、法律、公共数据、专利与安全"
+        - "16. 物流、航空、旅游、招聘与其他垂直应用"
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: 📝 这个工具能做什么
+      description: 1-3 句话说明核心功能（会被用到 catalog.csv 描述里）
+      placeholder: 让 AI Agent 操作浏览器、访问网页、执行点击、表单填写和截图
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: ✅ 我确认
+      options:
+        - label: 这不是纯概念验证 demo
+        - label: 仓库有 README 和使用说明
+        - label: 我已检查仓库不涉及恶意代码
+        - label: 工具属于 AI Agent / MCP 生态（不是普通开源库）
+    validations:
+      required: true
