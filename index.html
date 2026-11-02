@@ -1630,8 +1630,17 @@
       activeCat = btn.getAttribute("data-cat");
       document.querySelectorAll(".chip").forEach(function (c) { c.classList.remove("active"); });
       btn.classList.add("active");
+      // 分类 chip 互斥：清掉搜索词，保证结果只按分类筛选
+      if (query) {
+        query = "";
+        document.getElementById("searchInput").value = "";
+        box.classList.remove("has-text");
+        hideLiveSection();
+      }
       syncTaskChips();
       render();
+      // 点击分类 chip 自动滚到工具卡片区域
+      document.getElementById("tools").scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }
 
@@ -2237,13 +2246,26 @@
   input.addEventListener("input", function () {
     query = input.value.trim().toLowerCase();
     box.classList.toggle("has-text", !!query);
+    // 搜索互斥：清掉分类筛选，保证结果只按关键词匹配
+    if (activeCat !== "all") {
+      activeCat = "all";
+      document.querySelectorAll(".chip").forEach(function (c) {
+        c.classList.toggle("active", c.getAttribute("data-cat") === "all");
+      });
+      syncTaskChips();
+    }
     // 有搜索词时自动切到精选 tab 展示过滤结果
     if (query && activeTab !== "curated") switchTab("curated");
     render();
+    // 搜索有结果才自动滚到工具卡片区域；0 结果时保持当前页面位置
+    if (query) {
+      var hit = items.filter(matches).length;
+      if (hit > 0) document.getElementById("tools").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
     // 停顿 700ms 后：若本地过滤 0 结果，自动触发 GitHub 全站实时搜索（防抖保护限流额度）
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(function () {
-      if (!query || query.length < 2 || activeCat !== "all") return;
+      if (!query || query.length < 2) return;
       if (items.filter(matches).length === 0) runLiveSearch(true);
     }, 700);
   });
@@ -2253,6 +2275,8 @@
     box.classList.remove("has-text");
     input.focus();
     hideLiveSection();
+    // 防御：清空搜索后 activeCat 已是 "all"，确保 chip 视觉状态同步
+    syncTaskChips();
     render();
   });
 
@@ -2266,6 +2290,7 @@
       input.value = ""; query = "";
       box.classList.remove("has-text");
       hideLiveSection();
+      syncTaskChips();
       render();
     }
   });
