@@ -2258,9 +2258,10 @@
     if (query && activeTab !== "curated") switchTab("curated");
     render();
     // 搜索有结果才自动滚到工具卡片区域；0 结果时保持当前页面位置
+    // 用 "auto"（无动画）避免逐字输入时多次 smooth scroll 互相打断导致"看起来没跳"
     if (query) {
       var hit = items.filter(matches).length;
-      if (hit > 0) document.getElementById("tools").scrollIntoView({ behavior: "smooth", block: "start" });
+      if (hit > 0) document.getElementById("tools").scrollIntoView({ behavior: "auto", block: "start" });
     }
     // 停顿 700ms 后：若本地过滤 0 结果，自动触发 GitHub 全站实时搜索（防抖保护限流额度）
     clearTimeout(debounceTimer);
