@@ -889,12 +889,12 @@
     </div>
     <div class="search-examples">
       <span class="se-label">试试：</span>
-      <button class="se-chip" type="button" data-q="PPT">自动制作 PPT</button>
-      <button class="se-chip" type="button" data-q="Excel">分析 Excel</button>
-      <button class="se-chip" type="button" data-q="CAD">画 CAD / 3D</button>
-      <button class="se-chip" type="button" data-q="Docker">部署 Docker</button>
-      <button class="se-chip" type="button" data-q="浏览器">浏览器自动化</button>
-      <button class="se-chip" type="button" data-q="飞书">接飞书 / 钉钉</button>
+      <button class="se-chip" type="button" data-pre="3." data-q="PPT">自动制作 PPT</button>
+      <button class="se-chip" type="button" data-pre="3." data-q="Excel">分析 Excel</button>
+      <button class="se-chip" type="button" data-pre="11." data-q="CAD">画 CAD / 3D</button>
+      <button class="se-chip" type="button" data-pre="6." data-q="Docker">部署 Docker</button>
+      <button class="se-chip" type="button" data-pre="2." data-q="浏览器">浏览器自动化</button>
+      <button class="se-chip" type="button" data-pre="9A." data-q="飞书">接飞书 / 钉钉</button>
     </div>
   </div>
   <!-- 任务导向入口：搜索框下方紧跟任务卡片 -->
@@ -2197,19 +2197,40 @@
     });
   }
 
-  /* ================= 搜索示例 chips ================= */
+  /* ================= 搜索示例 chips：走分类过滤（和下方 task chip 同一路径） ================= */
   document.addEventListener("click", function (e) {
     var chip = e.target.closest(".se-chip");
-    if (chip) {
-      var q = chip.getAttribute("data-q");
+    if (!chip) return;
+    var pre = chip.getAttribute("data-pre");
+    var q = chip.getAttribute("data-q");
+    if (pre) {
+      // 优先走分类过滤路径（和下方 10 个 task-chip 联动）
+      var key = catKeyByPrefix(pre);
+      if (!key) return;
+      // 再点一次同一分类 = 取消，回到「全部」
+      activeCat = (activeCat === key) ? "all" : key;
+      // 清空搜索词：示例 chips 不再往搜索框写硬编码关键词（避免"PPT"之类搜不到 0 结果）
+      query = "";
+      input.value = "";
+      box.classList.remove("has-text");
+      hideLiveSection();
+      switchTab("curated");
+      document.querySelectorAll(".chip").forEach(function (c) {
+        c.classList.toggle("active", c.getAttribute("data-cat") === activeCat);
+      });
+      syncTaskChips();
+      render();
+      document.getElementById("tools").scrollIntoView({ behavior: "smooth", block: "start" });
+    } else {
+      // 兜底：没有 data-pre 时仍按关键词走
       input.value = q;
       query = q.toLowerCase();
       box.classList.add("has-text");
       switchTab("curated");
       render();
       input.focus();
-      e.preventDefault();
     }
+    e.preventDefault();
   });
 
   /* ================= 详情抽屉 ================= */
