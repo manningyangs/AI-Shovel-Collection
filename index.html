@@ -199,9 +199,9 @@
     padding: 8px 20px;
     box-shadow: 0 1px 3px rgba(31,35,40,.06);
   }
-  /* toolbar.compact 不再自动折叠 chips —— chips 由独立的 .chips-collapsed 控制 */
+  /* toolbar.compact 不再自动折叠 chips —— chips 由独立的 .chips-collapsed 控制；展开时完整展示 */
   .toolbar.compact .chips {
-    max-height: 120px; opacity: 1; padding-top: 12px; overflow: hidden;
+    opacity: 1; padding-top: 8px;
   }
   .toolbar.compact .search-box input { padding: 7px 118px 7px 40px; font-size: 14px; }
   .toolbar.compact .kbd-hint { font-size: 11px; }
@@ -256,17 +256,17 @@
     /* 继承 .chip 的 padding/font-size/border-radius —— 完全对齐 */
   }
   .chip-chip-toggle:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
-  /* chips-bar：按钮 + chips 精确对齐 */
-  .chips-bar { display: flex; align-items: center; gap: 8px; padding-top: 10px; }
-  .chips-bar .chip-toggle { flex-shrink: 0; margin: 0; }
-  .chips-bar .chips { flex: 1; padding-top: 0 !important; margin: 0; }
-  .toolbar.compact .chips-bar { padding-top: 6px; }
+  /* meta-row：第一行 = 元数据筛选 + 折叠按钮（按钮被 margin-left:auto 推到最右，独立于 chips） */
+  .meta-row {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  .meta-row .chip-toggle { margin-left: auto; flex-shrink: 0; }
 
-  /* chips 折叠态：仅由手动按钮控制 */
+  /* chips 折叠态：仅由手动按钮控制；展开时完整 flex-wrap，不做高度裁剪 */
   .chips.chips-collapsed {
     max-height: 0 !important; opacity: 0 !important; padding-top: 0 !important;
   }
-  /* 元数据组合筛选行 */
+/* 元数据组合筛选行 */
   .meta-filters {
     display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
     max-height: 48px; overflow: hidden; opacity: 1;
@@ -320,7 +320,7 @@
   }
   .chips {
     display: flex; flex-wrap: wrap; gap: 8px; padding-top: 12px;
-    max-height: 120px; overflow: hidden; opacity: 1;
+    max-height: 600px; opacity: 1; overflow: visible;
     transition: max-height .28s ease, opacity .2s ease, padding .2s ease;
   }
   .chip {
@@ -915,41 +915,44 @@
 
 <div class="toolbar">
   <div class="toolbar-inner">
-    <div class="meta-filters" id="metaFilters" role="group" aria-label="按元数据进一步筛选">
-      <label class="mf-item">
-        <span class="mf-label">语言</span>
-        <select id="fLang" aria-label="按编程语言筛选">
-          <option value="">全部</option>
-        </select>
-      </label>
-      <label class="mf-item">
-        <span class="mf-label">Stars</span>
-        <select id="fStars" aria-label="按 GitHub Stars 数量筛选">
-          <option value="0">不限</option>
-          <option value="100">≥ 100</option>
-          <option value="500">≥ 500</option>
-          <option value="1000">≥ 1k</option>
-          <option value="5000">≥ 5k</option>
-          <option value="10000">≥ 10k</option>
-        </select>
-      </label>
-      <label class="mf-item">
-        <span class="mf-label">更新</span>
-        <select id="fFresh" aria-label="按最近更新时间筛选">
-          <option value="0">不限</option>
-          <option value="1">24 小时内</option>
-          <option value="7">7 天内</option>
-          <option value="30">30 天内</option>
-          <option value="180">半年内</option>
-        </select>
-      </label>
-      <button class="mf-reset" id="fReset" type="button" aria-label="清空全部筛选条件">↺ 重置</button>
-      <span class="mf-hint">组合筛选只作用于「已收录」列表</span>
-    </div>
-    <div class="chips-bar">
+    <!-- 第一行：元数据筛选 + 折叠按钮（按钮推到最右，独立于 chips） -->
+    <div class="meta-row">
+      <div class="meta-filters" id="metaFilters" role="group" aria-label="按元数据进一步筛选">
+        <label class="mf-item">
+          <span class="mf-label">语言</span>
+          <select id="fLang" aria-label="按编程语言筛选">
+            <option value="">全部</option>
+          </select>
+        </label>
+        <label class="mf-item">
+          <span class="mf-label">Stars</span>
+          <select id="fStars" aria-label="按 GitHub Stars 数量筛选">
+            <option value="0">不限</option>
+            <option value="100">≥ 100</option>
+            <option value="500">≥ 500</option>
+            <option value="1000">≥ 1k</option>
+            <option value="5000">≥ 5k</option>
+            <option value="10000">≥ 10k</option>
+          </select>
+        </label>
+        <label class="mf-item">
+          <span class="mf-label">更新</span>
+          <select id="fFresh" aria-label="按最近更新时间筛选">
+            <option value="0">不限</option>
+            <option value="1">24 小时内</option>
+            <option value="7">7 天内</option>
+            <option value="30">30 天内</option>
+            <option value="180">半年内</option>
+          </select>
+        </label>
+        <button class="mf-reset" id="fReset" type="button" aria-label="清空全部筛选条件">↺ 重置</button>
+        <span class="mf-hint">组合筛选只作用于「已收录」列表</span>
+      </div>
+      <!-- 折叠按钮：meta-row 最右，不混入 chips -->
       <button class="chip chip-toggle" id="btnToggleChips" title="手动展开/收起分类筛选" aria-expanded="true" aria-controls="chips" type="button"></button>
-      <div class="chips" id="chips"></div>
     </div>
+    <!-- 第二行：纯分类 chips，完整 flex-wrap，无高度裁剪 -->
+    <div class="chips" id="chips"></div>
   </div>
 </div>
 
@@ -1434,12 +1437,18 @@
     var candN = livePayload && livePayload.candidates_count != null
       ? livePayload.candidates_count
       : (livePayload && livePayload.candidates ? livePayload.candidates.length : null);
+    // 端点实测：优先从归一化后的 candidateItems 读（与卡片徽章口径一致），
+    // 兜底直接从原始 livePayload.candidates 读取 extra.endpoint_status（Pipeline 写入位置）
     var okN = 0, epN = 0;
-    if (livePayload && livePayload.candidates) {
-      livePayload.candidates.forEach(function (c) {
-        if (c && c.endpoint) { epN++; if (c.endpoint_status === "ok") okN++; }
-      });
-    }
+    var srcCands = (candidateItems && candidateItems.length)
+      ? candidateItems
+      : (livePayload && livePayload.candidates ? livePayload.candidates : []);
+    srcCands.forEach(function (c) {
+      if (!c || !c.endpoint) return;
+      epN++;
+      var st = c.endpoint_status || (c.extra && c.extra.endpoint_status) || "";
+      if (st === "ok") okN++;
+    });
     if (curatedN) document.getElementById("statCurated").textContent = curatedN;
     if (syncedN != null) document.getElementById("statSynced").textContent = syncedN;
     if (candN != null) document.getElementById("statCand").textContent = candN;
