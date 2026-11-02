@@ -1,6 +1,7 @@
 ﻿(function () {
   "use strict";
 
+  console.log('[DEBUG] IIFE started');
   var items = [];
   var cats = [];
   var activeCat = "all";
@@ -114,6 +115,7 @@
   /* ================= 数据加载 ================= */
 
   function load() {
+    console.log('[DEBUG] load() called');
     return Promise.all([
       fetch("catalog.csv").then(function (r) {
         if (!r.ok) throw new Error("catalog.csv " + r.status);
@@ -122,6 +124,7 @@
       fetch("README.md").then(function (r) { return r.ok ? r.text() : ""; }).catch(function () { return ""; }),
       fetch("live_multi.json?ts=" + Math.floor(Date.now() / 3600000)).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
     ]).then(function (res) {
+      console.log('[DEBUG] Promise.all resolved, res[0] len=' + (res[0]?res[0].length:'null') + ' res[1] len=' + (res[1]?res[1].length:'null') + ' res[2]=' + (res[2] ? 'has keys ' + Object.keys(res[2]).join(',') : 'null'));
       livePayload = res[2];
       buildItems(parseCSV(res[0]));
       buildCandidates();
@@ -137,6 +140,7 @@
       renderLiveMeta();
       animateStats();
     }).catch(function (err) {
+      console.error('[DEBUG] Promise.all REJECTED:', err);
       document.getElementById("count").textContent = "";
       document.getElementById("empty").style.display = "block";
       document.getElementById("empty").innerHTML =
