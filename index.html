@@ -826,7 +826,24 @@
     .hero-search .search-box input { font-size: 15px; padding: 12px 120px 12px 44px; }
     .drawer { width: 100%; }
     .list-tab { padding: 8px 12px; font-size: 13px; }
+    .back-to-top { right: 14px; bottom: 18px; width: 38px; height: 38px; }
   }
+
+  /* ================= 右侧悬浮回到顶部按钮（业内通用） ================= */
+  .back-to-top {
+    position: fixed; right: 22px; bottom: 28px; z-index: 90;
+    width: 44px; height: 44px; border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface); color: var(--text-2);
+    box-shadow: 0 4px 18px rgba(15,23,42,.14);
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+    font-size: 19px; line-height: 1; padding: 0;
+    opacity: 0; transform: translateY(14px); pointer-events: none;
+    transition: opacity .22s ease, transform .22s ease, background .12s, color .12s, border-color .12s;
+  }
+  .back-to-top.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .back-to-top:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+  .back-to-top:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 </style>
 </head>
 <body>
@@ -2297,6 +2314,61 @@
       if (e.target.tagName === "A") mobileMenu.classList.remove("show");
     });
   }
+
+  /* ================= 主导航锚点跳转：先切 Tab 再 smooth scroll ================= */
+  // 纯 href="#id" 无法切 Tab（候选/领域检索默认隐藏），这里统一拦截处理
+  function handleNavAnchor(hash) {
+    if (!hash) return;
+    // 把 hash → (tab, elementId) 映射
+    var map = {
+      "#hero":       { tab: null,        el: "hero" },
+      "#tools":      { tab: "curated",   el: "tools" },
+      "#candidates": { tab: "candidates",el: "candidates" },
+      "#domains":    { tab: "live",      el: "domains" }
+    };
+    var m = map[hash];
+    if (!m) return;
+    if (m.tab) switchTab(m.tab);
+    if (m.el === "hero") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      var el = document.getElementById(m.el);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest("a[href^='#']");
+    if (!a) return;
+    var hash = a.getAttribute("href");
+    if (!hash || hash === "#" || hash.length < 2) return;
+    // 只处理站内锚点（跳过 GitHub 外链、skip-link 等）
+    if (a.href && a.getAttribute("target") === "_blank") return;
+    // 排除 skip-link（它直接让浏览器跳到 #tools，不需要我们拦截）
+    if (a.classList.contains("skip-link")) return;
+    handleNavAnchor(hash);
+    e.preventDefault();
+  });
+
+  /* ================= 右侧悬浮回到顶部按钮 ================= */
+  var backToTop = document.createElement("button");
+  backToTop.className = "back-to-top";
+  backToTop.type = "button";
+  backToTop.setAttribute("aria-label", "回到页面顶部");
+  backToTop.innerHTML = "↑";
+  document.body.appendChild(backToTop);
+  var throttled = false;
+  window.addEventListener("scroll", function () {
+    if (throttled) return;
+    throttled = true;
+    requestAnimationFrame(function () {
+      throttled = false;
+      backToTop.classList.toggle("show", window.scrollY > 320);
+    });
+  }, { passive: true });
+  backToTop.addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  // 键盘可访问性：也能 Tab 到按钮
 })();
 </script>
 </body>
