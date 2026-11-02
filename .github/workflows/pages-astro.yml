@@ -46,6 +46,26 @@ jobs:
       - name: Build Astro
         run: npm run build
 
+      # 调试日志补丁：Astro 构建会 drop 所有 console.* 调用，
+      # 用源文件覆盖 dist 中被处理过的 app.js（外部文件 + index.html 内联）
+      - name: Patch debug logs (restore console.log in dist)
+        run: |
+          cp src/scripts/app.js dist/scripts/app.js
+          SRC=$(cat src/scripts/app.js)
+          # 替换 index.html 中内联的 app.js：找到 <script> 开头和 </script> 结尾
+          # 保持 script 标签，中间插入源文件内容
+          python3 -c "
+          import re, sys
+          html = open('dist/index.html', 'r', encoding='utf-8').read()
+          src = open('src/scripts/app.js', 'r', encoding='utf-8').read()
+          # 匹配 <script> 后跟 IIFE 开头直到 </script>
+          pattern = r'<script>\uFEFF\(function \(\) \{.*?</script>'
+          replacement = '<script>\uFEFF' + src.rstrip('\n') + '</script>'
+          new_html = re.sub(pattern, replacement, html, flags=re.DOTALL)
+          open('dist/index.html', 'w', encoding='utf-8').write(new_html)
+          print('Patched inline script, [DEBUG] count:', new_html.count('[DEBUG]'))
+          "
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
