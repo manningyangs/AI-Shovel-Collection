@@ -11,14 +11,14 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AI 铲子大全 · AI Shovels">
 <meta property="og:title" content="AI 铲子大全 · AI Shovels — 让 AI 真正动手干活的开源工具目录">
-<meta property="og:description" content="收录 192+ 个 MCP、Agent Skills、自动化与专业工具开源项目，数据每 6 小时同步，支持本地实时过滤与 GitHub 全站实时检索。">
+<meta property="og:description" content="收录 191+ 个 MCP、Agent Skills、自动化与专业工具开源项目，数据每 6 小时同步，支持本地实时过滤与 GitHub 全站实时检索。">
 <meta property="og:url" content="https://manningyangs.github.io/AI-Shovel-Collection/">
 <meta property="og:image" content="https://manningyangs.github.io/AI-Shovel-Collection/og-image.jpg">
 <meta property="og:locale" content="zh_CN">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="AI 铲子大全 · AI Shovels">
-<meta name="twitter:description" content="让 AI 真正动手干活的开源工具目录：MCP、Agent Skills、自动化与专业工具，192+ 收录，每 6 小时同步。">
+<meta name="twitter:description" content="让 AI 真正动手干活的开源工具目录：MCP、Agent Skills、自动化与专业工具，191+ 收录，每 6 小时同步。">
 <meta name="twitter:image" content="https://manningyangs.github.io/AI-Shovel-Collection/og-image.jpg">
 <style>
   :root {
@@ -80,6 +80,11 @@
     background: var(--green);
     animation: pulse 1.6s ease-in-out infinite;
   }
+  .live-badge.warn { color: #b45309; background: #fff7e6; border-color: #fcd79b; }
+  .live-badge.warn::before { background: #d97706; }
+  .live-badge.bad { color: #b91c1c; background: #fee2e2; border-color: #fecaca; animation: none; }
+  .live-badge.bad::before { background: #dc2626; animation: blink 1.2s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.35} }
   @keyframes pulse {
     0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 0 0 rgba(16,185,129,.5); }
     50% { opacity: .55; transform: scale(.85); box-shadow: 0 0 0 5px rgba(16,185,129,0); }
@@ -358,6 +363,22 @@
     content: ""; width: 7px; height: 7px; border-radius: 50%;
     background: var(--green); animation: pulse 1.6s ease-in-out infinite;
   }
+  .live-updated.warn { color: #b45309; }
+  .live-updated.warn::before { background: #d97706; animation: none; }
+  .live-updated.bad { color: #b91c1c; }
+  .live-updated.bad::before { background: #dc2626; animation: blink 1.2s ease-in-out infinite; }
+
+  /* 统计卡折叠：收起时高度 0 + opacity */
+  .stats-grid-wrap { display: block; transition: all .25s ease; }
+  .stats-grid-wrap.collapsed .stats-grid { display: none; }
+  .stats-grid-wrap.collapsed .stat-legend { display: none; }
+  .stats-toggle {
+    display: inline-flex; align-items: center; gap: 4px;
+    background: transparent; border: 1px dashed var(--border);
+    border-radius: 6px; color: var(--text-3); font-size: 12px;
+    padding: 4px 10px; cursor: pointer; margin-top: 10px;
+  }
+  .stats-toggle:hover { color: var(--primary); border-color: var(--primary); }
 
   .grid {
     display: grid;
@@ -458,6 +479,14 @@
     background: #fff8db; border: 1px solid #eed77a; color: #92400e;
     font-size: 12.5px; border-radius: 8px; padding: 8px 12px; margin-bottom: 14px;
     line-height: 1.6;
+  }
+  .cfg-warn.danger {
+    background: #fef2f2; border-color: #fecaca; color: #991b1b;
+    font-weight: 600;
+  }
+  .cfg-warn.ok {
+    background: #ecfdf5; border-color: #bbf7d0; color: #065f46;
+    font-weight: 600;
   }
   .cfg-sec { margin-bottom: 16px; }
   .cfg-sec .cfg-label {
@@ -878,7 +907,7 @@
   <div class="hero-inner">
     <span class="eyebrow">⛏️ 面向 AI 大模型 · Agent · MCP 的工具发现目录</span>
     <h1>发现让 AI 真正<span class="grad">动手干活</span>的铲子</h1>
-    <p class="sub">覆盖 <b id="heroCount">192</b> 个开源项目，横跨 MCP Server、Agent Skills、CLI/SDK、自动化工作流与专业文件工具五大类型，<b>本地实时过滤</b> + <b>GitHub 全站实时搜索</b>双引擎，仓库 stars 与更新状态每 6 小时同步。</p>
+    <p class="sub">覆盖 <b id="heroCount">191</b> 个开源项目，横跨 MCP Server、Agent Skills、CLI/SDK、自动化工作流与专业文件工具五大类型，<b>本地实时过滤</b> + <b>GitHub 全站实时搜索</b>双引擎，仓库 stars 与更新状态每 6 小时同步。</p>
   </div>
   <div class="hero-search">
     <div class="search-box" id="searchBox">
@@ -918,16 +947,20 @@
       </div>
     </div>
   </div>
-  <div class="stats-grid">
-    <div class="stat-card" title="catalog.csv 中的人工精选行数（目录收录口径）"><div class="stat-num c1" id="statCurated" data-target="192">192</div><div class="stat-label">已收录工具（目录）</div></div>
-    <div class="stat-card" title="live_multi.json 中成功同步 GitHub 元数据的条目数，可能略少于目录行数"><div class="stat-num c2" id="statSynced" data-target="189">189</div><div class="stat-label">已同步 GitHub 元数据</div></div>
-    <div class="stat-card" title="Pipeline 从 MCP Registry / npm / crates.io 自动发现的候选条目"><div class="stat-num c3" id="statCand" data-target="150">150</div><div class="stat-label">自动发现候选</div></div>
-    <div class="stat-card" title="MCP initialize 握手实测通过的端点数（仅代表端点在线，非功能实测）"><div class="stat-num c1" id="statVfy">—</div><div class="stat-label">端点实测通过</div></div>
-    <div class="stat-card" title="已收录仓库的 GitHub Stars 累加，每 6 小时同步"><div class="stat-num c4" id="statStars">…</div><div class="stat-label">累计 GitHub Stars</div></div>
-    <div class="stat-card" title="目录内的细分工具类型"><div class="stat-num c3" data-target="17">17</div><div class="stat-label">细分分类</div></div>
+  <!-- P1-2: 统计卡可折叠 — 包裹在 stats-grid-wrap 里，加折叠按钮 -->
+  <div class="stats-grid-wrap" id="statsGridWrap">
+    <div class="stats-grid">
+      <div class="stat-card" title="catalog.csv 中的人工精选行数（目录收录口径）"><div class="stat-num c1" id="statCurated" data-target="191">191</div><div class="stat-label">已收录工具（目录）</div></div>
+      <div class="stat-card" title="live_multi.json 中成功同步 GitHub 元数据的条目数，可能略少于目录行数"><div class="stat-num c2" id="statSynced" data-target="189">189</div><div class="stat-label">已同步 GitHub 元数据</div></div>
+      <div class="stat-card" title="Pipeline 从 MCP Registry / npm / crates.io 自动发现的候选条目"><div class="stat-num c3" id="statCand" data-target="150">150</div><div class="stat-label">自动发现候选</div></div>
+      <div class="stat-card" title="MCP initialize 握手实测通过的端点数（仅代表端点在线，非功能实测）"><div class="stat-num c1" id="statVfy">—</div><div class="stat-label">端点实测通过</div></div>
+      <div class="stat-card" title="已收录仓库的 GitHub Stars 累加，每 6 小时同步"><div class="stat-num c4" id="statStars">…</div><div class="stat-label">累计 GitHub Stars</div></div>
+      <div class="stat-card" title="目录内的细分工具类型"><div class="stat-num c3" data-target="17">17</div><div class="stat-label">细分分类</div></div>
+    </div>
+    <p class="stat-legend" id="statLegend">统计口径：<b>目录收录 191</b>（catalog.csv 行数）· <b>已同步元数据 189</b> · <b>候选 150</b> · <b>端点实测 —</b>，四个数字口径不同，全部随数据文件动态计算。</p>
   </div>
-  <p class="stat-legend" id="statLegend">统计口径：<b>目录收录 192</b>（catalog.csv 行数）· <b>已同步元数据 189</b> · <b>候选 150</b> · <b>端点实测 —</b>，四个数字口径不同，全部随数据文件动态计算。</p>
-  <noscript><div class="noscript-note">⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（192 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。</div></noscript>
+  <button class="stats-toggle" id="btnToggleStats" type="button" aria-expanded="true" aria-controls="statsGridWrap">— 收起统计数字</button>
+  <noscript><div class="noscript-note">⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（191 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。</div></noscript>
 </header>
 
 <div class="toolbar">
@@ -976,7 +1009,7 @@
 <main>
   <!-- Tab 切换：精选 / 候选 / 实时搜索 -->
   <div class="list-tabs" id="listTabs" role="tablist">
-    <button class="list-tab active" data-tab="curated" type="button" role="tab" aria-selected="true">📦 精选工具<span class="tab-count" id="tabCuratedCount">192</span></button>
+    <button class="list-tab active" data-tab="curated" type="button" role="tab" aria-selected="true">📦 精选工具<span class="tab-count" id="tabCuratedCount">191</span></button>
     <button class="list-tab" data-tab="candidates" type="button" role="tab" aria-selected="false">🧭 自动发现<span class="tab-count" id="tabCandidateCount">150</span></button>
     <button class="list-tab" data-tab="live" type="button" role="tab" aria-selected="false">🌐 GitHub 实时搜索</button>
   </div>
@@ -1007,7 +1040,7 @@
   <!-- 候选 Tab -->
   <section id="candidates" class="candidates-section" data-tabpanel="candidates" style="display:none">
     <div class="section-head">
-      <h2>🧭 自动发现的候选铲子<span class="unverified-tag" title="机器检索入库：分类与可用性未经人工核验，confidence 评分不等于质量背书">🤖 自动发现</span></h2>
+      <h2>🧭 自动发现的候选铲子<span class="unverified-tag" title="机器检索入库：分类与可用性未经人工核验。confidence 是自动匹配分（算法推断可信度），不是工具质量评分">🤖 自动发现</span></h2>
       <span class="hint">由 Pipeline 从 MCP Registry / npm / crates.io 挖到，<b>未人工核验</b> · ✅ 端点实测仅代表 MCP 握手在线，<b>不代表功能完整可用</b></span>
     </div>
     <div class="candidates-hint">候选按 <b>MCP 官方注册 + Stars / 下载量 + 端点可调用 + 活跃状态</b> 加权排序 · 当前每轮保留 Top <b id="candidateCount">…</b> 条</div>
@@ -1286,7 +1319,7 @@
 "**Stars**: " + (c.stars != null ? c.stars : "未知") + "\n\n" +
 "**自动建议分类**: `" + (c.suggested_category || "（请人工判断）") + "`" +
       (hits ? "（命中关键词: " + hits + "）" : "") + "\n\n" +
-"**Pipeline confidence**: " + (c.confidence || 0) + " / 10\n\n" +
+"**自动匹配分**: " + (c.confidence || 0) + " / 10\n\n" +
 "**端点实测**: " + (c.endpoint_status === "ok" ? "✅ 验证可用" : c.endpoint_status === "auth" ? "🔑 需鉴权" : c.endpoint_status === "fail" ? "❌ 无响应（" + (c.endpoint_note || "失败") + "）" : "未实测（无远程端点）") + "\n\n" +
 "---\n\n" +
 "### 建议 catalog.csv 行（复制后粘贴到合适位置）\n\n" +
@@ -1310,7 +1343,7 @@
     var threshold = livePayload.threshold || 7;
     banner.innerHTML =
       '<span class="ib-count">✨ ' + count + ' 条高置信候选</span>' +
-      '<span>满足 confidence ≥ ' + threshold + ' · 每条都带建议分类 + catalog.csv 行模板</span>' +
+      '<span>满足自动匹配分 ≥ ' + threshold + ' · 每条都带建议分类 + catalog.csv 行模板</span>' +
       '<button class="btn-inbox" onclick="location.href=\'' + esc(applyIssueUrl(inbox[0])) + '\'">查看 inbox 汇总</button>' +
       '<button class="btn-inbox" onclick="openInboxAll()">批量打开申请</button>';
     banner.classList.add("show");
@@ -1430,11 +1463,56 @@
   }
 
   function renderLiveMeta() {
+    // ===== P0-1 LIVE 状态动态化 =====
+    var diffHours = null;
+    var liveBadge = document.querySelector(".live-badge");
+    var liveUpd = document.getElementById("liveUpdated");
+    var legendEl = document.getElementById("statLegend");
+    var liveStatus = "ok"; // ok / warn / bad
+    var statusLabel = "";
+    var statusHint = "";
     if (livePayload && livePayload.updated_at) {
-      document.getElementById("liveUpdated").textContent = "多源同步于 " + livePayload.updated_at.replace("T", " ").slice(0, 16) + " UTC";
-    } else {
-      document.getElementById("liveUpdated").textContent = "实时数据待首次同步";
+      var ts = Date.parse(livePayload.updated_at);
+      if (!isNaN(ts)) diffHours = (Date.now() - ts) / 3600000;
     }
+    if (diffHours == null) {
+      liveStatus = "bad";
+      statusLabel = "同步中断";
+      statusHint = "尚未检测到有效数据同步时间戳，请检查 GitHub Actions 运行状态";
+    } else if (diffHours > 72) {
+      liveStatus = "bad";
+      statusLabel = "数据过期";
+      statusHint = "上次同步已超过 72 小时，请检查 GitHub Actions 是否运行失败";
+    } else if (diffHours > 24) {
+      liveStatus = "bad";
+      statusLabel = "同步延迟";
+      statusHint = "上次同步已超过 24 小时，定时任务可能未按时触发";
+    } else if (diffHours > 12) {
+      liveStatus = "warn";
+      statusLabel = "同步延迟";
+      statusHint = "上次同步已超过 12 小时，略慢于 6 小时目标周期";
+    } else {
+      liveStatus = "ok";
+      statusLabel = "LIVE";
+      statusHint = "数据每 6 小时自动同步，端点实测与 Stars 来自 GitHub Actions Pipeline";
+    }
+    // 顶部导航 LIVE 徽章
+    if (liveBadge) {
+      liveBadge.className = "live-badge" + (liveStatus === "warn" ? " warn" : liveStatus === "bad" ? " bad" : "");
+      liveBadge.textContent = statusLabel;
+      liveBadge.title = statusHint + (diffHours != null ? " · 上次同步距今约 " + Math.round(diffHours) + " 小时" : "");
+    }
+    // 精选 Tab 标题行的 live-updated
+    if (liveUpd) {
+      liveUpd.className = "live-updated" + (liveStatus === "warn" ? " warn" : liveStatus === "bad" ? " bad" : "");
+      if (livePayload && livePayload.updated_at) {
+        liveUpd.textContent = "多源同步于 " + livePayload.updated_at.replace("T", " ").slice(0, 16) + " UTC";
+      } else {
+        liveUpd.textContent = "实时数据待首次同步";
+      }
+      liveUpd.title = statusHint;
+    }
+
     // 累计 stars（来自 curated 的 GitHub REST 字段）
     var total = null;
     if (livePayload && livePayload.curated) {
@@ -1470,11 +1548,14 @@
     if (syncedN != null) document.getElementById("statSynced").textContent = syncedN;
     if (candN != null) document.getElementById("statCand").textContent = candN;
     document.getElementById("statVfy").textContent = epN ? okN + "/" + epN : "—";
-    document.getElementById("statLegend").innerHTML =
+
+    // 统计口径行：带上 LIVE 状态
+    var legendTxt =
       "统计口径：<b>目录收录 " + curatedN + "</b>（catalog.csv 行数）" +
       " · <b>已同步元数据 " + (syncedN == null ? "—" : syncedN) + "</b>（live_multi.json）" +
       " · <b>候选 " + (candN == null ? "—" : candN) + "</b>" +
       " · <b>端点实测 " + (epN ? okN + "/" + epN : "—") + "</b>，四个数字口径不同，全部随数据文件动态计算。";
+    if (legendEl) legendEl.innerHTML = legendTxt;
   }
 
   /* ================= 统计数字滚动 ================= */
@@ -1721,12 +1802,20 @@
 
   function cfgPayload(o) {
     var slug = o.repo_slug || o.slug || String(o.id || "").replace("github.com/", "");
+    // P0-2：同时读取顶层 + extra 嵌套（curated 走 extra，candidates 走扁平）
+    var ex = o.extra || {};
+    var endpoint_status = o.endpoint_status || ex.endpoint_status || "";
+    var verified_at = o.verified_at || ex.verified_at || "";
     return {
       title: o.title || slug,
       endpoint: o.endpoint || null,
       pkg: (slug.split("/").pop() || o.title || "server").toLowerCase(),
       lang: o.lang || "",
-      headers: o.headers_req || null
+      headers: o.headers_req || null,
+      // P0-2 新增：端点验证状态 + 来源 + 端点实测时间，用于区分已验证 vs 自动推断
+      endpoint_status: endpoint_status,
+      verified_at: verified_at,
+      source: o.source || "" // "catalog" 或候选来源
     };
   }
 
@@ -1782,13 +1871,55 @@
     if (!p) return;
     var mask = document.getElementById("cfgMask");
     var body = document.getElementById("cfgBody");
-    var warn = p.endpoint
-      ? "这是 <b>远程 MCP 端点</b>（免安装，粘贴即用）。若端点要求鉴权，需在配置中补 <code>headers</code>，密钥别提交到公开仓库。"
-      : "本条目<b>没有登记远程端点</b>，以下按仓库名推断的 <code>" + (p.lang === "Python" ? "uvx" : "npx") + " " + esc(p.pkg) + "</code> 生成 —— 实际包名与启动参数<b>以项目 README 为准</b>（Python 项目多为 uvx，Node 项目为 npx，命令行工具可能是 docker/binary）。";
-    if (p.headers && p.headers.length) {
-      warn += "<br>⚠️ 登记信息提示：" + esc(String(p.headers[0]).slice(0, 160));
+    var head = document.getElementById("cfgTitle");
+    // P0-2 三档：ok / auth·fail / auto-infer
+    var verifStatus = p.endpoint_status || "";
+    var isCurated = p.source === "catalog";
+    var tier = "auto";              // ok / auth / fail / auto
+    var warnClass = "cfg-warn";
+    var warnTxt = "";
+    if (p.endpoint) {
+      // 有端点
+      if (verifStatus === "ok") {
+        tier = "ok";
+        warnClass = "cfg-warn ok";
+        warnTxt = "✅ <b>已验证配置</b> — 该端点经 Pipeline 每 6 小时 MCP initialize 握手实测通过，可直接粘贴使用。";
+      } else if (verifStatus === "auth") {
+        tier = "auth";
+        warnClass = "cfg-warn";
+        warnTxt = "🔑 <b>端点需鉴权</b> — Pipeline 实测端点在线但返回 401/403，请在配置中补 <code>headers</code> 填入 API Key（密钥别提交到公开仓库）。";
+      } else if (verifStatus === "fail") {
+        tier = "fail";
+        warnClass = "cfg-warn danger";
+        warnTxt = "❌ <b>端点无响应</b> — Pipeline 实测该端点连接失败或超时，以下配置仅供参考，请自行确认端点是否已下线。";
+      } else {
+        // 有端点但尚未实测（Pipeline 新条目）
+        tier = "auth";
+        warnClass = "cfg-warn";
+        warnTxt = "⚠️ <b>端点未实测</b> — 本条目有登记远程端点但尚未被 Pipeline 实测，请粘贴后自行验证是否可用。";
+      }
+    } else {
+      // 无端点 → 自动推断启动命令
+      tier = "auto";
+      warnClass = "cfg-warn danger";
+      warnTxt = "⚠️ <b>配置自动推断，非实测</b> — 本条目没有登记远程 MCP 端点，下面的 <code>" +
+        (p.lang === "Python" ? "uvx" : "npx") + " " + esc(p.pkg) +
+        "</code> 是根据仓库名和语言自动推断的，<b>请务必核对项目 README 确认真实包名、启动命令和是否支持 MCP 协议</b>。CLI 工具、Agent Skill、工作流编排项目可能完全不能作为 MCP Server 直接配置。";
+      if (!isCurated) {
+        warnTxt += "<br>🤖 此条目来自自动发现，尚未人工核验其是否支持 MCP 协议。";
+      }
     }
-    var html = '<div class="cfg-warn">' + warn + "</div>";
+    if (p.headers && p.headers.length) {
+      warnTxt += "<br>📋 登记信息提示：" + esc(String(p.headers[0]).slice(0, 160));
+    }
+    // 更新弹窗标题
+    if (head) {
+      if (tier === "ok") head.textContent = "✅ 已验证配置";
+      else if (tier === "auth") head.textContent = "🔑 端点需鉴权";
+      else if (tier === "fail") head.textContent = "❌ 端点无响应";
+      else head.textContent = "⚠️ 自动推断配置（请核对 README）";
+    }
+    var html = '<div class="' + warnClass + '">' + warnTxt + "</div>";
     cfgSnippets(p).forEach(function (s, i) {
       html += '<div class="cfg-sec">' +
         '<div class="cfg-label"><span>' + esc(s.label) + "</span>" +
@@ -1869,10 +2000,18 @@
       });
     } else if (sortMode === "verified") {
       arr.sort(function (a, b) {
-        // 已核验 = curated source 优先，其次有 live 数据
-        var ca = a.source === "catalog" ? 2 : (a.live ? 1 : 0);
-        var cb = b.source === "catalog" ? 2 : (b.live ? 1 : 0);
-        return cb - ca;
+        // P0-4 真正的核验程度排序：端点实测 ok > 有 live 数据 > 无 live 数据
+        function vScore(x) {
+          var live = x.live || x || {};
+          var st = live.endpoint_status || (live.extra && live.extra.endpoint_status) || "";
+          var hasLive = !!(x.live || x.source);
+          var isCurated = x.source === "catalog";
+          if (st === "ok") return 3;
+          if (isCurated && hasLive) return 2;
+          if (hasLive) return 1;
+          return 0;
+        }
+        return vScore(b) - vScore(a);
       });
     }
     return arr;
@@ -1950,7 +2089,7 @@
         ? '<span class="cat-badge" title="自动建议分类">' + esc(c.suggested_category.split(". ", 2)[0]) + "</span>"
         : "";
       var confBadge = c.confidence
-        ? '<span class="conf-badge" title="Pipeline confidence 评分（含端点实测加分）">' + c.confidence + "/10</span>"
+        ? '<span class="conf-badge" title="自动匹配分：Pipeline 根据 MCP 官方注册、Stars、下载量、端点实测等加权得出，不是工具质量评分">' + c.confidence + "/10</span>"
         : "";
       var applyBtn = c.repo_url || c.registry_url
         ? '<a class="btn-apply" href="' + applyIssueUrl(c) + '" target="_blank" rel="noopener">🔍 申请入精选</a>'
@@ -2150,6 +2289,30 @@
     });
   }
 
+  // ---- P1-2: 统计卡可折叠（类似 chips 折叠模式）----
+  var statsWrap = document.getElementById("statsGridWrap");
+  var btnStats = document.getElementById("btnToggleStats");
+  if (statsWrap && btnStats) {
+    var STORAGE_STATS = "ai-shovels:stats-collapsed";
+    // 读取持久化偏好
+    var savedStatsCollapsed = localStorage.getItem(STORAGE_STATS) === "1";
+    function syncStatsBtn() {
+      var collapsed = statsWrap.classList.contains("collapsed");
+      btnStats.textContent = collapsed ? "+ 展开统计数字" : "— 收起统计数字";
+      btnStats.setAttribute("aria-expanded", String(!collapsed));
+    }
+    if (savedStatsCollapsed) {
+      statsWrap.classList.add("collapsed");
+      syncStatsBtn();
+    }
+    btnStats.addEventListener("click", function () {
+      var nowCollapsed = !statsWrap.classList.contains("collapsed");
+      statsWrap.classList.toggle("collapsed", nowCollapsed);
+      localStorage.setItem(STORAGE_STATS, nowCollapsed ? "1" : "0");
+      syncStatsBtn();
+    });
+  }
+
   bindTaskChips();
   load();
   var domainsEl = document.getElementById("domains");
@@ -2275,6 +2438,46 @@
     if (live.lang || gh.language) infoHtml += "<dt>语言</dt><dd>" + esc(live.lang || gh.language) + "</dd>";
     if (live.stars != null || gh.stargazers_count != null) infoHtml += "<dt>Stars</dt><dd>★ " + esc(fmtStars(live.stars != null ? live.stars : gh.stargazers_count)) + "</dd>";
 
+    // ===== P1-1 新增：部署方式 / API Key 提示（基于现有字段推断，不动 Pipeline） =====
+    var deployHtml = "";
+    var ep = live.endpoint || item.endpoint;
+    var epSt = live.endpoint_status || (live.extra && live.extra.endpoint_status) || item.endpoint_status || "";
+    var lang = live.lang || gh.language || item.lang || "";
+    var hasLiveData = !!(live.stars || live.pushed_at || ep || live.license || live.source);
+    // 部署方式
+    if (ep) {
+      deployHtml += "<dt>部署方式</dt><dd>🖥️ 远程端点（免安装，粘贴配置即用）</dd>";
+    } else if (lang === "Python") {
+      deployHtml += "<dt>部署方式</dt><dd>💻 本地（uvx / uv） — 无远程端点，需在本机运行</dd>";
+    } else if (lang) {
+      deployHtml += "<dt>部署方式</dt><dd>💻 本地（按 README，通常 npx）</dd>";
+    } else if (item.url) {
+      deployHtml += "<dt>部署方式</dt><dd>💻 本地（请查看项目 README）</dd>";
+    }
+    // 端点实测状态（从配置推断）
+    if (ep && epSt) {
+      var vfyText = "";
+      if (epSt === "ok") vfyText = "✅ 端点可访问（MCP initialize 握手通过，Pipeline 每 6 小时重测）";
+      else if (epSt === "auth") vfyText = "🔑 端点在线但需要 API Key（返回 401/403），配置中需补 headers";
+      else if (epSt === "fail") vfyText = "❌ 端点实测失败（连接超时或无响应），请自行确认端点是否已下线";
+      if (vfyText) deployHtml += "<dt>端点实测</dt><dd>" + vfyText + "</dd>";
+    } else if (ep && !epSt) {
+      deployHtml += "<dt>端点实测</dt><dd>⚠️ 有登记端点但尚未被 Pipeline 实测</dd>";
+    }
+    // API Key 提示
+    if (epSt === "auth") {
+      deployHtml += "<dt>是否需要 API Key</dt><dd>🔑 是 — Pipeline 实测返回 401/403，请在配置 headers 中填入密钥</dd>";
+    } else if (ep && epSt === "ok") {
+      deployHtml += "<dt>是否需要 API Key</dt><dd>✅ 当前端点无需 Key（Pipeline 实测通过），但端点服务端可能在后续版本加鉴权</dd>";
+    } else if (!ep) {
+      deployHtml += "<dt>是否需要 API Key</dt><dd>📋 视项目而定 — 本地 stdio 启动通常不需要，但项目 README 可能有额外要求</dd>";
+    }
+    // 许可证
+    if (live.license || gh.license) {
+      var spdx = (live.license || gh.license || {}).spdx_id || live.license || "";
+      if (spdx) deployHtml += "<dt>开源许可证</dt><dd>📄 " + esc(spdx) + "</dd>";
+    }
+
     var html = "";
     if (doList.length) {
       html += '<div class="drawer-section"><h4>它能做什么</h4><ul class="drawer-do">';
@@ -2284,8 +2487,12 @@
     if (infoHtml) {
       html += '<div class="drawer-section"><h4>基本信息</h4><dl class="drawer-info">' + infoHtml + "</dl></div>";
     }
+    // 新增"部署与使用"section（GitHub 实时搜索条目无 live 数据，不显示）
+    if (deployHtml && data.kind !== "gh") {
+      html += '<div class="drawer-section"><h4>部署与使用提示</h4><dl class="drawer-info">' + deployHtml + "</dl></div>";
+    }
     if (data.kind === "candidate") {
-      html += '<div class="drawer-section"><h4>核验状态</h4><p style="font-size:13px;color:var(--text-2)">此条目由 Pipeline 自动发现，<b>未经过人工核验</b>。Confidence 评分 ' + esc(item.confidence || "") + '/10 代表自动推断的可信度，不是质量背书。</p></div>';
+      html += '<div class="drawer-section"><h4>核验状态</h4><p style="font-size:13px;color:var(--text-2)">此条目由 Pipeline 自动发现，<b>未经过人工核验</b>。自动匹配分 ' + esc(item.confidence || "") + '/10 代表算法推断的可信度（综合 MCP 官方注册、Stars、下载量、端点实测等加权），<b>不是工具质量评分</b>。</p></div>';
     }
     body.innerHTML = html || '<p style="color:var(--text-3);font-size:13px">暂无更多信息</p>';
 
