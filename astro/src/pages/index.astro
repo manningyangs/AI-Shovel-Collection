@@ -141,7 +141,7 @@ const domainsTotal = domainRows.length;
     </div>
   </div>
 
-  <!-- V2.1: 任务入口 6 个 + 更多按钮 -->
+  <!-- V2.1: 任务入口 10 个全可见（去掉更多按钮） -->
   <div class="task-bar task-v21" id="taskBar">
     <div class="task-inner">
       <div class="task-chips" id="taskChips" role="group" aria-label="按任务筛选工具">
@@ -150,13 +150,11 @@ const domainsTotal = domainRows.length;
         <button class="task-chip" data-pre="6." type="button"><span class="tc-icon">🚀</span><span class="tc-text">部署运维</span></button>
         <button class="task-chip" data-pre="11." type="button"><span class="tc-icon">🗺️</span><span class="tc-text">CAD · 3D · 地图</span></button>
         <button class="task-chip" data-pre="9A." type="button"><span class="tc-icon">💬</span><span class="tc-text">飞书 · 钉钉 · 微信</span></button>
-        <button class="task-chip task-more" id="btnTaskMore" type="button"><span class="tc-icon">⋯</span><span class="tc-text">更多</span></button>
-        <!-- 隐藏：点击「更多」展开 -->
-        <button class="task-chip task-hidden" data-pre="5." type="button" hidden><span class="tc-icon">📊</span><span class="tc-text">查数据库 · 数据分析</span></button>
-        <button class="task-chip task-hidden" data-pre="10." type="button" hidden><span class="tc-icon">🎨</span><span class="tc-text">图片 · 视频 · 音频</span></button>
-        <button class="task-chip task-hidden" data-pre="8." type="button" hidden><span class="tc-icon">💰</span><span class="tc-text">财务 · 会计</span></button>
-        <button class="task-chip task-hidden" data-pre="13." type="button" hidden><span class="tc-icon">🤖</span><span class="tc-text">机器人 · IoT · 硬件</span></button>
-        <button class="task-chip task-hidden" data-pre="7." type="button" hidden><span class="tc-icon">📧</span><span class="tc-text">邮件 · 日历 · 协作</span></button>
+        <button class="task-chip" data-pre="5." type="button"><span class="tc-icon">📊</span><span class="tc-text">查数据库 · 数据分析</span></button>
+        <button class="task-chip" data-pre="10." type="button"><span class="tc-icon">🎨</span><span class="tc-text">图片 · 视频 · 音频</span></button>
+        <button class="task-chip" data-pre="8." type="button"><span class="tc-icon">💰</span><span class="tc-text">财务 · 会计</span></button>
+        <button class="task-chip" data-pre="13." type="button"><span class="tc-icon">🤖</span><span class="tc-text">机器人 · IoT · 硬件</span></button>
+        <button class="task-chip" data-pre="7." type="button"><span class="tc-icon">📧</span><span class="tc-text">邮件 · 日历 · 协作</span></button>
       </div>
     </div>
   </div>
@@ -184,12 +182,12 @@ const domainsTotal = domainRows.length;
   </section>
   ) : null}
 
-  <!-- V2.1: 统计 4 个（原来 6 个，去掉"已同步元数据"和"细分分类"） -->
+  <!-- V2.1: 统计 4 个（恢复初始值 + data-target 给 animateStats 动画） -->
   <div class="stats-grid stats-v21" id="statsGrid" role="region" aria-label="核心数据统计">
-    <div class="stat-card" title="catalog.csv 中的人工精选行数"><div class="stat-num c1" id="statCurated">—</div><div class="stat-label">精选工具</div></div>
-    <div class="stat-card" title="Pipeline 自动发现的候选条目"><div class="stat-num c3" id="statCand">—</div><div class="stat-label">发现候选</div></div>
+    <div class="stat-card" title="catalog.csv 中的人工精选行数"><div class="stat-num c1" id="statCurated" data-target={catalogItems.length}>{catalogItems.length}</div><div class="stat-label">精选工具</div></div>
+    <div class="stat-card" title="Pipeline 自动发现的候选条目"><div class="stat-num c3" id="statCand" data-target="0">…</div><div class="stat-label">发现候选</div></div>
     <div class="stat-card" title="MCP initialize 握手实测通过的端点数"><div class="stat-num c1" id="statVfy">—</div><div class="stat-label">端点实测 OK</div></div>
-    <div class="stat-card" title="已收录仓库的 GitHub Stars 累加"><div class="stat-num c4" id="statStars">—</div><div class="stat-label">累计 GitHub Stars</div></div>
+    <div class="stat-card" title="已收录仓库的 GitHub Stars 累加"><div class="stat-num c4" id="statStars">…</div><div class="stat-label">累计 GitHub Stars</div></div>
   </div>
 
   <noscript><div class="noscript-note">⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（191 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。</div></noscript>

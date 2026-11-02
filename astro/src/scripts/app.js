@@ -548,12 +548,6 @@
     document.getElementById("taskChips").addEventListener("click", function (e) {
       var btn = e.target.closest(".task-chip");
       if (!btn) return;
-      // 更多按钮：展开隐藏的 task chips
-      if (btn.id === "btnTaskMore") {
-        document.querySelectorAll(".task-hidden").forEach(function (c) { c.hidden = false; });
-        btn.hidden = true;
-        return;
-      }
       var key = catKeyByPrefix(btn.getAttribute("data-pre"));
       if (!key) return;
       // 再点一次同一任务 = 取消，回到「全部」
@@ -1302,6 +1296,10 @@
     panels.forEach(function (p) {
       p.style.display = p.getAttribute("data-tabpanel") === name ? "" : "none";
     });
+    // 切到 candidates tab 时触发渲染（renderCandidates 依赖 candidateItems 已由 load/buildCandidates 初始化）
+    if (name === "candidates") {
+      renderCandidates();
+    }
     // 切换到 liveTab 且有搜索词时自动搜索
     if (name === "live" && query.length >= 2 && liveFetchedFor !== query) {
       runLiveSearch(true);
