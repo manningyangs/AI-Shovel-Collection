@@ -2,7 +2,9 @@
 import Base from '../layouts/Base.astro';
 import '../styles/main.css';
 import fs from 'fs';
-const appJs = fs.readFileSync(new URL('../scripts/app.js', import.meta.url), 'utf8');
+import path from 'path';
+// Use process.cwd() which is project root (repo/astro/) during astro build
+const appJs = fs.readFileSync(path.resolve(process.cwd(), 'src/scripts/app.js'), 'utf8');
 
 // Astro SSG: 构建时读取 catalog.csv + live_multi.json，预渲染 curated 卡片到 HTML
 const csvMod = import.meta.glob('../../public/catalog.csv', { as: 'raw', eager: true });
