@@ -19,6 +19,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -41,7 +44,4 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add live_multi.json trending.json scripts/.state/stars-history.json astro/public/live_multi.json astro/public/trending.json
-          git diff --cached --quiet || git commit -m "chore: 同步实时数据 + trending 榜单"
-          git fetch origin main
-          git pull --rebase origin main --autostash || true
-          git push origin main --force-with-lease
+          git diff --cached --quiet || (git commit -m "chore: 同步实时数据 + trending 榜单" && git push origin main)
