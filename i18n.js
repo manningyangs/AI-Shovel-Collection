@@ -279,6 +279,152 @@
     'task.design': { 'zh-CN': '🎨 设计 / 音视频', 'en': '🎨 Design / AV', 'zh-TW': '🎨 設計 / 音影片' },
     'task.engineering': { 'zh-CN': '🔧 CAD / 工程 / 工业', 'en': '🔧 CAD / Eng / Ind', 'zh-TW': '🔧 CAD / 工程 / 工業' },
 
+    // === Task cards (hero area) ===
+    'task.title': { 'zh-CN': '🙋 你希望 AI 帮你完成什么工作？', 'en': '🙋 What do you want AI to help with?', 'zh-TW': '🙋 你希望 AI 幫你完成什麼工作？' },
+    'task.hint': { 'zh-CN': '按任务跳转对应分类，不需要先懂 MCP', 'en': 'Jump by task, no need to know MCP first', 'zh-TW': '按任務跳轉對應分類，不需要先懂 MCP' },
+    'task.chip1.t': { 'zh-CN': '写文档 / 做 PPT', 'en': 'Docs / Presentations', 'zh-TW': '寫文件 / 做 PPT' },
+    'task.chip1.d': { 'zh-CN': 'Word · Excel · PDF', 'en': 'Word · Excel · PDF', 'zh-TW': 'Word · Excel · PDF' },
+    'task.chip2.t': { 'zh-CN': '查数据库 · 数据分析', 'en': 'DB · Data Analysis', 'zh-TW': '查資料庫 · 資料分析' },
+    'task.chip2.d': { 'zh-CN': 'SQL · BI · ETL', 'en': 'SQL · BI · ETL', 'zh-TW': 'SQL · BI · ETL' },
+    'task.chip3.t': { 'zh-CN': '浏览器自动化', 'en': 'Browser Automation', 'zh-TW': '瀏覽器自動化' },
+    'task.chip3.d': { 'zh-CN': '抓网页 · 点按钮 · 填表', 'en': 'Scrape · Click · Fill Forms', 'zh-TW': '抓網頁 · 點按鈕 · 填表' },
+    'task.chip4.t': { 'zh-CN': '部署运维', 'en': 'DevOps · Deploy', 'zh-TW': '部署運維' },
+    'task.chip4.d': { 'zh-CN': 'Docker · 服务器 · CI/CD', 'en': 'Docker · Server · CI/CD', 'zh-TW': 'Docker · 伺服器 · CI/CD' },
+    'task.chip5.t': { 'zh-CN': '图片 · 视频 · 音频', 'en': 'Images · Video · Audio', 'zh-TW': '圖片 · 影片 · 音訊' },
+    'task.chip5.d': { 'zh-CN': '设计素材 · 媒体生成', 'en': 'Design · Media Gen', 'zh-TW': '設計素材 · 媒體生成' },
+    'task.chip6.t': { 'zh-CN': 'CAD · 3D · 地图', 'en': 'CAD · 3D · Maps', 'zh-TW': 'CAD · 3D · 地圖' },
+    'task.chip6.d': { 'zh-CN': '工程制图 · GIS', 'en': 'Engineering · GIS', 'zh-TW': '工程製圖 · GIS' },
+    'task.chip7.t': { 'zh-CN': '财务 · 会计', 'en': 'Finance · Accounting', 'zh-TW': '財務 · 會計' },
+    'task.chip7.d': { 'zh-CN': '区块链 · 交易', 'en': 'Blockchain · Trading', 'zh-TW': '區塊鏈 · 交易' },
+    'task.chip8.t': { 'zh-CN': '机器人 · IoT · 硬件', 'en': 'Robots · IoT · Hardware', 'zh-TW': '機器人 · IoT · 硬體' },
+    'task.chip8.d': { 'zh-CN': 'PLC · 传感器', 'en': 'PLC · Sensors', 'zh-TW': 'PLC · 感測器' },
+    'task.chip9.t': { 'zh-CN': '邮件 · 日历 · 协作', 'en': 'Email · Calendar · Collab', 'zh-TW': '郵件 · 日曆 · 協作' },
+    'task.chip9.d': { 'zh-CN': 'Teams · Slack', 'en': 'Teams · Slack', 'zh-TW': 'Teams · Slack' },
+    'task.chip10.t': { 'zh-CN': '飞书 · 钉钉 · 微信', 'en': 'Feishu · DingTalk · WeChat', 'zh-TW': '飛書 · 釘釘 · 微信' },
+    'task.chip10.d': { 'zh-CN': '企业 IM 接入', 'en': 'Enterprise IM', 'zh-TW': '企業 IM 接入' },
+
+    // === Stats cards ===
+    'stats.curatedCatLabel': { 'zh-CN': '已收录工具（目录）', 'en': 'Curated Tools', 'zh-TW': '已收錄工具（目錄）' },
+    'stats.syncedMetaLabel': { 'zh-CN': '已同步 GitHub 元数据', 'en': 'GitHub Synced', 'zh-TW': '已同步 GitHub 元資料' },
+    'stats.legendTxt': {
+      'zh-CN': '统计口径：<b>目录收录 {n}</b>（catalog.csv 行数）· <b>已同步元数据 {s}</b>（live_multi.json）· <b>候选 {c}</b> · <b>端点实测 {v}</b>，四个数字口径不同，全部随数据文件动态计算。',
+      'en': 'Stats: <b>Curated {n}</b> · <b>Synced {s}</b> · <b>Candidates {c}</b> · <b>Verified {v}</b>. All dynamic, different sources.',
+      'zh-TW': '統計口徑：<b>目錄收錄 {n}</b>（catalog.csv 行數）· <b>已同步元資料 {s}</b>（live_multi.json）· <b>候選 {c}</b> · <b>端點實測 {v}</b>，四個數字口徑不同，全部隨資料檔案動態計算。'
+    },
+    'stats.toggleHide': { 'zh-CN': '— 收起统计数字', 'en': '— Hide stats', 'zh-TW': '— 收起統計數字' },
+    'stats.toggleShow': { 'zh-CN': '— 展开统计数字', 'en': '— Show stats', 'zh-TW': '— 展開統計數字' },
+
+    // === Meta Filters (dynamic dropdowns) ===
+    'mf.langLabel': { 'zh-CN': '语言', 'en': 'Language', 'zh-TW': '語言' },
+    'mf.starsLabel': { 'zh-CN': 'Stars', 'en': 'Stars', 'zh-TW': 'Stars' },
+    'mf.freshLabel': { 'zh-CN': '更新', 'en': 'Updated', 'zh-TW': '更新' },
+    'mf.within24h': { 'zh-CN': '24 小时内', 'en': '24 hours', 'zh-TW': '24 小時內' },
+    'mf.within7d': { 'zh-CN': '7 天内', 'en': '7 days', 'zh-TW': '7 天內' },
+    'mf.within30d': { 'zh-CN': '30 天内', 'en': '30 days', 'zh-TW': '30 天內' },
+    'mf.within6m': { 'zh-CN': '半年内', 'en': '6 months', 'zh-TW': '半年內' },
+    'mf.resetBtn': { 'zh-CN': '↺ 重置', 'en': '↺ Reset', 'zh-TW': '↺ 重置' },
+    'mf.hint': { 'zh-CN': '组合筛选只作用于「已收录」列表', 'en': 'Filters apply to Curated list only', 'zh-TW': '組合篩選只作用於「已收錄」列表' },
+
+    // === Sort bar ===
+    'sort.bar': { 'zh-CN': '排序：', 'en': 'Sort:', 'zh-TW': '排序：' },
+    'sort.recommend': { 'zh-CN': '综合推荐', 'en': 'Recommended', 'zh-TW': '綜合推薦' },
+    'sort.starsTop': { 'zh-CN': 'Stars 最高', 'en': 'Most Stars', 'zh-TW': 'Stars 最高' },
+
+    // === Section heads ===
+    'sec.curated.h2': { 'zh-CN': '📦 已收录的铲子', 'en': '📦 Curated Shovels', 'zh-TW': '📦 已收錄的鏟子' },
+    'sec.curated.tag': { 'zh-CN': '👤 人工筛选', 'en': '👤 Human-curated', 'zh-TW': '👤 人工篩選' },
+    'sec.curated.hint': { 'zh-CN': '分类不是质量排名，收录不代表背书 · <b>已收录 = 人工筛选入库</b>（未逐项功能实测）', 'en': 'Categories ≠ quality ranking · <b>Curated = human-selected</b> (not function-verified)', 'zh-TW': '分類不是質量排名，收錄不代表背書 · <b>已收錄 = 人工篩選入庫</b>（未逐項功能實測）' },
+    'sec.curated.syncing': { 'zh-CN': '实时数据同步中…', 'en': 'Syncing live data…', 'zh-TW': '即時資料同步中…' },
+    'sec.candidates.h2': { 'zh-CN': '🧭 自动发现的候选铲子', 'en': '🧭 Auto-discovered', 'zh-TW': '🧭 自動發現的候選鏟子' },
+    'sec.candidates.tag': { 'zh-CN': '🤖 自动发现', 'en': '🤖 Auto-discovered', 'zh-TW': '🤖 自動發現' },
+    'sec.candidates.hint': { 'zh-CN': '由 Pipeline 从 MCP Registry / npm / crates.io 挖到，<b>未人工核验</b> · ✅ 端点实测仅代表 MCP 握手在线，<b>不代表功能完整可用</b>', 'en': 'Fetched by Pipeline from MCP Registry / npm / crates.io, <b>not human-verified</b> · ✅ Endpoint test = MCP handshake ok, <b>not full functionality</b>', 'zh-TW': '由 Pipeline 從 MCP Registry / npm / crates.io 挖到，<b>未人工核驗</b> · ✅ 端點實測僅代表 MCP 握手在線，<b>不代表功能完整可用</b>' },
+    'sec.candidates.hint2': { 'zh-CN': '候选按 <b>MCP 官方注册 + Stars / 下载量 + 端点可调用 + 活跃状态</b> 加权排序 · 当前每轮保留 Top <b id="candidateCount">…</b> 条', 'en': 'Candidates ranked by <b>MCP registry + stars/downloads + endpoint + activity</b> · Keeping Top <b id="candidateCount">…</b>', 'zh-TW': '候選按 <b>MCP 官方註冊 + Stars / 下載量 + 端點可調用 + 活躍狀態</b> 加權排序 · 當前每輪保留 Top <b id="candidateCount">…</b> 條' },
+    'sec.live.h2': { 'zh-CN': '🌐 GitHub 全站实时搜索', 'en': '🌐 GitHub Live Search', 'zh-TW': '🌐 GitHub 全站即時搜索' },
+    'sec.live.hint': { 'zh-CN': '由 GitHub Search API 实时返回，按 Stars 排序，已收录的仓库自动去重', 'en': 'Real-time via GitHub Search API, sorted by Stars, curated repos auto-deduplicated', 'zh-TW': '由 GitHub Search API 即時返回，按 Stars 排序，已收錄的倉庫自動去重' },
+    'sec.domains.h2': { 'zh-CN': '🌍 按行业 / 领域实时检索 GitHub', 'en': '🌍 Domain Search on GitHub', 'zh-TW': '🌍 按行業 / 領域即時檢索 GitHub' },
+    'sec.domains.hint': { 'zh-CN': '关键词实时检索入口，查看该领域最新公开仓库', 'en': 'Keyword search, see latest repos in this domain', 'zh-TW': '關鍵詞即時檢索入口，查看該領域最新公開倉庫' },
+
+    // === Inbox banner ===
+    'inbox.highConf': { 'zh-CN': '✨ {n} 条高置信候选', 'en': '✨ {n} high-confidence candidates', 'zh-TW': '✨ {n} 條高置信候選' },
+    'inbox.desc': { 'zh-CN': '满足自动匹配分 ≥ {t} · 每条都带建议分类 + catalog.csv 行模板', 'en': 'Score ≥ {t} · Each has suggested category + catalog.csv row', 'zh-TW': '滿足自動匹配分 ≥ {t} · 每條都帶建議分類 + catalog.csv 行模板' },
+    'inbox.viewAll': { 'zh-CN': '查看 inbox 汇总', 'en': 'View Inbox', 'zh-TW': '查看 inbox 彙總' },
+    'inbox.batch': { 'zh-CN': '批量打开申请', 'en': 'Batch Open', 'zh-TW': '批量打開申請' },
+
+    // === Live strip ===
+    'live.stripText': { 'zh-CN': '点击下方按钮在 GitHub 全站几十亿级仓库中搜索', 'en': 'Click to search billions of repos on GitHub', 'zh-TW': '點擊下方按鈕在 GitHub 全站數十億級倉庫中搜索' },
+    'live.stripBtn': { 'zh-CN': '🌐 立即实时搜索 GitHub 全站', 'en': '🌐 Search GitHub Live', 'zh-TW': '🌐 立即即時搜索 GitHub 全站' },
+
+    // === Card buttons ===
+    'card.detail': { 'zh-CN': '详情', 'en': 'Detail', 'zh-TW': '詳情' },
+    'card.cfg': { 'zh-CN': '📋 配置', 'en': '📋 Config', 'zh-TW': '📋 配置' },
+    'card.applyCurate': { 'zh-CN': '🔍 申请入精选', 'en': '🔍 Apply for curation', 'zh-TW': '🔍 申請入精選' },
+    'card.source': { 'zh-CN': '来源 ↗', 'en': 'Source ↗', 'zh-TW': '來源 ↗' },
+    'card.archived': { 'zh-CN': '已归档', 'en': 'Archived', 'zh-TW': '已歸檔' },
+
+    // === relTime (relative time) ===
+    'rel.today': { 'zh-CN': '今天更新', 'en': 'Updated today', 'zh-TW': '今天更新' },
+    'rel.daysAgo': { 'zh-CN': '{n} 天前更新', 'en': '{n} days ago', 'zh-TW': '{n} 天前更新' },
+    'rel.monthsAgo': { 'zh-CN': '{n} 个月前更新', 'en': '{n} months ago', 'zh-TW': '{n} 個月前更新' },
+    'rel.yearsAgo': { 'zh-CN': '{n} 年前更新', 'en': '{n} years ago', 'zh-TW': '{n} 年前更新' },
+
+    // === cfg (config modal) dynamic warnings ===
+    'cfg.warnOk': { 'zh-CN': '✅ <b>已验证配置</b> — 该端点经 Pipeline 每 6 小时 MCP initialize 握手实测通过，可直接粘贴使用。', 'en': '✅ <b>Verified Config</b> — Endpoint verified by Pipeline every 6h, ready to paste.', 'zh-TW': '✅ <b>已驗證配置</b> — 該端點經 Pipeline 每 6 小時 MCP initialize 握手實測通過，可直接貼上使用。' },
+    'cfg.warnAuth': { 'zh-CN': '🔑 <b>端点需鉴权</b> — Pipeline 实测端点在线但返回 401/403，请在配置中补 <code>headers</code> 填入 API Key（密钥别提交到公开仓库）。', 'en': '🔑 <b>Auth Required</b> — Endpoint online but returns 401/403. Add API Key in <code>headers</code> (do NOT commit secrets).', 'zh-TW': '🔑 <b>端點需鑑權</b> — Pipeline 實測端點在線但返回 401/403，請在配置中補 <code>headers</code> 填入 API Key（密鑰別提交到公開倉庫）。' },
+    'cfg.warnFail': { 'zh-CN': '❌ <b>端点无响应</b> — Pipeline 实测该端点连接失败或超时，以下配置仅供参考，请自行确认端点是否已下线。', 'en': '❌ <b>Endpoint Unreachable</b> — Connection failed/timeout. Config is for reference only.', 'zh-TW': '❌ <b>端點無響應</b> — Pipeline 實測該端點連接失敗或超時，以下配置僅供參考，請自行確認端點是否已下線。' },
+    'cfg.warnNotTested': { 'zh-CN': '⚠️ <b>端点未实测</b> — 本条目有登记远程端点但尚未被 Pipeline 实测，请粘贴后自行验证是否可用。', 'en': '⚠️ <b>Endpoint Not Tested</b> — Has endpoint but not Pipeline-verified. Please test after pasting.', 'zh-TW': '⚠️ <b>端點未實測</b> — 本條目有登記遠端端點但尚未被 Pipeline 實測，請貼上後自行驗證是否可用。' },
+    'cfg.warnAutoInfer': { 'zh-CN': '⚠️ <b>配置自动推断，非实测</b> — 本条目没有登记远程 MCP 端点，下面的 <code>{launcher} {pkg}</code> 是根据仓库名和语言自动推断的，<b>请务必核对项目 README 确认真实包名、启动命令和是否支持 MCP 协议</b>。CLI 工具、Agent Skill、工作流编排项目可能完全不能作为 MCP Server 直接配置。{extra}', 'en': '⚠️ <b>Auto-inferred, not verified</b> — No remote MCP endpoint. <code>{launcher} {pkg}</code> is inferred from repo name and language. <b>Check project README for real package name, launch command, and MCP support</b>. CLI tools, Agent Skills, workflow projects may NOT work as MCP Servers. {extra}', 'zh-TW': '⚠️ <b>配置自動推斷，非實測</b> — 本條目沒有登記遠端 MCP 端點，下面的 <code>{launcher} {pkg}</code> 是根據倉庫名和語言自動推斷的，<b>請務必核對專案 README 確認真實包名、啟動命令和是否支持 MCP 協議</b>。CLI 工具、Agent Skill、工作流編排專案可能完全不能作為 MCP Server 直接配置。{extra}' },
+    'cfg.warnAutoInferExtra': { 'zh-CN': '<br>🤖 此条目来自自动发现，尚未人工核验其是否支持 MCP 协议。', 'en': '<br>🤖 This is auto-discovered, not human-verified for MCP support.', 'zh-TW': '<br>🤖 此條目來自自動發現，尚未人工核驗其是否支持 MCP 協議。' },
+    'cfg.copyFlashOk': { 'zh-CN': '✓ 已复制', 'en': '✓ Copied', 'zh-TW': '✓ 已複製' },
+    'cfg.copyFlashFail': { 'zh-CN': '已选中，Ctrl+C 复制', 'en': 'Selected. Ctrl+C to copy', 'zh-TW': '已選中，Ctrl+C 複製' },
+
+    // === Empty states (dynamic) ===
+    'empty.noCandMatch': { 'zh-CN': '没有匹配的候选自动发现条目', 'en': 'No matching candidates', 'zh-TW': '沒有匹配的候選自動發現條目' },
+
+    // === Live status messages ===
+    'live.syncing': { 'zh-CN': '实时数据同步中…', 'en': 'Syncing live data…', 'zh-TW': '即時資料同步中…' },
+    'live.lastSync': { 'zh-CN': '多源同步于 {time} UTC', 'en': 'Synced {time} UTC', 'zh-TW': '多源同步於 {time} UTC' },
+    'live.firstSync': { 'zh-CN': '实时数据待首次同步', 'en': 'Awaiting first sync', 'zh-TW': '即時資料待首次同步' },
+    'live.statusSyncing': { 'zh-CN': '同步中断', 'en': 'Sync broken', 'zh-TW': '同步中斷' },
+    'live.statusExpired': { 'zh-CN': '数据过期', 'en': 'Stale data', 'zh-TW': '資料過期' },
+    'live.statusDelayed': { 'zh-CN': '同步延迟', 'en': 'Delayed sync', 'zh-TW': '同步延遲' },
+    'live.hintSyncing': { 'zh-CN': '尚未检测到有效数据同步时间戳，请检查 GitHub Actions 运行状态', 'en': 'No valid sync timestamp. Check GitHub Actions.', 'zh-TW': '尚未檢測到有效資料同步時間戳，請檢查 GitHub Actions 運行狀態' },
+    'live.hintExpired': { 'zh-CN': '上次同步已超过 72 小时，请检查 GitHub Actions 是否运行失败', 'en': 'Last sync >72h ago. Check GitHub Actions failures.', 'zh-TW': '上次同步已超過 72 小時，請檢查 GitHub Actions 是否運行失敗' },
+    'live.hintDelayedBad': { 'zh-CN': '上次同步已超过 24 小时，定时任务可能未按时触发', 'en': 'Last sync >24h ago. Cron may have missed.', 'zh-TW': '上次同步已超過 24 小時，定時任務可能未按時觸發' },
+    'live.hintDelayedWarn': { 'zh-CN': '上次同步已超过 12 小时，略慢于 6 小时目标周期', 'en': 'Last sync >12h ago, slower than 6h target.', 'zh-TW': '上次同步已超過 12 小時，略慢於 6 小時目標週期' },
+    'live.hintOk': { 'zh-CN': '数据每 6 小时自动同步，端点实测与 Stars 来自 GitHub Actions Pipeline', 'en': 'Auto-sync every 6h. Endpoint tests & stars from GitHub Actions Pipeline.', 'zh-TW': '資料每 6 小時自動同步，端點實測與 Stars 來自 GitHub Actions Pipeline' },
+
+    // === Footer ===
+    'footer.source': {
+      'zh-CN': '数据来源：<a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">manningyangs/AI-Shovel-Collection</a> · 机器可读清单 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv" target="_blank" rel="noopener">catalog.csv</a> · 多源聚合 <a href="live_multi.json">live_multi.json</a>（MCP Registry / GitHub REST / npm / crates.io）',
+      'en': 'Sources: <a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">manningyangs/AI-Shovel-Collection</a> · Machine-readable list <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv" target="_blank" rel="noopener">catalog.csv</a> · Multi-source <a href="live_multi.json">live_multi.json</a> (MCP Registry / GitHub REST / npm / crates.io)',
+      'zh-TW': '資料來源：<a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">manningyangs/AI-Shovel-Collection</a> · 機器可讀清單 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv" target="_blank" rel="noopener">catalog.csv</a> · 多源聚合 <a href="live_multi.json">live_multi.json</a>（MCP Registry / GitHub REST / npm / crates.io）'
+    },
+    'footer.disclaimerLong': {
+      'zh-CN': '被收录不代表项目安全、活跃、可商用或质量已背书；使用前请自行检查许可证、维护状态、权限和数据安全。欢迎通过 Issue / PR 补充与纠错。',
+      'en': 'Inclusion does not imply safety, activity, fitness for commercial use, or quality endorsement. Check license, maintenance, permissions yourself. Contributions welcome.',
+      'zh-TW': '被收錄不代表專案安全、活躍、可商用或質量已背書；使用前請自行檢查許可證、維護狀態、權限和資料安全。歡迎透過 Issue / PR 補充與糾錯。'
+    },
+    'footer.updatedDate': {
+      'zh-CN': '初始检索整理日期：{d} · 页面随 catalog.csv 更新 · 实时数据每 6 小时同步',
+      'en': 'Initial curation: {d} · Page updates with catalog.csv · Live data synced every 6h',
+      'zh-TW': '初始檢索整理日期：{d} · 頁面隨 catalog.csv 更新 · 即時資料每 6 小時同步'
+    },
+
+    // === NoScript ===
+    'noscript.note': {
+      'zh-CN': '⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（191 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。',
+      'en': '⚠️ JavaScript disabled: List below needs JS. See <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a> ({n} curated) or <a href="live_multi.json">live_multi.json</a> (with candidates & endpoint data).',
+      'zh-TW': '⚠️ 當前瀏覽器未啟用 JavaScript：下方列表需 JS 渲染，請直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（{n} 條精選）或 <a href="live_multi.json">live_multi.json</a>（含候選與端點實測資料）。'
+    },
+
+    // === Mobile nav ===
+    'mob.home': { 'zh-CN': '🏠 首页', 'en': '🏠 Home', 'zh-TW': '🏠 首頁' },
+    'mob.curated': { 'zh-CN': '📦 已收录', 'en': '📦 Curated', 'zh-TW': '📦 已收錄' },
+    'mob.candidates': { 'zh-CN': '🧭 候选', 'en': '🧭 Candidates', 'zh-TW': '🧭 候選' },
+    'mob.domains': { 'zh-CN': '🌍 领域检索', 'en': '🌍 Domain Search', 'zh-TW': '🌍 領域檢索' },
+    'mob.submit': { 'zh-CN': '📥 提交收录', 'en': '📥 Submit', 'zh-TW': '📥 提交收錄' },
+    'mob.github': { 'zh-CN': '🐙 GitHub 仓库 ↗', 'en': '🐙 GitHub ↗', 'zh-TW': '🐙 GitHub 倉庫 ↗' },
+
     // === Footer ===
     'footer.disclaimer': {
       'zh-CN': '被收录不代表项目安全、活跃、可商用或质量已背书；使用前请自行检查许可证、维护状态、权限和数据安全。欢迎通过 Issue / PR 补充与纠错。',
