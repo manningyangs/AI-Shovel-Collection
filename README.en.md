@@ -1,4 +1,4 @@
-# AI Shovels — A Curated Directory of AI Agent Tools
+# AI Shovel Collection — The Open Directory for AI Tools & Capabilities
 
 <div align="center">
 
@@ -8,7 +8,9 @@
 
 </div>
 
-> A curated directory of open-source tools that enable AI models to **access data, operate software, execute tasks, convert files, call professional tooling, or complete domain work**.
+> **AI Shovel Collection — Discover · Verify · Community**
+>
+> An open directory of open-source tools that enable AI models to **access data, operate software, execute tasks, convert files, call professional tooling, or complete domain work**. Community-curated + pipeline-discovered, endpoint-verified (ok / fail / auth-required), with stars / push-time / language / endpoint status synced every 6 hours.
 >
 > Maintenance model: collect first, categorize second, verify third. Contributions welcome via Issues / Pull Requests — add repos, fix categorizations, or flag stale projects.
 
