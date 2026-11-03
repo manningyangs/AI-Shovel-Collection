@@ -4,8 +4,6 @@
 """
 from __future__ import annotations
 
-import urllib.error
-import urllib.request
 from datetime import datetime, timedelta, timezone
 from typing import Any
 

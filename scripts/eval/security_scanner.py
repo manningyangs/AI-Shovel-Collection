@@ -10,9 +10,9 @@ from __future__ import annotations
 
 import json
 import re
-import urllib.error
-import urllib.request
 from typing import Any
+
+import requests
 
 
 # 危险代码模式
@@ -184,17 +184,15 @@ def _osv_query_single(name: str, version: str, ecosystem: str) -> list[dict]:
         "version": version,
     }
     try:
-        data = json.dumps(payload).encode()
-        req = urllib.request.Request(
+        resp = requests.post(
             "https://api.osv.dev/v1/query",
-            data=data,
-            headers={"Content-Type": "application/json"},
-            method="POST",
+            json=payload,
+            timeout=10,
         )
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            result = json.loads(resp.read().decode())
-            return result.get("vulns", []) or []
-    except (urllib.error.URLError, urllib.error.HTTPError, TimeoutError, OSError):
+        resp.raise_for_status()
+        result = resp.json()
+        return result.get("vulns", []) or []
+    except (requests.RequestException, TimeoutError, OSError):
         return []
 
 

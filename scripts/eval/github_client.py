@@ -1,11 +1,12 @@
 # GitHub REST API 客户端（只读）
 import json
 import os
-import urllib.request
-import urllib.error
+
+import requests
 
 
 API_BASE = "https://api.github.com"
+HTTP_TIMEOUT = 15
 
 
 class GitHubClient:
@@ -23,14 +24,16 @@ class GitHubClient:
         if path in self._cache:
             return self._cache[path]
         url = API_BASE + path
-        req = urllib.request.Request(url, headers=self._headers())
         try:
-            with urllib.request.urlopen(req, timeout=15) as resp:
-                data = json.loads(resp.read().decode())
-                self._cache[path] = data
-                return data
-        except urllib.error.HTTPError as e:
-            if e.code == 404:
+            resp = requests.get(url, headers=self._headers(), timeout=HTTP_TIMEOUT)
+            if resp.status_code == 404:
+                return None
+            resp.raise_for_status()
+            data = resp.json()
+            self._cache[path] = data
+            return data
+        except requests.HTTPError as e:
+            if e.response is not None and e.response.status_code == 404:
                 return None
             raise
 
@@ -48,12 +51,18 @@ class GitHubClient:
     def get_content(self, owner: str, repo: str, path: str) -> str | None:
         # 用 raw.githubusercontent.com（更稳定）
         url = f"https://raw.githubusercontent.com/{owner}/{repo}/HEAD/{path}"
-        req = urllib.request.Request(url, headers={"User-Agent": "ai-shovel-eval/1.0"})
         try:
-            with urllib.request.urlopen(req, timeout=15) as resp:
-                raw = resp.read()
-                if len(raw) > 2 * 1024 * 1024:  # 单文件上限 2MB
-                    return None
-                return raw.decode("utf-8", errors="replace")
-        except urllib.error.HTTPError:
+            resp = requests.get(
+                url,
+                headers={"User-Agent": "ai-shovel-eval/1.0"},
+                timeout=HTTP_TIMEOUT,
+            )
+            if resp.status_code == 404:
+                return None
+            resp.raise_for_status()
+            raw = resp.content
+            if len(raw) > 2 * 1024 * 1024:  # 单文件上限 2MB
+                return None
+            return raw.decode("utf-8", errors="replace")
+        except requests.HTTPError:
             return None

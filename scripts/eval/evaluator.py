@@ -18,10 +18,11 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 # 确保 scripts/ 在 sys.path 里（无论从哪里运行）
+# evaluator.py 在 repo/scripts/eval/ → parent 是 repo/scripts/
 _HERE = Path(__file__).resolve().parent
-_PROJECT_ROOT = _HERE.parent.parent
-if str(_PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(_PROJECT_ROOT))
+_SCRIPTS_DIR = _HERE.parent
+if str(_SCRIPTS_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS_DIR))
 
 from eval.config import DIMENSIONS, SCORING_VERSION  # noqa: E402
 from eval.github_client import GitHubClient  # noqa: E402
