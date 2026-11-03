@@ -259,7 +259,7 @@ function levelBadge(level) {
         </div>
       )}
 
-      <a class="r-json-link" href={`${base}/evaluations/reports/${report.repository?.owner ?? "unknown"}-${report.repository?.name ?? "unknown"}-${report.schema_version ?? "1.0"}.json`} target="_blank" rel="noopener">
+      <a class="r-json-link" href={`${base}/evaluations/reports/${report.report_id}.json`} target="_blank" rel="noopener">
         📄 查看原始 JSON 报告
       </a>
     </>
