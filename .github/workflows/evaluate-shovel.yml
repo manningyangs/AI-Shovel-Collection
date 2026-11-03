@@ -41,6 +41,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install Python deps
+        run: pip install requests
+
       # ---------- 安全解析 Issue 正文（关键：用 Python 读 GITHUB_EVENT_PATH，不经 shell） ----------
       - name: Parse Issue from event payload
         id: parse
