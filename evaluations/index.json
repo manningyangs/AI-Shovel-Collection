@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-03T05:57:46.708113Z",
-  "total_reports": 1,
+  "updated_at": "2026-11-03T06:44:41.836873Z",
+  "total_reports": 2,
   "reports": [
+    {
+      "report_id": "sparkgeo-geo-mcp-servers-f5f69b9dd9fe",
+      "owner": "sparkgeo",
+      "name": "geo-mcp-servers",
+      "url": "https://github.com/sparkgeo/geo-mcp-servers",
+      "project_type": "agent_skill",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 63,
+      "grade": "C",
+      "coverage": 87,
+      "commit_sha": "3f250c998c71",
+      "evaluated_at": "2026-11-03T06:44:41.836873Z"
+    },
     {
       "report_id": "microsoft-playwright-mcp-8e46a9a81019",
       "owner": "microsoft",
