@@ -901,16 +901,17 @@
     .ttv21-row { grid-template-columns: 1fr; }
   }
 
-  /* 统计 4 个紧凑版 */
+  /* 统计 4 个（与排行榜/评测模块同宽 980px，卡片与字号适度放大） */
   .stats-v21 {
-    max-width: 680px; margin: 24px auto 0;
-    grid-template-columns: repeat(4, 1fr); gap: 12px;
+    max-width: 980px; margin: 28px auto 0;
+    grid-template-columns: repeat(4, 1fr); gap: 14px;
   }
-  .stats-v21 .stat-card { padding: 14px 8px; }
-  .stats-v21 .stat-num { font-size: clamp(18px, 2.2vw, 24px); }
-  .stats-v21 .stat-label { font-size: 12px; margin-top: 3px; }
+  .stats-v21 .stat-card { padding: 20px 12px 16px; }
+  .stats-v21 .stat-num { font-size: clamp(20px, 2.6vw, 30px); }
+  .stats-v21 .stat-label { font-size: 13px; margin-top: 5px; }
   @media (max-width: 520px) {
     .stats-v21 { grid-template-columns: repeat(2, 1fr); }
+    .stats-v21 .stat-num { font-size: clamp(22px, 5vw, 28px); }
   }
 
   /* 底部简洁入口 */
