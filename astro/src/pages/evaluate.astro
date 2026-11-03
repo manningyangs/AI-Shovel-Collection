@@ -1,0 +1,238 @@
+---
+import Base from "../layouts/Base.astro";
+import fs from "node:fs";
+import path from "node:path";
+
+const base = "/AI-Shovel-Collection";
+const repoUrl = "https://github.com/manningyangs/AI-Shovel-Collection";
+const issueFormUrl = `${repoUrl}/issues/new?assignees=&labels=evaluation-request&template=evaluation-request.yml`;
+
+// 读取 evaluations/index.json
+let indexData = { reports: [], total_reports: 0 };
+try {
+  const idxPath = path.resolve(process.cwd(), "../../evaluations/index.json");
+  indexData = JSON.parse(fs.readFileSync(idxPath, "utf8"));
+} catch (e) {
+  // 文件不存在或解析失败 → 空列表（正常，初次部署时）
+}
+
+const reports = indexData.reports || [];
+---
+
+<Base
+  title="🧪 AI Shovel Eval — 自动评测"
+  description="申请让 AI Shovel Eval 自动评测一个公开 GitHub 仓库，生成静态初评报告"
+  canonical="/evaluate/"
+>
+
+<style>
+  .eval-wrap { max-width: 960px; margin: 0 auto; padding: 40px 24px; }
+  .eval-hero {
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #3b82f6 100%);
+    border-radius: 16px; padding: 40px 32px; color: #fff;
+    margin-bottom: 32px; box-shadow: 0 4px 24px rgba(59,130,246,0.3);
+  }
+  .eval-hero h1 { margin: 0 0 12px 0; font-size: 2rem; }
+  .eval-hero p { margin: 0 0 24px 0; opacity: 0.9; line-height: 1.7; }
+  .eval-hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .eval-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: 8px; font-weight: 600;
+    text-decoration: none; transition: transform 0.15s;
+  }
+  .eval-btn-primary { background: #fbbf24; color: #1e3a5f; }
+  .eval-btn-primary:hover { transform: translateY(-2px); background: #fcd34d; }
+  .eval-btn-secondary { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+  .eval-btn-secondary:hover { background: rgba(255,255,255,0.25); }
+
+  .eval-section { margin-bottom: 32px; }
+  .eval-section h2 { font-size: 1.3rem; margin: 0 0 16px 0; color: #1e3a5f; border-bottom: 2px solid #e5e7eb; padding-bottom: 8px; }
+
+  .eval-pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .eval-pillar {
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 20px; transition: border-color 0.15s;
+  }
+  .eval-pillar:hover { border-color: #3b82f6; }
+  .eval-pillar-icon { font-size: 1.8rem; margin-bottom: 8px; }
+  .eval-pillar h3 { margin: 0 0 6px 0; font-size: 1rem; color: #1e3a5f; }
+  .eval-pillar p { margin: 0; font-size: 0.85rem; color: #64748b; line-height: 1.5; }
+
+  .eval-flow { display: flex; align-items: flex-start; gap: 16px; margin-top: 16px; flex-wrap: wrap; }
+  .eval-flow-step {
+    flex: 1; min-width: 180px; background: #fff; border: 1px solid #e2e8f0;
+    border-radius: 10px; padding: 16px; position: relative;
+  }
+  .eval-flow-num {
+    position: absolute; top: -12px; left: 16px;
+    background: #3b82f6; color: #fff; border-radius: 50%;
+    width: 24px; height: 24px; font-size: 0.8rem; display: flex;
+    align-items: center; justify-content: center; font-weight: 700;
+  }
+  .eval-flow-step h4 { margin: 4px 0 4px 0; font-size: 0.95rem; }
+  .eval-flow-step p { margin: 0; font-size: 0.8rem; color: #64748b; line-height: 1.5; }
+
+  .eval-note {
+    background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 6px;
+    padding: 12px 16px; font-size: 0.85rem; color: #92400e; margin-top: 16px;
+  }
+
+  .eval-reports-empty {
+    background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 12px;
+    padding: 40px; text-align: center; color: #64748b;
+  }
+
+  .eval-report-card {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 16px 20px; margin-bottom: 12px; display: flex;
+    align-items: center; gap: 16px; text-decoration: none; color: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .eval-report-card:hover { border-color: #3b82f6; box-shadow: 0 2px 12px rgba(59,130,246,0.1); }
+  .eval-report-score {
+    font-size: 2rem; font-weight: 800; color: #3b82f6;
+    min-width: 60px; text-align: center; font-variant-numeric: tabular-nums;
+  }
+  .eval-report-score.L2 { color: #10b981; }
+  .eval-report-score.L3 { color: #8b5cf6; }
+  .eval-report-info { flex: 1; }
+  .eval-report-repo { font-weight: 600; color: #1e3a5f; font-size: 0.95rem; }
+  .eval-report-meta { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+  .eval-report-arrow { color: #94a3b8; font-size: 1.2rem; }
+
+  .repo-form {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+    padding: 24px; margin-top: 16px;
+  }
+  .repo-form label { display: block; font-size: 0.85rem; color: #475569; font-weight: 600; margin-bottom: 6px; }
+  .repo-form input {
+    width: 100%; padding: 10px 14px; border: 1px solid #cbd5e1;
+    border-radius: 8px; font-size: 0.95rem; box-sizing: border-box;
+  }
+  .repo-form input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
+  .repo-form button {
+    margin-top: 16px; padding: 12px 28px; background: #3b82f6; color: #fff;
+    border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .repo-form button:hover { background: #2563eb; }
+
+  @media (max-width: 600px) {
+    .eval-hero h1 { font-size: 1.5rem; }
+    .eval-pillars { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+
+<!-- 导航栏（复用 index.astro 结构） -->
+<nav class="navbar" aria-label="主导航">
+  <div class="navbar-inner">
+    <div class="logo"><span class="dot" aria-hidden="true"></span>AI Shovel Collection<span class="live-badge">LIVE</span></div>
+    <div class="nav-links">
+      <a href={`${base}/#hero`}>🏠 首页</a>
+      <a href={`${base}/#tools`}>📦 已收录</a>
+      <a href={`${base}/#candidates`}>🧭 候选</a>
+      <a href={`${base}/trending/`}" style="color:#f59e0b;font-weight:600">🔥 Trending</a>
+      <a href={`${base}/evaluate/`}" style="color:#3b82f6;font-weight:600">🧪 评测</a>
+      <a href={`${base}/submit.html`}" style="color:var(--primary);font-weight:600">📥 提交收录</a>
+      <a class="gh" href={repoUrl} target="_blank" rel="noopener">GitHub ↗<span class="sr-only">（在新标签页打开）</span></a>
+    </div>
+  </div>
+</nav>
+
+<div class="eval-wrap">
+
+  <!-- Hero -->
+  <section class="eval-hero">
+    <h1>🧪 AI Shovel Eval</h1>
+    <p>让开源智能体工具接受 AI Shovel 的 <b>7 维度静态评测</b>，快速拿到一份透明、可重复、自动生成的质量报告。</p>
+    <div class="eval-hero-actions">
+      <a class="eval-btn eval-btn-primary" href="#apply">🚀 申请评测</a>
+      <a class="eval-btn eval-btn-secondary" href="#reports">📊 查看已有报告</a>
+    </div>
+    <div class="eval-note">
+      ⚠️ 评测仅做 <b>静态代码分析</b>，不执行被测仓库的任何代码。第一阶段聚焦公开 GitHub 仓库。
+    </div>
+  </section>
+
+  <!-- 评测流程 -->
+  <section class="eval-section">
+    <h2>📋 评测流程</h2>
+    <div class="eval-flow">
+      <div class="eval-flow-step"><div class="eval-flow-num">1</div><h4>提交申请</h4><p>填写公开 GitHub 仓库地址，GitHub Actions 自动触发评测 Pipeline</p></div>
+      <div class="eval-flow-step"><div class="eval-flow-num">2</div><h4>静态初评</h4><p>Python 引擎读取 manifest、README、依赖、Issue/PR 元数据，不运行任何代码</p></div>
+      <div class="eval-flow-step"><div class="eval-flow-num">3</div><h4>生成报告</h4><p>JSON 报告写入 evaluations/reports/，自动部署为独立静态页面</p></div>
+      <div class="eval-flow-step"><div class="eval-flow-num">4</div><h4>公开发布</h4><p>报告永久公开、可 SHA256 锚定到 commit，包含证据链和改进建议</p></div>
+    </div>
+  </section>
+
+  <!-- 七大维度 -->
+  <section class="eval-section">
+    <h2>🎯 七大评测维度（100 分制）</h2>
+    <div class="eval-pillars">
+      <div class="eval-pillar"><div class="eval-pillar-icon">⚙️</div><h3>功能完整度</h3><p>25 分 · 核心能力、Schema、错误处理、任务示例</p></div>
+      <div class="eval-pillar"><div class="eval-pillar-icon">🔌</div><h3>智能体兼容性</h3><p>15 分 · MCP/Skill 协议、宿主支持、传输配置</p></div>
+      <div class="eval-pillar"><div class="eval-pillar-icon">📦</div><h3>易用性与集成</h3><p>15 分 · 安装说明、配置变量、快速上手</p></div>
+      <div class="eval-pillar"><div class="eval-pillar-icon">⚡</div><h3>可靠性与效率</h3><p>15 分 · 测试覆盖、CI 流程、版本发布稳定性</p></div>
+      <div class="eval-pillar"><div class="eval-pillar-icon">🛡️</div><h3>安全与隐私</h3><p>15 分 · 依赖漏洞、危险操作、数据访问、敏感信息</p></div>
+      <div class="eval-pillar"><div class="eval-pillar-icon">🌱</div><h3>维护健康度</h3><p>10 分 · 最近更新、CI 状态、Issue 活跃度</p></div>
+      <div class="eval-pillar"><div class="eval-pillar-icon">📚</div><h3>文档体验</h3><p>5 分 · README、示例、License 说明</p></div>
+    </div>
+  </section>
+
+  <!-- 已有报告 -->
+  <section class="eval-section" id="reports">
+    <h2>📊 已有评测报告 <span style="font-size:0.85rem;color:#64748b;font-weight:400">（{reports.length} 份）</span></h2>
+    {reports.length === 0 && (
+      <div class="eval-reports-empty">
+        还没有评测报告 —— 成为第一个，申请评测一个你关注的仓库吧 👇
+      </div>
+    )}
+    {reports.length > 0 && reports.map(r => (
+      <a class="eval-report-card" href={`${base}/evaluations/${r.report_id}/`}>
+        <div class={`eval-report-score ${r.evaluation?.level || "L1"}`}>{r.evaluation?.preliminary_score ?? "—"}</div>
+        <div class="eval-report-info">
+          <div class="eval-report-repo">{r.repository.owner}/{r.repository.name}</div>
+          <div class="eval-report-meta">
+            {r.evaluation?.level ?? "L1"} · {r.evaluation?.coverage ?? 0}% 覆盖 · {r.evaluation?.evaluated_at?.slice(0, 10) ?? ""}
+          </div>
+        </div>
+        <div class="eval-report-arrow">→</div>
+      </a>
+    ))}
+  </section>
+
+  <!-- 申请评测 -->
+  <section class="eval-section" id="apply">
+    <h2>🚀 申请评测</h2>
+    <p style="font-size:0.9rem;color:#475569">输入一个公开 GitHub 仓库地址，我会自动跳转到 GitHub Issue 表单并预填信息。</p>
+    <div class="repo-form">
+      <label for="repoInput">🔗 GitHub Repository URL</label>
+      <input id="repoInput" type="url" placeholder="https://github.com/owner/repository" />
+      <button onclick="submitEvalRequest()">✨ 申请评测 →</button>
+      <p style="margin-top:12px;font-size:0.78rem;color:#94a3b8">
+        或者直接访问 <a href={issueFormUrl} style="color:#3b82f6">{issueFormUrl}</a>
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<script is:inline>
+function submitEvalRequest() {
+  const input = document.getElementById("repoInput").value.trim();
+  if (!input) { alert("请先输入仓库 URL"); return; }
+
+  // 预填 URL 到 GitHub Issue Form
+  const base = "https://github.com/manningyangs/AI-Shovel-Collection/issues/new";
+  const params = new URLSearchParams({
+    assignees: "",
+    labels: "evaluation-request",
+    template: "evaluation-request.yml",
+    "repo_url": input,
+    "project_type": "auto-detect：自动识别（推荐）",
+  });
+  window.location.href = `${base}?${params.toString()}`;
+}
+</script>
+
+</Base>

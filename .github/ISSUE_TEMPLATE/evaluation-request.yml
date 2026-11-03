@@ -1,0 +1,58 @@
+name: AI Shovel Evaluation Request
+description: 申请让 AI Shovel Eval 自动评测一个公开 GitHub 仓库，生成静态初评报告
+title: "[Eval Request] <owner/repository>"
+labels: ["evaluation-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🔍 AI Shovel Eval — 自动评测申请
+
+        输入一个公开 GitHub 仓库地址，我会自动拉取元数据、执行静态代码分析、计算初评分、生成独立评测报告页面。
+
+        **评测范围**：静态分析（不执行被测仓库中的任何代码）
+        **评测维度**：功能完整度、智能体兼容性、易用性、可靠性、安全性、维护健康度、文档
+
+  - type: input
+    id: repo_url
+    attributes:
+      label: 🔗 GitHub Repository URL
+      description: 公开仓库地址，如 https://github.com/microsoft/playwright-mcp （支持 .git 结尾，自动去斜杠）
+      placeholder: https://github.com/modelcontextprotocol/servers
+    validations:
+      required: true
+
+  - type: dropdown
+    id: project_type
+    attributes:
+      label: 📦 Project Type（可选：自动识别）
+      description: 如果知道项目类型可以直接指定，不知道请选「自动识别」（默认）
+      options:
+        - "auto-detect：自动识别（推荐）"
+        - "mcp-server：MCP Server"
+        - "agent-skill：Agent Skill"
+        - "cli-sdk-api：CLI / SDK / API"
+        - "framework：Agent Framework"
+        - "collection：工具合集"
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: 📝 Evaluation Notes（可选）
+      description: 补充你希望评测重点关注的方面、已知的风险点、或项目背景信息
+      placeholder: "例如：关注它的 MCP 协议符合性、Star 数虽高但维护是否活跃、README 是否有完整中文文档…"
+
+  - type: checkboxes
+    id: agreement
+    attributes:
+      label: ✅ Agreement（必须全部勾选）
+      options:
+        - label: 目标仓库是公开的（非私有）
+        - label: 仓库地址拼写正确，不是其他人的隐私仓库
+        - label: 同意评测报告（评分、证据、建议）将以公开形式发布
+        - label: 我理解评测仅为静态分析，不代表真实运行能力
+        - label: 我理解评测系统不会执行被测仓库中的任何代码或安装脚本
+    validations:
+      required: true
