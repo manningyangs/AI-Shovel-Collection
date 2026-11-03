@@ -291,15 +291,22 @@ jobs:
             || echo "Label add failed (label may not exist)"
 
       # ---------- 关闭 Issue ----------
+      # 注意：state 只接受 open/closed，completed 是 state_reason 的取值
+      # 必须检查 HTTP 状态码，否则 422 校验失败时 curl 退出码仍为 0 → 假成功
       - name: Close Issue
         if: needs.analyze.outputs.issue_number != ''
         run: |
           ISSUE_NUMBER="${{ needs.analyze.outputs.issue_number }}"
-          curl -sS -X PATCH \
+          HTTP_CODE=$(curl -sS -o /tmp/close_resp.json -w "%{http_code}" -X PATCH \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
-            -d '{"state": "completed"}' \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}" \
-            && echo "✅ Issue #${ISSUE_NUMBER} 已关闭并标记为 completed" \
-            || echo "⚠️ Close Issue 失败（可能是 workflow_dispatch 输入了不存在的 issue）"
+            -d '{"state": "closed", "state_reason": "completed"}' \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}")
+          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+            echo "✅ Issue #${ISSUE_NUMBER} 已关闭并标记为 completed"
+          else
+            echo "❌ Close Issue 失败 HTTP=$HTTP_CODE"
+            cat /tmp/close_resp.json
+            exit 1
+          fi
