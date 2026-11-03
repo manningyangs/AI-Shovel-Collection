@@ -24,7 +24,7 @@ _SCRIPTS_DIR = _HERE.parent
 if str(_SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR))
 
-from eval.config import DIMENSIONS, SCORING_VERSION  # noqa: E402
+from eval.config import DIMENSIONS, SCORING_VERSION, get_dimensions_by_ptype  # noqa: E402
 from eval.github_client import GitHubClient  # noqa: E402
 from eval.manifest_detector import (  # noqa: E402
     detect_agent_compatibility,
@@ -110,6 +110,11 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
     # Manifest → 项目类型
     ptype = detect_project_type(tree_files, contents)
 
+    # V1.0.1 P1-2: 按项目类型重建 DIMENSIONS_DICT（Agent Skill 用 30/20/10/15/10/10/5）
+    _rebuild_dimensions_dict(ptype.get("type", "unknown"))
+    if verbose and ptype.get("type") in ("agent_skill",):
+        print(f"      [ptype] {ptype.get('type')} → 应用专属权重")
+
     # Agent 兼容性
     agent_compat = detect_agent_compatibility(tree_files, contents)
 
@@ -135,7 +140,15 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
     deps = extract_dependency_versions(tree_files, contents)
     if verbose:
         print(f"      提取 {len(deps)} 个依赖版本，查询 OSV…")
-    osv_vulns = query_osv_dependencies(deps[:50])  # 限制 50 个，控制 API 消耗
+    osv_result = query_osv_dependencies(deps)  # V1.0.1: 带状态字典
+    osv_vulns = osv_result.get("vulns", [])
+    osv_meta = {
+        "query_status": osv_result.get("query_status", "success"),
+        "error": osv_result.get("error"),
+        "deps_queried": osv_result.get("deps_queried", 0),
+    }
+    if verbose and osv_meta["query_status"] != "success":
+        print(f"      [OSV] status={osv_meta['query_status']} error={osv_meta.get('error')}")
 
     # === 5. 构建评分 ===
     if verbose:
@@ -143,7 +156,7 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
 
     sub_scores = _build_sub_scores(
         ptype, agent_compat, readme_result, license_result, env_result,
-        health, sec_tools, code_scan, osv_vulns, deps,
+        health, sec_tools, code_scan, osv_vulns, deps, tree_files, osv_meta, contents,
     )
     prelim = compute_preliminary_score(sub_scores)
 
@@ -188,6 +201,10 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
         limitations.append("⚠️ 无法确认 License 类型")
     if health.get("archived"):
         limitations.append("⚠️ 项目已归档")
+    if osv_meta["query_status"] == "blocked":
+        limitations.append(f"⚠️ OSV 漏洞查询被阻断：{osv_meta.get('error') or 'API 不可用'} — 依赖安全项未评分")
+    elif osv_meta["query_status"] == "partial":
+        limitations.append(f"⚠️ OSV 部分查询失败 — 依赖安全结果可能不完整")
 
     report = {
         "schema_version": "1.0",
@@ -270,11 +287,19 @@ def _collect_manifest_paths(tree_files: list[str]) -> list[str]:
     return out
 
 
-def _build_sub_scores(ptype, agent_compat, readme, license_result, env_result, health, sec_tools, code_scan, osv_vulns, deps):
+def _build_sub_scores(ptype, agent_compat, readme, license_result, env_result, health, sec_tools, code_scan, osv_vulns, deps,
+                     tree_files=None, osv_meta=None, contents=None):
     """
     把分析结果映射到七个维度的子项评分（0-5）。
     每个子项给出 level(0-5) + status + evidence。
+
+    V1.0.1 关键修正：
+      - test_evidence 真检测 tree_files（不再传空列表）
+      - OSV blocked/partial 时 dependency_vulns 不再给满分
     """
+    tree_files = tree_files or []
+    osv_meta = osv_meta or {"query_status": "success"}
+    contents = contents or {}
     scores = []
 
     # === 功能完整度 (25分) ===
@@ -326,8 +351,9 @@ def _build_sub_scores(ptype, agent_compat, readme, license_result, env_result, h
     scores.append({"dim_key": "ease_of_use", "sub_key": "quickstart", "weight": 3, "level": qs_level, "status": "verified"})
 
     # === 可靠性 (15分) ===
-    test_level = 3 if any("test" in f.lower() for f in _collect_manifest_paths([])) else 1
-    scores.append({"dim_key": "reliability", "sub_key": "test_evidence", "weight": 5, "level": test_level, "status": "partial"})
+    # V1.0.1 P1-1 修正：test_evidence 真检测（之前传空列表 → 永远 level=1）
+    test_level, test_status = _detect_test_evidence(tree_files, contents)
+    scores.append({"dim_key": "reliability", "sub_key": "test_evidence", "weight": 5, "level": test_level, "status": test_status})
 
     ci_level = 5 if health.get("ci_present") else 0
     scores.append({"dim_key": "reliability", "sub_key": "ci_complete", "weight": 4, "level": ci_level, "status": "verified" if health.get("ci_present") else "failed"})
@@ -350,8 +376,18 @@ def _build_sub_scores(ptype, agent_compat, readme, license_result, env_result, h
     # === 安全性 (15分) ===
     vuln_count = len(osv_vulns)
     critical_vulns = sum(1 for v in osv_vulns if v.get("severity") == "critical")
-    dep_level = 5 if vuln_count == 0 else (2 if critical_vulns == 0 else 0)
-    scores.append({"dim_key": "security", "sub_key": "dependency_vulns", "weight": 4, "level": dep_level, "status": "verified"})
+
+    # V1.0.1 P0-5 修正：OSV blocked 时不能假装"无漏洞" → level=0, status=blocked
+    if osv_meta.get("query_status") == "blocked":
+        dep_level = 0
+        dep_status = "blocked"
+    elif osv_meta.get("query_status") == "partial":
+        dep_level = 3 if vuln_count == 0 else (2 if critical_vulns == 0 else 0)
+        dep_status = "partial"
+    else:
+        dep_level = 5 if vuln_count == 0 else (2 if critical_vulns == 0 else 0)
+        dep_status = "verified"
+    scores.append({"dim_key": "security", "sub_key": "dependency_vulns", "weight": 4, "level": dep_level, "status": dep_status})
 
     dangerous_count = len(code_scan.get("dangerous_findings", []))
     danger_level = 5 if dangerous_count == 0 else max(0, 4 - dangerous_count)
@@ -428,15 +464,22 @@ def _build_dimensions(sub_scores):
     return dims
 
 
-# 维度字典（快速查询）
-DIMENSIONS_DICT = {}
-for key, label, dim_weight, subs in DIMENSIONS:
-    DIMENSIONS_DICT[key] = {
-        "label": label,
-        "dim_weight": dim_weight,
-        "sub_weights": [sw for _, _, sw in subs],
-        "sub_names": [name for name, _, _ in subs],
-    }
+# 维度字典（V1.0.1: 运行时按 ptype 动态重建，initial import 时为空）
+DIMENSIONS_DICT: dict = {}
+
+
+def _rebuild_dimensions_dict(ptype: str = "unknown"):
+    """V1.0.1: 按项目类型重建 DIMENSIONS_DICT（全局变量）。"""
+    global DIMENSIONS_DICT
+    dims = get_dimensions_by_ptype(ptype)
+    DIMENSIONS_DICT = {}
+    for key, label, dim_weight, subs in dims:
+        DIMENSIONS_DICT[key] = {
+            "label": label,
+            "dim_weight": dim_weight,
+            "sub_weights": [sw for _, _, sw in subs],
+            "sub_names": [name for name, _, _ in subs],
+        }
 
 
 def _format_security_findings(code_scan, osv_vulns) -> list[dict]:
@@ -535,6 +578,95 @@ def _build_evidence(ptype, agent_compat, readme, code_scan, osv_vulns) -> list[s
         ev.append(f"[security] 扫描 {code_scan['files_scanned']} 个源码文件")
     ev.append(f"[osv] 查询 {len(osv_vulns)} 个依赖漏洞")
     return ev
+
+
+def _detect_test_evidence(tree_files: list[str], contents: dict) -> tuple[int, str]:
+    """
+    V1.0.1 P1-1: 真检测测试证据（之前传空列表永远 level=1）。
+    检测维度：
+      1. 真实测试文件存在（tests/ 目录、test_*.py、*.test.js 等）
+      2. 测试框架配置（pytest.ini、jest.config.*、vitest.config.*）
+      3. CI workflow 里有 test 步骤
+
+    返回 (level 0-5, status)
+    """
+    test_dir_markers = ("tests/", "test/", "__tests__/", "test_suite/", "spec/")
+    test_file_patterns = (
+        "test_", "_test.py", "_test.go", ".test.", ".spec.",
+    )
+    test_config_files = (
+        "pytest.ini", "conftest.py", "setup.cfg", "tox.ini",
+        "jest.config", "vitest.config", "mocha.opts", ".nycrc",
+        "phpunit.xml",
+    )
+
+    has_real_test_files = False
+    has_test_dir = False
+    has_test_config = False
+    has_ci_test_step = False
+    test_files_found = []
+
+    # 1. 检测目录和文件
+    for f in tree_files:
+        fl = f.lower()
+        # 测试目录
+        if any(marker in fl for marker in test_dir_markers):
+            has_test_dir = True
+        # 测试文件命名
+        if any(pat in fl for pat in test_file_patterns):
+            has_real_test_files = True
+            if len(test_files_found) < 5:
+                test_files_found.append(f)
+        # 测试框架配置
+        if any(fl.endswith(cfg) for cfg in test_config_files) or "pytest" in fl or "jest.config" in fl:
+            has_test_config = True
+
+    # 2. CI workflow 检测（看 contents 里的 yml 有没有 test 相关 step）
+    for fpath, text in contents.items():
+        if not text:
+            continue
+        fl = fpath.lower()
+        if ".github/workflows/" in fl and fl.endswith((".yml", ".yaml")):
+            tl = text.lower()
+            if any(kw in tl for kw in ("run:.*test", "pytest", "jest", "vitest", "npm test", "go test", "unittest", "make test")):
+                has_ci_test_step = True
+                break
+
+    # 3. 综合评分
+    evidence_parts = []
+    score = 0
+
+    if has_real_test_files:
+        score += 3  # 真实测试文件 = 核心证据
+        evidence_parts.append(f"{len(test_files_found)}+ 测试文件")
+    if has_test_dir:
+        score += 1
+        evidence_parts.append("tests/ 目录")
+    if has_test_config:
+        score += 1
+        evidence_parts.append("测试框架配置")
+    if has_ci_test_step:
+        score += 1
+        evidence_parts.append("CI test step")
+
+    # 判定 level 和 status
+    if score >= 4:
+        level = 5
+        status = "verified"
+    elif score >= 3:
+        level = 4
+        status = "verified"
+    elif score >= 2:
+        level = 3
+        status = "partial"
+    elif score >= 1:
+        level = 2
+        status = "declared" if has_ci_test_step else "partial"
+    else:
+        level = 0
+        status = "not_tested"
+
+    return level, status
 
 
 def main():

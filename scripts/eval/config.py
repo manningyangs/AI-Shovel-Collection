@@ -1,7 +1,7 @@
 # AI Shovel Eval V1.0 配置
 # 七个维度权重总计必须 = 100
 
-SCORING_VERSION = "1.0"
+SCORING_VERSION = "1.0.1"  # V1.0.1: OSV blocked 区分 + test_evidence 真检测 + 项目类型权重
 
 DIMENSIONS = [
     # (key, label, weight, sub_items)
@@ -90,3 +90,42 @@ MANIFEST_FILES = [
     "Dockerfile", "compose.yaml", "docker-compose.yaml",
     "mcp.json", "SKILL.md", "LICENSE", "README.md",
 ]
+
+
+# V1.0.1: 按项目类型动态调权重
+# 格式: {"ptype": {"dim_key": new_weight}} — 加起来必须 = 100
+PTYPE_WEIGHT_OVERRIDES = {
+    # Agent Skill: 功能和 Agent 集成是核心，易用性和安全权重降低
+    # 30 + 20 + 10 + 15 + 10 + 10 + 5 = 100 ✓
+    "agent_skill": {
+        "functionality": 30,
+        "agent_compat": 20,
+        "ease_of_use": 10,
+        "reliability": 15,
+        "security": 10,
+        "maintenance": 10,
+        "docs": 5,
+    },
+}
+
+
+def get_dimensions_by_ptype(ptype: str) -> list:
+    """
+    返回指定项目类型的 DIMENSIONS 列表（权重已调整）。
+    默认返回标准 DIMENSIONS（MCP / Framework / CLI / Collection / unknown 都用默认）。
+
+    V1.0.1: Agent Skill 权重上调 functionality + agent_compat。
+    """
+    overrides = PTYPE_WEIGHT_OVERRIDES.get(ptype)
+    if not overrides:
+        return list(DIMENSIONS)  # 浅拷贝足够（不修改 sub_items）
+
+    result = []
+    for key, label, default_weight, subs in DIMENSIONS:
+        new_weight = overrides.get(key, default_weight)
+        result.append((key, label, new_weight, subs))
+
+    # 安全校验
+    total = sum(w for _, _, w, _ in result)
+    assert total == 100, f"权重总和必须 = 100，当前 ptype={ptype} 得 {total}"
+    return result
