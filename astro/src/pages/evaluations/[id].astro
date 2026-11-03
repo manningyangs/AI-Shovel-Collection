@@ -466,7 +466,7 @@ function compatLabel(k: string): string {
 
 <script is:inline>
 function compatLabel(k) {
-  const m: Record<string, string> = {
+  const m = {
     host_cursor: "Cursor 支持", host_claude_desktop: "Claude Desktop",
     host_copilot: "VS Code Copilot", host_cline: "Cline",
     host_windsurf: "Windsurf", host_trae: "Trae", host_openclaw: "OpenClaw",
@@ -486,26 +486,27 @@ function avgStatus(subs) {
 }
 
 function copyRecommendations() {
+  const recsStr = JSON.stringify(recs || []);
   const text = [
-    `# AI Shovel Eval V1.0.1 改进任务单`,
-    ``,
-    `## 项目`,
-    `- **仓库**: ${repo.owner}/${repo.name}`,
-    `- **Commit**: ${repo.commit_sha?.slice(0, 12)}`,
-    `- **评测**: ${evalData.preliminary_score}/100 · ${evalData.grade} · L1 静态分析`,
-    `- **覆盖率**: ${evalData.coverage}%`,
-    ``,
-    `## 发现的问题与改进方向`,
-    ...${JSON.stringify(recs || []).replace(/"/g, '\\"')},
-    ``,
-    `## 验收标准`,
-    `- [ ] 修复完成后请重新评测确认分数变化`,
-    `- [ ] 关键安全问题修复后必须通过依赖扫描和人工 review`,
-    `- [ ] 改进 README 后确保项目类型识别有新证据支撑`,
-    ``,
-    `## 注意事项`,
-    `- 本评测为 L1 静态分析，未能覆盖真实运行测试场景`,
-    `- 如需 L2/L3 评测，请参考 AI Shovel Eval 文档申请`,
+    "# AI Shovel Eval V1.0.1 改进任务单",
+    "",
+    "## 项目",
+    "- **仓库**: " + repo.owner + "/" + repo.name,
+    "- **Commit**: " + (repo.commit_sha?.slice(0, 12) || "N/A"),
+    "- **评测**: " + evalData.preliminary_score + "/100 · " + evalData.grade + " · L1 静态分析",
+    "- **覆盖率**: " + evalData.coverage + "%",
+    "",
+    "## 发现的问题与改进方向",
+    recsStr,
+    "",
+    "## 验收标准",
+    "- [ ] 修复完成后请重新评测确认分数变化",
+    "- [ ] 关键安全问题修复后必须通过依赖扫描和人工 review",
+    "- [ ] 改进 README 后确保项目类型识别有新证据支撑",
+    "",
+    "## 注意事项",
+    "- 本评测为 L1 静态分析，未能覆盖真实运行测试场景",
+    "- 如需 L2/L3 评测，请参考 AI Shovel Eval 文档申请",
   ].join("\n");
 
   navigator.clipboard.writeText(text).then(() => {
