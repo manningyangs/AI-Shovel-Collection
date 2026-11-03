@@ -27,13 +27,16 @@ jobs:
   analyze:
     name: 🧪 静态评测
     runs-on: ubuntu-latest
+    # V1.0.1 fix: 去掉 label 硬过滤 — Issue Form 声明的 label 如果仓库不存在，GitHub 不会自动创建
+    # 改成在 Parse step 里判断有没有 repo_url，没有就优雅 skip 后续 step
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (
-        github.event_name == 'issues' &&
-        github.event.action == 'opened' &&
-        contains(github.event.issue.labels.*.name, 'evaluation-request')
-      )
+      (github.event_name == 'issues' && github.event.action == 'opened')
+    outputs:
+      skip_eval: ${{ steps.parse.outputs.skip_eval }}
+      repo_url: ${{ steps.parse.outputs.repo_url }}
+      issue_number: ${{ steps.parse.outputs.issue_number }}
+      report_id: ${{ steps.evaluate.outputs.report_id }}
     permissions:
       contents: read
       issues: read
@@ -49,80 +52,50 @@ jobs:
       - name: Install Python deps
         run: pip install requests
 
-      # ---------- 安全：Issue 正文走 Python heredoc，不经 shell ----------
+      # ---------- 解析 repo_url（没有就 skip，不让整个 Job 被 if 跳过） ----------
       - name: Parse Issue body from event payload
         id: parse
         run: |
           REPO_URL=""
           ISSUE_NUMBER=""
+          SKIP_EVAL="false"
 
           if [ -n "${{ github.event.issue.number }}" ]; then
             ISSUE_NUMBER="${{ github.event.issue.number }}"
           fi
 
           if [ -n "${{ github.event.issue.body }}" ]; then
-            # GitHub Actions double-encode workaround: 使用 Python 从 env 安全解析
             export ISSUE_BODY="${{ github.event.issue.body }}"
           fi
 
-          # Python 从环境变量读正文，完全绕过 shell 注入
           REPO_URL=$(python3 << 'PYEOF'
-          import os, re, sys
-
+          import os, re
           body = os.environ.get("ISSUE_BODY", "") or ""
           inputs = os.environ.get("INPUT_REPO_URL", "")
-
-          url = ""
           for line in body.split("\n"):
             line = line.strip()
-            if not line or line.startswith("#") or line.startswith("_") or line.startswith("- "):
+            if not line or line.startswith("#") or line.startswith("_"):
               continue
             if "github.com/" in line or line.startswith("https://"):
-              if re.match(r"^https?://github\.com/[A-Za-z0-9_.\-]+/[A-Za-z0-9_.\-]+/?$", line.rstrip("/")):
-                url = line.rstrip(".,;:!?").rstrip("/")
-                break
-
-          if not url and inputs:
-            url = inputs.strip().rstrip(".,;:!?").rstrip("/")
-
-          if url.endswith(".git"):
-            url = url[:-4]
-
-          print(url)
+              m = re.match(r"^https?://github\.com/[A-Za-z0-9_.\-]+/[A-Za-z0-9_.\-]+", line.rstrip("/.,;:!?"))
+              if m:
+                print(m.group(0).rstrip(".git"))
+                raise SystemExit(0)
+          if inputs:
+            print(inputs.strip().rstrip(".,;:!?").rstrip("/").rstrip(".git"))
           PYEOF
           )
 
-          # Python 兜底（避免 heredoc 里嵌套 heredoc 问题）
-          REPO_URL=$(python3 -c "
-          import os
-          b = os.environ.get('ISSUE_BODY', '') or ''
-          inp = os.environ.get('INPUT_REPO_URL', '')
-          import re
-          for line in b.split(chr(10)):
-              line = line.strip()
-              if line and ('github.com/' in line or line.startswith('https://')):
-                  if re.match(r'^https?://github\.com/[A-Za-z0-9_.\-]+/[A-Za-z0-9_.\-]+/?$', line.rstrip('/')):
-                      print(line.rstrip('.,;:!?').rstrip('/'))
-                      raise SystemExit(0)
-          if inp:
-              print(inp.strip().rstrip('.,;:!?').rstrip('/'))
-          else:
-              sys.exit(1)
-          " 2>/dev/null || echo "")
-
           if [ -z "$REPO_URL" ]; then
-            echo "::error::无法从 Issue 正文提取 repo_url，请检查格式"
-            exit 1
+            echo "⚠️ 未从 Issue 正文或 workflow inputs 中找到 GitHub repo_url → 跳过评测"
+            SKIP_EVAL="true"
+          else
+            echo "✅ 解析成功: repo_url=$REPO_URL"
           fi
 
-          echo "repo_url=$REPO_URL"
-          echo "issue_number=$ISSUE_NUMBER"
-
-          # 写入 GITHUB_OUTPUT（GitHub Actions 原生方式，不经 shell 插值）
-          {
-            echo "repo_url=$REPO_URL"
-            echo "issue_number=$ISSUE_NUMBER"
-          } >> "$GITHUB_OUTPUT"
+          echo "repo_url=$REPO_URL" >> "$GITHUB_OUTPUT"
+          echo "issue_number=$ISSUE_NUMBER" >> "$GITHUB_OUTPUT"
+          echo "skip_eval=$SKIP_EVAL" >> "$GITHUB_OUTPUT"
         env:
           INPUT_REPO_URL: ${{ github.event.inputs.repo_url }}
           INPUT_ISSUE_NUMBER: ${{ github.event.inputs.issue_number }}
@@ -130,6 +103,7 @@ jobs:
       # ---------- 运行 evaluator（安全：URL 从 env 读，Python 内部二次校验） ----------
       - name: Run evaluator
         id: evaluate
+        if: steps.parse.outputs.skip_eval != 'true'
         env:
           REPO_URL: ${{ steps.parse.outputs.repo_url }}
           # GITHUB_TOKEN 只用于 GitHub API 读（提高限流额度），不暴露给被测仓库
@@ -154,6 +128,7 @@ jobs:
           echo "report_id=$REPORT_ID" >> "$GITHUB_OUTPUT"
 
       - name: Upload report artifact
+        if: steps.parse.outputs.skip_eval != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: eval-report
@@ -165,7 +140,8 @@ jobs:
     name: 📝 发布报告
     needs: analyze
     runs-on: ubuntu-latest
-    if: always() && needs.analyze.result == 'success'
+    # V1.0.1 fix: 只有真正跑了评测才发布（skip_eval=true → analyze 里 evaluator 没跑 → 不该 publish）
+    if: always() && needs.analyze.result == 'success' && needs.analyze.outputs.skip_eval != 'true'
     permissions:
       contents: write
       issues: write
