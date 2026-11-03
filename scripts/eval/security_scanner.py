@@ -133,32 +133,53 @@ def _mask_secret(match: str) -> str:
 
 # OSV API 公开漏洞数据库查询
 # 文档：https://osv.dev/docs/api/
-def query_osv_dependencies(deps: list[dict[str, str]]) -> list[dict[str, Any]]:
+def query_osv_dependencies(deps: list[dict[str, str]]) -> dict[str, Any]:
     """
     对依赖包版本查询 OSV（Open Source Vulnerabilities）。
     deps: [{name, version, ecosystem}, ...]
-    返回漏洞列表 [{package, version, severity, osv_id, summary}, ...]
+    返回带状态的字典 — 区分 API 阻断、无依赖、查询成功三种情况：
+      {"vulns": [...], "query_status": "success"|"blocked"|"no_deps", "error": "...", "deps_queried": N}
+
+    V1.0.1 关键修正：API 挂了绝不能当成"没有漏洞"！
     """
+    result: dict[str, Any] = {
+        "vulns": [],
+        "query_status": "success",
+        "error": None,
+        "deps_queried": 0,
+    }
+
+    if not deps:
+        result["query_status"] = "no_deps"
+        return result
+
+    # 先做一次连通性探测 — 避免浪费整个循环
+    try:
+        probe = requests.post(
+            "https://api.osv.dev/v1/query",
+            json={"package": {"name": "requests", "ecosystem": "PyPI"}, "version": "2.31.0"},
+            timeout=8,
+        )
+        probe.raise_for_status()
+    except (requests.Timeout, requests.ConnectionError, requests.HTTPError, OSError) as e:
+        result["query_status"] = "blocked"
+        result["error"] = f"OSV API 不可用: {type(e).__name__}: {str(e)[:120]}"
+        return result
+
     vulns = []
-    batch_size = 100  # OSV API 单次最多 100 个
+    deps_queried = 0
+    blocked_count = 0
+    batch_size = 100
 
-    for i in range(0, len(deps), batch_size):
+    for i in range(0, min(len(deps), 50), batch_size):  # 限制最多 50 个 dep
         batch = deps[i:i + batch_size]
-        payload = {
-            "package": {"name": "*"},
-            "version": "*",
-            "query": [
-                {"package": {"name": d["name"], "ecosystem": d.get("ecosystem", "")}, "version": d["version"]}
-                for d in batch if d.get("version")
-            ],
-        }
-
-        # 但 OSV 的批量查询用 POST /v1/querybatch 更高效
-        # 这里简化：对每个 dep 单独查（V1.0 可以接受，V2.0 换成 querybatch）
         for dep in batch:
+            if not dep.get("version"):
+                continue
+            deps_queried += 1
             try:
-                result = _osv_query_single(dep["name"], dep.get("version", ""), dep.get("ecosystem", "PyPI"))
-                for v in result:
+                vlist = _osv_query_single(dep["name"], dep.get("version", ""), dep.get("ecosystem", "PyPI"))
+                for v in vlist:
                     vulns.append({
                         "package": dep["name"],
                         "version": dep["version"],
@@ -168,32 +189,41 @@ def query_osv_dependencies(deps: list[dict[str, str]]) -> list[dict[str, Any]]:
                         "summary": v.get("summary", "") or v.get("details", "")[:120],
                         "aliases": v.get("aliases", []),
                     })
-            except Exception:
-                # 单个失败不影响整体
-                continue
+            except Exception as e:
+                blocked_count += 1
+                if blocked_count <= 3:
+                    result["error"] = f"部分 dep 查询失败 ({blocked_count}): {type(e).__name__}"
 
-    return vulns
+    result["vulns"] = vulns
+    result["deps_queried"] = deps_queried
+
+    # 全部失败 → blocked；部分失败 → partial；全成功 → success
+    if blocked_count == deps_queried and deps_queried > 0:
+        result["query_status"] = "blocked"
+    elif blocked_count > 0:
+        result["query_status"] = "partial"
+    elif deps_queried == 0:
+        result["query_status"] = "no_deps"
+
+    return result
 
 
 def _osv_query_single(name: str, version: str, ecosystem: str) -> list[dict]:
-    """查单个包的漏洞。"""
+    """查单个包的漏洞。失败时抛出异常（让上层决定 blocked 还是 partial）。"""
     if not version:
         return []
     payload = {
         "package": {"name": name, "ecosystem": ecosystem},
         "version": version,
     }
-    try:
-        resp = requests.post(
-            "https://api.osv.dev/v1/query",
-            json=payload,
-            timeout=10,
-        )
-        resp.raise_for_status()
-        result = resp.json()
-        return result.get("vulns", []) or []
-    except (requests.RequestException, TimeoutError, OSError):
-        return []
+    resp = requests.post(
+        "https://api.osv.dev/v1/query",
+        json=payload,
+        timeout=10,
+    )
+    resp.raise_for_status()
+    data = resp.json()
+    return data.get("vulns", []) or []
 
 
 def _osv_severity(vuln: dict) -> str:

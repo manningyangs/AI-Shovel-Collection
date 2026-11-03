@@ -5,20 +5,19 @@ import path from "node:path";
 
 const base = "/AI-Shovel-Collection";
 
+// 读取所有报告生成静态路由
 export function getStaticPaths() {
-  let reportFiles = [];
+  let reportFiles: string[] = [];
   try {
     const reportsDir = path.resolve(process.cwd(), "../evaluations/reports");
     if (fs.existsSync(reportsDir)) {
-      reportFiles = fs.readdirSync(reportsDir).filter(f => f.endsWith(".json"));
+      reportFiles = fs.readdirSync(reportsDir).filter((f) => f.endsWith(".json") && !f.includes(".legacy"));
     }
-  } catch (e) {
-    // 目录不存在 → 空列表（正常，还没有任何评测报告）
-  }
+  } catch (e) {}
 
-  return reportFiles.map(f => {
+  return reportFiles.map((f) => {
     const id = f.replace(/\.json$/, "");
-    let data = {};
+    let data: any = {};
     try {
       data = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), `../evaluations/reports/${f}`), "utf8"));
     } catch (e) {}
@@ -26,245 +25,501 @@ export function getStaticPaths() {
   });
 }
 
-const report = Astro.props;
+const report = Astro.props || {};
 const repo = report.repository || {};
 const evalData = report.evaluation || {};
 const dims = report.dimensions || {};
+const ptype = report.project_type || {};
 const findings = report.security_findings || [];
 const recs = report.recommendations || [];
-const evidence = report.evidence || [];
+const agentCompat = report.agent_compatibility || { checks: {}, evidence: [] };
+const disclaimers = report.limitations || [];
 
 // 辅助函数
-function fmtScore(n) {
+function fmtPct(n: number | undefined | null) {
   if (n === undefined || n === null || Number.isNaN(n)) return "—";
   return Math.round(n);
 }
-function fmtStars(n) {
+function fmtStars(n: number | undefined | null) {
   if (!n) return "—";
   if (n >= 1000) return (n / 1000).toFixed(1) + "k";
   return String(n);
 }
-function levelBadge(level) {
-  const colors = {
-    "L1": "#94a3b8", "L2": "#10b981", "L3": "#8b5cf6",
-    "provisional": "#f59e0b", "official": "#3b82f6", "failed": "#ef4444"
+function gradeColor(g: string | undefined | null) {
+  const c: Record<string, string> = { S: "#f59e0b", A: "#10b981", B: "#3b82f6", C: "#8b5cf6", D: "#f97316", E: "#ef4444" };
+  return c[g || ""] || "#64748b";
+}
+function statusColor(s: string) {
+  const c: Record<string, string> = {
+    verified: "#10b981", declared: "#3b82f6", partial: "#f59e0b",
+    failed: "#ef4444", not_tested: "#94a3b8", not_applicable: "#cbd5e1", blocked: "#dc2626",
   };
-  return colors[level] || "#94a3b8";
+  return c[s] || "#64748b";
+}
+function statusLabel(s: string) {
+  const m: Record<string, string> = {
+    verified: "✓ 已验证", declared: "📝 声明", partial: "◐ 部分",
+    failed: "✗ 未达标", not_tested: "— 未测试", not_applicable: "⊘ 不适用", blocked: "⛔ 受阻",
+  };
+  return m[s] || s;
+}
+function _avgStatus(items: any[]): string {
+  // 从子项里取最严重/最可信的状态
+  const priority = ["blocked", "failed", "not_tested", "not_applicable", "partial", "declared", "verified"];
+  for (const p of priority) {
+    if (items.some((s: any) => s.status === p)) return p;
+  }
+  return items[0]?.status || "partial";
+}
+function compatLabel(k: string): string {
+  const m: Record<string, string> = {
+    host_cursor: "Cursor 支持", host_claude_desktop: "Claude Desktop",
+    host_copilot: "VS Code Copilot", host_cline: "Cline",
+    host_windsurf: "Windsurf", host_trae: "Trae", host_openclaw: "OpenClaw",
+    mcp_protocol_deps: "MCP 协议依赖",
+    transport_methods: "传输方式", auth_methods: "认证方式",
+  };
+  return m[k] || k;
 }
 ---
 
 <Base
-  title={`🧪 ${repo.owner}/${repo.name} — AI Shovel Eval 报告`}
-  description={`AI Shovel Eval 对 ${repo.owner}/${repo.name} 的静态评测报告，评分 ${evalData.preliminary_score ?? "—"}/100`}
+  title={`🧪 ${repo.owner}/${repo.name} — AI Shovel Eval V1.0.1 报告`}
+  description={`L1 静态分析 · ${evalData.preliminary_score ?? "—"}/100 · 评级 ${evalData.grade ?? "?"}`}
   canonical={`/evaluations/${report.params?.id ?? ""}/`}
 >
 
 <style>
-  .r-wrap { max-width: 860px; margin: 0 auto; padding: 32px 20px; }
+  .r-wrap { max-width: 860px; margin: 0 auto; padding: 28px 20px; }
+  .r-back { display: inline-block; margin-bottom: 14px; font-size: 0.85rem; color: #64748b; text-decoration: none; }
+  .r-back:hover { color: #1e3a5f; }
 
+  /* ===== Header ===== */
   .r-header {
-    background: linear-gradient(135deg, #1e3a5f 0%, #3b82f6 100%);
-    border-radius: 16px; padding: 28px 24px; color: #fff; margin-bottom: 24px;
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 50%, #3b82f6 100%);
+    border-radius: 16px; padding: 28px 24px; color: #fff; margin-bottom: 20px;
   }
   .r-header-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
-  .r-repo-link { color: #fff; text-decoration: none; font-size: 1.15rem; font-weight: 700; }
-  .r-repo-link:hover { text-decoration: underline; }
-  .r-meta { font-size: 0.85rem; opacity: 0.85; margin-top: 6px; }
-  .r-score-big {
-    font-size: 4rem; font-weight: 800; line-height: 1;
-    text-align: center; min-width: 120px;
-  }
-  .r-score-big span { font-size: 1.5rem; font-weight: 400; opacity: 0.7; }
-  .r-level-pill {
-    display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
-    margin-top: 8px;
+  .r-repo-link { color: #fff; text-decoration: none; font-size: 1.2rem; font-weight: 700; }
+  .r-meta { font-size: 0.82rem; opacity: 0.85; margin-top: 6px; }
+  .r-score-wrap { text-align: center; min-width: 130px; }
+  .r-score-big { font-size: 4rem; font-weight: 800; line-height: 1; }
+  .r-score-big span { font-size: 1.3rem; font-weight: 400; opacity: 0.7; }
+  .r-grade-pill {
+    display: inline-block; padding: 6px 18px; border-radius: 20px; font-size: 1.2rem; font-weight: 800;
+    margin-top: 6px;
   }
 
-  .r-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  /* ===== Badges ===== */
+  .r-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .r-badge {
+    padding: 4px 12px; border-radius: 14px; font-size: 0.75rem; font-weight: 600;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
+  }
+  .r-badge-l1 { background: #94a3b8; color: #1e293b; border: none; }
+  .r-badge-prelim { background: #f59e0b; color: #1e3a5f; border: none; }
+
+  /* ===== Quick Info ===== */
+  .r-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
   .r-card {
-    background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 20px;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px;
   }
-  .r-card-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-  .r-card-value { font-size: 1.3rem; font-weight: 700; color: #1e3a5f; margin-top: 4px; }
+  .r-card-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-weight: 600; letter-spacing: 0.05em; }
+  .r-card-value { font-size: 1.15rem; font-weight: 700; color: #1e3a5f; margin-top: 2px; }
+  .r-card-sub { font-size: 0.75rem; color: #94a3b8; margin-top: 2px; }
 
-  .r-section { margin-bottom: 24px; }
-  .r-section h2 { font-size: 1.1rem; margin: 0 0 12px 0; color: #1e3a5f; border-bottom: 2px solid #e5e7eb; padding-bottom: 6px; }
-
-  .r-dim-row {
-    display: flex; align-items: center; gap: 12px; padding: 10px 14px;
-    border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px;
+  /* ===== Project Type ===== */
+  .r-type-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+    border: 1px solid #dbeafe; border-radius: 10px; padding: 14px 18px; margin-bottom: 20px;
   }
-  .r-dim-label { flex: 1; font-size: 0.9rem; font-weight: 600; color: #334155; }
-  .r-dim-bar {
-    flex: 0 0 160px; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;
-  }
-  .r-dim-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
-  .r-dim-score { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 48px; text-align: right; color: #1e3a5f; }
+  .r-type-title { font-size: 0.75rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+  .r-type-name { font-size: 1.2rem; font-weight: 700; color: #1e3a5f; margin-top: 2px; }
+  .r-type-conf { font-size: 0.8rem; color: #3b82f6; font-weight: 600; }
+  .r-type-evidence { font-size: 0.78rem; color: #64748b; margin-top: 8px; }
+  .r-type-evidence span { display: inline-block; background: #fff; border: 1px solid #dbeafe; border-radius: 4px; padding: 2px 8px; margin: 2px 4px 2px 0; }
 
+  /* ===== Disclaimers ===== */
+  .r-disclaimer {
+    background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 6px;
+    padding: 10px 16px; font-size: 0.82rem; color: #92400e; margin-bottom: 20px;
+  }
+  .r-disclaimer b { color: #78350f; }
+
+  /* ===== Dimensions ===== */
+  .r-section { margin-bottom: 20px; }
+  .r-section h2 {
+    font-size: 1.05rem; margin: 0 0 12px 0; color: #1e3a5f; font-weight: 700;
+    border-bottom: 2px solid #e5e7eb; padding-bottom: 6px;
+  }
+
+  .r-dim-card {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+  .r-dim-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .r-dim-label { font-weight: 700; font-size: 0.95rem; color: #1e3a5f; }
+  .r-dim-badges { display: flex; gap: 6px; align-items: center; }
+  .r-dim-status {
+    font-size: 0.7rem; padding: 2px 8px; border-radius: 10px; color: #fff; font-weight: 600;
+  }
+
+  .r-dim-body { display: flex; gap: 14px; align-items: center; }
+  .r-dim-score {
+    font-size: 2rem; font-weight: 800; color: #3b82f6; min-width: 60px; text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .r-dim-score small { font-size: 0.9rem; color: #94a3b8; font-weight: 400; }
+
+  .r-dim-bar-wrap { flex: 1; }
+  .r-dim-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+  .r-dim-bar-fill {
+    height: 100%; border-radius: 4px; transition: width 0.4s;
+  }
+  .r-dim-meta { display: flex; gap: 12px; margin-top: 6px; font-size: 0.75rem; color: #64748b; }
+
+  .r-dim-subs { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e2e8f0; }
+  .r-dim-sub {
+    display: flex; gap: 8px; align-items: center; font-size: 0.78rem; color: #475569;
+    padding: 3px 0;
+  }
+  .r-dim-sub-level {
+    min-width: 40px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums;
+  }
+
+  /* ===== Security ===== */
   .r-finding {
-    padding: 12px 16px; border-radius: 8px; margin-bottom: 8px; font-size: 0.88rem;
+    padding: 10px 14px; border-radius: 8px; margin-bottom: 8px; font-size: 0.84rem;
     border-left: 4px solid;
   }
   .r-finding.critical { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
-  .r-finding.high { background: #fffbeb; border-color: #f59e0b; color: #92400e; }
-  .r-finding.medium { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
-  .r-finding.low { background: #f0fdf4; border-color: #10b981; color: #065f46; }
-
-  .r-rec-item {
-    padding: 10px 14px; background: #f8fafc; border-radius: 8px; font-size: 0.88rem;
-    margin-bottom: 6px; line-height: 1.6;
+  .r-finding.high { background: #fff7ed; border-color: #f97316; color: #9a3412; }
+  .r-finding.medium { background: #fef3c7; border-color: #f59e0b; color: #92400e; }
+  .r-finding.low { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
+  .r-finding .r-find-tag {
+    display: inline-block; font-size: 0.7rem; padding: 1px 6px; border-radius: 4px;
+    background: rgba(0,0,0,0.1); margin-right: 6px; font-weight: 600;
+  }
+  .r-severity-hero {
+    background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; border-radius: 10px;
+    padding: 12px 18px; margin-bottom: 14px; font-weight: 700; font-size: 0.95rem;
   }
 
-  .r-evidence-item {
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.82rem;
-    background: #f1f5f9; padding: 8px 12px; border-radius: 6px; margin-bottom: 4px;
-    color: #334155;
-  }
+  /* ===== Agent Compat ===== */
+  .r-compat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 16px; }
+  .r-compat-item { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 4px 0; border-bottom: 1px dashed #e2e8f0; }
+  .r-compat-name { color: #475569; }
+  .r-compat-val { font-weight: 600; font-size: 0.8rem; }
 
-  .r-limit {
-    background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 6px;
-    font-size: 0.85rem; color: #92400e; margin-top: 16px;
+  /* ===== Recommendations ===== */
+  .r-rec {
+    padding: 10px 14px; background: #f0fdf4; border-left: 4px solid #10b981;
+    border-radius: 6px; margin-bottom: 6px; font-size: 0.84rem; color: #166534; line-height: 1.6;
   }
+  .r-rec-p0 { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+  .r-rec-p1 { background: #fff7ed; border-color: #f97316; color: #9a3412; }
+  .r-rec-p2 { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
 
-  .r-back {
-    display: inline-block; margin-bottom: 16px; font-size: 0.85rem;
-    color: #64748b; text-decoration: none;
-  }
-  .r-back:hover { color: #1e3a5f; }
-
-  .r-json-link {
-    display: inline-block; margin-top: 16px; padding: 8px 16px;
+  .r-copy-btn {
+    display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px;
     background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
-    color: #475569; text-decoration: none; font-size: 0.85rem;
+    color: #475569; text-decoration: none; font-size: 0.82rem; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
   }
-  .r-json-link:hover { background: #f1f5f9; }
+  .r-copy-btn:hover { background: #e0f2fe; border-color: #3b82f6; color: #1e40af; }
 
-  @media (max-width: 600px) {
-    .r-grid { grid-template-columns: 1fr; }
+  /* ===== Evidence ===== */
+  .r-evidence-item {
+    font-family: ui-monospace, Menlo, monospace; font-size: 0.78rem;
+    background: #f1f5f9; padding: 6px 12px; border-radius: 6px;
+    color: #475569; margin-bottom: 3px;
+  }
+
+  /* ===== Footer ===== */
+  .r-footer {
+    display: flex; justify-content: space-between; gap: 10px; margin-top: 24px; flex-wrap: wrap;
+  }
+  .r-json-link {
+    display: inline-flex; align-items: center; gap: 6px; padding: 8px 18px;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 8px;
+    color: #475569; text-decoration: none; font-size: 0.85rem; font-weight: 600;
+  }
+  .r-json-link:hover { border-color: #3b82f6; color: #1e40af; }
+
+  @media (max-width: 640px) {
+    .r-grid { grid-template-columns: repeat(2, 1fr); }
     .r-header-top { flex-direction: column; }
-    .r-score-big { font-size: 3rem; }
+    .r-score-wrap { align-self: flex-start; text-align: left; }
+    .r-compat-grid { grid-template-columns: 1fr; }
   }
 </style>
 
-<a class="r-back" href={`${base}/evaluate/`}>← 返回评测首页</a>
+<!-- 404 -->
+{!report.repository && (
+  <div class="r-wrap" style="text-align:center;padding:60px 20px;color:#64748b">
+    <h1 style="font-size:2rem;color:#1e3a5f;margin-bottom:12px">📄 报告不存在</h1>
+    <p>这个 report_id 还没有对应的评测结果。</p>
+    <a style="color:#3b82f6" href={`${base}/evaluate/`}>去评测首页看看 →</a>
+  </div>
+)}
 
-<div class="r-wrap">
+{report.repository && (
+  <div class="r-wrap">
+    <a class="r-back" href={`${base}/evaluate/`}>← 返回评测首页</a>
 
-  <!-- 不存在 → 404 -->
-  {!report.repository && (
-    <div style="text-align:center;padding:60px 20px;color:#64748b">
-      <h1 style="font-size:2rem;color:#1e3a5f;margin-bottom:12px">📄 报告不存在</h1>
-      <p>这个报告 ID 还没有对应的评测结果。</p>
-      <a style="color:#3b82f6" href={`${base}/evaluate/`}>去评测首页看看 →</a>
+    {/* ===== Header ===== */}
+    <div class="r-header">
+      <div class="r-header-top">
+        <div>
+          <a class="r-repo-link" href={repo.url} target="_blank" rel="noopener">
+            {repo.owner}/{repo.name}
+          </a>
+          <div class="r-meta">
+            {repo.language ?? "—"} · ★ {fmtStars(repo.stars)} · 📄 <a href={`${repo.url}/commit/${repo.commit_sha}`} target="_blank" rel="noopener" style="color:#fff8">@{repo.commit_sha?.slice(0, 12)}</a>
+          </div>
+          <div class="r-meta">
+            评测 v{evalData.evaluation_version} · 评分引擎 v{evalData.scoring_version} · 发布 {evalData.evaluated_at?.slice(0, 10) ?? "—"}
+          </div>
+        </div>
+        <div class="r-score-wrap">
+          <div class="r-score-big">{evalData.preliminary_score ?? "—"}<span>/100</span></div>
+          <div class="r-grade-pill" style={`background:${gradeColor(evalData.grade)}`}>
+            {evalData.grade ?? "?"}
+          </div>
+        </div>
+      </div>
+      <div class="r-badges">
+        <span class="r-badge r-badge-l1">🔒 L1 · 静态分析</span>
+        <span class="r-badge r-badge-prelim">⚠️ 静态初评 · 非正式认证</span>
+        <span class="r-badge">覆盖率 {evalData.coverage ?? 0}%</span>
+        {repo.archived && <span class="r-badge" style="background:#ef4444;color:#fff">🗃️ 已归档</span>}
+      </div>
     </div>
-  )}
 
-  {report.repository && (
-    <>
-      <!-- Header -->
-      <div class="r-header">
-        <div class="r-header-top">
-          <div>
-            <a class="r-repo-link" href={repo.url} target="_blank" rel="noopener">
-              {repo.owner}/{repo.name}
-            </a>
-            <div class="r-meta">
-              {repo.language ?? "—"} · ★ {fmtStars(repo.stars)} ·
-              <a href={`${repo.url}/commit/${repo.commit_sha}`} target="_blank" rel="noopener" style="color:#fff8">
-                @{repo.commit_sha?.slice(0, 7) ?? "—"}
-              </a>
-            </div>
-            <div class="r-meta">
-              评测版本 v{report.schema_version} · 评分引擎 v{evalData.scoring_version} ·
-              发布 {evalData.evaluated_at?.slice(0, 10) ?? "—"}
-            </div>
-            <span class="r-level-pill" style={`background:${levelBadge(evalData.level)}`}>
-              {evalData.level} · {evalData.score_status}
-            </span>
-          </div>
-          <div>
-            <div class="r-score-big">{evalData.preliminary_score ?? "—"}<span>/100</span></div>
-            <div style="font-size:0.8rem;opacity:0.85;text-align:center;margin-top:4px">
-              覆盖率 {evalData.coverage}%
-            </div>
-          </div>
+    {/* ===== Quick Info ===== */}
+    <div class="r-grid">
+      <div class="r-card">
+        <div class="r-card-label">项目类型</div>
+        <div class="r-card-value">{ptype?.type ?? "unknown"}</div>
+        {ptype?.confidence != null && <div class="r-card-sub">置信度 {Math.round(ptype.confidence * 100)}%</div>}
+      </div>
+      <div class="r-card">
+        <div class="r-card-label">语言</div>
+        <div class="r-card-value">{repo.language ?? "—"}</div>
+        <div class="r-card-sub">License {repo.license ?? "未确认"}</div>
+      </div>
+      <div class="r-card">
+        <div class="r-card-label">加权总分</div>
+        <div class="r-card-value">
+          {Object.values(dims).reduce((s: number, d: any) => s + (d.weighted_score ?? 0), 0).toFixed(1)}
+        </div>
+        <div class="r-card-sub">= 各维度加权分之和</div>
+      </div>
+    </div>
+
+    {/* ===== Project Type Evidence ===== */}
+    {ptype?.evidence && Object.keys(ptype.evidence).some((k: string) => ptype.evidence[k]?.length) && (
+      <div class="r-type-card">
+        <div class="r-type-title">项目类型识别依据</div>
+        <div class="r-type-name">{ptype.type} · 置信度 {Math.round((ptype.confidence || 0) * 100)}%</div>
+        <div class="r-type-evidence">
+          {Object.entries(ptype.evidence || {}).map(([dim, files]: any) =>
+            (files as string[]).slice(0, 5).map((f: string) => <span title={dim}>{f}</span>)
+          )}
         </div>
       </div>
+    )}
 
-      <!-- 快速信息卡 -->
-      <div class="r-grid">
-        <div class="r-card">
-          <div class="r-card-label">功能完整度</div>
-          <div class="r-card-value">{fmtScore(dims.functionality?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /25</span></div>
-        </div>
-        <div class="r-card">
-          <div class="r-card-label">智能体兼容性</div>
-          <div class="r-card-value">{fmtScore(dims.agent_compat?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /15</span></div>
-        </div>
-        <div class="r-card">
-          <div class="r-card-label">易用性与集成</div>
-          <div class="r-card-value">{fmtScore(dims.ease_of_use?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /15</span></div>
-        </div>
-        <div class="r-card">
-          <div class="r-card-label">可靠性与效率</div>
-          <div class="r-card-value">{fmtScore(dims.reliability?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /15</span></div>
-        </div>
-        <div class="r-card">
-          <div class="r-card-label">安全与隐私</div>
-          <div class="r-card-value">{fmtScore(dims.security?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /15</span></div>
-        </div>
-        <div class="r-card">
-          <div class="r-card-label">维护健康度</div>
-          <div class="r-card-value">{fmtScore(dims.maintenance?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /10</span></div>
-        </div>
+    {/* ===== Disclaimers ===== */}
+    {disclaimers.length > 0 && (
+      <div class="r-disclaimer">
+        {disclaimers.map((d: string) => <div>⚠️ {d}</div>)}
       </div>
+    )}
 
-      <!-- 安全发现 -->
-      {findings.length > 0 && (
-        <div class="r-section">
-          <h2>🛡️ 安全发现 <span style="font-size:0.85rem;color:#64748b;font-weight:400">（{findings.length} 条）</span></h2>
-          {findings.map(f => (
-            <div class={`r-finding ${f.severity ?? "medium"}`}>
-              <b>{f.severity?.toUpperCase() ?? "MEDIUM"}</b> · {f.message || f.summary || JSON.stringify(f)}
-              {f.location && <div style="margin-top:4px;font-size:0.8rem;opacity:0.85">{f.location}</div>}
+    {/* ===== Seven Dimensions ===== */}
+    <section class="r-section">
+      <h2>📊 七维度评分</h2>
+      {Object.entries(dims).map(([key, d]: any) => {
+        const score = d.score ?? 0;
+        const color = score >= 80 ? "#10b981" : score >= 60 ? "#3b82f6" : score >= 40 ? "#f59e0b" : "#ef4444";
+        const avgStatus = _avgStatus(d.sub_items || []);
+        return (
+          <div class="r-dim-card">
+            <div class="r-dim-head">
+              <div class="r-dim-label">{d.label ?? key}</div>
+              <div class="r-dim-badges">
+                <span class="r-dim-status" style={{ background: statusColor(avgStatus) }}>
+                  {statusLabel(avgStatus)}
+                </span>
+              </div>
+            </div>
+            <div class="r-dim-body">
+              <div class="r-dim-score" style={{ color }}>{score}<small>/100</small></div>
+              <div class="r-dim-bar-wrap">
+                <div class="r-dim-bar">
+                  <div class="r-dim-bar-fill" style={{ width: `${score}%`, background: color }}></div>
+                </div>
+                <div class="r-dim-meta">
+                  <span>权重 {d.weight ?? 0}%</span>
+                  <span>加权贡献 {d.weighted_score ?? 0}</span>
+                  <span>子项覆盖 {d.sub_coverage ?? 0}%</span>
+                </div>
+              </div>
+            </div>
+            {(d.sub_items || []).length > 0 && (
+              <details class="r-dim-subs">
+                <summary style={{ fontSize: "0.78rem", color: "#64748b", cursor: "pointer", userSelect: "none" }}>
+                  展开 {d.sub_items.length} 个子项评分
+                </summary>
+                {(d.sub_items || []).map((s: any) => (
+                  <div class="r-dim-sub">
+                    <span class="r-dim-sub-level">{s.level}/5</span>
+                    <span style={{
+                      display: "inline-block", fontSize: "0.62rem", padding: "1px 6px",
+                      borderRadius: "8px", color: "#fff", background: statusColor(s.status)
+                    }}>{statusLabel(s.status)}</span>
+                    <span style={{ flex: 1 }}>{s.sub_key ?? ""} · 权重 {s.weight}</span>
+                  </div>
+                ))}
+              </details>
+            )}
+          </div>
+        );
+      })}
+    </section>
+
+    {/* ===== Agent Compatibility ===== */}
+    {agentCompat.checks && Object.keys(agentCompat.checks).length > 0 && (
+      <section class="r-section">
+        <h2>🔌 智能体兼容性（仅声明，非真实测试）</h2>
+        <div class="r-compat-grid">
+          {Object.entries(agentCompat.checks).map(([k, v]: any) => (
+            <div class="r-compat-item">
+              <span class="r-compat-name">{compatLabel(k)}</span>
+              <span class="r-compat-val" style={{ color: v ? "#10b981" : "#ef4444" }}>
+                {v ? "📝 文档声明" : "—"}
+              </span>
             </div>
           ))}
         </div>
-      )}
+      </section>
+    )}
 
-      <!-- 改进建议 -->
-      {recs.length > 0 && (
-        <div class="r-section">
-          <h2>💡 改进建议 <span style="font-size:0.85rem;color:#64748b;font-weight:400">（{recs.length} 条）</span></h2>
-          {recs.map(r => (
-            <div class="r-rec-item">{typeof r === "string" ? r : r.text || r.message || JSON.stringify(r)}</div>
-          ))}
+    {/* ===== Security ===== */}
+    <section class="r-section">
+      <h2>🛡️ 安全检查</h2>
+      {findings.length === 0 && (
+        <div style={{ fontSize: "0.85rem", color: "#64748b", padding: "10px 14px", background: "#f0fdf4", border: "1px dashed #86efac", borderRadius: "8px" }}>
+          ✅ 本次静态扫描未发现明确危险模式或 OSV 已知漏洞。<br />
+          <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>
+            安全扫描有局限，不能证明绝对安全。建议额外人工 review 关键代码路径。
+          </span>
         </div>
       )}
-
-      <!-- 证据 -->
-      {evidence.length > 0 && (
-        <div class="r-section">
-          <h2>🔍 评测证据 <span style="font-size:0.85rem;color:#64748b;font-weight:400">（{evidence.length} 条）</span></h2>
-          {evidence.slice(0, 15).map(e => (
-            <div class="r-evidence-item">{typeof e === "string" ? e : e.file || e.path || JSON.stringify(e)}</div>
-          ))}
+      {findings.filter((f: any) => f.severity === "critical").length > 0 && (
+        <div class="r-severity-hero">
+          ⚠️ 高风险 · 暂不建议直接部署 — 发现 {findings.filter((f: any) => f.severity === "critical").length} 个严重问题
         </div>
       )}
-
-      <!-- 限制 -->
-      {(report.limitations || []).length > 0 && (
-        <div class="r-limit">
-          ⚠️ <b>评测限制</b>：{(report.limitations || []).join("；")}
+      {findings.map((f: any) => (
+        <div class={`r-finding ${f.severity ?? "medium"}`}>
+          <span class="r-find-tag">{f.type ?? "unknown"}</span>
+          <b>{(f.severity ?? "").toUpperCase()}</b> · {f.message || f.summary || JSON.stringify(f)}
+          {f.location && <div style={{ fontSize: "0.72rem", marginTop: "4px", opacity: 0.7 }}>📍 {f.location}</div>}
         </div>
-      )}
+      ))}
+    </section>
 
+    {/* ===== Recommendations ===== */}
+    {recs.length > 0 && (
+      <section class="r-section">
+        <h2>💡 改进建议（{recs.length} 条）</h2>
+        {recs.map((r: any, i: number) => (
+          <div class={`r-rec ${i === 0 ? "r-rec-p0" : i < 3 ? "r-rec-p1" : "r-rec-p2"}`}>
+            <b>{i === 0 ? "P0" : i < 3 ? "P1" : "P2"} · </b>
+            {typeof r === "string" ? r : r.text || r.message || JSON.stringify(r)}
+          </div>
+        ))}
+      </section>
+    )}
+
+    {/* ===== Evidence ===== */}
+    {report.evidence && report.evidence.length > 0 && (
+      <section class="r-section">
+        <h2>🔍 评测证据（{report.evidence.length} 条）</h2>
+        {report.evidence.slice(0, 15).map((e: any) => (
+          <div class="r-evidence-item">{typeof e === "string" ? e : e.file || e.path || JSON.stringify(e)}</div>
+        ))}
+      </section>
+    )}
+
+    {/* ===== Footer ===== */}
+    <div class="r-footer">
       <a class="r-json-link" href={`${base}/evaluations/reports/${report.report_id}.json`} target="_blank" rel="noopener">
         📄 查看原始 JSON 报告
       </a>
-    </>
-  )}
+      <button class="r-copy-btn" onclick="copyRecommendations()">📋 复制改进建议到 Trae/Codex 任务单</button>
+    </div>
+  </div>
+)}
 
-</div>
+<script is:inline>
+function compatLabel(k) {
+  const m = {
+    host_cursor: "Cursor 支持", host_claude_desktop: "Claude Desktop",
+    host_copilot: "VS Code Copilot", host_cline: "Cline",
+    host_windsurf: "Windsurf", host_trae: "Trae", host_openclaw: "OpenClaw",
+    mcp_protocol_deps: "MCP 协议依赖",
+    transport_methods: "传输方式", auth_methods: "认证方式",
+  };
+  return m[k] || k;
+}
+
+function avgStatus(subs) {
+  if (!subs || subs.length === 0) return "not_tested";
+  const priority = ["failed", "blocked", "verified", "declared", "partial", "not_tested", "not_applicable"];
+  for (const p of priority) {
+    if (subs.some(s => s.status === p)) return p;
+  }
+  return subs[0]?.status || "not_tested";
+}
+
+function copyRecommendations() {
+  const recsStr = JSON.stringify(recs || []);
+  const text = [
+    "# AI Shovel Eval V1.0.1 改进任务单",
+    "",
+    "## 项目",
+    "- **仓库**: " + repo.owner + "/" + repo.name,
+    "- **Commit**: " + (repo.commit_sha?.slice(0, 12) || "N/A"),
+    "- **评测**: " + evalData.preliminary_score + "/100 · " + evalData.grade + " · L1 静态分析",
+    "- **覆盖率**: " + evalData.coverage + "%",
+    "",
+    "## 发现的问题与改进方向",
+    recsStr,
+    "",
+    "## 验收标准",
+    "- [ ] 修复完成后请重新评测确认分数变化",
+    "- [ ] 关键安全问题修复后必须通过依赖扫描和人工 review",
+    "- [ ] 改进 README 后确保项目类型识别有新证据支撑",
+    "",
+    "## 注意事项",
+    "- 本评测为 L1 静态分析，未能覆盖真实运行测试场景",
+    "- 如需 L2/L3 评测，请参考 AI Shovel Eval 文档申请",
+  ].join("\n");
+
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector(".r-copy-btn");
+    if (btn) {
+      const orig = btn.textContent;
+      btn.textContent = "✅ 已复制";
+      setTimeout(() => btn.textContent = orig, 1500);
+    }
+  }).catch(err => {
+    alert("复制失败，请手动复制：\n" + text);
+  });
+}
+</script>
 
 </Base>
