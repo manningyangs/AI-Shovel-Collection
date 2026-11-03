@@ -1,0 +1,270 @@
+---
+import Base from "../../layouts/Base.astro";
+import fs from "node:fs";
+import path from "node:path";
+
+const base = "/AI-Shovel-Collection";
+
+export function getStaticPaths() {
+  let reportFiles = [];
+  try {
+    const reportsDir = path.resolve(process.cwd(), "../../evaluations/reports");
+    if (fs.existsSync(reportsDir)) {
+      reportFiles = fs.readdirSync(reportsDir).filter(f => f.endsWith(".json"));
+    }
+  } catch (e) {
+    // 目录不存在 → 空列表（正常，还没有任何评测报告）
+  }
+
+  return reportFiles.map(f => {
+    const id = f.replace(/\.json$/, "");
+    let data = {};
+    try {
+      data = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), `../../evaluations/reports/${f}`), "utf8"));
+    } catch (e) {}
+    return { params: { id }, props: data };
+  });
+}
+
+const report = Astro.props;
+const repo = report.repository || {};
+const evalData = report.evaluation || {};
+const dims = report.dimensions || {};
+const findings = report.security_findings || [];
+const recs = report.recommendations || [];
+const evidence = report.evidence || [];
+
+// 辅助函数
+function fmtScore(n) {
+  if (n === undefined || n === null || Number.isNaN(n)) return "—";
+  return Math.round(n);
+}
+function fmtStars(n) {
+  if (!n) return "—";
+  if (n >= 1000) return (n / 1000).toFixed(1) + "k";
+  return String(n);
+}
+function levelBadge(level) {
+  const colors = {
+    "L1": "#94a3b8", "L2": "#10b981", "L3": "#8b5cf6",
+    "provisional": "#f59e0b", "official": "#3b82f6", "failed": "#ef4444"
+  };
+  return colors[level] || "#94a3b8";
+}
+---
+
+<Base
+  title={`🧪 ${repo.owner}/${repo.name} — AI Shovel Eval 报告`}
+  description={`AI Shovel Eval 对 ${repo.owner}/${repo.name} 的静态评测报告，评分 ${evalData.preliminary_score ?? "—"}/100`}
+  canonical={`/evaluations/${report.params?.id ?? ""}/`}
+>
+
+<style>
+  .r-wrap { max-width: 860px; margin: 0 auto; padding: 32px 20px; }
+
+  .r-header {
+    background: linear-gradient(135deg, #1e3a5f 0%, #3b82f6 100%);
+    border-radius: 16px; padding: 28px 24px; color: #fff; margin-bottom: 24px;
+  }
+  .r-header-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .r-repo-link { color: #fff; text-decoration: none; font-size: 1.15rem; font-weight: 700; }
+  .r-repo-link:hover { text-decoration: underline; }
+  .r-meta { font-size: 0.85rem; opacity: 0.85; margin-top: 6px; }
+  .r-score-big {
+    font-size: 4rem; font-weight: 800; line-height: 1;
+    text-align: center; min-width: 120px;
+  }
+  .r-score-big span { font-size: 1.5rem; font-weight: 400; opacity: 0.7; }
+  .r-level-pill {
+    display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600;
+    margin-top: 8px;
+  }
+
+  .r-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .r-card {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 20px;
+  }
+  .r-card-label { font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+  .r-card-value { font-size: 1.3rem; font-weight: 700; color: #1e3a5f; margin-top: 4px; }
+
+  .r-section { margin-bottom: 24px; }
+  .r-section h2 { font-size: 1.1rem; margin: 0 0 12px 0; color: #1e3a5f; border-bottom: 2px solid #e5e7eb; padding-bottom: 6px; }
+
+  .r-dim-row {
+    display: flex; align-items: center; gap: 12px; padding: 10px 14px;
+    border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 8px;
+  }
+  .r-dim-label { flex: 1; font-size: 0.9rem; font-weight: 600; color: #334155; }
+  .r-dim-bar {
+    flex: 0 0 160px; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;
+  }
+  .r-dim-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
+  .r-dim-score { font-weight: 700; font-variant-numeric: tabular-nums; min-width: 48px; text-align: right; color: #1e3a5f; }
+
+  .r-finding {
+    padding: 12px 16px; border-radius: 8px; margin-bottom: 8px; font-size: 0.88rem;
+    border-left: 4px solid;
+  }
+  .r-finding.critical { background: #fef2f2; border-color: #ef4444; color: #991b1b; }
+  .r-finding.high { background: #fffbeb; border-color: #f59e0b; color: #92400e; }
+  .r-finding.medium { background: #eff6ff; border-color: #3b82f6; color: #1e40af; }
+  .r-finding.low { background: #f0fdf4; border-color: #10b981; color: #065f46; }
+
+  .r-rec-item {
+    padding: 10px 14px; background: #f8fafc; border-radius: 8px; font-size: 0.88rem;
+    margin-bottom: 6px; line-height: 1.6;
+  }
+
+  .r-evidence-item {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.82rem;
+    background: #f1f5f9; padding: 8px 12px; border-radius: 6px; margin-bottom: 4px;
+    color: #334155;
+  }
+
+  .r-limit {
+    background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px 16px; border-radius: 6px;
+    font-size: 0.85rem; color: #92400e; margin-top: 16px;
+  }
+
+  .r-back {
+    display: inline-block; margin-bottom: 16px; font-size: 0.85rem;
+    color: #64748b; text-decoration: none;
+  }
+  .r-back:hover { color: #1e3a5f; }
+
+  .r-json-link {
+    display: inline-block; margin-top: 16px; padding: 8px 16px;
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+    color: #475569; text-decoration: none; font-size: 0.85rem;
+  }
+  .r-json-link:hover { background: #f1f5f9; }
+
+  @media (max-width: 600px) {
+    .r-grid { grid-template-columns: 1fr; }
+    .r-header-top { flex-direction: column; }
+    .r-score-big { font-size: 3rem; }
+  }
+</style>
+
+<a class="r-back" href={`${base}/evaluate/`}>← 返回评测首页</a>
+
+<div class="r-wrap">
+
+  <!-- 不存在 → 404 -->
+  {!report.repository && (
+    <div style="text-align:center;padding:60px 20px;color:#64748b">
+      <h1 style="font-size:2rem;color:#1e3a5f;margin-bottom:12px">📄 报告不存在</h1>
+      <p>这个报告 ID 还没有对应的评测结果。</p>
+      <a style="color:#3b82f6" href={`${base}/evaluate/`}>去评测首页看看 →</a>
+    </div>
+  )}
+
+  {report.repository && (
+    <>
+      <!-- Header -->
+      <div class="r-header">
+        <div class="r-header-top">
+          <div>
+            <a class="r-repo-link" href={repo.url} target="_blank" rel="noopener">
+              {repo.owner}/{repo.name}
+            </a>
+            <div class="r-meta">
+              {repo.language ?? "—"} · ★ {fmtStars(repo.stars)} ·
+              <a href={`${repo.url}/commit/${repo.commit_sha}`} target="_blank" rel="noopener" style="color:#fff8">
+                @{repo.commit_sha?.slice(0, 7) ?? "—"}
+              </a>
+            </div>
+            <div class="r-meta">
+              评测版本 v{report.schema_version} · 评分引擎 v{evalData.scoring_version} ·
+              发布 {evalData.evaluated_at?.slice(0, 10) ?? "—"}
+            </div>
+            <span class="r-level-pill" style={`background:${levelBadge(evalData.level)}`}>
+              {evalData.level} · {evalData.score_status}
+            </span>
+          </div>
+          <div>
+            <div class="r-score-big">{evalData.preliminary_score ?? "—"}<span>/100</span></div>
+            <div style="font-size:0.8rem;opacity:0.85;text-align:center;margin-top:4px">
+              覆盖率 {evalData.coverage}%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 快速信息卡 -->
+      <div class="r-grid">
+        <div class="r-card">
+          <div class="r-card-label">功能完整度</div>
+          <div class="r-card-value">{fmtScore(dims.functionality?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /25</span></div>
+        </div>
+        <div class="r-card">
+          <div class="r-card-label">智能体兼容性</div>
+          <div class="r-card-value">{fmtScore(dims.agent_compat?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /15</span></div>
+        </div>
+        <div class="r-card">
+          <div class="r-card-label">易用性与集成</div>
+          <div class="r-card-value">{fmtScore(dims.ease_of_use?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /15</span></div>
+        </div>
+        <div class="r-card">
+          <div class="r-card-label">可靠性与效率</div>
+          <div class="r-card-value">{fmtScore(dims.reliability?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /15</span></div>
+        </div>
+        <div class="r-card">
+          <div class="r-card-label">安全与隐私</div>
+          <div class="r-card-value">{fmtScore(dims.security?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /15</span></div>
+        </div>
+        <div class="r-card">
+          <div class="r-card-label">维护健康度</div>
+          <div class="r-card-value">{fmtScore(dims.maintenance?.score)}<span style="font-size:0.9rem;color:#94a3b8"> /10</span></div>
+        </div>
+      </div>
+
+      <!-- 安全发现 -->
+      {findings.length > 0 && (
+        <div class="r-section">
+          <h2>🛡️ 安全发现 <span style="font-size:0.85rem;color:#64748b;font-weight:400">（{findings.length} 条）</span></h2>
+          {findings.map(f => (
+            <div class={`r-finding ${f.severity ?? "medium"}`}>
+              <b>{f.severity?.toUpperCase() ?? "MEDIUM"}</b> · {f.message || f.summary || JSON.stringify(f)}
+              {f.location && <div style="margin-top:4px;font-size:0.8rem;opacity:0.85">{f.location}</div>}
+            </div>
+          ))}
+        </div>
+      )}
+
+      <!-- 改进建议 -->
+      {recs.length > 0 && (
+        <div class="r-section">
+          <h2>💡 改进建议 <span style="font-size:0.85rem;color:#64748b;font-weight:400">（{recs.length} 条）</span></h2>
+          {recs.map(r => (
+            <div class="r-rec-item">{typeof r === "string" ? r : r.text || r.message || JSON.stringify(r)}</div>
+          ))}
+        </div>
+      )}
+
+      <!-- 证据 -->
+      {evidence.length > 0 && (
+        <div class="r-section">
+          <h2>🔍 评测证据 <span style="font-size:0.85rem;color:#64748b;font-weight:400">（{evidence.length} 条）</span></h2>
+          {evidence.slice(0, 15).map(e => (
+            <div class="r-evidence-item">{typeof e === "string" ? e : e.file || e.path || JSON.stringify(e)}</div>
+          ))}
+        </div>
+      )}
+
+      <!-- 限制 -->
+      {(report.limitations || []).length > 0 && (
+        <div class="r-limit">
+          ⚠️ <b>评测限制</b>：{(report.limitations || []).join("；")}
+        </div>
+      )}
+
+      <a class="r-json-link" href={`${base}/evaluations/reports/${report.repository?.owner ?? "unknown"}-${report.repository?.name ?? "unknown"}-${report.schema_version ?? "1.0"}.json`} target="_blank" rel="noopener">
+        📄 查看原始 JSON 报告
+      </a>
+    </>
+  )}
+
+</div>
+
+</Base>
