@@ -16,9 +16,10 @@ on:
 
 # 只对带 evaluation-request label 的 opened issue 触发
 # workflow_dispatch 始终可手动触发
-# —— 普通 issue 不触发，编辑 issue 不触发，避免重复评测
+# —— Issue Form 模板自动带 evaluation-request label，普通 issue 请手动添加
+# —— 编辑 issue 不触发，避免重复评测
 concurrency:
-  group: eval-${{ github.run_id }}
+  group: ai-shovel-eval
   cancel-in-progress: false
 
 jobs:

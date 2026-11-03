@@ -671,16 +671,23 @@ def _detect_test_evidence(tree_files: list[str], contents: dict) -> tuple[int, s
 
 def main():
     parser = argparse.ArgumentParser(description="AI Shovel Eval — 静态评测主入口")
-    parser.add_argument("url", help="GitHub 仓库 URL")
+    # V1.0.1 fix: 同时支持位置参数和 --repo-url 命名参数（GitHub Actions workflow 用命名参数）
+    url_group = parser.add_mutually_exclusive_group()
+    url_group.add_argument("url", nargs="?", help="GitHub 仓库 URL（位置参数）")
+    url_group.add_argument("--repo-url", help="GitHub 仓库 URL（命名参数，GitHub Actions 用）")
     parser.add_argument("--output", "-o", help="输出 JSON 文件路径（默认 stdout）")
     parser.add_argument("--token", "-t", help="GitHub Token（可选，提高 API 限流额度）")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
+    url = args.repo_url or args.url
+    if not url:
+        parser.error("必须提供仓库 URL（位置参数或 --repo-url）")
+
     token = args.token or os.environ.get("GITHUB_TOKEN")
 
     try:
-        report = run(args.url, token=token, verbose=args.verbose)
+        report = run(url, token=token, verbose=args.verbose)
     except Exception as e:
         print(f"[ERROR] {e}", file=sys.stderr)
         sys.exit(1)
