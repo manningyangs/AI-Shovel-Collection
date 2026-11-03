@@ -8,7 +8,7 @@ const base = "/AI-Shovel-Collection";
 export function getStaticPaths() {
   let reportFiles = [];
   try {
-    const reportsDir = path.resolve(process.cwd(), "../../evaluations/reports");
+    const reportsDir = path.resolve(process.cwd(), "../evaluations/reports");
     if (fs.existsSync(reportsDir)) {
       reportFiles = fs.readdirSync(reportsDir).filter(f => f.endsWith(".json"));
     }
@@ -20,7 +20,7 @@ export function getStaticPaths() {
     const id = f.replace(/\.json$/, "");
     let data = {};
     try {
-      data = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), `../../evaluations/reports/${f}`), "utf8"));
+      data = JSON.parse(fs.readFileSync(path.resolve(process.cwd(), `../evaluations/reports/${f}`), "utf8"));
     } catch (e) {}
     return { params: { id }, props: data };
   });

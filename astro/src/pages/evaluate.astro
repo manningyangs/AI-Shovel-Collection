@@ -10,7 +10,7 @@ const issueFormUrl = `${repoUrl}/issues/new?assignees=&labels=evaluation-request
 // 读取 evaluations/index.json
 let indexData = { reports: [], total_reports: 0 };
 try {
-  const idxPath = path.resolve(process.cwd(), "../../evaluations/index.json");
+  const idxPath = path.resolve(process.cwd(), "../evaluations/index.json");
   indexData = JSON.parse(fs.readFileSync(idxPath, "utf8"));
 } catch (e) {
   // 文件不存在或解析失败 → 空列表（正常，初次部署时）
@@ -189,11 +189,11 @@ const reports = indexData.reports || [];
     )}
     {reports.length > 0 && reports.map(r => (
       <a class="eval-report-card" href={`${base}/evaluations/${r.report_id}/`}>
-        <div class={`eval-report-score ${r.evaluation?.level || "L1"}`}>{r.evaluation?.preliminary_score ?? "—"}</div>
+        <div class={`eval-report-score ${r.level || "L1"}`}>{r.preliminary_score ?? "—"}</div>
         <div class="eval-report-info">
-          <div class="eval-report-repo">{r.repository.owner}/{r.repository.name}</div>
+          <div class="eval-report-repo">{r.owner}/{r.name}</div>
           <div class="eval-report-meta">
-            {r.evaluation?.level ?? "L1"} · {r.evaluation?.coverage ?? 0}% 覆盖 · {r.evaluation?.evaluated_at?.slice(0, 10) ?? ""}
+            {r.level ?? "L1"} · {r.coverage ?? 0}% 覆盖 · {r.evaluated_at?.slice(0, 10) ?? ""}
           </div>
         </div>
         <div class="eval-report-arrow">→</div>
