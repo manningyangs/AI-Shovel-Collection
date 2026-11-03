@@ -35,6 +35,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # ===== 把根目录 evaluations/ 复制到 astro/public/evaluations/ =====
+      # 这样 Astro build 会自动 public → dist，upload-pages-artifact 也必然包含
+      - name: Sync evaluations/ into public/
+        run: |
+          cd ..
+          if [ -d "evaluations" ]; then
+            # 先清理旧的 public/evaluations（避免残留旧报告）
+            rm -rf astro/public/evaluations
+            cp -r evaluations astro/public/evaluations
+            echo "✅ evaluations/ synced into astro/public/ ($(find evaluations -type f | wc -l) files)"
+          else
+            echo "⚠️ evaluations/ dir not found, creating empty placeholder"
+            mkdir -p astro/public/evaluations
+            echo '{"schema_version":"1.0","reports":[]}' > astro/public/evaluations/index.json
+          fi
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -48,14 +64,14 @@ jobs:
       - name: Build Astro
         run: npm run build
 
-      - name: Copy evaluations/ into dist
+      - name: Verify evaluations in dist
         run: |
-          cd ..
-          if [ -d "evaluations" ]; then
-            cp -r evaluations astro/dist/evaluations
-            echo "✅ evaluations/ copied to dist ($(ls evaluations | wc -l) entries)"
+          if [ -d "dist/evaluations" ]; then
+            echo "✅ dist/evaluations exists: $(find dist/evaluations -type f | wc -l) files"
+            ls dist/evaluations/
           else
-            echo "⚠️ evaluations/ dir not found, skipping"
+            echo "❌ dist/evaluations MISSING"
+            exit 1
           fi
 
       - name: Upload artifact

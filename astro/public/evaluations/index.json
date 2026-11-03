@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-11-03T03:41:03.328159Z",
+  "total_reports": 1,
+  "reports": [
+    {
+      "report_id": "microsoft-playwright-mcp-cf28b3b78460",
+      "owner": "microsoft",
+      "name": "playwright-mcp",
+      "url": "https://github.com/microsoft/playwright-mcp",
+      "level": "L2",
+      "preliminary_score": 72,
+      "coverage": 92,
+      "evaluated_at": "2026-11-03T03:41:03.328159Z"
+    }
+  ]
+}
