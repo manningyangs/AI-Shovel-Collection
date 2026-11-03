@@ -1,0 +1,941 @@
+{
+  "schema_version": "1.0",
+  "report_id": "hykfft-mcp-dingtalk-doc-a0f03d563e29",
+  "repository": {
+    "owner": "hykfft",
+    "name": "mcp-dingtalk-doc",
+    "url": "https://github.com/hykfft/mcp-dingtalk-doc",
+    "commit_sha": "9772443c313d73210519ceca81ac3062bc4c67d9",
+    "language": "Python",
+    "license": null,
+    "license_file": null,
+    "stars": 56,
+    "forks": 7,
+    "archived": false
+  },
+  "evaluation": {
+    "evaluation_version": "1.0",
+    "scoring_version": "1.0.1",
+    "evaluation_mode": "static",
+    "evaluation_level": "L1",
+    "level": "L1",
+    "score_status": "preliminary",
+    "preliminary_score": 51,
+    "official_score": null,
+    "grade": "D",
+    "coverage": 87,
+    "evaluated_at": "2026-11-03T07:21:17.507692Z",
+    "report_generated_by": "AI Shovel Eval",
+    "disclaimer": "静态初评 · 非正式认证 · 不能作为项目真实运行能力的担保"
+  },
+  "project_type": {
+    "type": "mcp_server",
+    "confidence": 0.67,
+    "scores": {
+      "mcp_server": 4,
+      "agent_skill": 0,
+      "framework": 0,
+      "cli_sdk_api": 2,
+      "collection": 0
+    },
+    "evidence": {
+      "mcp_server": [
+        "pyproject/requirements 含 mcp",
+        "README 含 MCP 关键词 x2"
+      ],
+      "agent_skill": [],
+      "framework": [],
+      "cli_sdk_api": [
+        "pyproject.toml [project.scripts]"
+      ],
+      "collection": []
+    },
+    "detected_via_manifest": true
+  },
+  "dimensions": {
+    "reliability": {
+      "label": "可靠性与运行效率",
+      "score": 9,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 1.35,
+      "sub_coverage": 50,
+      "sub_items": [
+        {
+          "dim_key": "reliability",
+          "sub_key": "test_evidence",
+          "weight": 5,
+          "level": 0,
+          "status": "not_tested"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "ci_complete",
+          "weight": 4,
+          "level": 0,
+          "status": "failed"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "error_mechanism",
+          "weight": 3,
+          "level": 2,
+          "status": "not_tested"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "release_stability",
+          "weight": 3,
+          "level": 1,
+          "status": "verified"
+        }
+      ]
+    },
+    "agent_compat": {
+      "label": "智能体兼容性",
+      "score": 55,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 8.25,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "protocol_compliance",
+          "weight": 4,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "host_support",
+          "weight": 5,
+          "level": 2,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "transport_config",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "env_auth",
+          "weight": 3,
+          "level": 2,
+          "status": "declared"
+        }
+      ]
+    },
+    "maintenance": {
+      "label": "项目维护健康度",
+      "score": 36,
+      "max_score": 100,
+      "weight": 10,
+      "weighted_score": 3.6,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "maintenance",
+          "sub_key": "update_release",
+          "weight": 3,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "ci_status",
+          "weight": 3,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "issue_maintain",
+          "weight": 2,
+          "level": 4,
+          "status": "partial"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "continuity",
+          "weight": 2,
+          "level": 2,
+          "status": "verified"
+        }
+      ]
+    },
+    "security": {
+      "label": "安全性与隐私保护",
+      "score": 76,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 11.4,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "security",
+          "sub_key": "dependency_vulns",
+          "weight": 4,
+          "level": 2,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "danger_ops",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "data_access",
+          "weight": 3,
+          "level": 3,
+          "status": "partial"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "secret_scan",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    },
+    "ease_of_use": {
+      "label": "易用性与集成体验",
+      "score": 36,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 5.4,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "install_instructions",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "config_env",
+          "weight": 4,
+          "level": 1,
+          "status": "partial"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "deploy",
+          "weight": 3,
+          "level": 1,
+          "status": "declared"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "quickstart",
+          "weight": 3,
+          "level": 0,
+          "status": "verified"
+        }
+      ]
+    },
+    "docs": {
+      "label": "文档与开发者体验",
+      "score": 48,
+      "max_score": 100,
+      "weight": 5,
+      "weighted_score": 2.4,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "docs",
+          "sub_key": "install_deploy_doc",
+          "weight": 2,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "usage_example",
+          "weight": 2,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "license_info",
+          "weight": 1,
+          "level": 0,
+          "status": "failed"
+        }
+      ]
+    },
+    "functionality": {
+      "label": "功能完整度",
+      "score": 65,
+      "max_score": 100,
+      "weight": 25,
+      "weighted_score": 16.25,
+      "sub_coverage": 80,
+      "sub_items": [
+        {
+          "dim_key": "functionality",
+          "sub_key": "core_completeness",
+          "weight": 5,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "coverage",
+          "weight": 5,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "schema_completeness",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "task_examples",
+          "weight": 5,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "error_handling",
+          "weight": 5,
+          "level": 0,
+          "status": "not_tested"
+        }
+      ]
+    }
+  },
+  "agent_compatibility": {
+    "checks": {
+      "mcp_protocol_deps": true,
+      "host_cursor": true,
+      "transport_methods": [
+        "http"
+      ],
+      "auth_methods": []
+    },
+    "evidence": [
+      "pyproject.toml 含 MCP 依赖",
+      "README 提及 cursor",
+      "README 提及传输: ['http']"
+    ]
+  },
+  "security_findings": [
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 mcp@1.0.0 存在 GHSA-3qhf-m339-9g5v：MCP Python SDK vulnerability in the FastMCP Server causes validation error, leading to DoS",
+      "aliases": [
+        "CVE-2025-53366",
+        "PYSEC-2026-1616"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 mcp@1.0.0 存在 GHSA-9h52-p55h-vw2f：Model Context Protocol (MCP) Python SDK does not enable DNS rebinding protection by default",
+      "aliases": [
+        "CVE-2025-66416",
+        "PYSEC-2026-1617"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 mcp@1.0.0 存在 GHSA-j975-95f5-7wqh：MCP Python SDK has Unhandled Exception in Streamable HTTP Transport, Leading to Denial of Service",
+      "aliases": [
+        "CVE-2025-53365",
+        "PYSEC-2026-1618"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 mcp@1.0.0 存在 GHSA-jpw9-pfvf-9f58：MCP Python SDK: HTTP transports serve session requests without verifying the authenticated principal",
+      "aliases": [
+        "CVE-2026-52869",
+        "PYSEC-2026-3482"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 mcp@1.0.0 存在 GHSA-vj7q-gjh5-988w：MCP Python SDK: WebSocket server transport does not support Host/Origin validation",
+      "aliases": [
+        "CVE-2026-59950",
+        "PYSEC-2026-3483"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-2xpw-w6gg-jr37：urllib3 streaming API improperly handles highly compressed data",
+      "aliases": [
+        "CVE-2025-66471",
+        "PYSEC-2026-1994"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-38jv-5279-wg99：Decompression-bomb safeguards bypassed when following HTTP redirects (streaming API)",
+      "aliases": [
+        "CVE-2026-21441",
+        "PYSEC-2026-1996"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-8988-9cw3-xx77：urllib3: HTTPS proxy TLS configuration may be ignored or overridden",
+      "aliases": [
+        "CVE-2026-97687",
+        "PYSEC-2026-4175"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-gm62-xv2j-4w53：urllib3 allows an unbounded number of links in the decompression chain",
+      "aliases": [
+        "CVE-2025-66418",
+        "PYSEC-2026-1998"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-qccp-gfcp-xxvc：urllib3: Sensitive headers forwarded across origins in proxied low-level redirects",
+      "aliases": [
+        "CVE-2026-44431",
+        "PYSEC-2026-141"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-v845-jxx5-vc9f：`Cookie` HTTP header isn't stripped on cross-origin redirects",
+      "aliases": [
+        "CVE-2023-43804",
+        "PYSEC-2023-192"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-vxq7-64xx-v4gw：urllib3: HTTPResponse.stream()/read_chunked() buffers an unbounded chunk-size line into memory",
+      "aliases": [
+        "CVE-2026-97689",
+        "PYSEC-2026-4177"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 mcp@1.0.0 存在 GHSA-3qhf-m339-9g5v：MCP Python SDK vulnerability in the FastMCP Server causes validation error, leading to DoS",
+      "aliases": [
+        "CVE-2025-53366",
+        "PYSEC-2026-1616"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 mcp@1.0.0 存在 GHSA-9h52-p55h-vw2f：Model Context Protocol (MCP) Python SDK does not enable DNS rebinding protection by default",
+      "aliases": [
+        "CVE-2025-66416",
+        "PYSEC-2026-1617"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 mcp@1.0.0 存在 GHSA-j975-95f5-7wqh：MCP Python SDK has Unhandled Exception in Streamable HTTP Transport, Leading to Denial of Service",
+      "aliases": [
+        "CVE-2025-53365",
+        "PYSEC-2026-1618"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 mcp@1.0.0 存在 GHSA-jpw9-pfvf-9f58：MCP Python SDK: HTTP transports serve session requests without verifying the authenticated principal",
+      "aliases": [
+        "CVE-2026-52869",
+        "PYSEC-2026-3482"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 mcp@1.0.0 存在 GHSA-vj7q-gjh5-988w：MCP Python SDK: WebSocket server transport does not support Host/Origin validation",
+      "aliases": [
+        "CVE-2026-59950",
+        "PYSEC-2026-3483"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-2xpw-w6gg-jr37：urllib3 streaming API improperly handles highly compressed data",
+      "aliases": [
+        "CVE-2025-66471",
+        "PYSEC-2026-1994"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-38jv-5279-wg99：Decompression-bomb safeguards bypassed when following HTTP redirects (streaming API)",
+      "aliases": [
+        "CVE-2026-21441",
+        "PYSEC-2026-1996"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-8988-9cw3-xx77：urllib3: HTTPS proxy TLS configuration may be ignored or overridden",
+      "aliases": [
+        "CVE-2026-97687",
+        "PYSEC-2026-4175"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-gm62-xv2j-4w53：urllib3 allows an unbounded number of links in the decompression chain",
+      "aliases": [
+        "CVE-2025-66418",
+        "PYSEC-2026-1998"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-qccp-gfcp-xxvc：urllib3: Sensitive headers forwarded across origins in proxied low-level redirects",
+      "aliases": [
+        "CVE-2026-44431",
+        "PYSEC-2026-141"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-v845-jxx5-vc9f：`Cookie` HTTP header isn't stripped on cross-origin redirects",
+      "aliases": [
+        "CVE-2023-43804",
+        "PYSEC-2023-192"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-vxq7-64xx-v4gw：urllib3: HTTPResponse.stream()/read_chunked() buffers an unbounded chunk-size line into memory",
+      "aliases": [
+        "CVE-2026-97689",
+        "PYSEC-2026-4177"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@1.0.0 存在 PYSEC-2026-1616：MCP Python SDK vulnerability in the FastMCP Server causes validation error, leading to DoS",
+      "aliases": [
+        "CVE-2025-53366",
+        "GHSA-3qhf-m339-9g5v"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@1.0.0 存在 PYSEC-2026-1617：Model Context Protocol (MCP) Python SDK does not enable DNS rebinding protection by default",
+      "aliases": [
+        "CVE-2025-66416",
+        "GHSA-9h52-p55h-vw2f"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@1.0.0 存在 PYSEC-2026-1618：MCP Python SDK has Unhandled Exception in Streamable HTTP Transport, Leading to Denial of Service",
+      "aliases": [
+        "CVE-2025-53365",
+        "GHSA-j975-95f5-7wqh"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@1.0.0 存在 PYSEC-2026-3482：MCP Python SDK: HTTP transports serve session requests without verifying the authenticated principal",
+      "aliases": [
+        "CVE-2026-52869",
+        "GHSA-jpw9-pfvf-9f58"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@1.0.0 存在 PYSEC-2026-3483：MCP Python SDK: WebSocket server transport does not support Host/Origin validation",
+      "aliases": [
+        "CVE-2026-59950",
+        "GHSA-vj7q-gjh5-988w"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 pydantic@2.0.0 存在 GHSA-mr82-8j83-vxmv：Pydantic regular expression denial of service",
+      "aliases": [
+        "CVE-2024-3772",
+        "PYSEC-2026-1812"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 pydantic@2.0.0 存在 PYSEC-2026-1812：Pydantic regular expression denial of service",
+      "aliases": [
+        "CVE-2024-3772",
+        "GHSA-mr82-8j83-vxmv"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-34jh-p97f-mpxf：urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects",
+      "aliases": [
+        "CVE-2024-37891",
+        "PYSEC-2026-1995"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-g4mx-q9vg-27p4：urllib3's request body not stripped after redirect from 303 status changes request method to GET",
+      "aliases": [
+        "CVE-2023-45803",
+        "PYSEC-2023-212"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-pq67-6m6q-mj2v：urllib3 redirects are not disabled when retries are disabled on PoolManager instantiation",
+      "aliases": [
+        "CVE-2025-50181",
+        "PYSEC-2026-1999"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2023-192：urllib3 is a user-friendly HTTP client library for Python. urllib3 doesn't treat the `Cookie` HTTP header special or pro",
+      "aliases": [
+        "CVE-2023-43804",
+        "GHSA-v845-jxx5-vc9f"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2023-212：urllib3 is a user-friendly HTTP client library for Python. urllib3 previously wouldn't remove the HTTP request body when",
+      "aliases": [
+        "CVE-2023-45803",
+        "GHSA-g4mx-q9vg-27p4"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-141：urllib3 is an HTTP client library for Python. From 1.23 to before 2.7.0, cross-origin redirects followed from the low-le",
+      "aliases": [
+        "CVE-2026-44431",
+        "GHSA-qccp-gfcp-xxvc"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-1994：urllib3 streaming API improperly handles highly compressed data",
+      "aliases": [
+        "CVE-2025-66471",
+        "GHSA-2xpw-w6gg-jr37"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-1995：urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects",
+      "aliases": [
+        "CVE-2024-37891",
+        "GHSA-34jh-p97f-mpxf"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-1996：Decompression-bomb safeguards bypassed when following HTTP redirects (streaming API)",
+      "aliases": [
+        "CVE-2026-21441",
+        "GHSA-38jv-5279-wg99"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-1998：urllib3 allows an unbounded number of links in the decompression chain",
+      "aliases": [
+        "CVE-2025-66418",
+        "GHSA-gm62-xv2j-4w53"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-1999：urllib3 redirects are not disabled when retries are disabled on PoolManager instantiation",
+      "aliases": [
+        "CVE-2025-50181",
+        "GHSA-pq67-6m6q-mj2v"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-4175：urllib3: HTTPS proxy TLS configuration may be ignored or overridden",
+      "aliases": [
+        "CVE-2026-97687",
+        "GHSA-8988-9cw3-xx77"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-4177：urllib3: HTTPResponse.stream()/read_chunked() buffers an unbounded chunk-size line into memory",
+      "aliases": [
+        "CVE-2026-97689",
+        "GHSA-vxq7-64xx-v4gw"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@1.0.0 存在 PYSEC-2026-1616：MCP Python SDK vulnerability in the FastMCP Server causes validation error, leading to DoS",
+      "aliases": [
+        "CVE-2025-53366",
+        "GHSA-3qhf-m339-9g5v"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@1.0.0 存在 PYSEC-2026-1617：Model Context Protocol (MCP) Python SDK does not enable DNS rebinding protection by default",
+      "aliases": [
+        "CVE-2025-66416",
+        "GHSA-9h52-p55h-vw2f"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@1.0.0 存在 PYSEC-2026-1618：MCP Python SDK has Unhandled Exception in Streamable HTTP Transport, Leading to Denial of Service",
+      "aliases": [
+        "CVE-2025-53365",
+        "GHSA-j975-95f5-7wqh"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@1.0.0 存在 PYSEC-2026-3482：MCP Python SDK: HTTP transports serve session requests without verifying the authenticated principal",
+      "aliases": [
+        "CVE-2026-52869",
+        "GHSA-jpw9-pfvf-9f58"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@1.0.0 存在 PYSEC-2026-3483：MCP Python SDK: WebSocket server transport does not support Host/Origin validation",
+      "aliases": [
+        "CVE-2026-59950",
+        "GHSA-vj7q-gjh5-988w"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 pydantic@2.0.0 存在 GHSA-mr82-8j83-vxmv：Pydantic regular expression denial of service",
+      "aliases": [
+        "CVE-2024-3772",
+        "PYSEC-2026-1812"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 pydantic@2.0.0 存在 PYSEC-2026-1812：Pydantic regular expression denial of service",
+      "aliases": [
+        "CVE-2024-3772",
+        "GHSA-mr82-8j83-vxmv"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-34jh-p97f-mpxf：urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects",
+      "aliases": [
+        "CVE-2024-37891",
+        "PYSEC-2026-1995"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-g4mx-q9vg-27p4：urllib3's request body not stripped after redirect from 303 status changes request method to GET",
+      "aliases": [
+        "CVE-2023-45803",
+        "PYSEC-2023-212"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 GHSA-pq67-6m6q-mj2v：urllib3 redirects are not disabled when retries are disabled on PoolManager instantiation",
+      "aliases": [
+        "CVE-2025-50181",
+        "PYSEC-2026-1999"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2023-192：urllib3 is a user-friendly HTTP client library for Python. urllib3 doesn't treat the `Cookie` HTTP header special or pro",
+      "aliases": [
+        "CVE-2023-43804",
+        "GHSA-v845-jxx5-vc9f"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2023-212：urllib3 is a user-friendly HTTP client library for Python. urllib3 previously wouldn't remove the HTTP request body when",
+      "aliases": [
+        "CVE-2023-45803",
+        "GHSA-g4mx-q9vg-27p4"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-141：urllib3 is an HTTP client library for Python. From 1.23 to before 2.7.0, cross-origin redirects followed from the low-le",
+      "aliases": [
+        "CVE-2026-44431",
+        "GHSA-qccp-gfcp-xxvc"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-1994：urllib3 streaming API improperly handles highly compressed data",
+      "aliases": [
+        "CVE-2025-66471",
+        "GHSA-2xpw-w6gg-jr37"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-1995：urllib3's Proxy-Authorization request header isn't stripped during cross-origin redirects",
+      "aliases": [
+        "CVE-2024-37891",
+        "GHSA-34jh-p97f-mpxf"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-1996：Decompression-bomb safeguards bypassed when following HTTP redirects (streaming API)",
+      "aliases": [
+        "CVE-2026-21441",
+        "GHSA-38jv-5279-wg99"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-1998：urllib3 allows an unbounded number of links in the decompression chain",
+      "aliases": [
+        "CVE-2025-66418",
+        "GHSA-gm62-xv2j-4w53"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-1999：urllib3 redirects are not disabled when retries are disabled on PoolManager instantiation",
+      "aliases": [
+        "CVE-2025-50181",
+        "GHSA-pq67-6m6q-mj2v"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-4175：urllib3: HTTPS proxy TLS configuration may be ignored or overridden",
+      "aliases": [
+        "CVE-2026-97687",
+        "GHSA-8988-9cw3-xx77"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 urllib3@2.0.0 存在 PYSEC-2026-4177：urllib3: HTTPResponse.stream()/read_chunked() buffers an unbounded chunk-size line into memory",
+      "aliases": [
+        "CVE-2026-97689",
+        "GHSA-vxq7-64xx-v4gw"
+      ]
+    }
+  ],
+  "recommendations": [
+    "README 添加安装说明章节（Quick Start / Getting Started）",
+    "README 添加使用示例章节（Usage / Examples）",
+    "添加 LICENSE 文件（MIT / Apache 2.0 / BSD 推荐）",
+    "配置 GitHub Actions CI（lint + test）",
+    "最近 3 个月未活跃更新，建议维护或明确 deprecation 状态",
+    "修复 24 个高危依赖漏洞",
+    "配置 Dependabot 或 OSV-Scanner 做自动化安全扫描"
+  ],
+  "evidence": [
+    "[mcp_server] manifest 识别证据: pyproject/requirements 含 mcp",
+    "[mcp_server] manifest 识别证据: README 含 MCP 关键词 x2",
+    "[cli_sdk_api] manifest 识别证据: pyproject.toml [project.scripts]",
+    "[docs] README 章节覆盖: config",
+    "[ease] README 安装命令示例: cd python",
+    "[docs] README 含 10 个代码块",
+    "[security] 扫描 18 个源码文件",
+    "[osv] 查询 64 个依赖漏洞"
+  ],
+  "limitations": [
+    "⚠️ 本报告为纯静态分析（L1），未执行被测仓库中的任何代码",
+    "⚠️ 静态初评 · 非正式认证 — 评分不能等同于真实运行表现",
+    "⚠️ 覆盖率仅 87%，未测试项目不计零分",
+    "⚠️ 无法确认 License 类型"
+  ]
+}

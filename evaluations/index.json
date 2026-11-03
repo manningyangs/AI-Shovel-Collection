@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-03T07:15:06.214260Z",
-  "total_reports": 4,
+  "updated_at": "2026-11-03T07:21:17.507692Z",
+  "total_reports": 5,
   "reports": [
+    {
+      "report_id": "hykfft-mcp-dingtalk-doc-a0f03d563e29",
+      "owner": "hykfft",
+      "name": "mcp-dingtalk-doc",
+      "url": "https://github.com/hykfft/mcp-dingtalk-doc",
+      "project_type": "mcp_server",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 51,
+      "grade": "D",
+      "coverage": 87,
+      "commit_sha": "9772443c313d",
+      "evaluated_at": "2026-11-03T07:21:17.507692Z"
+    },
     {
       "report_id": "octocat-Hello-World-9a259f107dc9",
       "owner": "octocat",
