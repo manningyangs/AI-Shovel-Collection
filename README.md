@@ -14,11 +14,15 @@
 >
 > 维护方式：先收集、再分类、后核验。欢迎通过 Issue / Pull Request 补充仓库、纠正分类或标记失效项目。
 
+**🌐 在线站点：<https://manningyangs.github.io/AI-Shovel-Collection/>** — Astro 静态站点，由 GitHub Actions 自动构建并部署到 GitHub Pages。
+
+- [网站功能](#网站功能)
 - [按行业/领域检索 GitHub](#按行业领域检索-github)
 - [已收录的铲子仓库](#已收录的铲子仓库)
 - [上游目录与索引](#上游目录与索引)
 - [收录与质量规则](#收录与质量规则)
 - [贡献方式](#贡献方式)
+- [版本记录](#版本记录)
 
 ## 目录说明
 
@@ -31,6 +35,30 @@
 - **专业文件工具 / 数据工具**：PDF、Office、CAD、GIS、音视频、科研数据等解析、编辑和转换工具。
 
 本清单是**持续维护的发现目录，不声称当前已经穷尽整个 GitHub**。GitHub 上相关仓库数量极大、每天都在变化；以下“GitHub 搜索”链接是按关键词生成的实时检索入口，可以查看最新结果和更多分页。被收录不代表项目安全、活跃、可商用或质量已经背书；使用前请自行检查许可证、维护状态、权限和数据安全。
+
+## 网站功能
+
+以下按页面实际结构说明当前站点功能。
+
+**首页顶部（自上而下）**
+
+1. **核心数据统计**：精选工具 / 发现候选 / 端点实测 OK / 累计 GitHub Stars 四张卡片，数值从 `catalog.csv` 与 `live_multi.json` 动态计算（不硬编码），桌面四列、移动端两列，卡片可折叠并记忆状态。
+2. **本周 Stars 排行榜**：LIVE 标识 + Top 3 卡片（Stars、编程语言），入口指向[近期更新榜](https://manningyangs.github.io/AI-Shovel-Collection/trending/)完整榜单（按最近推送时间与 Stars 加权，不按热度误导排序）。
+3. **最新评测报告**：按评测时间倒序展示最近 3 份有效报告 —— 项目类型、`L1 静态初评`、综合评分、评测覆盖度与核心维度摘要（功能完整度 / 智能体兼容性 / 项目维护健康度），点击进入报告详情与原始 JSON。数据取自 `evaluations/index.json` 与 `evaluations/reports/*.json`，legacy 历史报告自动排除，不足 3 份按实际数量展示。
+
+**工具目录（三栏）**
+
+- **精选工具**：人工核验的主体目录。支持关键词搜索、任务导向入口、行业分类 chips（手动展开/收起）、排序与分页；搜索与分类筛选互斥，结果为空时不清空页面位置。静态预渲染，禁用 JavaScript 仍可浏览完整目录。
+- **自动发现**：Pipeline 候选条目，带「未核验」标识与「自动匹配分」，支持近 7 天更新筛选、MCP 端点实测状态徽章、一键生成待核验 Issue。
+- **GitHub 实时搜索**：直接检索 GitHub 全站相关仓库。
+
+**工具详情页**：展示部署方式、API Key 要求、端点状态、许可证等关键决策信息；结构化数据采用 `SoftwareSourceCode` 类型，不虚构评分与价格。
+
+**提交收录页**：<https://manningyangs.github.io/AI-Shovel-Collection/submit/> 粘贴 GitHub 仓库自动识别；仓库 404 时给出相似仓库建议并支持一键回填重新识别。
+
+**AI Shovel Eval 评测中心**：<https://manningyangs.github.io/AI-Shovel-Collection/evaluate/> 通过带 `evaluation-request` 标签的 Issue 提交评测申请，GitHub Actions 执行**纯静态分析**（不运行被测仓库代码、不把 Secrets 暴露给外部代码），生成 L1 静态初评报告（S~E 等级、综合评分、维度得分、原始 JSON 下载），评测完成后自动关闭 Issue。所有报告均为「静态初评 · 非正式认证」，不能替代真实运行验证。
+
+**数据同步**：`catalog.csv`（人工精选，主体）+ `live_multi.json`（多源聚合补充）+ `stars-history.json` / `trending.json`（趋势快照），由 GitHub Actions 每 6 小时同步，并对带端点的条目执行 MCP `initialize` 握手实测，结果实时展示为状态徽章。
 
 ## 按行业/领域检索 GitHub
 
@@ -380,8 +408,21 @@
 
 请勿提交只有教程截图、已失效链接、纯 prompt 集合（除非其 Skills / workflow 可直接执行）、或无法确认来源的二进制下载链接。涉及安全、医疗、金融、工控和真实设备控制的项目，需要明确标注风险与权限。
 
+## 版本记录
+
+> 按时间倒序。站点版本对应前端发布；AI Shovel Eval 为独立子系统版本。
+
+| 版本 | 日期 | 主要变更 |
+|---|---|---|
+| **v2.2.0** | 2026-11-03 | 首页顶部布局调整：核心数据统计四卡上移至 Stars 排行榜上方（与下方模块同宽 980px、卡片与字号放大）；排行榜下方新增「最新评测报告」预览模块（真实评测数据、按评测时间倒序、最多 3 份、legacy 报告自动排除）；修复三栏 Tab 切换时的状态残留、清空搜索自动回精选 Tab；提交收录页 404 时新增相似仓库建议与一键回填；README 中英双语同步更新（本文档）。 |
+| **AI Shovel Eval V1.0.1** | 2026-11-03 | 评测系统升级：全部报告强制 L1 静态初评（`score_status=preliminary`，杜绝 L2/L3 假认证）、新增 S~E 等级与「静态初评 · 非正式认证」免责声明、OSV 数据源受阻状态修正（blocked → level 0）、测试证据维度真实检测 CI 与目录结构、按项目类型动态维度权重、评测工作流安全加固（label 过滤 / shell 注入修复）、评测完成自动关闭 Issue、原始 JSON 下载 404 修复。 |
+| **v2.1.0** | 2026-11-02 | 提交收录页上线（粘贴仓库自动识别）、中英双语 README 与界面 i18n、搜索与分类筛选互斥、任务导向入口与搜索联动、LIVE 多态状态标识、统计卡片可折叠。 |
+| **v2.0.0** | 2026-11-02 | Astro 静态站点重构：首页工具卡片预渲染为静态 HTML（无 JS 可读）、工具详情页 `getStaticPaths` 自动生成、GitHub Pages 自动部署工作流、Trending 榜单与 Stars 历史快照、AI Shovel Eval 报告页。 |
+| **v1.x** | 2026-10-29 → 2026-11-01 | 单页静态目录起步：多源数据 Pipeline 五件套（`catalog.csv` / `live_multi.json` / `update_live_data.py` / `live-data.yml` / `index.html`）、每 6 小时同步与 MCP 端点实测、自动发现候选与待核验 Inbox、GitHub Issue 一键生成。 |
+
 ## 来源与更新时间
 
 - 本轮初始检索整理日期：2026-10-29。
+- 网站功能与文档最后更新：2026-11-03（v2.2.0）。
 - 项目发现入口以 GitHub 仓库和 GitHub Topics 为主，包括 `abordage/awesome-mcp`、`mcpHQ/awesome-mcp-servers`、`anthropics/skills`、以及 GIS / AEC / SEO / Hardware 等专业目录。
 - 目录中的仓库名称和用途为初步分类；每个项目的当前维护状态、许可证、安装方式与安全性仍需按仓库最新页面复核。

@@ -14,11 +14,15 @@
 >
 > Maintenance model: collect first, categorize second, verify third. Contributions welcome via Issues / Pull Requests — add repos, fix categorizations, or flag stale projects.
 
+**🌐 Live site: <https://manningyangs.github.io/AI-Shovel-Collection/>** — an Astro static site, built and deployed to GitHub Pages automatically by GitHub Actions.
+
+- [Site Features](#site-features)
 - [Browse GitHub by Industry / Domain](#browse-github-by-industry--domain)
 - [Curated Shovel Repositories](#curated-shovel-repositories)
 - [Upstream Directories & Indexes](#upstream-directories--indexes)
 - [Inclusion & Quality Criteria](#inclusion--quality-criteria)
 - [Contributing](#contributing)
+- [Version History](#version-history)
 
 ## What goes in here
 
@@ -31,6 +35,30 @@ The term "shovel" is used broadly — not limited to MCP. This directory may inc
 - **Specialized File / Data Tools**: Parsing, editing, and conversion tools for PDF, Office, CAD, GIS, audio/video, scientific data, etc.
 
 This list is a **continuously maintained discovery directory** and does not claim to exhaust GitHub. The landscape of relevant repositories on GitHub is massive and changes daily; the "GitHub Search" links below are real-time keyword-generated entry points to explore the latest results and additional pages. Inclusion does not imply that a project is secure, active, commercially usable, or quality-endorsed — always check the license, maintenance status, permissions, and data security before using.
+
+## Site Features
+
+The current site, described as it is actually structured on the page:
+
+**Homepage top section (top to bottom)**
+
+1. **Core statistics**: four cards — Curated Tools / Discovered Candidates / Endpoints Verified OK / Total GitHub Stars — computed dynamically from `catalog.csv` and `live_multi.json` (never hard-coded); four columns on desktop, two on mobile, collapsible with persisted state.
+2. **Weekly Stars leaderboard**: LIVE badge + Top 3 cards (stars, language), linking to the full [recently-updated ranking](https://manningyangs.github.io/AI-Shovel-Collection/trending/) (weighted by last push time and stars — not a hype rank).
+3. **Latest evaluation reports**: the 3 most recent valid reports in reverse evaluation-time order — project type, `L1 preliminary review`, composite score, coverage, and core-dimension summaries (Functionality / Agent Compatibility / Maintenance). Each card links to the full report and its raw JSON. Data comes from `evaluations/index.json` and `evaluations/reports/*.json`; legacy reports are excluded automatically, and fewer than 3 reports are shown as-is.
+
+**Tool directory (three tabs)**
+
+- **Curated Tools**: the human-verified main catalog. Keyword search, task-oriented entry points, industry category chips (manual expand/collapse), sorting and pagination; search and category filters are mutually exclusive, and an empty search does not jump the page. Cards are statically pre-rendered — the full catalog is browsable with JavaScript disabled.
+- **Auto Discovery**: pipeline-discovered candidates flagged as *unverified* with an *auto-match score*, plus a last-7-days filter, MCP endpoint verification badges, and one-click issue generation for manual review.
+- **GitHub Live Search**: real-time search across GitHub itself.
+
+**Tool detail pages**: deployment method, API-key requirements, endpoint status, license and other decision-critical info; structured data uses the `SoftwareSourceCode` type — no invented ratings or prices.
+
+**Submission page**: <https://manningyangs.github.io/AI-Shovel-Collection/submit/> — paste a GitHub repo for automatic recognition; if the repo returns 404, similar-repo suggestions are offered with one-click refill.
+
+**AI Shovel Eval center**: <https://manningyangs.github.io/AI-Shovel-Collection/evaluate/> — submit an evaluation request via an issue labeled `evaluation-request`; GitHub Actions runs **static analysis only** (the evaluated repository's code is never executed, and no secrets are exposed to external code), producing an L1 preliminary report (S–E grade, composite score, dimension scores, raw JSON download), then auto-closes the issue. Every report is a *preliminary static review — not a formal certification* and never substitutes for real runtime verification.
+
+**Data sync**: `catalog.csv` (human-curated, primary) + `live_multi.json` (multi-source aggregation, supplementary) + `stars-history.json` / `trending.json` (trend snapshots), synced every 6 hours by GitHub Actions, with an MCP `initialize` handshake probe for every endpoint-bearing entry surfaced as a live status badge.
 
 ## Browse GitHub by Industry / Domain
 
@@ -380,8 +408,21 @@ Issues and Pull Requests welcome. To add an entry, use this format and describe 
 
 Do not submit tutorial-only screenshots, broken links, pure prompt collections (unless their skills/workflow execute directly), or unverifiable binary download links. Projects involving security, healthcare, finance, industrial control, or real device control need explicit risk and permission annotations.
 
+## Version History
+
+> Reverse chronological. Site versions correspond to frontend releases; AI Shovel Eval is an independent subsystem with its own version.
+
+| Version | Date | Highlights |
+|---|---|---|
+| **v2.2.0** | 2026-11-03 | Homepage top-section restructure: the four core-statistics cards moved above the Stars leaderboard (aligned to the same 980px width as the modules below, with enlarged cards and fonts); new "Latest Evaluation Reports" preview below the leaderboard (real report data, reverse evaluation-time order, max 3, legacy reports auto-excluded); fixed stale state when switching the three tabs and auto-return to the Curated tab when search is cleared; similar-repo suggestions with one-click refill on 404 in the submission page; bilingual README updated (this document). |
+| **AI Shovel Eval V1.0.1** | 2026-11-03 | Evaluation subsystem upgrade: all reports forced to L1 preliminary (`score_status=preliminary`, no fake L2/L3 certification), S–E grades plus a "preliminary static review — not a formal certification" disclaimer, corrected OSV blocked handling (blocked → level 0), test-evidence dimension now really inspects CI and tree files, dynamic dimension weights per project type, workflow hardening (label filter / shell-injection fix), auto-close of issues after evaluation, raw JSON download 404 fix. |
+| **v2.1.0** | 2026-11-02 | Submission page (paste-to-recognize repos), bilingual README and UI i18n, mutually exclusive search/category filters, task-oriented entry points linked to search, multi-state LIVE badges, collapsible statistics cards. |
+| **v2.0.0** | 2026-11-02 | Astro static-site rewrite: homepage tool cards pre-rendered as static HTML (readable without JS), tool detail pages generated via `getStaticPaths`, GitHub Pages deploy workflow, Trending page with stars-history snapshots, AI Shovel Eval report pages. |
+| **v1.x** | 2026-10-29 → 2026-11-01 | Single-page static directory start: multi-source data pipeline five-piece set (`catalog.csv` / `live_multi.json` / `update_live_data.py` / `live-data.yml` / `index.html`), 6-hourly sync with MCP endpoint verification, auto-discovery candidates with a review inbox, one-click GitHub issue generation. |
+
 ## Source & Timeline
 
 - Initial discovery & curation round: 2026-10-29.
+- Site features & documentation last updated: 2026-11-03 (v2.2.0).
 - Discovery entry points are primarily GitHub repos and GitHub Topics, including `abordage/awesome-mcp`, `mcpHQ/awesome-mcp-servers`, `anthropics/skills`, plus specialized directories for GIS / AEC / SEO / Hardware.
 - Repository names and purposes in this directory are provisional categorizations; each project's current maintenance status, license, installation method, and security still needs verification against the latest repo page.
