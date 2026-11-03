@@ -1,0 +1,283 @@
+name: AI Shovel Evaluation
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+  workflow_dispatch:
+    inputs:
+      repo_url:
+        description: GitHub repo URL (fallback when run manually)
+        required: false
+        default: ""
+      issue_number:
+        description: Issue number (optional, for posting result comment)
+        required: false
+        default: ""
+
+# 最多 30 分钟
+timeout-minutes: 30
+
+permissions:
+  contents: read
+  issues: read
+
+concurrency:
+  group: eval-${{ github.event.issue.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  # ========== Job A: Validate & Analyze ==========
+  # 安全红线：不执行被测仓库代码，Issue 正文通过 GITHUB_EVENT_PATH + Python 解析（不经过 shell）
+  analyze:
+    name: 🧪 静态评测
+    runs-on: ubuntu-latest
+    outputs:
+      report_json: ${{ steps.evaluate.outputs.report_json }}
+      report_id: ${{ steps.evaluate.outputs.report_id }}
+      issue_number: ${{ steps.parse.outputs.issue_number }}
+    steps:
+      - name: Checkout (只读)
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # ---------- 安全解析 Issue 正文（关键：用 Python 读 GITHUB_EVENT_PATH，不经 shell） ----------
+      - name: Parse Issue from event payload
+        id: parse
+        run: |
+          python3 << 'PYEOF'
+          import json, os, sys
+
+          event_path = os.environ.get("GITHUB_EVENT_PATH", "")
+          with open(event_path) as f:
+              event = json.load(f)
+
+          issue = event.get("issue", {})
+          issue_number = str(issue.get("number", ""))
+          issue_body = issue.get("body", "") or ""
+
+          # 从 Issue Form body 提取 repo_url
+          # GitHub Issue Form 格式是：### 🔗 GitHub Repository URL\n\nhttps://github.com/xxx/yyy
+          repo_url = ""
+          for line in issue_body.split("\n"):
+              line = line.strip()
+              if line.startswith("###") and "GitHub Repository URL" in line:
+                  continue
+              if line and not line.startswith("#") and not line.startswith("_"):
+                  if "github.com/" in line or line.startswith("https://"):
+                      repo_url = line.strip()
+                      break
+
+          # workflow_dispatch fallback
+          wf_input = os.environ.get("INPUT_REPO_URL", "").strip()
+          if wf_input and not repo_url:
+              repo_url = wf_input
+
+          issue_input = os.environ.get("INPUT_ISSUE_NUMBER", "").strip()
+          if issue_input and not issue_number:
+              issue_number = issue_input
+
+          if not repo_url:
+              print("::error::无法从 Issue 正文中提取 repo_url，请检查 Issue Form 格式")
+              sys.exit(1)
+
+          # 清理 URL（去行尾标点、去 .git、去尾部 /）
+          repo_url = repo_url.rstrip(".,;:!?")
+          repo_url = repo_url.rstrip("/")
+          if repo_url.endswith(".git"):
+              repo_url = repo_url[:-4]
+
+          print(f"repo_url={repo_url}")
+          print(f"issue_number={issue_number}")
+
+          # Set step outputs（GITHUB_OUTPUT 文件）
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              # 多行值用 heredoc 语法
+              out.write(f"repo_url<<EOF\n{repo_url}\nEOF\n")
+              out.write(f"issue_number={issue_number}\n")
+          PYEOF
+
+        # 传递手动触发的 inputs
+        env:
+          INPUT_REPO_URL: ${{ github.event.inputs.repo_url }}
+          INPUT_ISSUE_NUMBER: ${{ github.event.inputs.issue_number }}
+
+      # ---------- 运行 evaluator（纯静态，不执行被测代码） ----------
+      - name: Run evaluator
+        id: evaluate
+        env:
+          # GITHUB_TOKEN 在这里只用于 GitHub API 读（60 req/h → 有 token 5000/h）
+          # 不暴露给被测仓库
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # 先验证 URL
+          python3 -c "
+          import sys; sys.path.insert(0, 'scripts')
+          from eval.url_validator import validate_github_repo_url
+          v = validate_github_repo_url('${{ steps.parse.outputs.repo_url }}')
+          print('✅ URL 校验通过:', v['owner'], v['repo'])
+          "
+
+          # 跑 evaluator，输出 JSON 到文件（避免 stdout 截断）
+          python3 scripts/eval/evaluator.py \
+            "${{ steps.parse.outputs.repo_url }}" \
+            --output /tmp/eval_report.json \
+            --verbose
+
+          # 读取 JSON 作为 step output
+          REPORT_JSON=$(cat /tmp/eval_report.json)
+          REPORT_ID=$(python3 -c "import json; print(json.load(open('/tmp/eval_report.json'))['report_id'])")
+          echo "report_id=${REPORT_ID}" >> "$GITHUB_OUTPUT"
+
+          # 保存完整 JSON 供后续步骤下载
+          echo "${REPORT_JSON}" > /tmp/eval_report.json
+          # 也作为 output（注意截断处理）
+          echo "report_json<<EOF" >> "$GITHUB_OUTPUT"
+          cat /tmp/eval_report.json >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-report
+          path: /tmp/eval_report.json
+          retention-days: 7
+
+  # ========== Job B: Publish Report ==========
+  # 把 JSON 写入 evaluations/reports/ → 更新 index.json → commit push → Issue 评论
+  publish:
+    name: 📝 发布报告
+    needs: analyze
+    runs-on: ubuntu-latest
+    if: always() && needs.analyze.result == 'success'
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # push 触发 pages-astro.yml workflow_run（注意 GITHUB_TOKEN push 不触发同仓库 workflow）
+          # 所以还需要 pages-astro.yml 加 push trigger 或手动 dispatch
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download report
+        uses: actions/download-artifact@v4
+        with:
+          name: eval-report
+          path: /tmp
+
+      # ---------- 写入 evaluations/reports/{report_id}.json ----------
+      - name: Write report + update index
+        id: write
+        run: |
+          python3 << 'PYEOF'
+          import json, os, sys
+          from pathlib import Path
+
+          with open("/tmp/eval_report.json") as f:
+              report = json.load(f)
+
+          report_id = report["report_id"]
+          report_path = Path(f"evaluations/reports/{report_id}.json")
+          report_path.parent.mkdir(parents=True, exist_ok=True)
+          report_path.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
+          print(f"📄 报告写入: {report_path}")
+
+          # 更新 evaluations/index.json
+          index_path = Path("evaluations/index.json")
+          if index_path.exists():
+              idx = json.loads(index_path.read_text(encoding="utf-8"))
+          else:
+              idx = {"schema_version": "1.0", "reports": []}
+
+          # 去重（如果 report_id 已存在则替换）
+          idx["reports"] = [r for r in idx["reports"] if r.get("report_id") != report_id]
+          # prepend 新报告（最新在前）
+          idx["reports"].insert(0, {
+              "report_id": report_id,
+              "owner": report["repository"]["owner"],
+              "name": report["repository"]["name"],
+              "url": report["repository"]["url"],
+              "level": report["evaluation"]["level"],
+              "preliminary_score": report["evaluation"]["preliminary_score"],
+              "coverage": report["evaluation"]["coverage"],
+              "evaluated_at": report["evaluation"]["evaluated_at"],
+          })
+          idx["total_reports"] = len(idx["reports"])
+          idx["updated_at"] = report["evaluation"]["evaluated_at"]
+
+          index_path.write_text(json.dumps(idx, indent=2, ensure_ascii=False), encoding="utf-8")
+          print(f"📊 index 更新: {len(idx['reports'])} 份报告")
+
+          # 输出 Issue 评论摘要
+          ps = report["evaluation"]["preliminary_score"]
+          level = report["evaluation"]["level"]
+          coverage = report["evaluation"]["coverage"]
+          owner = report["repository"]["owner"]
+          name = report["repository"]["name"]
+          summary = (
+              f"## 🧪 AI Shovel Eval — 评测完成\n\n"
+              f"**仓库**：{owner}/{name}  \n"
+              f"**评分**：**{ps}/100** · 等级 {level} · 覆盖率 {coverage}%\n"
+              f"**报告 ID**：`{report_id}`\n\n"
+              f"📄 **完整报告**：将在 Pages 部署后可访问 `/AI-Shovel-Collection/evaluations/{report_id}/`\n\n"
+              f"⚠️ 本评测为纯静态分析，不执行被测仓库中的任何代码。"
+          )
+          Path("/tmp/eval_comment.md").write_text(summary, encoding="utf-8")
+          print(summary)
+
+          # 给后续 step 用
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"report_id={report_id}\n")
+              out.write(f"preliminary_score={ps}\n")
+              out.write(f"level={level}\n")
+          PYEOF
+
+      # ---------- Commit + Push ----------
+      # 注意：用 GITHUB_TOKEN push 到 main 不会触发同仓库的 pages-astro.yml push trigger
+      # 但我们已经在 pages-astro.yml 加了 workflow_run: ["AI Shovel Evaluation"] 来监听
+      - name: Commit and push
+        id: push
+        run: |
+          git config --local user.name "AI Shovel Eval Bot"
+          git config --local user.email "ai-shovel-eval-bot@users.noreply.github.com"
+
+          git add evaluations/
+          if git diff --cached --quiet; then
+              echo "No changes to commit"
+          else
+              git commit -m "🤖 AI Shovel Eval: publish ${{ steps.write.outputs.report_id }} (score ${{ steps.write.outputs.preliminary_score }}, level ${{ steps.write.outputs.level }})"
+              git push origin main
+              echo "pushed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ---------- 在原 Issue 评论 ----------
+      - name: Comment on Issue
+        if: steps.push.outputs.pushed == 'true' && needs.analyze.outputs.issue_number != ''
+        run: |
+          ISSUE_NUMBER="${{ needs.analyze.outputs.issue_number }}"
+          BODY=$(cat /tmp/eval_comment.md)
+
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/comments" \
+            -d "{\"body\": $(echo "$BODY" | python3 -c 'import sys,json; print(json.dumps(sys.stdin.read()))')}" \
+            --fail
+          echo "✅ 已评论 Issue #${ISSUE_NUMBER}"
+
+      # ---------- 给 Issue 加标签 ----------
+      - name: Add label to Issue
+        if: needs.analyze.outputs.issue_number != ''
+        run: |
+          ISSUE_NUMBER="${{ needs.analyze.outputs.issue_number }}"
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/labels" \
+            -d '["eval-completed"]' \
+            || echo "Label add failed (label may not exist or already applied)"

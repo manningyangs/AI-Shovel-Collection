@@ -9,7 +9,9 @@ on:
       - '.github/workflows/pages-astro.yml'
   # Build after live-data workflow completes (data updated → rebuild)
   workflow_run:
-    workflows: ["Sync live multi-source catalog data"]
+    workflows:
+      - "Sync live multi-source catalog data"
+      - "AI Shovel Evaluation"
     types: ["completed"]
   workflow_dispatch:
 
