@@ -1,8 +1,18 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-03T03:41:03.328159Z",
-  "total_reports": 1,
+  "updated_at": "2026-11-03T04:58:03.409697Z",
+  "total_reports": 2,
   "reports": [
+    {
+      "report_id": "larksuite-lark-openapi-mcp-ceb3934810ed",
+      "owner": "larksuite",
+      "name": "lark-openapi-mcp",
+      "url": "https://github.com/larksuite/lark-openapi-mcp",
+      "level": "L1",
+      "preliminary_score": 54,
+      "coverage": 92,
+      "evaluated_at": "2026-11-03T04:58:03.409697Z"
+    },
     {
       "report_id": "microsoft-playwright-mcp-cf28b3b78460",
       "owner": "microsoft",

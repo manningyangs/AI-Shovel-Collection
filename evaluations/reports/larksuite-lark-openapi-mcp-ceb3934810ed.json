@@ -1,0 +1,658 @@
+{
+  "schema_version": "1.0",
+  "report_id": "larksuite-lark-openapi-mcp-ceb3934810ed",
+  "repository": {
+    "owner": "larksuite",
+    "name": "lark-openapi-mcp",
+    "url": "https://github.com/larksuite/lark-openapi-mcp",
+    "commit_sha": "21920354ec6e3966b52e89152620c5085e496b55",
+    "language": "TypeScript",
+    "license": "MIT",
+    "license_file": "LICENSE",
+    "stars": 854,
+    "forks": 121,
+    "archived": false
+  },
+  "evaluation": {
+    "evaluation_version": "1.0",
+    "scoring_version": "1.0",
+    "level": "L1",
+    "score_status": "official",
+    "preliminary_score": 54,
+    "official_score": null,
+    "coverage": 92,
+    "evaluated_at": "2026-11-03T04:58:03.409697Z",
+    "report_generated_by": "AI Shovel Eval"
+  },
+  "project_type": {
+    "type": "mcp_server",
+    "confidence": 0.55,
+    "scores": {
+      "mcp_server": 6,
+      "agent_skill": 0,
+      "framework": 0,
+      "cli_sdk_api": 5,
+      "collection": 0
+    },
+    "evidence": {
+      "mcp_server": [
+        "package.json.dependencies.@modelcontextprotocol/sdk",
+        "package.json.dependencies.@modelcontextprotocol/sdk"
+      ],
+      "agent_skill": [],
+      "framework": [],
+      "cli_sdk_api": [
+        "package.json.dependencies.commander",
+        "package.json.bin"
+      ],
+      "collection": []
+    },
+    "detected_via_manifest": true
+  },
+  "dimensions": {
+    "maintenance": {
+      "score": 44,
+      "max_score": 100,
+      "sub_items": [
+        {
+          "dim_key": "maintenance",
+          "sub_key": "update_release",
+          "weight": 3,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "ci_status",
+          "weight": 3,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "issue_maintain",
+          "weight": 2,
+          "level": 4,
+          "status": "partial"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "continuity",
+          "weight": 2,
+          "level": 4,
+          "status": "verified"
+        }
+      ]
+    },
+    "docs": {
+      "score": 68,
+      "max_score": 100,
+      "sub_items": [
+        {
+          "dim_key": "docs",
+          "sub_key": "install_deploy_doc",
+          "weight": 2,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "usage_example",
+          "weight": 2,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "license_info",
+          "weight": 1,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    },
+    "agent_compat": {
+      "score": 65,
+      "max_score": 100,
+      "sub_items": [
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "protocol_compliance",
+          "weight": 4,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "host_support",
+          "weight": 5,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "transport_config",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "env_auth",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        }
+      ]
+    },
+    "functionality": {
+      "score": 60,
+      "max_score": 100,
+      "sub_items": [
+        {
+          "dim_key": "functionality",
+          "sub_key": "core_completeness",
+          "weight": 5,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "coverage",
+          "weight": 5,
+          "level": 2,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "schema_completeness",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "task_examples",
+          "weight": 5,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "error_handling",
+          "weight": 5,
+          "level": 0,
+          "status": "not_tested"
+        }
+      ]
+    },
+    "reliability": {
+      "score": 13,
+      "max_score": 100,
+      "sub_items": [
+        {
+          "dim_key": "reliability",
+          "sub_key": "test_evidence",
+          "weight": 5,
+          "level": 1,
+          "status": "partial"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "ci_complete",
+          "weight": 4,
+          "level": 0,
+          "status": "failed"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "error_mechanism",
+          "weight": 3,
+          "level": 2,
+          "status": "not_tested"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "release_stability",
+          "weight": 3,
+          "level": 1,
+          "status": "verified"
+        }
+      ]
+    },
+    "ease_of_use": {
+      "score": 48,
+      "max_score": 100,
+      "sub_items": [
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "install_instructions",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "config_env",
+          "weight": 4,
+          "level": 1,
+          "status": "partial"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "deploy",
+          "weight": 3,
+          "level": 1,
+          "status": "declared"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "quickstart",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        }
+      ]
+    },
+    "security": {
+      "score": 76,
+      "max_score": 100,
+      "sub_items": [
+        {
+          "dim_key": "security",
+          "sub_key": "dependency_vulns",
+          "weight": 4,
+          "level": 2,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "danger_ops",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "data_access",
+          "weight": 3,
+          "level": 3,
+          "status": "partial"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "secret_scan",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    }
+  },
+  "agent_compatibility": {
+    "checks": {
+      "mcp_protocol_deps": true,
+      "host_cursor": true,
+      "host_trae": true,
+      "transport_methods": [
+        "stdio",
+        "sse",
+        "http"
+      ],
+      "auth_methods": [
+        "oauth",
+        "token"
+      ]
+    },
+    "evidence": [
+      "package.json deps 含 MCP: ['@modelcontextprotocol/sdk']",
+      "README 提及 cursor",
+      "README 提及 trae",
+      "README 提及传输: ['stdio', 'sse', 'http']",
+      "README 提及认证: ['oauth', 'token']"
+    ]
+  },
+  "security_findings": [
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 @modelcontextprotocol/sdk@1.12.1 存在 GHSA-345p-7cg4-v4c7：@modelcontextprotocol/sdk has cross-client data leak via shared server/transport instance reuse",
+      "aliases": [
+        "CVE-2026-25536"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 @modelcontextprotocol/sdk@1.12.1 存在 GHSA-46jr-4wx8-v453：MCP TypeScript SDK: One HTTP request within the default size limit could exhaust server memory during validation",
+      "aliases": [
+        "CVE-2026-111768"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 @modelcontextprotocol/sdk@1.12.1 存在 GHSA-6qxp-vccf-f47h：MCP TypeScript SDK: OAuth client could send credentials to an authorization server chosen by the MCP server",
+      "aliases": [
+        "CVE-2026-104850"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 @modelcontextprotocol/sdk@1.12.1 存在 GHSA-8r9q-7v3j-jr4g：Anthropic's MCP TypeScript SDK has a ReDoS vulnerability",
+      "aliases": [
+        "CVE-2026-0621"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 @modelcontextprotocol/sdk@1.12.1 存在 GHSA-f897-62hf-6gxq：MCP TypeScript SDK: HTTP server transports and handlers did not limit request body size or JSON-RPC batch length",
+      "aliases": []
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 @modelcontextprotocol/sdk@1.12.1 存在 GHSA-w48q-cv73-mx4w：Model Context Protocol (MCP) TypeScript SDK does not enable DNS rebinding protection by default",
+      "aliases": [
+        "CVE-2025-66414"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-35jp-ww65-95wh：axios Vulnerable to Full Man-in-the-Middle via Prototype Pollution Gadget in `config.proxy`",
+      "aliases": [
+        "CVE-2026-44494"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-3g43-6gmg-66jw：axios Vulnerable to Credential Theft and Response Hijacking via Prototype Pollution Gadget in Config Merge",
+      "aliases": [
+        "CVE-2026-44495"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-43fc-jf86-j433：Axios is Vulnerable to Denial of Service via __proto__ Key in mergeConfig",
+      "aliases": [
+        "CVE-2026-25639"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-4hjh-wcwx-xvwj：Axios is vulnerable to DoS attack through lack of data size check",
+      "aliases": [
+        "CVE-2025-58754"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-6chq-wfr3-2hj9：Axios: Header Injection via Prototype Pollution",
+      "aliases": [
+        "CVE-2026-42035"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-777c-7fjr-54vf：Allocation of Resources Without Limits or Throttling in Axios",
+      "aliases": [
+        "CVE-2026-44488"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-hfxv-24rg-xrqf：Axios: Regular Expression Denial of Service (ReDoS) via Cookie Name Injection",
+      "aliases": [
+        "CVE-2026-44496"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-j5f8-grm9-p9fc：Axios: Proxy-Authorization header leaks to redirect target when proxy is re-evaluated to direct connection",
+      "aliases": [
+        "CVE-2026-44486"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-p92q-9vqr-4j8v：Axios: Proxy-Authorization Credential Leak to Origin Server Across HTTP-to-HTTPS Redirect in Axios Node.js HTTP Adapter",
+      "aliases": [
+        "CVE-2026-44487"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-pf86-5x62-jrwf：Axios: Prototype Pollution Gadgets - Response Tampering, Data Exfiltration, and Request Hijacking",
+      "aliases": [
+        "CVE-2026-42033"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-pmwg-cvhr-8vh7：Axios: Incomplete Fix for CVE-2025-62718 — NO_PROXY Protection Bypassed via RFC 1122 Loopback Subnet (127.0.0.0/8) in Axios 1.15.0",
+      "aliases": [
+        "CVE-2026-42043"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 axios@1.8.4 存在 GHSA-q8qp-cvcw-x6jj：Axios has prototype pollution read-side gadgets in HTTP adapter that allow credential injection and request hijacking",
+      "aliases": [
+        "CVE-2026-42264"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 @modelcontextprotocol/sdk@1.12.1 存在 GHSA-6prh-2h8m-c8cw：MCP TypeScript client SDK: HTTP client transports and OAuth requests followed cross-origin redirects and re-sent custom headers and request bodies",
+      "aliases": [
+        "CVE-2026-111769"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 @modelcontextprotocol/sdk@1.12.1 存在 GHSA-rvq5-wwqv-78pq：MCP TypeScript SDK: Server bearer authentication accepted tokens issued for another service",
+      "aliases": [
+        "CVE-2026-111771"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-3p68-rc4w-qgx5：Axios has a NO_PROXY Hostname Normalization Bypass that Leads to SSRF",
+      "aliases": [
+        "CVE-2025-62718"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-3w6x-2g7m-8v23：Axios: Invisible JSON Response Tampering via Prototype Pollution Gadget in `parseReviver`",
+      "aliases": [
+        "CVE-2026-42044"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-42h9-826w-cgv3：Axios: Excessive recursion in formDataToJSON can cause denial of service",
+      "aliases": [
+        "CVE-2026-67313"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-445q-vr5w-6q77：Axios: CRLF Injection in multipart/form-data body via unsanitized blob.type in formDataToStream",
+      "aliases": [
+        "CVE-2026-42037"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-5c9x-8gcm-mpgx：Axios' HTTP adapter-streamed uploads bypass maxBodyLength when maxRedirects: 0",
+      "aliases": [
+        "CVE-2026-42034"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-62hf-57xw-28j9：Axios: unbounded recursion in toFormData causes DoS via deeply nested request data",
+      "aliases": [
+        "CVE-2026-42039"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-7q8q-rj6j-mhjq：Axios: Nested axios option objects can consume polluted prototype values",
+      "aliases": [
+        "CVE-2026-67319"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-898c-q2cr-xwhg：axios has DoS & Header Injection via Prototype Pollution Read-Side Gadgets in axios merge functions",
+      "aliases": [
+        "CVE-2026-44490"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-9fr6-4gfg-395g：Axios: Prototype-Pollution Gadget in the Default Instance Allows Inherited Object.prototype.method to Override HTTP Method",
+      "aliases": [
+        "CVE-2026-101902"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-fvcv-3m26-pcqx：Axios has Unrestricted Cloud Metadata Exfiltration via Header Injection Chain",
+      "aliases": [
+        "CVE-2026-40175"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-j8rh-479h-cp32：Axios: Header Injection via Inherited headers After Minimal Interceptor",
+      "aliases": [
+        "CVE-2026-101904"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-jqh4-m9w3-8hp9：Axios: Fetch adapter `ReadableStream` uploads bypass `maxBodyLength`",
+      "aliases": [
+        "CVE-2026-67317"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-m7pr-hjqh-92cm：Axios: no_proxy bypass via IP alias allows SSRF",
+      "aliases": [
+        "CVE-2026-42038"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-mmx7-hfxf-jppx：Axios: Prototype pollution gadgets can alter axios request construction",
+      "aliases": [
+        "CVE-2026-67316"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-pmv8-rq9r-6j72：Axios: Deep formToJSON Key Recursion Can Cause Denial of Service",
+      "aliases": [
+        "CVE-2026-67312"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-vf2m-468p-8v99：Axios: HTTP adapter streamed responses bypass maxContentLength",
+      "aliases": [
+        "CVE-2026-42036"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-vh66-26gq-q6x8：Axios: Prototype pollution gadget in fetch adapter can alter outbound requests",
+      "aliases": [
+        "CVE-2026-101908"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-w9j2-pvgh-6h63：Axios: Authentication Bypass via Prototype Pollution Gadget in `validateStatus` Merge Strategy",
+      "aliases": [
+        "CVE-2026-42041"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 axios@1.8.4 存在 GHSA-xx6v-rp6x-q39c：Axios: XSRF Token Cross-Origin Leakage via Prototype Pollution Gadget in `withXSRFToken` Boolean Coercion",
+      "aliases": [
+        "CVE-2026-42042"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "low",
+      "message": "依赖 axios@1.8.4 存在 GHSA-xhjh-pmcv-23jw：Axios: Null Byte Injection via Reverse-Encoding in AxiosURLSearchParams",
+      "aliases": [
+        "CVE-2026-42040"
+      ]
+    }
+  ],
+  "recommendations": [
+    "README 添加使用示例章节（Usage / Examples）",
+    "README 添加配置和环境变量说明",
+    "配置 GitHub Actions CI（lint + test）",
+    "最近 3 个月未活跃更新，建议维护或明确 deprecation 状态",
+    "修复 18 个高危依赖漏洞",
+    "配置 Dependabot 或 OSV-Scanner 做自动化安全扫描"
+  ],
+  "evidence": [
+    "[mcp_server] manifest 识别证据: package.json.dependencies.@modelcontextprotocol/sdk",
+    "[mcp_server] manifest 识别证据: package.json.dependencies.@modelcontextprotocol/sdk",
+    "[cli_sdk_api] manifest 识别证据: package.json.dependencies.commander",
+    "[cli_sdk_api] manifest 识别证据: package.json.bin",
+    "[docs] README 章节覆盖: install, troubleshooting, contributing",
+    "[ease] README 安装命令示例: node -v",
+    "[docs] README 含 6 个代码块",
+    "[security] 扫描 77 个源码文件",
+    "[osv] 查询 40 个依赖漏洞"
+  ],
+  "limitations": [
+    "覆盖率仅 92%，部分子项未测试",
+    "本报告为纯静态分析，未执行被测仓库中的任何代码"
+  ]
+}
