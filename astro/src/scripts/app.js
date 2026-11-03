@@ -1080,6 +1080,10 @@
     liveFetchedFor = "";
     var g = document.getElementById("liveGrid2");
     if (g) g.innerHTML = "";
+    var st = document.getElementById("liveStatus");
+    if (st) st.textContent = "";
+    var btn = document.getElementById("btnLive");
+    if (btn) btn.disabled = false;
   }
 
   function renderLive(list, total) {
@@ -1200,7 +1204,8 @@
     box.classList.remove("has-text");
     input.focus();
     hideLiveSection();
-    // 防御：清空搜索后 activeCat 已是 "all"，确保 chip 视觉状态同步
+    // 清空搜索后切回精选 tab + 确保 chip 视觉状态同步
+    if (activeTab !== "curated") switchTab("curated");
     syncTaskChips();
     render();
   });
