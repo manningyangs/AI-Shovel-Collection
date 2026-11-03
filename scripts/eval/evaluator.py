@@ -147,17 +147,29 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
     )
     prelim = compute_preliminary_score(sub_scores)
 
+    # === V1.0.1 重要修正 ===
+    # 静态分析不能自动升级到 L2/L3 —— L2 需要真实运行测试，L3 需要 Agent 端到端
+    level = "L1"  # 全部报告强制 L1 · 静态分析
+    score_status = "preliminary"  # 静态初评，非正式认证
+    evaluation_mode = "static"  # 明确标注评测模式
+
     # === 6. 构建完整报告 ===
     report_id = report_id_from(owner, repo, commit_sha, SCORING_VERSION)
 
-    # 评级
+    # 评级（仅作为参考，静态初评阶段显示但必须标注非正式）
     ps = prelim["preliminary_score"]
-    if ps >= 80 and prelim["coverage"] >= 80:
-        level = "L3"
-    elif ps >= 60 and prelim["coverage"] >= 70:
-        level = "L2"
+    if ps >= 90:
+        grade = "S"
+    elif ps >= 80:
+        grade = "A"
+    elif ps >= 70:
+        grade = "B"
+    elif ps >= 60:
+        grade = "C"
+    elif ps >= 40:
+        grade = "D"
     else:
-        level = "L1"
+        grade = "E"
 
     # 建议
     recommendations = _build_recommendations(
@@ -169,11 +181,13 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
 
     # 限制
     limitations = []
-    if prelim["coverage"] < 100:
-        limitations.append(f"覆盖率仅 {prelim['coverage']}%，部分子项未测试")
-    limitations.append("本报告为纯静态分析，未执行被测仓库中的任何代码")
+    limitations.append("⚠️ 本报告为纯静态分析（L1），未执行被测仓库中的任何代码")
+    limitations.append("⚠️ 静态初评 · 非正式认证 — 评分不能等同于真实运行表现")
+    limitations.append(f"⚠️ 覆盖率仅 {prelim['coverage']}%，未测试项目不计零分")
     if not license_result["has_license"]:
-        limitations.append("无法确认 License 类型")
+        limitations.append("⚠️ 无法确认 License 类型")
+    if health.get("archived"):
+        limitations.append("⚠️ 项目已归档")
 
     report = {
         "schema_version": "1.0",
@@ -193,13 +207,17 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
         "evaluation": {
             "evaluation_version": "1.0",
             "scoring_version": SCORING_VERSION,
+            "evaluation_mode": evaluation_mode,
+            "evaluation_level": level,
             "level": level,
-            "score_status": prelim["score_level"],
+            "score_status": score_status,
             "preliminary_score": prelim["preliminary_score"],
-            "official_score": None,
+            "official_score": None,  # v1.0.1 暂不接入人工认证分数
+            "grade": grade,
             "coverage": prelim["coverage"],
             "evaluated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             "report_generated_by": "AI Shovel Eval",
+            "disclaimer": "静态初评 · 非正式认证 · 不能作为项目真实运行能力的担保",
         },
         "project_type": ptype,
         "dimensions": _build_dimensions(sub_scores),
@@ -380,27 +398,45 @@ def _build_sub_scores(ptype, agent_compat, readme, license_result, env_result, h
 
 
 def _build_dimensions(sub_scores):
-    """把 sub_scores 按维度聚合。"""
+    """把 sub_scores 按维度聚合，输出完整维度对象。"""
     dims = {}
     for dim_key in set(s["dim_key"] for s in sub_scores):
         subs = [s for s in sub_scores if s["dim_key"] == dim_key]
-        dim_weight = sum(DIMENSIONS_DICT[dim_key]["sub_weights"]) if dim_key in DIMENSIONS_DICT else 0
-        # 计算该维度加权得分
+        label = DIMENSIONS_DICT.get(dim_key, {}).get("label", dim_key)
+        dim_weight = DIMENSIONS_DICT.get(dim_key, {}).get("dim_weight", 0)
+
+        # 计算该维度加权得分（子项 level × 子项权重 归一化）
         weighted = sum(s["weight"] * (s["level"] / 5) for s in subs if s["status"] not in ("not_tested", "not_applicable"))
         weight_total = sum(s["weight"] for s in subs if s["status"] not in ("not_tested", "not_applicable"))
         score = round(weighted / weight_total * 100) if weight_total > 0 else 0
+        weighted_score = round(score * dim_weight / 100, 2)
+
+        # 计算子项覆盖率
+        applicable_subs = [s for s in subs if s["status"] not in ("not_applicable", "blocked")]
+        tested_subs = [s for s in applicable_subs if s["status"] not in ("not_tested",)]
+        sub_coverage = round(len(tested_subs) / max(len(applicable_subs), 1) * 100)
+
         dims[dim_key] = {
+            "label": label,
             "score": score,
             "max_score": 100,
+            "weight": dim_weight,
+            "weighted_score": weighted_score,
+            "sub_coverage": sub_coverage,
             "sub_items": subs,
         }
     return dims
 
 
-# 维度子项权重字典（快速查询）
+# 维度字典（快速查询）
 DIMENSIONS_DICT = {}
-for _, label, _, subs in DIMENSIONS:
-    DIMENSIONS_DICT[_] = {"label": label, "sub_weights": [sw for _, _, sw in subs]}
+for key, label, dim_weight, subs in DIMENSIONS:
+    DIMENSIONS_DICT[key] = {
+        "label": label,
+        "dim_weight": dim_weight,
+        "sub_weights": [sw for _, _, sw in subs],
+        "sub_names": [name for name, _, _ in subs],
+    }
 
 
 def _format_security_findings(code_scan, osv_vulns) -> list[dict]:
