@@ -93,11 +93,26 @@ const reports = indexData.reports || [];
     font-size: 2rem; font-weight: 800; color: #3b82f6;
     min-width: 60px; text-align: center; font-variant-numeric: tabular-nums;
   }
-  .eval-report-score.L2 { color: #10b981; }
-  .eval-report-score.L3 { color: #8b5cf6; }
+  .eval-report-grade {
+    display: inline-block; padding: 2px 10px; border-radius: 10px;
+    font-size: 0.75rem; font-weight: 700; margin-left: 6px;
+  }
+  .grade-S { background: #fef3c7; color: #b45309; }
+  .grade-A { background: #d1fae5; color: #065f46; }
+  .grade-B { background: #dbeafe; color: #1e40af; }
+  .grade-C { background: #fef3c7; color: #92400e; }
+  .grade-D { background: #fee2e2; color: #991b1b; }
+  .grade-E { background: #fecaca; color: #7f1d1d; }
+  .eval-report-badge {
+    display: inline-block; padding: 1px 8px; border-radius: 8px;
+    font-size: 0.7rem; font-weight: 600; margin-right: 4px;
+  }
+  .badge-L1 { background: #e0e7ff; color: #3730a3; }
+  .badge-preliminary { background: #fef3c7; color: #b45309; }
+  .badge-official { background: #d1fae5; color: #065f46; }
   .eval-report-info { flex: 1; }
   .eval-report-repo { font-weight: 600; color: #1e3a5f; font-size: 0.95rem; }
-  .eval-report-meta { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+  .eval-report-meta { font-size: 0.8rem; color: #64748b; margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
   .eval-report-arrow { color: #94a3b8; font-size: 1.2rem; }
 
   .repo-form {
@@ -143,14 +158,14 @@ const reports = indexData.reports || [];
 
   <!-- Hero -->
   <section class="eval-hero">
-    <h1>🧪 AI Shovel Eval</h1>
+    <h1>🧪 AI Shovel Eval <span style="font-size:0.9rem;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:6px;font-weight:400">V1.0.1</span></h1>
     <p>让开源智能体工具接受 AI Shovel 的 <b>7 维度静态评测</b>，快速拿到一份透明、可重复、自动生成的质量报告。</p>
     <div class="eval-hero-actions">
       <a class="eval-btn eval-btn-primary" href="#apply">🚀 申请评测</a>
       <a class="eval-btn eval-btn-secondary" href="#reports">📊 查看已有报告</a>
     </div>
     <div class="eval-note">
-      ⚠️ 评测仅做 <b>静态代码分析</b>，不执行被测仓库的任何代码。第一阶段聚焦公开 GitHub 仓库。
+      ⚠️ <b>V1.0.1 规则升级</b>：全平台强制 L1 静态初评 · 非正式认证 · 真实测试文件检测 · OSV 漏洞查询区分阻断 · Agent Skill 专属权重
     </div>
   </section>
 
@@ -189,11 +204,18 @@ const reports = indexData.reports || [];
     )}
     {reports.length > 0 && reports.map(r => (
       <a class="eval-report-card" href={`${base}/evaluations/${r.report_id}/`}>
-        <div class={`eval-report-score ${r.level || "L1"}`}>{r.preliminary_score ?? "—"}</div>
+        <div class="eval-report-score">
+          {r.preliminary_score ?? "—"}
+          {r.grade && <span class={`eval-report-grade grade-${r.grade}`}>{r.grade}</span>}
+        </div>
         <div class="eval-report-info">
           <div class="eval-report-repo">{r.owner}/{r.name}</div>
           <div class="eval-report-meta">
-            {r.level ?? "L1"} · {r.coverage ?? 0}% 覆盖 · {r.evaluated_at?.slice(0, 10) ?? ""}
+            <span class="eval-report-badge badge-L1">L1</span>
+            <span class={`eval-report-badge ${r.score_status === "official" ? "badge-official" : "badge-preliminary"}`}>
+              {r.score_status ?? "preliminary"}
+            </span>
+            · {r.coverage ?? 0}% 覆盖 · {r.evaluated_at?.slice(0, 10) ?? ""}
           </div>
         </div>
         <div class="eval-report-arrow">→</div>
