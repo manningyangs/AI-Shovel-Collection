@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-03T06:44:41.836873Z",
-  "total_reports": 2,
+  "updated_at": "2026-11-03T06:55:51.821287Z",
+  "total_reports": 3,
   "reports": [
+    {
+      "report_id": "docker-hub-mcp-a8ca1576aabe",
+      "owner": "docker",
+      "name": "hub-mcp",
+      "url": "https://github.com/docker/hub-mcp",
+      "project_type": "mcp_server",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 78,
+      "grade": "B",
+      "coverage": 92,
+      "commit_sha": "68f4c79223f3",
+      "evaluated_at": "2026-11-03T06:55:51.821287Z"
+    },
     {
       "report_id": "sparkgeo-geo-mcp-servers-f5f69b9dd9fe",
       "owner": "sparkgeo",
