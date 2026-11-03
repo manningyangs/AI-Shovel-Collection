@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0",
-  "report_id": "microsoft-playwright-mcp-cf28b3b78460",
+  "report_id": "microsoft-playwright-mcp-8e46a9a81019",
   "repository": {
     "owner": "microsoft",
     "name": "playwright-mcp",
@@ -9,20 +9,24 @@
     "language": "TypeScript",
     "license": "MIT",
     "license_file": "LICENSE",
-    "stars": 39068,
-    "forks": 3366,
+    "stars": 39086,
+    "forks": 3368,
     "archived": false
   },
   "evaluation": {
     "evaluation_version": "1.0",
-    "scoring_version": "1.0",
-    "level": "L2",
-    "score_status": "official",
-    "preliminary_score": 72,
+    "scoring_version": "1.0.1",
+    "evaluation_mode": "static",
+    "evaluation_level": "L1",
+    "level": "L1",
+    "score_status": "preliminary",
+    "preliminary_score": 66,
     "official_score": null,
+    "grade": "C",
     "coverage": 92,
-    "evaluated_at": "2026-11-03T03:41:03.328159Z",
-    "report_generated_by": "AI Shovel Eval"
+    "evaluated_at": "2026-11-03T05:57:29.613703Z",
+    "report_generated_by": "AI Shovel Eval",
+    "disclaimer": "静态初评 · 非正式认证 · 不能作为项目真实运行能力的担保"
   },
   "project_type": {
     "type": "mcp_server",
@@ -53,9 +57,127 @@
     "detected_via_manifest": true
   },
   "dimensions": {
-    "functionality": {
+    "agent_compat": {
+      "label": "智能体兼容性",
+      "score": 79,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 11.85,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "protocol_compliance",
+          "weight": 4,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "host_support",
+          "weight": 5,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "transport_config",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "env_auth",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        }
+      ]
+    },
+    "ease_of_use": {
+      "label": "易用性与集成体验",
+      "score": 67,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 10.05,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "install_instructions",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "config_env",
+          "weight": 4,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "deploy",
+          "weight": 3,
+          "level": 3,
+          "status": "declared"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "quickstart",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        }
+      ]
+    },
+    "maintenance": {
+      "label": "项目维护健康度",
       "score": 60,
       "max_score": 100,
+      "weight": 10,
+      "weighted_score": 6.0,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "maintenance",
+          "sub_key": "update_release",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "ci_status",
+          "weight": 3,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "issue_maintain",
+          "weight": 2,
+          "level": 2,
+          "status": "partial"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "continuity",
+          "weight": 2,
+          "level": 4,
+          "status": "verified"
+        }
+      ]
+    },
+    "functionality": {
+      "label": "功能完整度",
+      "score": 60,
+      "max_score": 100,
+      "weight": 25,
+      "weighted_score": 15.0,
+      "sub_coverage": 80,
       "sub_items": [
         {
           "dim_key": "functionality",
@@ -95,22 +217,26 @@
       ]
     },
     "reliability": {
+      "label": "可靠性与运行效率",
       "score": 67,
       "max_score": 100,
+      "weight": 15,
+      "weighted_score": 10.05,
+      "sub_coverage": 75,
       "sub_items": [
         {
           "dim_key": "reliability",
           "sub_key": "test_evidence",
           "weight": 5,
-          "level": 1,
-          "status": "partial"
+          "level": 5,
+          "status": "verified"
         },
         {
           "dim_key": "reliability",
           "sub_key": "ci_complete",
           "weight": 4,
-          "level": 5,
-          "status": "verified"
+          "level": 0,
+          "status": "failed"
         },
         {
           "dim_key": "reliability",
@@ -128,111 +254,13 @@
         }
       ]
     },
-    "ease_of_use": {
-      "score": 67,
-      "max_score": 100,
-      "sub_items": [
-        {
-          "dim_key": "ease_of_use",
-          "sub_key": "install_instructions",
-          "weight": 5,
-          "level": 4,
-          "status": "verified"
-        },
-        {
-          "dim_key": "ease_of_use",
-          "sub_key": "config_env",
-          "weight": 4,
-          "level": 3,
-          "status": "verified"
-        },
-        {
-          "dim_key": "ease_of_use",
-          "sub_key": "deploy",
-          "weight": 3,
-          "level": 3,
-          "status": "declared"
-        },
-        {
-          "dim_key": "ease_of_use",
-          "sub_key": "quickstart",
-          "weight": 3,
-          "level": 3,
-          "status": "verified"
-        }
-      ]
-    },
-    "maintenance": {
-      "score": 92,
-      "max_score": 100,
-      "sub_items": [
-        {
-          "dim_key": "maintenance",
-          "sub_key": "update_release",
-          "weight": 3,
-          "level": 5,
-          "status": "verified"
-        },
-        {
-          "dim_key": "maintenance",
-          "sub_key": "ci_status",
-          "weight": 3,
-          "level": 5,
-          "status": "verified"
-        },
-        {
-          "dim_key": "maintenance",
-          "sub_key": "issue_maintain",
-          "weight": 2,
-          "level": 4,
-          "status": "partial"
-        },
-        {
-          "dim_key": "maintenance",
-          "sub_key": "continuity",
-          "weight": 2,
-          "level": 4,
-          "status": "verified"
-        }
-      ]
-    },
-    "agent_compat": {
-      "score": 79,
-      "max_score": 100,
-      "sub_items": [
-        {
-          "dim_key": "agent_compat",
-          "sub_key": "protocol_compliance",
-          "weight": 4,
-          "level": 4,
-          "status": "verified"
-        },
-        {
-          "dim_key": "agent_compat",
-          "sub_key": "host_support",
-          "weight": 5,
-          "level": 5,
-          "status": "verified"
-        },
-        {
-          "dim_key": "agent_compat",
-          "sub_key": "transport_config",
-          "weight": 3,
-          "level": 3,
-          "status": "verified"
-        },
-        {
-          "dim_key": "agent_compat",
-          "sub_key": "env_auth",
-          "weight": 3,
-          "level": 3,
-          "status": "verified"
-        }
-      ]
-    },
     "docs": {
+      "label": "文档与开发者体验",
       "score": 68,
       "max_score": 100,
+      "weight": 5,
+      "weighted_score": 3.4,
+      "sub_coverage": 100,
       "sub_items": [
         {
           "dim_key": "docs",
@@ -258,15 +286,19 @@
       ]
     },
     "security": {
-      "score": 76,
+      "label": "安全性与隐私保护",
+      "score": 65,
       "max_score": 100,
+      "weight": 15,
+      "weighted_score": 9.75,
+      "sub_coverage": 100,
       "sub_items": [
         {
           "dim_key": "security",
           "sub_key": "dependency_vulns",
           "weight": 4,
-          "level": 2,
-          "status": "verified"
+          "level": 0,
+          "status": "blocked"
         },
         {
           "dim_key": "security",
@@ -319,65 +351,10 @@
       "README 提及认证: ['token']"
     ]
   },
-  "security_findings": [
-    {
-      "type": "osv_vulnerability",
-      "severity": "high",
-      "message": "依赖 @modelcontextprotocol/sdk@1.25.2 存在 GHSA-22jm-h49p-29qw：MCP TypeScript SDK: Experimental tasks were not tied to the session that created them",
-      "aliases": [
-        "CVE-2026-111767"
-      ]
-    },
-    {
-      "type": "osv_vulnerability",
-      "severity": "high",
-      "message": "依赖 @modelcontextprotocol/sdk@1.25.2 存在 GHSA-345p-7cg4-v4c7：@modelcontextprotocol/sdk has cross-client data leak via shared server/transport instance reuse",
-      "aliases": [
-        "CVE-2026-25536"
-      ]
-    },
-    {
-      "type": "osv_vulnerability",
-      "severity": "high",
-      "message": "依赖 @modelcontextprotocol/sdk@1.25.2 存在 GHSA-46jr-4wx8-v453：MCP TypeScript SDK: One HTTP request within the default size limit could exhaust server memory during validation",
-      "aliases": [
-        "CVE-2026-111768"
-      ]
-    },
-    {
-      "type": "osv_vulnerability",
-      "severity": "high",
-      "message": "依赖 @modelcontextprotocol/sdk@1.25.2 存在 GHSA-6qxp-vccf-f47h：MCP TypeScript SDK: OAuth client could send credentials to an authorization server chosen by the MCP server",
-      "aliases": [
-        "CVE-2026-104850"
-      ]
-    },
-    {
-      "type": "osv_vulnerability",
-      "severity": "high",
-      "message": "依赖 @modelcontextprotocol/sdk@1.25.2 存在 GHSA-f897-62hf-6gxq：MCP TypeScript SDK: HTTP server transports and handlers did not limit request body size or JSON-RPC batch length",
-      "aliases": []
-    },
-    {
-      "type": "osv_vulnerability",
-      "severity": "medium",
-      "message": "依赖 @modelcontextprotocol/sdk@1.25.2 存在 GHSA-6prh-2h8m-c8cw：MCP TypeScript client SDK: HTTP client transports and OAuth requests followed cross-origin redirects and re-sent custom headers and request bodies",
-      "aliases": [
-        "CVE-2026-111769"
-      ]
-    },
-    {
-      "type": "osv_vulnerability",
-      "severity": "medium",
-      "message": "依赖 @modelcontextprotocol/sdk@1.25.2 存在 GHSA-rvq5-wwqv-78pq：MCP TypeScript SDK: Server bearer authentication accepted tokens issued for another service",
-      "aliases": [
-        "CVE-2026-111771"
-      ]
-    }
-  ],
+  "security_findings": [],
   "recommendations": [
     "README 添加使用示例章节（Usage / Examples）",
-    "修复 5 个高危依赖漏洞"
+    "配置 GitHub Actions CI（lint + test）"
   ],
   "evidence": [
     "[mcp_server] manifest 识别证据: package.json.devDependencies.@modelcontextprotocol/sdk",
@@ -388,11 +365,13 @@
     "[docs] README 章节覆盖: install, config, security",
     "[ease] README 安装命令示例: amp mcp add playwright -- npx @playwright/mcp@latest",
     "[docs] README 含 30 个代码块",
-    "[security] 扫描 12 个源码文件",
-    "[osv] 查询 7 个依赖漏洞"
+    "[security] 扫描 3 个源码文件",
+    "[osv] 查询 0 个依赖漏洞"
   ],
   "limitations": [
-    "覆盖率仅 92%，部分子项未测试",
-    "本报告为纯静态分析，未执行被测仓库中的任何代码"
+    "⚠️ 本报告为纯静态分析（L1），未执行被测仓库中的任何代码",
+    "⚠️ 静态初评 · 非正式认证 — 评分不能等同于真实运行表现",
+    "⚠️ 覆盖率仅 92%，未测试项目不计零分",
+    "⚠️ OSV 漏洞查询被阻断：部分 dep 查询失败 (3): ConnectionError — 依赖安全项未评分"
   ]
 }

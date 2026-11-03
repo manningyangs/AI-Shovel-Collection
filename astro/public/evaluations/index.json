@@ -1,37 +1,22 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-03T05:17:00.149852Z",
-  "total_reports": 3,
+  "scoring_version": "1.0.1",
+  "updated_at": "2026-11-03T05:57:46.708113Z",
+  "total_reports": 1,
   "reports": [
     {
-      "report_id": "yehuoshun-yuque-ai-mcp-795490d81350",
-      "owner": "yehuoshun",
-      "name": "yuque-ai-mcp",
-      "url": "https://github.com/yehuoshun/yuque-ai-mcp",
-      "level": "L2",
-      "preliminary_score": 63,
-      "coverage": 92,
-      "evaluated_at": "2026-11-03T05:17:00.149852Z"
-    },
-    {
-      "report_id": "larksuite-lark-openapi-mcp-ceb3934810ed",
-      "owner": "larksuite",
-      "name": "lark-openapi-mcp",
-      "url": "https://github.com/larksuite/lark-openapi-mcp",
-      "level": "L1",
-      "preliminary_score": 54,
-      "coverage": 92,
-      "evaluated_at": "2026-11-03T04:58:03.409697Z"
-    },
-    {
-      "report_id": "microsoft-playwright-mcp-cf28b3b78460",
+      "report_id": "microsoft-playwright-mcp-8e46a9a81019",
       "owner": "microsoft",
       "name": "playwright-mcp",
       "url": "https://github.com/microsoft/playwright-mcp",
-      "level": "L2",
-      "preliminary_score": 72,
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 66,
+      "grade": "C",
       "coverage": 92,
-      "evaluated_at": "2026-11-03T03:41:03.328159Z"
+      "scoring_version": "1.0.1",
+      "disclaimer": "静态初评 · 非正式认证 · 不能作为项目真实运行能力的担保",
+      "evaluated_at": "2026-11-03T05:57:29.613703Z"
     }
   ]
 }
