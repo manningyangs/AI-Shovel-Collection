@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import EvaluationFeatured from '../components/EvaluationFeatured.astro';
 import '../styles/main.css';
 import fs from 'fs';
 import path from 'path';
@@ -163,6 +164,14 @@ const domainsTotal = domainRows.length;
     </div>
   </div>
 
+  <!-- V2.1: 统计 4 个（上移到排行榜上方；恢复初始值 + data-target 给 animateStats 动画） -->
+  <div class="stats-grid stats-v21" id="statsGrid" role="region" aria-label="核心数据统计">
+    <div class="stat-card" title="catalog.csv 中的人工精选行数"><div class="stat-num c1" id="statCurated" data-target={catalogItems.length}>{catalogItems.length}</div><div class="stat-label">精选工具</div></div>
+    <div class="stat-card" title="Pipeline 自动发现的候选条目"><div class="stat-num c3" id="statCand" data-target="0">…</div><div class="stat-label">发现候选</div></div>
+    <div class="stat-card" title="MCP initialize 握手实测通过的端点数"><div class="stat-num c1" id="statVfy">—</div><div class="stat-label">端点实测 OK</div></div>
+    <div class="stat-card" title="已收录仓库的 GitHub Stars 累加"><div class="stat-num c4" id="statStars">…</div><div class="stat-label">累计 GitHub Stars</div></div>
+  </div>
+
   <!-- V2.1: Trending Top 3 横排区块 -->
   {trendingTop3.length > 0 ? (
   <section class="trending-top-v21" aria-label="🔥 Trending Top 3">
@@ -186,13 +195,8 @@ const domainsTotal = domainRows.length;
   </section>
   ) : null}
 
-  <!-- V2.1: 统计 4 个（恢复初始值 + data-target 给 animateStats 动画） -->
-  <div class="stats-grid stats-v21" id="statsGrid" role="region" aria-label="核心数据统计">
-    <div class="stat-card" title="catalog.csv 中的人工精选行数"><div class="stat-num c1" id="statCurated" data-target={catalogItems.length}>{catalogItems.length}</div><div class="stat-label">精选工具</div></div>
-    <div class="stat-card" title="Pipeline 自动发现的候选条目"><div class="stat-num c3" id="statCand" data-target="0">…</div><div class="stat-label">发现候选</div></div>
-    <div class="stat-card" title="MCP initialize 握手实测通过的端点数"><div class="stat-num c1" id="statVfy">—</div><div class="stat-label">端点实测 OK</div></div>
-    <div class="stat-card" title="已收录仓库的 GitHub Stars 累加"><div class="stat-num c4" id="statStars">…</div><div class="stat-label">累计 GitHub Stars</div></div>
-  </div>
+  <!-- 最新评测报告预览（原统计卡片位置：排行榜下方、工具卡片区域之前） -->
+  <EvaluationFeatured />
 
   <noscript><div class="noscript-note">⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（191 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。</div></noscript>
 </header>

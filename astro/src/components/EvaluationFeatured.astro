@@ -1,0 +1,305 @@
+---
+// 首页顶部「最新评测报告」预览
+// 构建阶段读取 evaluations/index.json（列表）+ evaluations/reports/{report_id}.json（详情）
+// 只读静态数据，不引入任何后端服务；数据缺失/异常时降级为空状态，不影响首页构建
+import fs from "node:fs";
+import path from "node:path";
+
+const base = "/AI-Shovel-Collection";
+
+const TYPE_LABELS: Record<string, string> = {
+  mcp_server: "MCP Server",
+  agent_skill: "Agent Skills",
+  cli_sdk_api: "CLI / SDK / API",
+  framework: "Framework",
+  collection: "Collection",
+};
+
+function loadJson(p: string) {
+  try {
+    return JSON.parse(fs.readFileSync(p, "utf8"));
+  } catch (e) {
+    return null;
+  }
+}
+
+const indexData = loadJson(path.resolve(process.cwd(), "../evaluations/index.json"));
+const idxVersion: string = indexData?.scoring_version || "";
+const rawList: any[] = Array.isArray(indexData?.reports) ? indexData.reports : [];
+
+type DimBrief = { label: string; score: number; max: number };
+type Card = {
+  reportId: string;
+  owner: string;
+  name: string;
+  url: string;
+  typeLabel: string;
+  stage: string;
+  score: number | null;
+  coverage: number | null;
+  date: string;
+  evaluatedAt: string;
+  isCurrent: boolean;
+  dims: DimBrief[];
+};
+
+const DIM_KEYS = ["functionality", "agent_compat", "maintenance"];
+
+const cards: Card[] = [];
+for (const r of rawList) {
+  if (!r || typeof r !== "object" || !r.report_id) continue;
+
+  // 校验详情页真实存在：legacy 历史报告文件名带 .legacy 后缀，不会匹配 → 自动排除，杜绝死链
+  const file = path.resolve(process.cwd(), `../evaluations/reports/${String(r.report_id)}.json`);
+  if (!fs.existsSync(file)) continue;
+
+  const detail = loadJson(file);
+  const ev = detail?.evaluation || {};
+  const scoringVer: string = ev.scoring_version || "";
+  // 当前评分规则版本优先（版本号缺失视为当前版本：index 由当前流水线维护）
+  const isCurrent = !idxVersion || !scoringVer || scoringVer === idxVersion;
+
+  const dimsRaw = detail?.dimensions || {};
+  const dims: DimBrief[] = DIM_KEYS.map((k) => dimsRaw[k])
+    .filter((d) => d && typeof d.score === "number")
+    .map((d) => ({ label: String(d.label || ""), score: d.score, max: typeof d.max_score === "number" ? d.max_score : 100 }));
+
+  const score = typeof r.preliminary_score === "number" ? r.preliminary_score : (typeof ev.preliminary_score === "number" ? ev.preliminary_score : null);
+  const coverage = typeof r.coverage === "number" ? r.coverage : (typeof ev.coverage === "number" ? ev.coverage : null);
+  const level = String(r.level || ev.level || "");
+  const scoreStatus = String(r.score_status || ev.score_status || "");
+  // 真实评测阶段：preliminary → 静态初评；不把静态分析包装成运行测试
+  const stage = level
+    ? scoreStatus === "official"
+      ? `${level} 正式评分`
+      : `${level} 静态初评`
+    : scoreStatus === "official"
+      ? "正式评分"
+      : "静态初评";
+
+  cards.push({
+    reportId: String(r.report_id),
+    owner: String(r.owner || detail?.repository?.owner || ""),
+    name: String(r.name || detail?.repository?.name || ""),
+    url: String(r.url || detail?.repository?.url || `https://github.com/${r.owner}/${r.name}`),
+    typeLabel: TYPE_LABELS[String(r.project_type || (typeof detail?.project_type === "object" ? detail.project_type?.type : detail?.project_type) || "")] || String(r.project_type || "") || "—",
+    stage,
+    score,
+    coverage,
+    date: String(r.evaluated_at || ev.evaluated_at || "").slice(0, 10),
+    evaluatedAt: String(r.evaluated_at || ev.evaluated_at || ""),
+    isCurrent,
+    dims,
+  });
+}
+
+// 展示规则：当前评分规则版本优先，其次按最近评测时间降序（是「最新」不是「最高分」）
+cards.sort((a, b) => Number(b.isCurrent) - Number(a.isCurrent) || b.evaluatedAt.localeCompare(a.evaluatedAt));
+const top3 = cards.slice(0, 3);
+---
+
+<section class="eval-feat" aria-label="🧪 最新评测报告">
+  <div class="ef-head">
+    <div class="ef-head-text">
+      <span class="ef-title">🧪 最新评测报告</span>
+      <span class="ef-sub">不只发现好工具，更要验证它们是否真正好用。</span>
+    </div>
+    <a class="ef-all" href={`${base}/evaluate/`}>全部评测 →</a>
+  </div>
+
+  {top3.length > 0 ? (
+    <div class="ef-row">
+      {top3.map((r) => (
+        <article class="ef-card">
+          <div class="ef-card-head">
+            <a class="ef-name" href={r.url} target="_blank" rel="noopener" title={`${r.owner}/${r.name}（GitHub 仓库）`}>
+              {r.owner}/{r.name}<span class="ef-ext">↗</span>
+            </a>
+          </div>
+          <div class="ef-tags">
+            <span class="ef-type">{r.typeLabel}</span>
+            <span class="ef-level">{r.stage}</span>
+          </div>
+          <div class="ef-score">
+            {r.score !== null ? (
+              <span class="ef-score-num">{r.score}<span class="ef-score-max">/100</span></span>
+            ) : (
+              <span class="ef-score-none">暂无综合评分</span>
+            )}
+            {r.coverage !== null && <span class="ef-cover">评测覆盖 {r.coverage}%</span>}
+          </div>
+          {r.dims.length > 0 && (
+            <ul class="ef-dims">
+              {r.dims.map((d) => (
+                <li class="ef-dim">
+                  <span class="ef-dim-label">{d.label}</span>
+                  <span class="ef-dim-val">{d.score}/{d.max}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div class="ef-foot">
+            <span class="ef-date">{r.date || "日期未知"}</span>
+            <a class="ef-link" href={`${base}/evaluations/${r.reportId}/`}>查看完整报告 →</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  ) : (
+    <div class="ef-empty">
+      还没有评测报告 —— <a href={`${base}/evaluate/`}>申请评测一个你关注的仓库 →</a>
+    </div>
+  )}
+</section>
+
+<style>
+  /* 最新评测报告：浅蓝灰底，与排行榜浅黄色区分；蓝色为强调色 */
+  .eval-feat {
+    position: relative;
+    max-width: 980px;
+    margin: 28px auto 0;
+    padding: 20px 24px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: left;
+  }
+  .ef-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .ef-head-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .ef-title { font-weight: 700; font-size: 15px; color: #1e3a5f; }
+  .ef-sub { font-size: 12.5px; color: #64748b; line-height: 1.6; }
+  .ef-all {
+    margin-left: auto;
+    flex: none;
+    font-size: 13px;
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .ef-all:hover { text-decoration: underline; }
+
+  .ef-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .ef-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    min-width: 0;
+  }
+  .ef-card:hover {
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+
+  .ef-card-head { min-width: 0; }
+  .ef-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #1e3a5f;
+    text-decoration: none;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .ef-name:hover { color: #2563eb; text-decoration: underline; }
+  .ef-ext { font-size: 11px; color: #94a3b8; margin-left: 3px; }
+
+  .ef-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ef-type {
+    font-size: 11px;
+    font-weight: 600;
+    color: #475569;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 1px 8px;
+    border-radius: 999px;
+  }
+  .ef-level {
+    font-size: 11px;
+    font-weight: 600;
+    color: #3730a3;
+    background: #e0e7ff;
+    padding: 1px 8px;
+    border-radius: 999px;
+  }
+
+  .ef-score { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+  .ef-score-num {
+    font-size: 26px;
+    font-weight: 800;
+    color: #2563eb;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .ef-score-max { font-size: 13px; font-weight: 600; color: #93c5fd; margin-left: 1px; }
+  .ef-score-none { font-size: 14px; font-weight: 600; color: #94a3b8; }
+  .ef-cover { font-size: 12px; color: #64748b; }
+
+  .ef-dims { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+  .ef-dim {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    background: #f8fafc;
+    border: 1px solid #eef2f7;
+    border-radius: 6px;
+    padding: 3px 8px;
+  }
+  .ef-dim-label { color: #64748b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ef-dim-val { color: #334155; font-weight: 600; font-variant-numeric: tabular-nums; flex: none; }
+
+  .ef-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px dashed #e2e8f0;
+  }
+  .ef-date { font-size: 12px; color: #94a3b8; }
+  .ef-link { font-size: 12.5px; font-weight: 600; color: #2563eb; text-decoration: none; white-space: nowrap; }
+  .ef-link:hover { text-decoration: underline; }
+
+  .ef-empty {
+    background: #fff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    font-size: 13.5px;
+    color: #64748b;
+  }
+  .ef-empty a { color: #2563eb; font-weight: 600; text-decoration: none; }
+  .ef-empty a:hover { text-decoration: underline; }
+
+  /* 平板：两列 */
+  @media (max-width: 760px) {
+    .ef-row { grid-template-columns: repeat(2, 1fr); }
+  }
+  /* 手机：单列，防溢出 */
+  @media (max-width: 520px) {
+    .eval-feat { padding: 16px 14px; }
+    .ef-row { grid-template-columns: 1fr; }
+    .ef-head { flex-wrap: wrap; }
+    .ef-all { margin-left: 0; }
+  }
+</style>
