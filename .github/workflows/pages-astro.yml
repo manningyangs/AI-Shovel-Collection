@@ -48,6 +48,16 @@ jobs:
       - name: Build Astro
         run: npm run build
 
+      - name: Copy evaluations/ into dist
+        run: |
+          cd ..
+          if [ -d "evaluations" ]; then
+            cp -r evaluations astro/dist/evaluations
+            echo "✅ evaluations/ copied to dist ($(ls evaluations | wc -l) entries)"
+          else
+            echo "⚠️ evaluations/ dir not found, skipping"
+          fi
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
