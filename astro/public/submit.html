@@ -303,11 +303,12 @@ function parseRepoUrl(url) {
 }
 
 // GitHub REST API（匿名调用，60 req/h 限制）
-async function ghApi(path) {
+async function ghApi(path, silent404) {
   const resp = await fetch("https://api.github.com" + path, {
     headers: { "Accept": "application/vnd.github+json", "User-Agent": "ai-shovels-submit/1.0" }
   });
   if (!resp.ok) {
+    if (silent404 && resp.status === 404) return null;
     if (resp.status === 403 || resp.status === 429) throw new Error("GitHub API 限流（60 次/小时/IP）");
     if (resp.status === 404) throw new Error("仓库不存在或无法访问");
     throw new Error("GitHub API HTTP " + resp.status);
@@ -315,79 +316,42 @@ async function ghApi(path) {
   return resp.json();
 }
 
-// Fallback：从 github.com HTML 页面爬 meta 标签（当 REST API 不通时）
-async function ghFallback(owner, repo) {
-  const resp = await fetch(`https://github.com/${owner}/${repo}`, {
-    headers: { "User-Agent": "Mozilla/5.0 (ai-shovels-submit)" }
-  });
-  if (!resp.ok) throw new Error("GitHub 页面访问失败 (HTTP " + resp.status + ")");
-  const html = await resp.text();
-  const doc = new DOMParser().parseFromString(html, "text/html");
-
-  // og:title / og:description
-  const ogTitle = doc.querySelector('meta[property="og:title"]')?.content || repo;
-  const ogDesc = doc.querySelector('meta[property="og:description"]')?.content || "";
-
-  // Stars — 找含 "stars" 的 aria-label 或 data-view-component
-  let stars = 0;
-  const starLinks = doc.querySelectorAll('a[href$="/stargazers"], a[href*="/stargazers"]');
-  for (const a of starLinks) {
-    const txt = a.textContent.trim().replace(/[^\d.kKmM]/g, "");
-    const n = parseStarStr(txt);
-    if (n > stars) stars = n;
-  }
-
-  // Archived
-  const archived = !!doc.querySelector('article.Publication, div.AppHeader span:has-text("Archived")') ||
-    /\barchived\b/i.test(html.slice(0, 3000));
-
-  // Language pill
-  let language = "";
-  const langPill = doc.querySelector('span[itemprop="programmingLanguage"]');
-  if (langPill) language = langPill.textContent.trim();
-
-  // Last push date
-  let pushed_at = "";
-  const timeEls = doc.querySelectorAll('relative-time[datetime]');
-  if (timeEls.length) pushed_at = timeEls[timeEls.length - 1].getAttribute("datetime") || "";
-
-  return {
-    name: repo, full_name: `${owner}/${repo}`,
-    description: ogDesc, html_url: `https://github.com/${owner}/${repo}`,
-    stargazers_count: stars, language, archived,
-    pushed_at, topics: [], license: null, _fallback: true
-  };
-}
-function parseStarStr(s) {
-  if (!s) return 0;
-  s = s.trim().toLowerCase();
-  const m = s.match(/^([\d.]+)\s*([kmb]?)$/);
-  if (!m) return 0;
-  let n = parseFloat(m[1]);
-  const u = m[2];
-  if (u === "k") n *= 1000;
-  if (u === "m") n *= 1000000;
-  if (u === "b") n *= 1000000000;
-  return Math.round(n);
-}
-
-// 统一入口：先 REST API，失败 fallback HTML 抓取
-async function fetchRepoMeta(owner, repo) {
+// 智能建议：REST 404 时用 GitHub Search API 搜相似仓库
+// 浏览器端 CORS 限制：fetch github.com HTML 必定失败 → 直接用 Search API 给建议
+async function ghSearchSuggest(repo) {
   try {
-    const [data, topicsResp] = await Promise.all([
-      ghApi(`/repos/${owner}/${repo}`),
-      ghApi(`/repos/${owner}/${repo}/topics`).catch(() => ({ names: [] }))
-    ]);
-    data.topics = topicsResp.names || [];
-    return { data, source: "api" };
-  } catch (e1) {
-    try {
-      const data = await ghFallback(owner, repo);
-      return { data, source: "html", fallback: true };
-    } catch (e2) {
-      throw new Error("REST API 失败：" + e1.message + "；HTML fallback 也失败：" + e2.message);
-    }
+    // 用仓库名做精确搜索
+    const q = repo.replace(/[._-]/g, " ");
+    const resp = await fetch(
+      "https://api.github.com/search/repositories?q=" + encodeURIComponent(q) + "+in:name&sort=stars&order=desc&per_page=5",
+      { headers: { "Accept": "application/vnd.github+json", "User-Agent": "ai-shovels-submit/1.0" } }
+    );
+    if (!resp.ok) return [];
+    const json = await resp.json();
+    return (json.items || []).slice(0, 5);
+  } catch (e) {
+    return [];
   }
+}
+
+// 统一入口：REST API + 智能搜索建议
+async function fetchRepoMeta(owner, repo) {
+  const [data, topicsResp] = await Promise.all([
+    ghApi(`/repos/${owner}/${repo}`, true),   // 404 静默返回 null
+    ghApi(`/repos/${owner}/${repo}/topics`, true).catch(() => ({ names: [] }))
+  ]);
+
+  if (data) {
+    // 正常命中
+    data.topics = (topicsResp && topicsResp.names) || [];
+    return { data, source: "api" };
+  }
+
+  // REST 返回 404 → 搜相似仓库给用户建议
+  const suggestions = await ghSearchSuggest(repo);
+  const err = new Error("仓库不存在或无法访问（REST API 404）");
+  err.suggestions = suggestions;
+  throw err;
 }
 
 // 分类推断（与 Pipeline Python 版本一致）
@@ -474,14 +438,31 @@ async function fetchRepo() {
     document.getElementById("cardResult").style.display = "";
     document.getElementById("cardGen").style.display = "";
   } catch (e) {
-    showError(e.message || String(e));
+    showError(e.message || String(e), e.suggestions);
   } finally {
     btn.disabled = false; btn.textContent = "🔍 自动识别";
   }
 }
 
-function showError(msg) {
-  document.getElementById("errMsg").textContent = msg;
+function showError(msg, suggestions) {
+  const errMsg = document.getElementById("errMsg");
+  let html = esc(msg);
+  if (suggestions && suggestions.length) {
+    html += `<div style="margin-top:12px;font-size:13px">
+      <b style="color:var(--text-2)">💡 你是不是想找这些？（点击可直接填入）</b>
+      <ul style="margin-top:6px;padding-left:18px;line-height:1.9">
+        ${suggestions.map(s => {
+          const stars = (s.stargazers_count || 0).toLocaleString();
+          return `<li><a href="javascript:void(0)" onclick="document.getElementById('ghUrl').value='${esc(s.html_url)}'; document.getElementById('cardError').style.display='none'; fetchRepo()" style="color:var(--primary);text-decoration:underline">${esc(s.full_name)}</a>
+            <span style="color:var(--text-3);font-size:12px">★ ${stars}${s.language ? ' · ' + esc(s.language) : ''}</span>
+            <div style="color:var(--text-2);font-size:12px;margin-left:0;max-width:520px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(s.description || "")}</div></li>`;
+        }).join("")}
+      </ul>
+    </div>`;
+  } else if (suggestions && suggestions.length === 0 && msg.includes("404")) {
+    html += '<p style="margin-top:10px;font-size:12.5px;color:var(--text-3)">仓库名可能拼写错误、已更名或设为私有。</p>';
+  }
+  errMsg.innerHTML = html;
   document.getElementById("cardError").style.display = "";
 }
 
