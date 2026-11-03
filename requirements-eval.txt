@@ -1,0 +1,5 @@
+# AI Shovel Eval V1.0 依赖
+# 只用标准库也能跑，以下是可选的增强
+requests>=2.31          # 更友好的 HTTP 客户端（替代 urllib）
+jsonschema>=4.22        # 完整的 JSON Schema 校验（替代简易版）
+pyyaml>=6.0             # YAML 解析（Issue Form 字段校验）
