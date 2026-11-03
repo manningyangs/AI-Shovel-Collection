@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-03T06:55:51.821287Z",
-  "total_reports": 3,
+  "updated_at": "2026-11-03T07:15:06.214260Z",
+  "total_reports": 4,
   "reports": [
+    {
+      "report_id": "octocat-Hello-World-9a259f107dc9",
+      "owner": "octocat",
+      "name": "Hello-World",
+      "url": "https://github.com/octocat/Hello-World",
+      "project_type": "unknown",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 34,
+      "grade": "E",
+      "coverage": 87,
+      "commit_sha": "7fd1a60b01f9",
+      "evaluated_at": "2026-11-03T07:15:06.214260Z"
+    },
     {
       "report_id": "docker-hub-mcp-a8ca1576aabe",
       "owner": "docker",
