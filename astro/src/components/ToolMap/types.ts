@@ -47,12 +47,106 @@ export type CapabilityDef = {
   category: string;
 };
 
+/** 候选关系（relation-candidates.json，非公共事实，默认不展示） */
+export type CandidateRelation = RelationData & {
+  direction?: string;
+  status?: string;
+  inputOutputMatch?: string;
+  protocolMatch?: string;
+  setupRequired?: string;
+  displayByDefault?: boolean;
+  reviewNote?: string;
+  importedAt?: string;
+};
+
+/** 工具输入输出能力画像（io-capabilities.json；空数组 = unknown） */
+export type IOProfile = {
+  repo: string;
+  operations: string[];
+  inputs: string[];
+  outputs: string[];
+  protocols: string[];
+  constraints: string[];
+  explicitInputs?: string[];
+  explicitOutputs?: string[];
+  evidence?: { type: string; url: string }[];
+  evidenceLevel: string;
+  summary?: string;
+};
+
+/** 连接检查结果（任务书 §8.1 五种状态） */
+export type CheckStatus = 'verified' | 'documented' | 'logical' | 'conflict' | 'unknown';
+
+export type CheckDimensionState = 'pass' | 'warn' | 'fail' | 'unknown';
+
+export type CheckDimension = {
+  label: string;
+  state: CheckDimensionState;
+  detail: string;
+};
+
+export type BridgeTool = { id: string; name: string; reason: string };
+
+export type ConnectionCheck = {
+  status: CheckStatus;
+  /** 一句话结论 */
+  conclusion: string;
+  dimensions: {
+    taskLogic: CheckDimension;
+    ioCompat: CheckDimension;
+    protocol: CheckDimension;
+    integration: CheckDimension;
+    runtime: CheckDimension;
+  };
+  /** 分维度解释（任务书 §8.3 必须解释原因，不能只说失败） */
+  reasons: string[];
+  suggestions: string[];
+  /** 命中的公共关系 */
+  relation?: { id: string; type: RelationType; evidenceLevel: EvidenceLevel; description: string; source: string; target: string };
+  /** 命中的候选关系（未审核） */
+  candidate?: { id: string; type: RelationType; evidenceLevel: EvidenceLevel; description: string; reviewNote?: string };
+  /** 画像证据摘要 */
+  ioEvidence?: { sourceOutputs: string[]; targetInputs: string[]; sourceLevel: string; targetLevel: string };
+  /** 推荐的中间转换工具（io 冲突或无交集时） */
+  bridges?: BridgeTool[];
+};
+
+/** 检查状态视觉规范（任务书 §11：不能仅靠颜色，界面同时给文字标签） */
+export const CHECK_STYLE: Record<CheckStatus, { color: string; label: string; symbol: string }> = {
+  verified: { color: '#16a34a', label: '已验证连接', symbol: '✓' },
+  documented: { color: '#2563eb', label: '文档支持', symbol: '✓' },
+  logical: { color: '#d97706', label: '逻辑合理·待验证', symbol: '!' },
+  conflict: { color: '#dc2626', label: '存在冲突', symbol: '×' },
+  unknown: { color: '#64748b', label: '信息不足', symbol: '?' },
+};
+
+export type WorkflowTemplateStep = {
+  tool: string;
+  desc: string;
+  input: string;
+  output: string;
+  needsManual: boolean;
+  needsConfig: boolean;
+  configNote?: string;
+  verified: boolean;
+  verifyNote?: string;
+};
+
+export type WorkflowTemplate = {
+  id: string;
+  title: string;
+  steps: WorkflowTemplateStep[];
+};
+
 export type MapData = {
   generatedAt: string;
   stats: Record<string, unknown>;
   capabilities: CapabilityDef[];
   nodes: MapNodeData[];
   relations: RelationData[];
+  candidates?: CandidateRelation[];
+  ioProfiles?: Record<string, IOProfile>;
+  templates?: WorkflowTemplate[];
 };
 
 /** 关系类型视觉规范（任务书 §8：四类关系不同颜色线型） */

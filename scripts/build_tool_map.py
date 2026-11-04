@@ -78,6 +78,27 @@ def main() -> int:
     cluster = layout["cluster"]
     explicit_pos = layout.get("tools", {})
 
+    # ---------- 候选关系层（可选，与生产关系库隔离；由 analyze_tool_relations.py 生成） ----------
+    cand_doc_path = DATA_DIR / "relation-candidates.json"
+    candidates, cand_invalid = [], []
+    if cand_doc_path.exists():
+        for c in load_json(cand_doc_path).get("candidates", []):
+            problems = []
+            if c.get("type") not in VALID_REL_TYPES:
+                problems.append(f"非法类型 {c.get('type')}")
+            if c.get("evidenceLevel") not in VALID_EVIDENCE:
+                problems.append(f"非法证据等级 {c.get('evidenceLevel')}")
+            if (c.get("source") or "").lower() == (c.get("target") or "").lower():
+                problems.append("自环")
+            if problems:
+                cand_invalid.append({"id": c.get("id"), "problems": problems})
+            else:
+                candidates.append(c)
+
+    # ---------- 能力画像层（可选，由 build_io_capabilities.py 生成） ----------
+    io_path = DATA_DIR / "io-capabilities.json"
+    io_profiles = load_json(io_path).get("profiles", {}) if io_path.exists() else {}
+
     # ---------- 节点构建与校验 ----------
     invalid_rows, dupes, nodes = [], [], []
     seen: dict[str, str] = {}
@@ -180,6 +201,18 @@ def main() -> int:
     related_ids = {r["source"].lower() for r in relations} | {r["target"].lower() for r in relations}
     ev_count = {e: sum(1 for r in relations if r["evidenceLevel"] == e) for e in VALID_EVIDENCE}
     type_count = {t: sum(1 for r in relations if r["type"] == t) for t in sorted(VALID_REL_TYPES)}
+    # ---------- 典型工作流模板（可选；工具 ID 必须全部存在于节点中） ----------
+    tpl_path = DATA_DIR / "workflow-templates.json"
+    templates, tpl_invalid = [], []
+    if tpl_path.exists():
+        node_ids = {n["id"] for n in nodes}
+        for t in load_json(tpl_path).get("templates", []):
+            bad = [s.get("tool") for s in t.get("steps", []) if s.get("tool") not in node_ids]
+            if bad or len(t.get("steps", [])) < 2:
+                tpl_invalid.append({"id": t.get("id"), "missingTools": bad})
+            else:
+                templates.append(t)
+
     stats = {
         "catalogRecords": dir_record_count,
         "validRepoUrls": dir_record_count - len(invalid_rows),
@@ -193,6 +226,19 @@ def main() -> int:
         "duplicates": len(dupes),
         "invalidRelations": len(rel_invalid),
         "evaluatedTools": sum(1 for n in nodes if n["eval"]),
+        "candidateTotal": len(candidates),
+        "candidateInvalid": len(cand_invalid),
+        "ioProfiledTools": sum(
+            1 for n in nodes
+            if (io_profiles.get(n["id"]) or {}).get("inputs")
+            and (io_profiles.get(n["id"]) or {}).get("outputs")
+        ),
+        "ioDocumentedTools": sum(
+            1 for n in nodes
+            if (io_profiles.get(n["id"]) or {}).get("evidenceLevel") == "documented"
+        ),
+        "templateTotal": len(templates) + len(tpl_invalid),
+        "templateInvalid": len(tpl_invalid),
     }
 
     # ---------- 输出 JSON ----------
@@ -204,6 +250,9 @@ def main() -> int:
         "capabilities": capabilities,
         "nodes": nodes,
         "relations": relations,
+        "candidates": candidates,
+        "ioProfiles": io_profiles,
+        "templates": templates,
     }
     OUT_JSON.write_text(
         json.dumps(payload, ensure_ascii=False, indent=1), encoding="utf-8"
@@ -230,6 +279,10 @@ def main() -> int:
         f"| 推断关系（inferred） | {ev_count['inferred']} |",
         f"| 证据不足关系（unverified，已剔除） | {ev_count['unverified']} |",
         f"| 已有评测报告的工具数 | {stats['evaluatedTools']} |",
+        f"| 候选关系（默认不展示，独立候选层） | {stats['candidateTotal']} |",
+        f"| 具备输入+输出能力画像的工具数 | {stats['ioProfiledTools']} |",
+        f"| 画像为文档级证据（documented）的工具数 | {stats['ioDocumentedTools']} |",
+        f"| 典型工作流模板（通过工具校验） | {stats['templateTotal'] - stats['templateInvalid']}/{stats['templateTotal']} |",
         "",
         "## 关系类型分布",
         "",

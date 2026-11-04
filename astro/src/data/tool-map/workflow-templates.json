@@ -1,0 +1,396 @@
+{
+  "version": 1,
+  "note": "典型工作流模板（第一批 10 条）。steps 顺序即连线顺序（相邻步骤连线）。所有模板仅基于工具公开能力与任务逻辑编排：verified 一律为 false，接口兼容性未经端到端实测；needsManual/needsConfig 为依据工具公开资料的判断，载入模板后仍需经连线检查器逐条复核。",
+  "templates": [
+    {
+      "id": "tpl-web-content",
+      "title": "网页内容处理",
+      "steps": [
+        {
+          "tool": "firecrawl/firecrawl-mcp-server",
+          "desc": "抓取网页，输出适合 LLM 的内容",
+          "input": "网页 URL",
+          "output": "Markdown / 文本",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要 Firecrawl API Key",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "zcaceres/markdownify-mcp",
+          "desc": "把抓取结果统一转成 Markdown",
+          "input": "HTML / 文本",
+          "output": "Markdown",
+          "needsManual": false,
+          "needsConfig": false,
+          "configNote": "",
+          "verified": false,
+          "verifyNote": "未做端到端实测；格式衔接需人工确认"
+        },
+        {
+          "tool": "Unstructured-IO/UNS-MCP",
+          "desc": "文档解析与结构化",
+          "input": "文档（PDF/HTML/文本）",
+          "output": "结构化 JSON",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "Unstructured 部分能力需要 API Key 或本地部署",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        }
+      ]
+    },
+    {
+      "id": "tpl-code-quality",
+      "title": "代码质量分析",
+      "steps": [
+        {
+          "tool": "github/github-mcp-server",
+          "desc": "读取 GitHub 仓库代码与文件",
+          "input": "仓库 / 文件路径",
+          "output": "代码 / 文件内容",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要 GitHub Token 与 MCP 客户端配置",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "SonarSource/sonarqube-mcp-server",
+          "desc": "代码质量与安全检查",
+          "input": "代码 / 仓库",
+          "output": "质量报告 JSON",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要 SonarQube 服务端与项目 Key",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "yuque/yuque-mcp-server",
+          "desc": "把分析结果整理进知识库",
+          "input": "文本 / 报告",
+          "output": "语雀文档",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要语雀 Token",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        }
+      ]
+    },
+    {
+      "id": "tpl-data-analysis",
+      "title": "数据分析",
+      "steps": [
+        {
+          "tool": "ClickHouse/mcp-clickhouse",
+          "desc": "查询分析数据库",
+          "input": "SQL 查询",
+          "output": "查询结果 JSON",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要 ClickHouse 连接串与凭据",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "datalayer/jupyter-mcp-server",
+          "desc": "在 Jupyter Notebook 中做数据分析",
+          "input": "数据 / 代码",
+          "output": "Notebook 结果",
+          "needsManual": true,
+          "needsConfig": true,
+          "configNote": "需要可运行的 Jupyter 内核，Notebook 执行可能需人工确认",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "hustcc/mcp-echarts",
+          "desc": "生成 ECharts 图表",
+          "input": "JSON 数据",
+          "output": "图表（HTML/图片）",
+          "needsManual": false,
+          "needsConfig": false,
+          "configNote": "",
+          "verified": false,
+          "verifyNote": "未做端到端实测；数据格式衔接需确认"
+        }
+      ]
+    },
+    {
+      "id": "tpl-container-ops",
+      "title": "容器运维",
+      "steps": [
+        {
+          "tool": "docker/hub-mcp",
+          "desc": "Docker 镜像查询与管理",
+          "input": "镜像名 / 查询",
+          "output": "镜像信息 JSON",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要 Docker Hub 访问配置",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "reza-gholizade/k8s-mcp-server",
+          "desc": "Kubernetes 集群部署与运维",
+          "input": "K8s 操作指令 / YAML",
+          "output": "集群状态 JSON",
+          "needsManual": true,
+          "needsConfig": true,
+          "configNote": "需要 kubeconfig 与集群权限；部署动作建议人工确认",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "grafana/mcp-grafana",
+          "desc": "为部署的服务建立监控面板",
+          "input": "指标 / 数据源",
+          "output": "监控面板与告警",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要 Grafana 地址与 API Token",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        }
+      ]
+    },
+    {
+      "id": "tpl-monitor-alert",
+      "title": "监控分析",
+      "steps": [
+        {
+          "tool": "grafana/mcp-grafana",
+          "desc": "采集与查看监控指标面板",
+          "input": "数据源指标",
+          "output": "指标 / 面板数据 JSON",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要 Grafana 与数据源（如 Prometheus）配置",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "ClickHouse/mcp-clickhouse",
+          "desc": "对监控数据做查询分析",
+          "input": "SQL 查询",
+          "output": "分析结果 JSON",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要时序/监控数据已入 ClickHouse",
+          "verified": false,
+          "verifyNote": "未做端到端实测；指标能否入仓需确认"
+        },
+        {
+          "tool": "gotoolkits/mcp-wecombot-server",
+          "desc": "把告警通知发到企业微信群",
+          "input": "告警文本",
+          "output": "群消息",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要企微机器人 Webhook",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        }
+      ]
+    },
+    {
+      "id": "tpl-video-analysis",
+      "title": "视频分析",
+      "steps": [
+        {
+          "tool": "tubeagentkit/youtube-mcp",
+          "desc": "检索定位目标视频",
+          "input": "关键词 / 频道 / 播放列表",
+          "output": "视频元数据 JSON",
+          "needsManual": false,
+          "needsConfig": false,
+          "configNote": "",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "nabid-pf/youtube-video-summarizer-mcp",
+          "desc": "生成字幕与内容摘要",
+          "input": "视频 URL / 字幕",
+          "output": "摘要文本",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "通常需要 LLM/字幕服务配置",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "zcaceres/markdownify-mcp",
+          "desc": "把摘要整理成 Markdown 文档",
+          "input": "文本",
+          "output": "Markdown",
+          "needsManual": false,
+          "needsConfig": false,
+          "configNote": "",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        }
+      ]
+    },
+    {
+      "id": "tpl-research-notes",
+      "title": "科研资料整理",
+      "steps": [
+        {
+          "tool": "mochow13/google-scholar-mcp",
+          "desc": "检索学术文献",
+          "input": "检索词",
+          "output": "文献列表 JSON",
+          "needsManual": false,
+          "needsConfig": false,
+          "configNote": "",
+          "verified": false,
+          "verifyNote": "未做端到端实测；存在被检索限流的可能"
+        },
+        {
+          "tool": "JonasRackl/labmate-mcp",
+          "desc": "文献与实验资料分析整理",
+          "input": "文献 / 文本",
+          "output": "整理结果",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "部分数据源需要 API 配置",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "yuque/yuque-mcp-server",
+          "desc": "沉淀进个人知识库",
+          "input": "文本 / 文档",
+          "output": "语雀知识库页面",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要语雀 Token",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        }
+      ]
+    },
+    {
+      "id": "tpl-gis-analysis",
+      "title": "GIS 数据分析",
+      "steps": [
+        {
+          "tool": "BnJam/stac-mcp",
+          "desc": "检索遥感与地理空间数据目录",
+          "input": "区域 / 时间 / 数据集条件",
+          "output": "STAC 条目 JSON",
+          "needsManual": false,
+          "needsConfig": false,
+          "configNote": "",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "JordanGunn/gdal-mcp",
+          "desc": "GDAL 格式转换与预处理",
+          "input": "栅格/矢量数据文件",
+          "output": "处理后的地理数据",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要本地 GDAL 环境",
+          "verified": false,
+          "verifyNote": "未做端到端实测；数据下载到本地的衔接需确认"
+        },
+        {
+          "tool": "jjsantos01/qgis_mcp",
+          "desc": "在 QGIS 中加载分析出图",
+          "input": "地理数据图层",
+          "output": "地图工程 / 图层结果",
+          "needsManual": true,
+          "needsConfig": true,
+          "configNote": "需要本机运行 QGIS 桌面端并开启 MCP 插件",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        }
+      ]
+    },
+    {
+      "id": "tpl-industrial-pdm",
+      "title": "工业数据分析",
+      "steps": [
+        {
+          "tool": "kukapay/opcua-mcp",
+          "desc": "读取 OPC UA 工业设备数据",
+          "input": "OPC UA 节点 / 端点",
+          "output": "设备时序数据 JSON",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要 OPC UA 端点地址与证书",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "datalayer/jupyter-mcp-server",
+          "desc": "在 Notebook 中做时序数据分析",
+          "input": "时序数据 / 代码",
+          "output": "分析结果",
+          "needsManual": true,
+          "needsConfig": true,
+          "configNote": "需要 Jupyter 内核；分析过程可能需人工调整",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "LGDiMaggio/predictive-maintenance-mcp",
+          "desc": "预测性维护与故障诊断",
+          "input": "设备历史数据",
+          "output": "维护建议 / 诊断结论",
+          "needsManual": false,
+          "needsConfig": true,
+          "configNote": "需要模型与数据源配置",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        }
+      ]
+    },
+    {
+      "id": "tpl-job-hunting",
+      "title": "求职辅助",
+      "steps": [
+        {
+          "tool": "0xDAEF0F/job-searchoor",
+          "desc": "按个人需求搜索职位",
+          "input": "岗位需求描述",
+          "output": "职位列表",
+          "needsManual": false,
+          "needsConfig": false,
+          "configNote": "",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        },
+        {
+          "tool": "Himalayas-App/himalayas-mcp",
+          "desc": "获取职位/候选人/薪资数据辅助匹配",
+          "input": "职位 / 筛选条件",
+          "output": "匹配数据 JSON",
+          "needsManual": false,
+          "needsConfig": false,
+          "configNote": "",
+          "verified": false,
+          "verifyNote": "未做端到端实测；匹配逻辑依赖人工筛选"
+        },
+        {
+          "tool": "thechandanbhagat/cv-forge",
+          "desc": "生成 ATS 简历与求职信",
+          "input": "经历文本 / 职位描述",
+          "output": "简历 / 求职信文档",
+          "needsManual": true,
+          "needsConfig": true,
+          "configNote": "简历内容需人工校对；可能需要邮件服务配置",
+          "verified": false,
+          "verifyNote": "未做端到端实测"
+        }
+      ]
+    }
+  ]
+}

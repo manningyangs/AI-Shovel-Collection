@@ -20,11 +20,13 @@ import '@xyflow/react/dist/style.css';
 import './tool-map.css';
 import ToolNode from './ToolNode';
 import ToolEdge from './ToolEdge';
+import WorkflowBuilder from './WorkflowBuilder';
 import { MapInteractionContext } from './context';
 import {
   EVIDENCE_LABEL,
   REL_STYLE,
   capColor,
+  type EvidenceLevel,
   type MapData,
   type MapNodeData,
   type RelationData,
@@ -40,18 +42,24 @@ type Filters = {
   caps: Set<string>;
   langs: Set<string>;
   relTypes: Set<RelationType>;
+  evidences: Set<EvidenceLevel>;
   showInferred: boolean;
+  showCandidates: boolean;
   evalFilter: 'all' | 'evaluated' | 'unevaluated';
   minStars: number;
   onlyRelated: boolean;
 };
+
+const ALL_EVIDENCES: EvidenceLevel[] = ['verified', 'documented', 'inferred'];
 
 const EMPTY_FILTERS: Filters = {
   query: '',
   caps: new Set(),
   langs: new Set(),
   relTypes: new Set(ALL_REL_TYPES),
+  evidences: new Set(ALL_EVIDENCES),
   showInferred: true,
+  showCandidates: false,
   evalFilter: 'all',
   minStars: 0,
   onlyRelated: false,
@@ -68,6 +76,10 @@ export default function ToolMapApp() {
   const [detailOpen, setDetailOpen] = useState(true); // 桌面右栏收起
   const [isMobile, setIsMobile] = useState(false);
   const instanceRef = useRef<ReactFlowInstance | null>(null);
+
+  /* ---------- 双模式（任务书 §7.1）：关系探索 / 工作流搭建 ---------- */
+  const [mode, setMode] = useState<'explore' | 'workflow'>('explore');
+  const [pendingTpl, setPendingTpl] = useState<string | null>(null);
 
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
@@ -140,12 +152,32 @@ export default function ToolMapApp() {
     return data.relations.filter(
       (r) =>
         filters.relTypes.has(r.type) &&
+        filters.evidences.has(r.evidenceLevel) &&
         (filters.showInferred || r.evidenceLevel !== 'inferred') &&
         visibleNodeIds.has(r.source) &&
         visibleNodeIds.has(r.target) &&
         (!selectedId || r.source === selectedId || r.target === selectedId),
     );
-  }, [data, filters.relTypes, filters.showInferred, visibleNodeIds, selectedId]);
+  }, [data, filters.relTypes, filters.evidences, filters.showInferred, visibleNodeIds, selectedId]);
+
+  /* 候选关系层（默认关闭；任务书 §九：候选不作为公共事实展示） */
+  const visibleCandidates = useMemo(() => {
+    if (!data || !filters.showCandidates) return [];
+    return (data.candidates ?? []).filter(
+      (c) =>
+        filters.relTypes.has(c.type) &&
+        filters.evidences.has(c.evidenceLevel) &&
+        visibleNodeIds.has(c.source) &&
+        visibleNodeIds.has(c.target) &&
+        (!selectedId || c.source === selectedId || c.target === selectedId),
+    );
+  }, [data, filters, visibleNodeIds, selectedId]);
+
+  const evidenceCounts = useMemo(() => {
+    const m: Partial<Record<EvidenceLevel, number>> = {};
+    data?.relations.forEach((r) => (m[r.evidenceLevel] = (m[r.evidenceLevel] || 0) + 1));
+    return m;
+  }, [data]);
 
   /* ---------- 同步到 React Flow（仅过滤/数据变化时重建；选中/悬停走 Context） ---------- */
   useEffect(() => {
@@ -160,20 +192,35 @@ export default function ToolMapApp() {
   }, [visibleNodes, capIndexMap, setNodes]);
 
   useEffect(() => {
-    setEdges(
-      visibleRels.map((r) => {
-        const touches = selectedId ? r.source === selectedId || r.target === selectedId : false;
-        return {
-          id: r.id,
-          source: r.source,
-          target: r.target,
-          type: 'tool',
-          data: { relation: r, highlighted: !!selectedId && touches, dimmed: !!selectedId && !touches },
-          markerEnd: { type: 'arrowclosed', width: 14, height: 14, color: REL_STYLE[r.type].color },
-        };
-      }),
-    );
-  }, [visibleRels, selectedId, setEdges]);
+    const officialEdges: Edge[] = visibleRels.map((r) => {
+      const touches = selectedId ? r.source === selectedId || r.target === selectedId : false;
+      return {
+        id: r.id,
+        source: r.source,
+        target: r.target,
+        type: 'tool',
+        data: { relation: r, highlighted: !!selectedId && touches, dimmed: !!selectedId && !touches },
+        markerEnd: { type: 'arrowclosed', width: 14, height: 14, color: REL_STYLE[r.type].color },
+      };
+    });
+    const candidateEdges: Edge[] = visibleCandidates.map((c) => {
+      const touches = selectedId ? c.source === selectedId || c.target === selectedId : false;
+      return {
+        id: c.id,
+        source: c.source,
+        target: c.target,
+        type: 'tool',
+        data: {
+          relation: c,
+          candidate: true,
+          highlighted: !!selectedId && touches,
+          dimmed: !!selectedId && !touches,
+        },
+        markerEnd: { type: 'arrowclosed', width: 14, height: 14, color: REL_STYLE[c.type].color },
+      };
+    });
+    setEdges([...officialEdges, ...candidateEdges]);
+  }, [visibleRels, visibleCandidates, selectedId, setEdges]);
 
   /* ---------- 语言选项（真实数据聚合） ---------- */
   const langOptions = useMemo(() => {
@@ -219,15 +266,31 @@ export default function ToolMapApp() {
   };
 
   const selectedNode = data?.nodes.find((n) => n.id === selectedId) || null;
-  const selectedRel = data?.relations.find((r) => r.id === selectedRelId) || null;
+  const selectedRel =
+    data?.relations.find((r) => r.id === selectedRelId) ||
+    data?.candidates?.find((c) => c.id === selectedRelId) ||
+    null;
   const selectedRels = selectedId ? relByNode.get(selectedId) || [] : [];
-  const upstream = selectedRels.filter((r) => r.target === selectedId);
-  const downstream = selectedRels.filter((r) => r.source === selectedId);
+  const upstream = selectedRels.filter((r) => r.target === selectedId && r.type !== 'alternative');
+  const downstream = selectedRels.filter((r) => r.source === selectedId && r.type !== 'alternative');
+  const alternatives = selectedRels.filter((r) => r.type === 'alternative');
 
   /* ---------- 渲染 ---------- */
   if (error) return <div className="tm-status tm-error">地图数据加载失败：{error}</div>;
   if (!data)
     return <div className="tm-status tm-loading"><span className="tm-spinner" />正在加载工具地图…</div>;
+
+  /* 工作流搭建模式（独立组件；关系探索逻辑完全不受影响） */
+  if (mode === 'workflow') {
+    return (
+      <WorkflowBuilder
+        data={data}
+        onExit={() => setMode('explore')}
+        initialTemplateId={pendingTpl}
+        onTemplateConsumed={() => setPendingTpl(null)}
+      />
+    );
+  }
 
   const s = data.stats as Record<string, any>;
 
@@ -265,6 +328,41 @@ export default function ToolMapApp() {
         />
         弱化显示「推断」关系
       </label>
+    </div>
+  );
+
+  const relEvidenceChecks = (
+    <div className="tm-group">
+      <div className="tm-group-title">关系可信度</div>
+      {ALL_EVIDENCES.map((ev) => (
+        <label key={ev} className="tm-check" title={`证据等级：${EVIDENCE_LABEL[ev]}`}>
+          <input
+            type="checkbox"
+            checked={filters.evidences.has(ev)}
+            onChange={() => patch({ evidences: toggleInSet(filters.evidences, ev) })}
+          />
+          <span className={`tm-badge ev-${ev}`}>{EVIDENCE_LABEL[ev]}</span>
+          <span className="tm-count">{evidenceCounts[ev] || 0}</span>
+        </label>
+      ))}
+      <p className="tm-legend-note">unverified（证据不足）关系不会进入公共关系库；等级不可互相自动升级。</p>
+    </div>
+  );
+
+  const candidateChecks = (
+    <div className="tm-group">
+      <div className="tm-group-title">候选关系</div>
+      <label className="tm-check" title="来自 94 条候选种子数据，静态分析生成、未经审核">
+        <input
+          type="checkbox"
+          checked={filters.showCandidates}
+          onChange={(e) => patch({ showCandidates: e.target.checked })}
+        />
+        <span className="tm-swatch" style={{ background: '#94a3b8', borderStyle: 'dotted', borderWidth: 2 }} />
+        显示候选（未审核）
+        <span className="tm-count">{data.candidates?.length || 0}</span>
+      </label>
+      <p className="tm-legend-note">候选关系以灰色点线弱化展示，仅代表待核对线索，不代表真实集成。</p>
     </div>
   );
 
@@ -326,6 +424,31 @@ export default function ToolMapApp() {
       )}
 
       {relTypeChecks}
+      {relEvidenceChecks}
+      {candidateChecks}
+
+      {(data.templates?.length || 0) > 0 && (
+        <div className="tm-group">
+          <div className="tm-group-title">典型工作流</div>
+          <p className="tm-legend-note" style={{ marginTop: 0, marginBottom: 6 }}>
+            选用模板将在「工作流搭建」模式打开（不会修改当前探索视图）。
+          </p>
+          {data.templates!.map((t) => (
+            <button
+              key={t.id}
+              className="wf-tpl-btn"
+              title={t.steps.map((st) => st.tool).join(' → ')}
+              onClick={() => {
+                setPendingTpl(t.id);
+                setMode('workflow');
+              }}
+            >
+              <span className="wf-tpl-title">{t.title}</span>
+              <span className="wf-tpl-note">{t.steps.length} 步</span>
+            </button>
+          ))}
+        </div>
+      )}
 
       <div className="tm-group">
         <div className="tm-group-title">评测状态</div>
@@ -442,6 +565,20 @@ export default function ToolMapApp() {
             ))}
           </>
         )}
+        {alternatives.length > 0 && (
+          <>
+            <div className="tm-sub-label alt">⇄ 替代工具（同类可互换，非工作流步骤）</div>
+            {alternatives.map((r) => (
+              <RelRow
+                key={r.id}
+                r={r}
+                other={r.source === selectedId ? r.target : r.source}
+                onSelect={onSelect}
+                onRel={setSelectedRelId}
+              />
+            ))}
+          </>
+        )}
       </div>
 
       <a className="tm-btn primary wide" href={selectedNode.detailUrl}>查看完整工具详情 →</a>
@@ -476,6 +613,10 @@ export default function ToolMapApp() {
             aria-label="打开筛选"
           >☰</button>
           {searchBox}
+          <div className="tm-mode-switch" role="tablist" aria-label="地图模式">
+            <button role="tab" aria-selected="true" className="on">关系探索</button>
+            <button role="tab" aria-selected="false" onClick={() => setMode('workflow')}>工作流搭建</button>
+          </div>
           <button
             className={`tm-btn ${filters.onlyRelated ? 'on' : 'ghost'}`}
             disabled={!selectedId}
