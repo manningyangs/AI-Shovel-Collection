@@ -17,6 +17,8 @@ on:
       - 'catalog.csv'
       - 'live_multi.json'
       - 'package*.json'
+      - 'evaluations/**'
+      - '.github/workflows/pages-astro.yml'
   workflow_dispatch:
     inputs:
       request_id:
@@ -64,11 +66,20 @@ jobs:
       - name: Build
         run: cd astro && npm run build
 
+      # 根目录 evaluations/ 是评测发布数据的唯一权威源（evaluate-shovel publish 只写这里），
+      # astro/public/evaluations 是历史遗留的不完整副本 —— 部署前把权威数据同步进产物，
+      # 修复「查看原始 JSON 报告 404」（evaluations/reports/*.json 未随 public 目录发布）
+      - name: Sync evaluation data into dist
+        run: |
+          mkdir -p astro/dist/evaluations
+          cp -R evaluations/. astro/dist/evaluations/
+
       # 部署前校验评测产物已就位，防止发布流程半途失败导致 404
       - name: Verify evaluation artifacts exist
         run: |
-          test -f astro/public/evaluations/index.json || { echo "missing index.json"; exit 1; }
-          test -d astro/public/evaluations/reports || { echo "missing reports dir"; exit 1; }
+          test -f astro/dist/evaluations/index.json || { echo "missing index.json"; exit 1; }
+          test -d astro/dist/evaluations/reports || { echo "missing reports dir"; exit 1; }
+          test -n "$(ls astro/dist/evaluations/reports/*.json 2>/dev/null)" || { echo "no report json files"; exit 1; }
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
