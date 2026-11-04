@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import ToolMapApp from '../components/ToolMap/ToolMapApp.tsx';
+import csvMod from '../../public/catalog.csv?raw';
+
+// 阶段1技术验证：取真实目录前 10 个工具铺节点，阶段2/3 接入完整地图数据层
+const rows = csvMod
+  .replace(/^﻿/, '')
+  .split(/\r?\n/)
+  .filter((l: string) => l.trim() && !l.startsWith('分类'));
+
+const tools = rows.slice(0, 10).map((row: string) => {
+  const parts = row.split(',');
+  const url = (parts[2] || '').trim();
+  const repo = url
+    .replace(/^https?:\/\/(www\.)?github\.com\//, '')
+    .replace(/\.git$/, '')
+    .replace(/\/$/, '');
+  const full = (parts[1] || '').trim();
+  const name = full.replace(/^\d+[A-Za-z]?\.\s*/, '');
+  const category = (parts[0] || '').trim().replace(/^\d+[A-Za-z]?\.\s*/, '');
+  return { repo, name, category };
+});
+---
+
+<Base
+  title="🗺️ AI 工具生态地图 — AI Tool Map"
+  description="探索 AI 工具生态地图：工具之间的集成、互补与组合关系。"
+  canonical="/tool-map/"
+  lang="zh-CN"
+>
+  <div class="tm-shell">
+    <ToolMapApp client:only="react" tools={tools} />
+  </div>
+</Base>
+
+<style is:global>
+  .tm-shell {
+    width: 100%;
+    height: calc(100vh - 60px);
+    min-height: 480px;
+  }
+</style>
