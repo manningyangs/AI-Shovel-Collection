@@ -11,3 +11,12 @@ _check_*.py
 _check_*.html
 _debug_*.py
 _diag_*.py
+
+# Secret material — 私钥/密钥/环境变量文件永不入库
+*.pem
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+.env
+.deploy.secrets.env
