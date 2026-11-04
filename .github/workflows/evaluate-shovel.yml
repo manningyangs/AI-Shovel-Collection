@@ -1,25 +1,36 @@
+# AI Shovel Eval — Cloudflare Worker 驱动的无 Issue 评测工作流（V2）
+#
+# 触发方式：workflow_dispatch（由 Worker 通过 GitHub App Installation Token 调用）
+#   repo_url   — 被测仓库地址
+#   request_id — 评测任务 ID（EV-xxxxxxxx），进度回调与幂等主键
+#
+# 与旧版（Issue 触发）的差异：
+#   - 移除 issues 触发、Issue 正文解析、评论/加标签/关闭 Issue 步骤
+#   - 新增八阶段进度回调（HMAC 签名，经 scripts/eval/progress_client.py）
+#   - 报告发布后显式 workflow_dispatch pages-astro.yml（GITHUB_TOKEN 的 push
+#     不会触发 push 事件，workflow_dispatch 是官方允许的例外）
+#
+# 安全：analyze job 只读（persist-credentials: false），被测仓库代码不执行；
+#       写权限（contents: write / actions: write）仅存在于 publish job。
 name: AI Shovel Evaluation
 
+run-name: "AI Shovel Eval · ${{ inputs.request_id || github.run_id }}"
+
 on:
-  issues:
-    types: [opened]
   workflow_dispatch:
     inputs:
       repo_url:
-        description: GitHub repo URL (fallback when run manually)
-        required: false
-        default: ""
-      issue_number:
-        description: Issue number (optional, for posting result comment)
-        required: false
-        default: ""
+        description: "GitHub 仓库地址"
+        required: true
+        type: string
+      request_id:
+        description: "评测任务 ID"
+        required: true
+        type: string
 
-# 只对带 evaluation-request label 的 opened issue 触发
-# workflow_dispatch 始终可手动触发
-# —— Issue Form 模板自动带 evaluation-request label，普通 issue 请手动添加
-# —— 编辑 issue 不触发，避免重复评测
 concurrency:
   group: ai-shovel-eval
+  queue: max
   cancel-in-progress: false
 
 jobs:
@@ -27,22 +38,20 @@ jobs:
   analyze:
     name: 🧪 静态评测
     runs-on: ubuntu-latest
-    # V1.0.1 fix: 去掉 label 硬过滤 — Issue Form 声明的 label 如果仓库不存在，GitHub 不会自动创建
-    # 改成在 Parse step 里判断有没有 repo_url，没有就优雅 skip 后续 step
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'issues' && github.event.action == 'opened')
-    outputs:
-      skip_eval: ${{ steps.parse.outputs.skip_eval }}
-      repo_url: ${{ steps.parse.outputs.repo_url }}
-      issue_number: ${{ steps.parse.outputs.issue_number }}
-      report_id: ${{ steps.evaluate.outputs.report_id }}
     permissions:
       contents: read
-      issues: read
+    outputs:
+      report_id: ${{ steps.evaluate.outputs.report_id }}
+    env:
+      INPUT_REPO_URL: ${{ inputs.repo_url }}
+      EVAL_REQUEST_ID: ${{ inputs.request_id }}
+      EVAL_PROGRESS_URL: ${{ vars.EVAL_PROGRESS_URL || '' }}
+      EVAL_PROGRESS_SECRET: ${{ secrets.EVAL_PROGRESS_SECRET }}
     steps:
       - name: Checkout (只读)
         uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -52,64 +61,11 @@ jobs:
       - name: Install Python deps
         run: pip install requests
 
-      # ---------- 解析 repo_url（没有就 skip，不让整个 Job 被 if 跳过） ----------
-      - name: Parse Issue body from event payload
-        id: parse
-        run: |
-          REPO_URL=""
-          ISSUE_NUMBER=""
-          SKIP_EVAL="false"
-
-          # issue_number 来源：issues event → github.event.issue.number
-          #                 workflow_dispatch → inputs.issue_number
-          if [ -n "${{ github.event.issue.number }}" ]; then
-            ISSUE_NUMBER="${{ github.event.issue.number }}"
-          elif [ -n "${{ github.event.inputs.issue_number }}" ]; then
-            ISSUE_NUMBER="${{ github.event.inputs.issue_number }}"
-          fi
-
-          if [ -n "${{ github.event.issue.body }}" ]; then
-            export ISSUE_BODY="${{ github.event.issue.body }}"
-          fi
-
-          REPO_URL=$(python3 << 'PYEOF'
-          import os, re
-          body = os.environ.get("ISSUE_BODY", "") or ""
-          inputs = os.environ.get("INPUT_REPO_URL", "")
-          for line in body.split("\n"):
-            line = line.strip()
-            if not line or line.startswith("#") or line.startswith("_"):
-              continue
-            if "github.com/" in line or line.startswith("https://"):
-              m = re.match(r"^https?://github\.com/[A-Za-z0-9_.\-]+/[A-Za-z0-9_.\-]+", line.rstrip("/.,;:!?"))
-              if m:
-                print(m.group(0).rstrip(".git"))
-                raise SystemExit(0)
-          if inputs:
-            print(inputs.strip().rstrip(".,;:!?").rstrip("/").rstrip(".git"))
-          PYEOF
-          )
-
-          if [ -z "$REPO_URL" ]; then
-            echo "⚠️ 未从 Issue 正文或 workflow inputs 中找到 GitHub repo_url → 跳过评测"
-            SKIP_EVAL="true"
-          else
-            echo "✅ 解析成功: repo_url=$REPO_URL"
-          fi
-
-          echo "repo_url=$REPO_URL" >> "$GITHUB_OUTPUT"
-          echo "issue_number=$ISSUE_NUMBER" >> "$GITHUB_OUTPUT"
-          echo "skip_eval=$SKIP_EVAL" >> "$GITHUB_OUTPUT"
-        env:
-          INPUT_REPO_URL: ${{ github.event.inputs.repo_url }}
-          INPUT_ISSUE_NUMBER: ${{ github.event.inputs.issue_number }}
-
       # ---------- 运行 evaluator（安全：URL 从 env 读，Python 内部二次校验） ----------
       - name: Run evaluator
         id: evaluate
-        if: steps.parse.outputs.skip_eval != 'true'
         env:
-          REPO_URL: ${{ steps.parse.outputs.repo_url }}
+          REPO_URL: ${{ inputs.repo_url }}
           # GITHUB_TOKEN 只用于 GitHub API 读（提高限流额度），不暴露给被测仓库
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -132,23 +88,31 @@ jobs:
           echo "report_id=$REPORT_ID" >> "$GITHUB_OUTPUT"
 
       - name: Upload report artifact
-        if: steps.parse.outputs.skip_eval != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: eval-report
           path: /tmp/eval_report.json
           retention-days: 7
 
+      # 失败回调：stage_index=0 表示保留当前阶段，仅置 failed 终态
+      - name: Report failure to Worker
+        if: failure()
+        run: |
+          python3 -m scripts.eval.progress_client fail --stage 0 \
+            --message "静态评测失败，详见 Actions run ${{ github.run_id }}"
+
   # ========== Job B: Publish Report（报告发布，最低权限） ==========
   publish:
     name: 📝 发布报告
     needs: analyze
     runs-on: ubuntu-latest
-    # V1.0.1 fix: 只有真正跑了评测才发布（skip_eval=true → analyze 里 evaluator 没跑 → 不该 publish）
-    if: always() && needs.analyze.result == 'success' && needs.analyze.outputs.skip_eval != 'true'
     permissions:
       contents: write
-      issues: write
+      actions: write
+    env:
+      EVAL_REQUEST_ID: ${{ inputs.request_id }}
+      EVAL_PROGRESS_URL: ${{ vars.EVAL_PROGRESS_URL || '' }}
+      EVAL_PROGRESS_SECRET: ${{ secrets.EVAL_PROGRESS_SECRET }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -212,41 +176,27 @@ jobs:
           index_path.write_text(json.dumps(idx, indent=2, ensure_ascii=False), encoding="utf-8")
           print(f"📊 index 更新: {len(idx['reports'])} 份报告")
 
-          # 5. 评论摘要（V1.0.1 修正 —— 明确标注 L1 静态分析）
-          ps = report["evaluation"]["preliminary_score"]
-          level = report["evaluation"]["level"]
-          coverage = report["evaluation"]["coverage"]
-          grade = report["evaluation"].get("grade", "?")
-          owner = report["repository"]["owner"]
-          name = report["repository"]["name"]
-          prtype = report["project_type"].get("type", "unknown") if isinstance(report["project_type"], dict) else "unknown"
-
-          summary = (
-              f"## 🧪 AI Shovel Eval — 评测完成\n\n"
-              f"| 项目 | 值 |\n"
-              f"|---|---|\n"
-              f"| **仓库** | [{owner}/{name}](https://github.com/{owner}/{name}) |\n"
-              f"| **评测模式** | {level} · 静态分析 |\n"
-              f"| **项目类型** | {prtype} |\n"
-              f"| **综合初评** | **{ps}/100** · 评级 **{grade}** |\n"
-              f"| **覆盖率** | {coverage}% |\n"
-              f"| **评测 Commit** | `{report['repository']['commit_sha'][:12]}` |\n\n"
-              f"> ⚠️ 本报告为 **L1 静态分析**，未执行被测仓库中的任何代码。\n"
-              f"> 评分仅为自动化分析结果，不等于真实运行表现或人工认证。\n\n"
-              f"📄 **完整报告**：将在 GitHub Pages 部署后可访问 `/AI-Shovel-Collection/evaluations/{report_id}/`"
-          )
-          Path("/tmp/eval_comment.md").write_text(summary, encoding="utf-8")
-
           # 输出到 GITHUB_OUTPUT
           with open(os.environ["GITHUB_OUTPUT"], "a") as out:
               out.write(f"report_id={report_id}\n")
-              out.write(f"preliminary_score={ps}\n")
-              out.write(f"level={level}\n")
-              out.write(f"grade={grade}\n")
+              out.write(f"preliminary_score={report['evaluation']['preliminary_score']}\n")
+              out.write(f"level={report['evaluation']['level']}\n")
+              out.write(f"grade={report['evaluation'].get('grade', '')}\n")
           PYEOF
 
+      # —— 阶段 7「报告生成与校验」完成 ——
+      - name: Report stage 7 completed
+        run: |
+          python3 -m scripts.eval.progress_client progress \
+            --stage 7 --status completed --message "报告结构校验通过，开始发布"
+
+      # —— 阶段 8「报告发布」开始 ——
+      - name: Report stage 8 started
+        run: |
+          python3 -m scripts.eval.progress_client progress \
+            --stage 8 --status running --message "正在提交报告并触发站点部署"
+
       # ---------- Commit + Push ----------
-      # 只处理经过 schema 校验的 JSON（publish job 做了二次校验）
       - name: Commit and push
         id: push
         run: |
@@ -262,51 +212,52 @@ jobs:
               echo "pushed=true" >> "$GITHUB_OUTPUT"
           fi
 
-      # ---------- Issue 评论 ----------
-      - name: Comment on Issue
-        if: steps.push.outputs.pushed == 'true' && needs.analyze.outputs.issue_number != ''
+      # ---------- 显式触发 Pages 部署 ----------
+      # pages-astro.yml 部署完成后回调 /internal/finalize 置 completed（需报告页真实 200）
+      - name: Trigger Pages deploy
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DISPATCH_REPORT_ID: ${{ steps.write.outputs.report_id }}
         run: |
-          ISSUE_NUMBER="${{ needs.analyze.outputs.issue_number }}"
-          BODY=$(cat /tmp/eval_comment.md)
+          python3 << 'PYEOF'
+          import json, os, sys, urllib.error, urllib.request
 
-          curl -sS -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            -d "$(python3 -c 'import sys,json; print(json.dumps({"body": open("/tmp/eval_comment.md").read()}))')" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/comments"
-          echo "✅ 已评论 Issue #${ISSUE_NUMBER}"
+          payload = json.dumps({
+              "ref": "main",
+              "inputs": {
+                  "request_id": os.environ["EVAL_REQUEST_ID"],
+                  "report_id": os.environ["DISPATCH_REPORT_ID"],
+              },
+          }).encode()
+          req = urllib.request.Request(
+              "https://api.github.com/repos/manningyangs/AI-Shovel-Collection/"
+              "actions/workflows/pages-astro.yml/dispatches",
+              data=payload,
+              method="POST",
+              headers={
+                  "Accept": "application/vnd.github+json",
+                  "Authorization": f"Bearer {os.environ['GH_TOKEN']}",
+                  "X-GitHub-Api-Version": "2022-11-28",
+                  "User-Agent": "ai-shovel-eval",
+                  "Content-Type": "application/json",
+              },
+          )
+          try:
+              with urllib.request.urlopen(req, timeout=20) as resp:
+                  print(f"Pages deploy dispatched: HTTP {resp.status}")
+          except urllib.error.HTTPError as e:
+              # 204 No Content 为历史正常响应
+              if e.code == 204:
+                  print("Pages deploy dispatched: HTTP 204")
+              else:
+                  body = e.read().decode(errors="replace")[:500]
+                  print(f"::error::Pages dispatch failed: HTTP {e.code} {body}")
+                  sys.exit(1)
+          PYEOF
 
-      # ---------- 给 Issue 加标签 ----------
-      - name: Add label to Issue
-        if: needs.analyze.outputs.issue_number != ''
+      # 发布链路任一步失败 → 回调 failed，避免任务卡死在 publishing
+      - name: Report publish failure to Worker
+        if: failure()
         run: |
-          ISSUE_NUMBER="${{ needs.analyze.outputs.issue_number }}"
-          curl -sS -X POST \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}/labels" \
-            -d '["eval-completed", "L1-static-analysis"]' \
-            || echo "Label add failed (label may not exist)"
-
-      # ---------- 关闭 Issue ----------
-      # 注意：state 只接受 open/closed，completed 是 state_reason 的取值
-      # 必须检查 HTTP 状态码，否则 422 校验失败时 curl 退出码仍为 0 → 假成功
-      - name: Close Issue
-        if: needs.analyze.outputs.issue_number != ''
-        run: |
-          ISSUE_NUMBER="${{ needs.analyze.outputs.issue_number }}"
-          HTTP_CODE=$(curl -sS -o /tmp/close_resp.json -w "%{http_code}" -X PATCH \
-            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            -d '{"state": "closed", "state_reason": "completed"}' \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${ISSUE_NUMBER}")
-          if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
-            echo "✅ Issue #${ISSUE_NUMBER} 已关闭并标记为 completed"
-          else
-            echo "❌ Close Issue 失败 HTTP=$HTTP_CODE"
-            cat /tmp/close_resp.json
-            exit 1
-          fi
+          python3 -m scripts.eval.progress_client fail --stage 8 \
+            --message "报告发布失败，详见 Actions run ${{ github.run_id }}"
