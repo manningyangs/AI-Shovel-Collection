@@ -1,0 +1,12 @@
+# 本地调试用（复制为 .dev.vars，值不进版本库）
+# GitHub App Client ID（App 页面顶部 About 区）
+GITHUB_APP_CLIENT_ID=Iv1.xxxxxxxxxxxxxxxx
+# GitHub App Client Secret（GitHub App → Client secret → Generate a new client secret）
+GITHUB_APP_CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# GitHub App 私钥全文（-----BEGIN ... -----END ...----- 整体粘贴，\n 保留）
+GITHUB_APP_PRIVATE_KEY=-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----
+# App Installation ID（settings/installations/<数字>）
+GITHUB_APP_INSTALLATION_ID=12345678
+# HMAC 共享密钥（与 GitHub Actions Secret EVAL_PROGRESS_SECRET 完全一致）
+# 生成：python -c "import secrets;print(secrets.token_hex(32))"
+EVAL_PROGRESS_SECRET=change-me-64-hex-chars
