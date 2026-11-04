@@ -39,6 +39,7 @@ from eval.security_scanner import (  # noqa: E402
     query_osv_dependencies,
     scan_code,
 )
+from eval.progress_client import report_progress  # noqa: E402
 from eval.url_validator import validate_github_repo_url  # noqa: E402
 
 
@@ -52,6 +53,7 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
     执行一次完整的静态评测，返回 report dict。
     """
     # === 1. URL 校验 ===
+    report_progress(2, "running", "正在校验仓库地址")
     v = validate_github_repo_url(url)
     owner, repo = v["owner"], v["repo"]
 
@@ -62,7 +64,10 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
     client = GitHubClient(token=token)
     repo_data = client.get_repo(owner, repo)
     if not repo_data:
+        report_progress(2, "failed", "仓库不存在或无法访问")
         raise RuntimeError(f"仓库不存在或无法访问：{owner}/{repo}（404）")
+    report_progress(2, "completed", "仓库验证通过")
+    report_progress(3, "running", "正在读取仓库资料")
 
     commit_sha = repo_data.get("default_branch") or "main"
     # 拿确切 commit SHA（用于 report_id 锚定）
@@ -72,6 +77,9 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
             commit_sha = branches["commit"]["sha"]
     except Exception:
         pass
+
+    report_progress(3, "completed", "仓库资料读取完成")
+    report_progress(4, "running", "正在分析项目结构")
 
     if verbose:
         print(f"[2/7] 元数据：Stars={repo_data.get('stargazers_count')} Language={repo_data.get('language')}")
@@ -102,6 +110,9 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
 
     if verbose:
         print(f"      已下载 {len([c for c in contents.values() if c])} 个文件（{total_bytes // 1024}KB）")
+
+    report_progress(4, "completed", f"项目结构分析完成（{len(tree_files)} 个文件）")
+    report_progress(5, "running", "正在执行静态与安全分析")
 
     # === 4. 静态分析 ===
     if verbose:
@@ -150,6 +161,9 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
     if verbose and osv_meta["query_status"] != "success":
         print(f"      [OSV] status={osv_meta['query_status']} error={osv_meta.get('error')}")
 
+    report_progress(5, "completed", "静态与安全分析完成")
+    report_progress(6, "running", "正在计算综合评分")
+
     # === 5. 构建评分 ===
     if verbose:
         print("[5/7] 评分中…")
@@ -159,6 +173,8 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
         health, sec_tools, code_scan, osv_vulns, deps, tree_files, osv_meta, contents,
     )
     prelim = compute_preliminary_score(sub_scores)
+    report_progress(6, "completed", "综合评分完成")
+    report_progress(7, "running", "正在生成评测报告")
 
     # === V1.0.1 重要修正 ===
     # 静态分析不能自动升级到 L2/L3 —— L2 需要真实运行测试，L3 需要 Agent 端到端
@@ -247,7 +263,10 @@ def run(url: str, token: str | None = None, verbose: bool = False) -> dict:
 
     # === 7. 校验报告 ===
     valid, err = validate_report(report)
-    if not valid:
+    if valid:
+        report_progress(7, "completed", f"报告生成完成 {report_id}")
+    else:
+        report_progress(7, "failed", "报告结构校验失败")
         print(f"[WARN] 报告校验失败：{err}", file=sys.stderr)
 
     if verbose:

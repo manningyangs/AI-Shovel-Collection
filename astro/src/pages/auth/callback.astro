@@ -1,0 +1,125 @@
+---
+import Base from "../../layouts/Base.astro";
+
+const base = "/AI-Shovel-Collection";
+const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/, "");
+---
+
+<Base
+  title="🔐 登录回调 — AI Shovel Eval"
+  description="GitHub 登录回调处理页"
+  canonical="/auth/callback/"
+>
+
+<style>
+  .cb-wrap {
+    max-width: 520px; margin: 80px auto; padding: 0 24px; text-align: center;
+    font-family: inherit;
+  }
+  .cb-card {
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+    padding: 36px 28px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+  }
+  .cb-icon { font-size: 2.4rem; margin-bottom: 12px; }
+  .cb-title { font-size: 1.15rem; color: #1e3a5f; font-weight: 700; margin: 0 0 8px 0; }
+  .cb-msg { font-size: 0.9rem; color: #64748b; line-height: 1.6; margin: 0; word-break: break-all; }
+  .cb-msg.error { color: #dc2626; }
+  .cb-link {
+    display: inline-block; margin-top: 18px; padding: 10px 22px;
+    background: #3b82f6; color: #fff; text-decoration: none;
+    border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+  }
+  .cb-link:hover { background: #2563eb; }
+  .cb-spinner {
+    width: 34px; height: 34px; margin: 0 auto 14px;
+    border: 4px solid #dbeafe; border-top-color: #3b82f6;
+    border-radius: 50%; animation: cbSpin 0.9s linear infinite;
+  }
+  @keyframes cbSpin { to { transform: rotate(360deg); } }
+</style>
+
+<div class="cb-wrap">
+  <div class="cb-card">
+    <div id="cbIcon" class="cb-spinner" aria-hidden="true"></div>
+    <h1 class="cb-title" id="cbTitle">正在完成登录…</h1>
+    <p class="cb-msg" id="cbMsg">正在与评测服务交换登录凭证，请稍候。</p>
+    <a class="cb-link" id="cbLink" href={`${base}/evaluate/#apply`} hidden>返回评测页</a>
+  </div>
+</div>
+
+<script is:inline define:vars={{ evalApiBase, base }}>
+(function () {
+  const API = evalApiBase;
+  const SESSION_KEY = "EV_SESSION";
+  const icon = document.getElementById("cbIcon");
+  const title = document.getElementById("cbTitle");
+  const msg = document.getElementById("cbMsg");
+  const link = document.getElementById("cbLink");
+
+  function fail(text) {
+    icon.className = "";
+    icon.textContent = "⚠️";
+    title.textContent = "登录失败";
+    msg.className = "cb-msg error";
+    msg.textContent = text;
+    link.hidden = false;
+  }
+
+  function done() {
+    icon.className = "";
+    icon.textContent = "✅";
+    title.textContent = "登录成功";
+    msg.className = "cb-msg";
+    msg.textContent = "正在返回评测页…";
+    const ret = sessionStorage.getItem("EV_RETURN");
+    sessionStorage.removeItem("EV_RETURN");
+    sessionStorage.removeItem("EV_STATE");
+    sessionStorage.removeItem("EV_VERIFIER");
+    setTimeout(() => {
+      location.replace(ret || (base + "/evaluate/#apply"));
+    }, 400);
+  }
+
+  const params = new URLSearchParams(location.search);
+  // ticket 经 URL fragment（#ticket=...）传递：fragment 不会进入静态托管访问日志，
+  // 用后立即清除；session token 只存 sessionStorage，不写 localStorage、不进 URL。
+  const hashParams = new URLSearchParams(location.hash.replace(/^#/, ""));
+
+  if (params.get("error")) {
+    fail("GitHub 授权被拒绝：" + (params.get("error_description") || params.get("error")));
+    return;
+  }
+
+  const ticket = hashParams.get("ticket");
+  if (!API) {
+    fail("评测服务未接入（PUBLIC_EVAL_API_BASE 未设置）。");
+    return;
+  }
+  if (!ticket) {
+    fail("缺少登录凭证（ticket），请重新发起登录。");
+    return;
+  }
+
+  // 一次性 ticket 换 session（同标签页 POST，不写 URL、不落持久化存储）
+  fetch(API + "/api/auth/exchange", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ticket: ticket }),
+  })
+    .then(async (res) => {
+      const data = await res.json().catch(() => null);
+      if (!res.ok) {
+        throw new Error((data && data.error && data.error.message) || ("兑换失败 HTTP " + res.status));
+      }
+      const token = data.session_token || (data.session && data.session.token);
+      if (!token) throw new Error("响应中缺少 session_token");
+      sessionStorage.setItem(SESSION_KEY, token);
+      // 立即从地址栏清除 fragment 中的一次性凭证
+      history.replaceState(null, "", location.pathname + location.search);
+      done();
+    })
+    .catch((err) => fail(err.message));
+})();
+</script>
+
+</Base>

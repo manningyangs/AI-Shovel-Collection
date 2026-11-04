@@ -5,7 +5,9 @@ import path from "node:path";
 
 const base = "/AI-Shovel-Collection";
 const repoUrl = "https://github.com/manningyangs/AI-Shovel-Collection";
-const issueFormUrl = `${repoUrl}/issues/new?assignees=&labels=evaluation-request&template=evaluation-request.yml`;
+
+// Cloudflare Worker API 基地址（构建期注入；未配置时页面显示"评测服务未接入"）
+const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/, "");
 
 // 读取 evaluations/index.json
 let indexData = { reports: [], total_reports: 0 };
@@ -131,6 +133,92 @@ const reports = indexData.reports || [];
     cursor: pointer; transition: background 0.15s;
   }
   .repo-form button:hover { background: #2563eb; }
+  .repo-form button:disabled { background: #94a3b8; cursor: not-allowed; }
+
+  /* —— 登录状态行 —— */
+  .auth-row {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding-bottom: 14px; margin-bottom: 14px; border-bottom: 1px dashed #e2e8f0;
+    font-size: 0.88rem;
+  }
+  .auth-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+  }
+  .auth-badge.ok { background: #d1fae5; color: #065f46; }
+  .auth-badge.no { background: #f1f5f9; color: #475569; }
+  .auth-badge.err { background: #fee2e2; color: #991b1b; }
+  .auth-btn {
+    margin: 0 !important; padding: 7px 16px !important; border-radius: 8px !important;
+    font-size: 0.85rem !important; font-weight: 600; cursor: pointer;
+    background: #24292f !important; color: #fff; border: none;
+  }
+  .auth-btn.ghost { background: transparent !important; color: #64748b; border: 1px solid #cbd5e1 !important; }
+  .auth-user { color: #475569; font-weight: 600; }
+  .form-hint { margin-top: 10px; font-size: 0.8rem; color: #94a3b8; }
+  .form-hint.error { color: #dc2626; }
+
+  /* —— 八阶段进度面板 —— */
+  .progress-panel { margin-top: 16px; border-top: 1px dashed #e2e8f0; padding-top: 16px; }
+  .progress-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .progress-title { font-weight: 700; color: #1e3a5f; font-size: 1rem; }
+  .progress-msg {
+    margin-top: 8px; font-size: 0.83rem; color: #64748b;
+    background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+    padding: 8px 12px; word-break: break-all;
+  }
+  .progress-msg.error { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+  .stage-list { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 6px; }
+  .stage-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 8px; font-size: 0.87rem;
+    background: #f8fafc; border: 1px solid #e2e8f0; color: #94a3b8;
+  }
+  .stage-dot {
+    width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0;
+    background: #e2e8f0; position: relative;
+  }
+  .stage-item.done { background: #f0fdf4; border-color: #bbf7d0; color: #166534; }
+  .stage-item.done .stage-dot { background: #22c55e; }
+  .stage-item.done .stage-dot::after {
+    content: "✓"; position: absolute; inset: 0; color: #fff;
+    font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  }
+  .stage-item.active { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; font-weight: 600; }
+  .stage-item.active .stage-dot {
+    background: #3b82f6;
+    animation: stagePulse 1.1s ease-in-out infinite;
+  }
+  @keyframes stagePulse { 0%,100% { box-shadow: 0 0 0 0 rgba(59,130,246,0.45);} 50% { box-shadow: 0 0 0 6px rgba(59,130,246,0);} }
+  .stage-item.failed { background: #fef2f2; border-color: #fecaca; color: #991b1b; font-weight: 600; }
+  .stage-item.failed .stage-dot { background: #ef4444; }
+  .stage-item.failed .stage-dot::after {
+    content: "✕"; position: absolute; inset: 0; color: #fff;
+    font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center;
+  }
+  .progress-actions { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .progress-actions .eval-btn { padding: 10px 20px; font-size: 0.9rem; }
+  .progress-retry {
+    margin: 0 !important; padding: 6px 14px !important; font-size: 0.82rem !important;
+    background: #f1f5f9 !important; color: #334155 !important; border: 1px solid #cbd5e1 !important;
+  }
+
+  /* —— 历史记录 —— */
+  .history-panel { margin-top: 18px; border-top: 1px dashed #e2e8f0; padding-top: 14px; }
+  .history-panel h3 { margin: 0 0 10px 0; font-size: 0.92rem; color: #1e3a5f; }
+  .history-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+  .history-item {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    font-size: 0.83rem; padding: 8px 12px; background: #f8fafc;
+    border: 1px solid #e2e8f0; border-radius: 8px;
+  }
+  .history-item .h-repo { font-weight: 600; color: #334155; }
+  .history-item .h-status { padding: 1px 8px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+  .h-status.completed { background: #d1fae5; color: #065f46; }
+  .h-status.failed, .h-status.cancelled { background: #fee2e2; color: #991b1b; }
+  .h-status.running, .h-status.queued, .h-status.dispatching, .h-status.dispatch_unknown, .h-status.publishing { background: #dbeafe; color: #1e40af; }
+  .history-item .h-msg { color: #64748b; flex: 1; min-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .history-item a { color: #3b82f6; text-decoration: none; font-weight: 600; }
 
   @media (max-width: 600px) {
     .eval-hero h1 { font-size: 1.5rem; }
@@ -173,9 +261,9 @@ const reports = indexData.reports || [];
   <section class="eval-section">
     <h2>📋 评测流程</h2>
     <div class="eval-flow">
-      <div class="eval-flow-step"><div class="eval-flow-num">1</div><h4>提交申请</h4><p>填写公开 GitHub 仓库地址，GitHub Actions 自动触发评测 Pipeline</p></div>
+      <div class="eval-flow-step"><div class="eval-flow-num">1</div><h4>站内提交</h4><p>GitHub 登录后填写公开仓库地址，无需跳转，评测流水线自动触发</p></div>
       <div class="eval-flow-step"><div class="eval-flow-num">2</div><h4>静态初评</h4><p>Python 引擎读取 manifest、README、依赖、Issue/PR 元数据，不运行任何代码</p></div>
-      <div class="eval-flow-step"><div class="eval-flow-num">3</div><h4>生成报告</h4><p>JSON 报告写入 evaluations/reports/，自动部署为独立静态页面</p></div>
+      <div class="eval-flow-step"><div class="eval-flow-num">3</div><h4>实时进度</h4><p>八阶段进度实时回传页面：仓库验证 → 结构分析 → 静态分析 → 评分 → 发布</p></div>
       <div class="eval-flow-step"><div class="eval-flow-num">4</div><h4>公开发布</h4><p>报告永久公开、可 SHA256 锚定到 commit，包含证据链和改进建议</p></div>
     </div>
   </section>
@@ -223,38 +311,377 @@ const reports = indexData.reports || [];
     ))}
   </section>
 
-  <!-- 申请评测 -->
+  <!-- 申请评测（站内提交 + 八阶段进度） -->
   <section class="eval-section" id="apply">
     <h2>🚀 申请评测</h2>
-    <p style="font-size:0.9rem;color:#475569">输入一个公开 GitHub 仓库地址，我会自动跳转到 GitHub Issue 表单并预填信息。</p>
-    <div class="repo-form">
-      <label for="repoInput">🔗 GitHub Repository URL</label>
-      <input id="repoInput" type="url" placeholder="https://github.com/owner/repository" />
-      <button onclick="submitEvalRequest()">✨ 申请评测 →</button>
-      <p style="margin-top:12px;font-size:0.78rem;color:#94a3b8">
-        或者直接访问 <a href={issueFormUrl} style="color:#3b82f6">{issueFormUrl}</a>
-      </p>
+    <p style="font-size:0.9rem;color:#475569">使用 GitHub 登录后提交一个公开仓库地址，全程在站内完成，可实时查看评测进度。</p>
+    <div class="repo-form" id="evalForm">
+      <div class="auth-row">
+        <span class="auth-badge no" id="authBadge">⏳ 正在检查登录状态…</span>
+        <span class="auth-user" id="authUser" hidden></span>
+        <button class="auth-btn" id="loginBtn" type="button" hidden>🐙 使用 GitHub 登录</button>
+        <button class="auth-btn ghost" id="logoutBtn" type="button" hidden>退出登录</button>
+      </div>
+
+      <div id="submitRow" hidden>
+        <label for="repoInput">🔗 GitHub Repository URL</label>
+        <input id="repoInput" type="url" placeholder="https://github.com/owner/repository" />
+        <button id="submitEvalBtn" type="button">✨ 申请评测 →</button>
+        <p class="form-hint" id="submitHint"></p>
+      </div>
+
+      <!-- 八阶段进度面板 -->
+      <div class="progress-panel" id="progressPanel" hidden>
+        <div class="progress-head">
+          <span class="progress-title" id="progressTitle">⏳ 等待评测开始</span>
+          <button class="progress-retry" id="newEvalBtn" type="button" hidden>重新提交</button>
+        </div>
+        <ol class="stage-list" id="stageList">
+          <li class="stage-item" data-stage="1"><span class="stage-dot"></span><span>1. 请求已受理</span></li>
+          <li class="stage-item" data-stage="2"><span class="stage-dot"></span><span>2. 仓库验证</span></li>
+          <li class="stage-item" data-stage="3"><span class="stage-dot"></span><span>3. 项目资料读取</span></li>
+          <li class="stage-item" data-stage="4"><span class="stage-dot"></span><span>4. 项目结构分析</span></li>
+          <li class="stage-item" data-stage="5"><span class="stage-dot"></span><span>5. 静态与安全分析</span></li>
+          <li class="stage-item" data-stage="6"><span class="stage-dot"></span><span>6. 综合评分</span></li>
+          <li class="stage-item" data-stage="7"><span class="stage-dot"></span><span>7. 报告生成与校验</span></li>
+          <li class="stage-item" data-stage="8"><span class="stage-dot"></span><span>8. 报告发布</span></li>
+        </ol>
+        <div class="progress-msg" id="progressMsg" hidden></div>
+        <div class="progress-actions">
+          <a class="eval-btn eval-btn-primary" id="reportLink" href="#" hidden>📄 查看完整报告 →</a>
+        </div>
+      </div>
+
+      <!-- 我的评测记录 -->
+      <div class="history-panel" id="historyPanel" hidden>
+        <h3>🗂 我的评测记录</h3>
+        <ul class="history-list" id="historyList"></ul>
+      </div>
     </div>
   </section>
 
 </div>
 
-<script is:inline>
-function submitEvalRequest() {
-  const input = document.getElementById("repoInput").value.trim();
-  if (!input) { alert("请先输入仓库 URL"); return; }
+<script is:inline define:vars={{ evalApiBase, base }}>
+(function () {
+  const API = evalApiBase;
+  // Session token：仅存 sessionStorage（同标签页），发送只走 Authorization header，
+  // 不写 localStorage、不进 URL、不打印 —— 符合任务书 §17.2
+  const SESSION_KEY = "EV_SESSION";
+  const TASK_KEY = "EV_CURRENT_TASK";
 
-  // 预填 URL 到 GitHub Issue Form
-  const base = "https://github.com/manningyangs/AI-Shovel-Collection/issues/new";
-  const params = new URLSearchParams({
-    assignees: "",
-    labels: "evaluation-request",
-    template: "evaluation-request.yml",
-    "repo_url": input,
-    "project_type": "auto-detect：自动识别（推荐）",
+  const $ = (id) => document.getElementById(id);
+  const els = {
+    authBadge: $("authBadge"), authUser: $("authUser"),
+    loginBtn: $("loginBtn"), logoutBtn: $("logoutBtn"),
+    submitRow: $("submitRow"), repoInput: $("repoInput"),
+    submitBtn: $("submitEvalBtn"), submitHint: $("submitHint"),
+    progressPanel: $("progressPanel"), progressTitle: $("progressTitle"),
+    progressMsg: $("progressMsg"), stageList: $("stageList"),
+    reportLink: $("reportLink"), newEvalBtn: $("newEvalBtn"),
+    historyPanel: $("historyPanel"), historyList: $("historyList"),
+  };
+
+  let pollTimer = null;
+  let pollErrors = 0;
+  let currentUser = null;
+
+  const STAGE_TITLES = {
+    queued: "⏳ 等待评测开始",
+    dispatching: "🚀 正在触发评测流水线",
+    dispatch_unknown: "🔍 触发结果确认中",
+    running: "🧪 评测进行中",
+    publishing: "📝 报告发布中",
+    completed: "✅ 评测完成",
+    failed: "❌ 评测失败",
+    cancelled: "🚫 评测已取消",
+  };
+
+  function token() { return sessionStorage.getItem(SESSION_KEY) || ""; }
+
+  function api(path, options) {
+    const opts = options || {};
+    opts.headers = Object.assign({ "Content-Type": "application/json" }, opts.headers || {});
+    const t = token();
+    if (t) opts.headers["Authorization"] = "Bearer " + t;
+    return fetch(API + path, opts).then(async (res) => {
+      let data = null;
+      try { data = await res.json(); } catch (e) { /* 非 JSON */ }
+      if (!res.ok) {
+        const err = new Error((data && data.error && data.error.message) || ("请求失败 HTTP " + res.status));
+        err.status = res.status;
+        err.code = data && data.error && data.error.code;
+        throw err;
+      }
+      return data;
+    });
+  }
+
+  function setAuthBadge(kind, text) {
+    els.authBadge.className = "auth-badge " + kind;
+    els.authBadge.textContent = text;
+  }
+
+  function showLoginState() {
+    setAuthBadge("no", "未登录");
+    els.authUser.hidden = true;
+    els.loginBtn.hidden = false;
+    els.logoutBtn.hidden = true;
+    els.submitRow.hidden = true;
+  }
+
+  function showLoggedIn(user) {
+    currentUser = user;
+    setAuthBadge("ok", "已登录");
+    els.authUser.hidden = false;
+    els.authUser.textContent = "@" + (user.login || user.name || "user");
+    els.loginBtn.hidden = true;
+    els.logoutBtn.hidden = false;
+    els.submitRow.hidden = false;
+  }
+
+  function renderStages(task) {
+    const status = task.status;
+    const current = Number(task.stage_index || 1);
+    const items = els.stageList.querySelectorAll(".stage-item");
+    items.forEach((li) => {
+      const n = Number(li.getAttribute("data-stage"));
+      li.className = "stage-item";
+      if (status === "completed") {
+        li.classList.add("done");
+      } else if (status === "failed" || status === "cancelled") {
+        if (n < current) li.classList.add("done");
+        else if (n === current) li.classList.add("failed");
+      } else {
+        if (n < current) li.classList.add("done");
+        else if (n === current) li.classList.add("active");
+      }
+    });
+  }
+
+  function renderTask(task) {
+    els.progressPanel.hidden = false;
+    const status = task.status || "queued";
+    els.progressTitle.textContent = STAGE_TITLES[status] || status;
+    renderStages(task);
+
+    const msg = task.stage_message || "";
+    if (status === "failed" || status === "cancelled") {
+      els.progressMsg.hidden = false;
+      els.progressMsg.className = "progress-msg error";
+      els.progressMsg.textContent = msg || "评测失败，请稍后重试";
+      els.newEvalBtn.hidden = false;
+    } else if (msg) {
+      els.progressMsg.hidden = false;
+      els.progressMsg.className = "progress-msg";
+      els.progressMsg.textContent = msg;
+    }
+
+    const finished = status === "completed";
+    const reportUrl = task.report_url || "";
+    els.reportLink.hidden = !(finished && reportUrl);
+    if (finished && reportUrl) {
+      els.reportLink.href = reportUrl.indexOf("http") === 0 ? reportUrl : (base + reportUrl);
+    }
+    els.newEvalBtn.hidden = finished;
+
+    if (finished || status === "failed" || status === "cancelled") {
+      stopPolling();
+      loadHistory();
+    }
+  }
+
+  function startPolling(taskId) {
+    stopPolling();
+    pollErrors = 0;
+    const tick = () => {
+      api("/api/evaluations/" + encodeURIComponent(taskId))
+        .then((data) => {
+          pollErrors = 0;
+          const task = data.task || data;
+          renderTask(task);
+        })
+        .catch((err) => {
+          if (err.status === 401) { clearSession(); showLoginState(); return; }
+          pollErrors += 1;
+          if (pollErrors >= 5) {
+            stopPolling();
+            els.progressMsg.hidden = false;
+            els.progressMsg.className = "progress-msg error";
+            els.progressMsg.textContent = "进度获取失败：" + err.message + "（可点击重新提交重试）";
+            els.newEvalBtn.hidden = false;
+          }
+        });
+    };
+    tick();
+    pollTimer = setInterval(tick, 5000);
+  }
+
+  function stopPolling() {
+    if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+  }
+
+  function loadHistory() {
+    if (!token()) return;
+    api("/api/evaluations")
+      .then((data) => {
+        const tasks = data.tasks || data.evaluations || [];
+        if (!tasks.length) { els.historyPanel.hidden = true; return; }
+        els.historyPanel.hidden = false;
+        els.historyList.innerHTML = "";
+        tasks.slice(0, 10).forEach((t) => {
+          const li = document.createElement("li");
+          li.className = "history-item";
+          const repo = document.createElement("span");
+          repo.className = "h-repo";
+          repo.textContent = (t.repository_url || "").replace("https://github.com/", "");
+          const st = document.createElement("span");
+          st.className = "h-status " + (t.status || "");
+          st.textContent = t.status || "-";
+          const msg = document.createElement("span");
+          msg.className = "h-msg";
+          msg.textContent = t.stage_message || t.task_id || "";
+          li.appendChild(repo); li.appendChild(st); li.appendChild(msg);
+          if (t.status === "completed" && t.report_url) {
+            const a = document.createElement("a");
+            a.href = t.report_url.indexOf("http") === 0 ? t.report_url : (base + t.report_url);
+            a.textContent = "查看报告 →";
+            li.appendChild(a);
+          }
+          els.historyList.appendChild(li);
+        });
+      })
+      .catch(() => { /* 历史加载失败静默 */ });
+  }
+
+  function clearSession() {
+    sessionStorage.removeItem(SESSION_KEY);
+    sessionStorage.removeItem(TASK_KEY);
+    currentUser = null;
+  }
+
+  // —— 初始化 ——
+  function init() {
+    if (!API) {
+      setAuthBadge("err", "评测服务未接入");
+      els.submitHint.textContent = "评测服务暂未配置（PUBLIC_EVAL_API_BASE 未设置）。";
+      return;
+    }
+
+    els.loginBtn.addEventListener("click", () => {
+      sessionStorage.setItem("EV_RETURN", location.href);
+      location.href = API + "/auth/github/start?return_to=" +
+        encodeURIComponent(base + "/auth/callback");
+    });
+
+    els.logoutBtn.addEventListener("click", () => {
+      api("/api/auth/logout", { method: "POST" }).catch(() => {}).finally(() => {
+        clearSession();
+        showLoginState();
+        els.progressPanel.hidden = true;
+        els.historyPanel.hidden = true;
+        stopPolling();
+      });
+    });
+
+    els.submitBtn.addEventListener("click", submitEval);
+    els.repoInput.addEventListener("keydown", (e) => { if (e.key === "Enter") submitEval(); });
+
+    els.newEvalBtn.addEventListener("click", () => {
+      sessionStorage.removeItem(TASK_KEY);
+      els.progressPanel.hidden = true;
+      els.progressMsg.hidden = true;
+      els.reportLink.hidden = true;
+      els.newEvalBtn.hidden = true;
+      els.submitRow.hidden = false;
+      els.repoInput.focus();
+    });
+
+    // 恢复登录态
+    if (!token()) {
+      showLoginState();
+      return;
+    }
+    api("/api/me")
+      .then((data) => {
+        const user = (data && (data.user || data)) || {};
+        if (!user.login && !user.id) { showLoginState(); return; }
+        showLoggedIn(user);
+        loadHistory();
+        // 恢复进行中的任务
+        const saved = sessionStorage.getItem(TASK_KEY);
+        if (saved) {
+          startPolling(saved);
+        }
+      })
+      .catch((err) => {
+        if (err.status === 401) { clearSession(); showLoginState(); }
+        else {
+          setAuthBadge("err", "登录状态检查失败");
+          els.submitHint.className = "form-hint error";
+          els.submitHint.textContent = "无法连接评测服务：" + err.message;
+        }
+      });
+  }
+
+  function submitEval() {
+    const url = (els.repoInput.value || "").trim();
+    els.submitHint.className = "form-hint";
+    if (!url) { els.submitHint.textContent = "请先输入仓库 URL"; return; }
+    if (!/^https:\/\/github\.com\/[\w.-]+\/[\w.-]+\/?$/.test(url)) {
+      els.submitHint.className = "form-hint error";
+      els.submitHint.textContent = "仅支持 https://github.com/owner/repository 格式的公开仓库地址";
+      return;
+    }
+    els.submitBtn.disabled = true;
+    els.submitHint.textContent = "正在提交…";
+
+    api("/api/evaluations", {
+      method: "POST",
+      body: JSON.stringify({
+        repo_url: url.replace(/\/+$/, ""),
+        idempotency_key: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
+      }),
+    })
+      .then((data) => {
+        const task = data.task || data;
+        els.submitBtn.disabled = false;
+        els.submitHint.textContent = "";
+        els.submitRow.hidden = true;
+        sessionStorage.setItem(TASK_KEY, task.task_id);
+        renderTask(task);
+        startPolling(task.task_id);
+        loadHistory();
+      })
+      .catch((err) => {
+        els.submitBtn.disabled = false;
+        if (err.status === 401) {
+          clearSession();
+          showLoginState();
+          els.submitHint.className = "form-hint error";
+          els.submitHint.textContent = "登录已过期，请重新登录";
+          return;
+        }
+        els.submitHint.className = "form-hint error";
+        // 409 → 已有进行中任务，直接恢复展示
+        if (err.status === 409 && err.code && /EXIST|ACTIVE|QUEUE/.test(err.code)) {
+          els.submitHint.textContent = err.message;
+          return;
+        }
+        els.submitHint.textContent = "提交失败：" + err.message;
+      });
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopPolling();
+    else {
+      const saved = sessionStorage.getItem(TASK_KEY);
+      if (saved && !pollTimer) startPolling(saved);
+    }
   });
-  window.location.href = `${base}?${params.toString()}`;
-}
+
+  init();
+})();
 </script>
 
 </Base>

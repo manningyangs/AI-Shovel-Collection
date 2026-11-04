@@ -1,0 +1,30 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ai-shovel-eval-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ai-shovel-eval",
+      "database_id": "4772ebff-fa28-48a3-9fe7-12726f10fa50",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // 非敏感变量；Secret 用 `wrangler secret put` 设置：
+  //   GITHUB_APP_CLIENT_ID / GITHUB_APP_PRIVATE_KEY / GITHUB_APP_INSTALLATION_ID / EVAL_PROGRESS_SECRET
+  "vars": {
+    "GITHUB_APP_ID": "5606390",
+    "GITHUB_API_REPOSITORY": "manningyangs/AI-Shovel-Collection",
+    "GITHUB_WORKFLOW_FILE": "evaluate-shovel.yml",
+    "PUBLIC_SITE_BASE_URL": "https://manningyangs.github.io/AI-Shovel-Collection",
+    "ALLOWED_SITE_ORIGINS": "https://manningyangs.github.io,http://localhost:4321",
+    "RATE_DAILY_PER_USER": "3",
+    "RATE_MAX_ACTIVE_PER_REPO": "1",
+    "RATE_MAX_QUEUED_PER_USER": "2",
+    "SESSION_TTL_SECONDS": "28800"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

@@ -1,91 +1,164 @@
+# Astro Pages 部署工作流
+#
+# 触发方式：
+#   1. push 到 main（首页 / Astro 源码 / 数据文件变更）
+#   2. workflow_dispatch —— 评测报告发布后由 evaluate-shovel.yml 显式触发
+#      （GITHUB_TOKEN 的 push 不会触发任何 push 事件，workflow_dispatch 是官方允许的例外），
+#      携带 request_id + report_id，部署完成后回调 Worker /internal/finalize。
+#   旧的 workflow_run 联动已移除，避免与显式触发形成双重部署。
 name: Deploy Astro site to GitHub Pages
 
 on:
-  # Build on pushes to main that touch Astro project
   push:
-    branches: [main]
+    branches:
+      - main
     paths:
       - 'astro/**'
-      - '.github/workflows/pages-astro.yml'
-  # Build after live-data workflow completes (data updated → rebuild)
-  workflow_run:
-    workflows:
-      - "Sync live multi-source catalog data"
-      - "AI Shovel Evaluation"
-    types: ["completed"]
+      - 'catalog.csv'
+      - 'live_multi.json'
+      - 'package*.json'
   workflow_dispatch:
+    inputs:
+      request_id:
+        description: '评测任务 ID（报告部署回调用，可留空）'
+        required: false
+        type: string
+      report_id:
+        description: '评测报告 ID（部署后 200 校验用，可留空）'
+        required: false
+        type: string
 
+# 串行化所有部署，避免 push 触发与评测触发并发打架
+concurrency:
+  group: "pages-deploy"
+  queue: max
+  cancel-in-progress: false
+
+# 权限遵循最小化原则：内容读取 + Pages 部署 + IdToken
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Prevent multiple concurrent deploys
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: astro
+    env:
+      # Cloudflare Worker API 基地址（仓库 Actions variable，部署手册见 docs/CLOUDFLARE-WORKER-SETUP.md）
+      PUBLIC_EVAL_API_BASE: ${{ vars.PUBLIC_EVAL_API_BASE || '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ===== 把根目录 evaluations/ 复制到 astro/public/evaluations/ =====
-      # 这样 Astro build 会自动 public → dist，upload-pages-artifact 也必然包含
-      - name: Sync evaluations/ into public/
-        run: |
-          cd ..
-          if [ -d "evaluations" ]; then
-            # 先清理旧的 public/evaluations（避免残留旧报告）
-            rm -rf astro/public/evaluations
-            cp -r evaluations astro/public/evaluations
-            echo "✅ evaluations/ synced into astro/public/ ($(find evaluations -type f | wc -l) files)"
-          else
-            echo "⚠️ evaluations/ dir not found, creating empty placeholder"
-            mkdir -p astro/public/evaluations
-            echo '{"schema_version":"1.0","reports":[]}' > astro/public/evaluations/index.json
-          fi
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: astro/package-lock.json
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'astro/package-lock.json'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install Dependencies
+        run: cd astro && npm ci
 
-      - name: Build Astro
-        run: npm run build
+      - name: Build
+        run: cd astro && npm run build
 
-      - name: Verify evaluations in dist
+      # 部署前校验评测产物已就位，防止发布流程半途失败导致 404
+      - name: Verify evaluation artifacts exist
         run: |
-          if [ -d "dist/evaluations" ]; then
-            echo "✅ dist/evaluations exists: $(find dist/evaluations -type f | wc -l) files"
-            ls dist/evaluations/
-          else
-            echo "❌ dist/evaluations MISSING"
-            exit 1
-          fi
+          test -f astro/public/evaluations/index.json || { echo "missing index.json"; exit 1; }
+          test -d astro/public/evaluations/reports || { echo "missing reports dir"; exit 1; }
 
-      - name: Upload artifact
+      - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: astro/dist
+          path: './astro/dist'
 
   deploy:
-    needs: build
+    name: Deploy
+    needs: [build]
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Setup GitHub Pages
+        uses: actions/configure-pages@v5
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # —— 评测部署回调（仅 workflow_dispatch 且携带 request_id 时执行）——
+  notify-eval:
+    name: Notify Eval Finalize
+    needs: [build, deploy]
+    if: ${{ always() && github.event_name == 'workflow_dispatch' && inputs.request_id != '' }}
+    runs-on: ubuntu-latest
+    env:
+      EVAL_REQUEST_ID: ${{ inputs.request_id }}
+      NOTIFY_REPORT_ID: ${{ inputs.report_id }}
+      EVAL_PROGRESS_URL: ${{ vars.EVAL_PROGRESS_URL || '' }}
+      EVAL_PROGRESS_SECRET: ${{ secrets.EVAL_PROGRESS_SECRET }}
+      DEPLOY_RESULT: ${{ needs.deploy.result }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # 部署成功 → 校验报告页真实 200（容忍 CDN 传播延迟）→ finalize completed
+      # 部署失败   → finalize failed（任务不卡死在 publishing）
+      - name: Verify report page and finalize
+        env:
+          GITHUB_RUN_ID: ${{ github.run_id }}
+          GITHUB_RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          python3 - <<'PY'
+          import os, sys, time, urllib.request
+          sys.path.insert(0, 'scripts')
+          from eval.progress_client import finalize_report
+
+          deploy_ok = os.environ.get("DEPLOY_RESULT") == "success"
+          report_id = os.environ.get("NOTIFY_REPORT_ID", "")
+          request_id = os.environ.get("EVAL_REQUEST_ID", "")
+
+          if not deploy_ok:
+              print(f"Deploy failed (result={os.environ.get('DEPLOY_RESULT')}) → finalize failed")
+              finalize_report(report_id or "unknown", "", "failed",
+                              "Pages 部署失败，报告未上线")
+              sys.exit(0)
+
+          if not report_id:
+              print("No report_id provided → nothing to verify, mark completed")
+              finalize_report("", "", "completed", "站点部署完成")
+              sys.exit(0)
+
+          # 报告详情页真实可访问性校验（含 CDN 传播重试）
+          url = f"https://manningyangs.github.io/AI-Shovel-Collection/evaluations/{report_id}/"
+          ok = False
+          for attempt in range(10):
+              try:
+                  req = urllib.request.Request(url, method="GET",
+                                               headers={"User-Agent": "ai-shovel-eval-deploy-check"})
+                  with urllib.request.urlopen(req, timeout=15) as resp:
+                      if resp.status == 200:
+                          ok = True
+                          break
+                      print(f"attempt {attempt + 1}: HTTP {resp.status}")
+              except Exception as e:
+                  print(f"attempt {attempt + 1}: {e}")
+              time.sleep(15)
+
+          if ok:
+              print(f"Report page live: {url}")
+              finalize_report(report_id, url, "completed", "评测完成，报告已发布")
+          else:
+              print("Report page not reachable after retries")
+              finalize_report(report_id, url, "failed", "报告页部署后持续不可访问")
+              sys.exit(1)
+          PY
