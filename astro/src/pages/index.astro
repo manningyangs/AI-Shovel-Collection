@@ -232,6 +232,16 @@ try {
   <noscript><div class="noscript-note">⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（191 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。</div></noscript>
 </header>
 
+<!-- AI 工具生态地图预览（评测报告下方、工具分类上方） -->
+<ToolMapPreview
+  client:visible
+  stats={mapPreview.stats}
+  capabilityCount={mapPreview.capabilityCount}
+  nodes={mapPreview.nodes}
+  edges={mapPreview.edges}
+  baseUrl={mapPreview.baseUrl}
+/>
+
 <div class="toolbar">
   <div class="toolbar-inner">
     <div class="meta-row">
@@ -264,15 +274,6 @@ try {
 </div>
 
 <main>
-  <!-- AI 工具生态地图预览（真实数据微缩点阵，CTA 进入完整地图） -->
-  <ToolMapPreview
-    client:visible
-    stats={mapPreview.stats}
-    capabilityCount={mapPreview.capabilityCount}
-    nodes={mapPreview.nodes}
-    edges={mapPreview.edges}
-    baseUrl={mapPreview.baseUrl}
-  />
   <div class="list-tabs" id="listTabs" role="tablist">
     <button class="list-tab active" data-tab="curated" type="button" role="tab" aria-selected="true">📦 精选工具<span class="tab-count" id="tabCuratedCount">191</span></button>
     <button class="list-tab" data-tab="candidates" type="button" role="tab" aria-selected="false">🧭 自动发现<span class="tab-count" id="tabCandidateCount">150</span></button>

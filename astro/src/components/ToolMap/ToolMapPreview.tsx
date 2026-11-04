@@ -80,10 +80,10 @@ export default function ToolMapPreview({
     >
       <div style={{ flex: '1 1 300px', minWidth: 260 }}>
         <div style={{ fontSize: '.78rem', letterSpacing: '.08em', opacity: 0.75, fontWeight: 700 }}>
-          AI TOOL MAP · 生态地图
+          AI Shovel MAP · 生态地图
         </div>
         <h2 style={{ margin: '8px 0 8px', fontSize: '1.45rem', lineHeight: 1.3 }}>
-          看清工具之间怎么连
+          看清工具之间的关系
         </h2>
         <p style={{ margin: '0 0 14px', fontSize: '.88rem', lineHeight: 1.65, opacity: 0.85 }}>
           按能力领域聚类的可交互关系网络：集成、互补与替代关系全部基于真实数据，
