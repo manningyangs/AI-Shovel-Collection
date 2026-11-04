@@ -11,6 +11,7 @@ _check_*.py
 _check_*.html
 _debug_*.py
 _diag_*.py
+debug-*.md
 
 # Secret material — 私钥/密钥/环境变量文件永不入库
 *.pem
