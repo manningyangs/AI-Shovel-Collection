@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-04T05:50:52.829043Z",
-  "total_reports": 6,
+  "updated_at": "2026-11-04T06:17:46.021794Z",
+  "total_reports": 7,
   "reports": [
+    {
+      "report_id": "WordPress-mcp-adapter-7358e571a6f7",
+      "owner": "WordPress",
+      "name": "mcp-adapter",
+      "url": "https://github.com/WordPress/mcp-adapter",
+      "project_type": "mcp_server",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 66,
+      "grade": "C",
+      "coverage": 92,
+      "commit_sha": "e6f7e192f70d",
+      "evaluated_at": "2026-11-04T06:17:46.021794Z"
+    },
     {
       "report_id": "sparkgeo-geo-mcp-servers-aefed91ee10c",
       "owner": "sparkgeo",

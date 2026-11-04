@@ -1,0 +1,351 @@
+{
+  "schema_version": "1.0",
+  "report_id": "WordPress-mcp-adapter-7358e571a6f7",
+  "repository": {
+    "owner": "WordPress",
+    "name": "mcp-adapter",
+    "url": "https://github.com/WordPress/mcp-adapter",
+    "commit_sha": "e6f7e192f70d441950a99d195cfed92d2b3b72de",
+    "language": "PHP",
+    "license": "MIT",
+    "license_file": "LICENSE.md",
+    "stars": 1903,
+    "forks": 228,
+    "archived": false
+  },
+  "evaluation": {
+    "evaluation_version": "1.0",
+    "scoring_version": "1.0.1",
+    "evaluation_mode": "static",
+    "evaluation_level": "L1",
+    "level": "L1",
+    "score_status": "preliminary",
+    "preliminary_score": 66,
+    "official_score": null,
+    "grade": "C",
+    "coverage": 92,
+    "evaluated_at": "2026-11-04T06:17:46.021794Z",
+    "report_generated_by": "AI Shovel Eval",
+    "disclaimer": "静态初评 · 非正式认证 · 不能作为项目真实运行能力的担保"
+  },
+  "project_type": {
+    "type": "mcp_server",
+    "confidence": 1.0,
+    "scores": {
+      "mcp_server": 1,
+      "agent_skill": 0,
+      "framework": 0,
+      "cli_sdk_api": 0,
+      "collection": 0
+    },
+    "evidence": {
+      "mcp_server": [
+        "README 含 MCP 关键词 x2"
+      ],
+      "agent_skill": [],
+      "framework": [],
+      "cli_sdk_api": [],
+      "collection": []
+    },
+    "detected_via_manifest": true
+  },
+  "dimensions": {
+    "docs": {
+      "label": "文档与开发者体验",
+      "score": 68,
+      "max_score": 100,
+      "weight": 5,
+      "weighted_score": 3.4,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "docs",
+          "sub_key": "install_deploy_doc",
+          "weight": 2,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "usage_example",
+          "weight": 2,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "license_info",
+          "weight": 1,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    },
+    "functionality": {
+      "label": "功能完整度",
+      "score": 55,
+      "max_score": 100,
+      "weight": 25,
+      "weighted_score": 13.75,
+      "sub_coverage": 80,
+      "sub_items": [
+        {
+          "dim_key": "functionality",
+          "sub_key": "core_completeness",
+          "weight": 5,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "coverage",
+          "weight": 5,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "schema_completeness",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "task_examples",
+          "weight": 5,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "error_handling",
+          "weight": 5,
+          "level": 0,
+          "status": "not_tested"
+        }
+      ]
+    },
+    "maintenance": {
+      "label": "项目维护健康度",
+      "score": 92,
+      "max_score": 100,
+      "weight": 10,
+      "weighted_score": 9.2,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "maintenance",
+          "sub_key": "update_release",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "ci_status",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "issue_maintain",
+          "weight": 2,
+          "level": 4,
+          "status": "partial"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "continuity",
+          "weight": 2,
+          "level": 4,
+          "status": "verified"
+        }
+      ]
+    },
+    "agent_compat": {
+      "label": "智能体兼容性",
+      "score": 39,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 5.85,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "protocol_compliance",
+          "weight": 4,
+          "level": 1,
+          "status": "partial"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "host_support",
+          "weight": 5,
+          "level": 2,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "transport_config",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "env_auth",
+          "weight": 3,
+          "level": 2,
+          "status": "declared"
+        }
+      ]
+    },
+    "ease_of_use": {
+      "label": "易用性与集成体验",
+      "score": 35,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 5.25,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "install_instructions",
+          "weight": 5,
+          "level": 2,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "config_env",
+          "weight": 4,
+          "level": 1,
+          "status": "partial"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "deploy",
+          "weight": 3,
+          "level": 1,
+          "status": "declared"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "quickstart",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        }
+      ]
+    },
+    "security": {
+      "label": "安全性与隐私保护",
+      "score": 92,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 13.8,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "security",
+          "sub_key": "dependency_vulns",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "danger_ops",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "data_access",
+          "weight": 3,
+          "level": 3,
+          "status": "partial"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "secret_scan",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    },
+    "reliability": {
+      "label": "可靠性与运行效率",
+      "score": 100,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 15.0,
+      "sub_coverage": 75,
+      "sub_items": [
+        {
+          "dim_key": "reliability",
+          "sub_key": "test_evidence",
+          "weight": 5,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "ci_complete",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "error_mechanism",
+          "weight": 3,
+          "level": 2,
+          "status": "not_tested"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "release_stability",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    }
+  },
+  "agent_compatibility": {
+    "checks": {
+      "mcp_protocol_deps": false,
+      "host_claude_desktop": true,
+      "transport_methods": [
+        "stdio",
+        "http"
+      ],
+      "auth_methods": []
+    },
+    "evidence": [
+      "README 提及 claude_desktop",
+      "README 提及传输: ['stdio', 'http']"
+    ]
+  },
+  "security_findings": [],
+  "recommendations": [
+    "README 添加使用示例章节（Usage / Examples）",
+    "README 添加配置和环境变量说明"
+  ],
+  "evidence": [
+    "[mcp_server] manifest 识别证据: README 含 MCP 关键词 x2",
+    "[docs] README 章节覆盖: install, license, contributing",
+    "[security] 扫描 2 个源码文件",
+    "[osv] 查询 0 个依赖漏洞"
+  ],
+  "limitations": [
+    "⚠️ 本报告为纯静态分析（L1），未执行被测仓库中的任何代码",
+    "⚠️ 静态初评 · 非正式认证 — 评分不能等同于真实运行表现",
+    "⚠️ 覆盖率仅 92%，未测试项目不计零分"
+  ]
+}
