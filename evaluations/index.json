@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-04T06:17:46.021794Z",
-  "total_reports": 7,
+  "updated_at": "2026-11-04T08:31:28.286876Z",
+  "total_reports": 8,
   "reports": [
+    {
+      "report_id": "BrowserMCP-mcp-bb121834c2e1",
+      "owner": "BrowserMCP",
+      "name": "mcp",
+      "url": "https://github.com/BrowserMCP/mcp",
+      "project_type": "unknown",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 63,
+      "grade": "C",
+      "coverage": 92,
+      "commit_sha": "ba7a268f6b45",
+      "evaluated_at": "2026-11-04T08:31:28.286876Z"
+    },
     {
       "report_id": "WordPress-mcp-adapter-7358e571a6f7",
       "owner": "WordPress",
