@@ -229,18 +229,18 @@ try {
   <!-- 最新评测报告预览（原统计卡片位置：排行榜下方、工具卡片区域之前） -->
   <EvaluationFeatured />
 
+  <!-- AI 工具生态地图预览（评测报告下方，与评测块同宽） -->
+  <ToolMapPreview
+    client:visible
+    stats={mapPreview.stats}
+    capabilityCount={mapPreview.capabilityCount}
+    nodes={mapPreview.nodes}
+    edges={mapPreview.edges}
+    baseUrl={mapPreview.baseUrl}
+  />
+
   <noscript><div class="noscript-note">⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（191 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。</div></noscript>
 </header>
-
-<!-- AI 工具生态地图预览（评测报告下方、工具分类上方） -->
-<ToolMapPreview
-  client:visible
-  stats={mapPreview.stats}
-  capabilityCount={mapPreview.capabilityCount}
-  nodes={mapPreview.nodes}
-  edges={mapPreview.edges}
-  baseUrl={mapPreview.baseUrl}
-/>
 
 <div class="toolbar">
   <div class="toolbar-inner">

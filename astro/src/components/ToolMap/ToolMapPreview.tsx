@@ -65,8 +65,8 @@ export default function ToolMapPreview({
     <section
       aria-label="AI 工具生态地图预览"
       style={{
-        maxWidth: 1080,
-        margin: '26px auto 6px',
+        maxWidth: 980,
+        margin: '28px auto 6px',
         padding: '22px 26px',
         borderRadius: 16,
         background: 'linear-gradient(135deg,#0f172a 0%,#1e3a8a 62%,#312e81 100%)',
