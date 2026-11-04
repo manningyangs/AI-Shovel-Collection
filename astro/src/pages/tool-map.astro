@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import ToolMapApp from '../components/ToolMap/ToolMapApp.tsx';
+---
+
+<Base
+  title="🗺️ AI 工具生态地图 — AI Tool Map"
+  description="探索 AI 工具生态地图：193 个 AI 工具之间的集成、互补与替代关系，按能力领域聚类、可搜索过滤的可交互关系网络。"
+  canonical="/tool-map/"
+  lang="zh-CN"
+>
+  <!-- 仅本页加载 React Flow（client:only），首页不引入 -->
+  <ToolMapApp client:only="react" />
+</Base>

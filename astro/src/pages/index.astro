@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import EvaluationFeatured from '../components/EvaluationFeatured.astro';
+import ToolMapPreview from '../components/ToolMap/ToolMapPreview.tsx';
 import '../styles/main.css';
 import fs from 'fs';
 import path from 'path';
@@ -81,6 +82,34 @@ const domainRows = (() => {
 })();
 const domainsTop8 = domainRows.slice(0, 8);
 const domainsTotal = domainRows.length;
+
+// AI Tool Map 预览数据（构建期读取生成产物；缺失时组件降级为占位+入口）
+let mapPreview = null;
+try {
+  const mapRaw = fs.readFileSync(path.resolve(process.cwd(), 'public/data/tool-map.json'), 'utf8');
+  const mapData = JSON.parse(mapRaw);
+  const REL_ORDER = ['integration', 'protocol', 'complementary', 'alternative'];
+  const capIdx = {};
+  (mapData.capabilities || []).forEach((c, i) => { capIdx[c.id] = i; });
+  const idIdx = {};
+  const previewNodes = (mapData.nodes || []).map((n, i) => {
+    idIdx[n.id] = i;
+    return [n.position.x, n.position.y, capIdx[n.capability] ?? 0];
+  });
+  const previewEdges = (mapData.relations || [])
+    .map(r => [idIdx[r.source], idIdx[r.target], REL_ORDER.indexOf(r.type)])
+    .filter(e => e[0] != null && e[1] != null && e[2] >= 0);
+  mapPreview = {
+    stats: { mapNodes: mapData.stats?.mapNodes, relationTotal: mapData.stats?.relationTotal },
+    capabilityCount: (mapData.capabilities || []).length,
+    nodes: previewNodes,
+    edges: previewEdges,
+    baseUrl: '/AI-Shovel-Collection',
+  };
+} catch (e) {
+  // tool-map.json 尚未生成 → 预览组件走占位态（仅 CTA）
+  mapPreview = { baseUrl: '/AI-Shovel-Collection' };
+}
 ---
 
 <Base
@@ -102,6 +131,7 @@ const domainsTotal = domainRows.length;
       <a href="#domains">🌍 领域检索</a>
       <a href="/AI-Shovel-Collection/trending/" style="color:#f59e0b;font-weight:600">🔥 Trending</a>
       <a href="/AI-Shovel-Collection/evaluate/" style="color:#3b82f6;font-weight:600">🧪 评测</a>
+      <a href="/AI-Shovel-Collection/tool-map/" style="color:#8b5cf6;font-weight:600">🗺️ 地图</a>
       <a href="submit.html" style="color:var(--primary);font-weight:600">📥 提交收录</a>
       <span class="hits-badge-wrap">
         <img class="hits-badge" src="https://hits.sh/manningyangs.github.io/AI-Shovel-Collection.svg?view=1&style=flat-square&label=Visitors&labelColor=2563eb&color=2563eb" alt="访问量统计 — 点击查看历史曲线">
@@ -119,6 +149,7 @@ const domainsTotal = domainRows.length;
   <a href="#domains">🌍 领域检索</a>
   <a href="/AI-Shovel-Collection/trending/" style="color:#f59e0b">🔥 Trending</a>
   <a href="/AI-Shovel-Collection/evaluate/" style="color:#3b82f6">🧪 评测</a>
+  <a href="/AI-Shovel-Collection/tool-map/" style="color:#8b5cf6">🗺️ 地图</a>
   <a href="submit.html">📥 提交收录</a>
   <a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">🐙 GitHub 仓库 ↗</a>
 </div>
@@ -233,6 +264,15 @@ const domainsTotal = domainRows.length;
 </div>
 
 <main>
+  <!-- AI 工具生态地图预览（真实数据微缩点阵，CTA 进入完整地图） -->
+  <ToolMapPreview
+    client:visible
+    stats={mapPreview.stats}
+    capabilityCount={mapPreview.capabilityCount}
+    nodes={mapPreview.nodes}
+    edges={mapPreview.edges}
+    baseUrl={mapPreview.baseUrl}
+  />
   <div class="list-tabs" id="listTabs" role="tablist">
     <button class="list-tab active" data-tab="curated" type="button" role="tab" aria-selected="true">📦 精选工具<span class="tab-count" id="tabCuratedCount">191</span></button>
     <button class="list-tab" data-tab="candidates" type="button" role="tab" aria-selected="false">🧭 自动发现<span class="tab-count" id="tabCandidateCount">150</span></button>

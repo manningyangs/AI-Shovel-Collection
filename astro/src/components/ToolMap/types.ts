@@ -1,0 +1,81 @@
+// AI Tool Map 共享类型（与 scripts/build_tool_map.py 输出的 tool-map.json 对应）
+
+export type EvalInfo = {
+  score?: number | null;
+  grade?: string;
+  level?: string;
+  status?: string;
+  reportId?: string;
+} | null;
+
+export type MapNodeData = {
+  id: string;
+  name: string;
+  category: string;
+  capability: string;
+  desc?: string;
+  stars?: number | null;
+  lang?: string;
+  pushedAt?: string;
+  status?: string;
+  eval?: EvalInfo;
+  detailUrl: string;
+  capabilities: string[];
+  mapGroup: string;
+  summary?: string;
+  position: { x: number; y: number };
+};
+
+export type RelationType = 'integration' | 'protocol' | 'complementary' | 'alternative';
+export type EvidenceLevel = 'verified' | 'documented' | 'inferred' | 'unverified';
+
+export type RelationData = {
+  id: string;
+  source: string;
+  target: string;
+  type: RelationType;
+  evidenceLevel: EvidenceLevel;
+  description: string;
+  evidence?: { type: string; url: string }[];
+  updatedAt?: string;
+};
+
+export type CapabilityDef = {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+};
+
+export type MapData = {
+  generatedAt: string;
+  stats: Record<string, unknown>;
+  capabilities: CapabilityDef[];
+  nodes: MapNodeData[];
+  relations: RelationData[];
+};
+
+/** 关系类型视觉规范（任务书 §8：四类关系不同颜色线型） */
+export const REL_STYLE: Record<RelationType, { color: string; dashed: boolean; label: string }> = {
+  integration: { color: '#3b82f6', dashed: false, label: '集成' },
+  protocol: { color: '#22c55e', dashed: false, label: '协议兼容' },
+  complementary: { color: '#a855f7', dashed: true, label: '互补' },
+  alternative: { color: '#f97316', dashed: true, label: '替代' },
+};
+
+export const EVIDENCE_LABEL: Record<EvidenceLevel, string> = {
+  verified: '已验证',
+  documented: '文档支持',
+  inferred: '推断',
+  unverified: '证据不足',
+};
+
+/** 能力域配色（按 capabilities 顺序稳定分配） */
+export function capColor(index: number): string {
+  const palette = [
+    '#6366f1', '#0ea5e9', '#f59e0b', '#22c55e', '#8b5cf6', '#ef4444',
+    '#14b8a6', '#ec4899', '#f97316', '#e11d48', '#a855f7', '#0891b2',
+    '#16a34a', '#d946ef', '#dc2626', '#7c3aed', '#0d9488',
+  ];
+  return palette[index % palette.length];
+}

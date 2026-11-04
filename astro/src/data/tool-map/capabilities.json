@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "note": "能力领域定义 — 由 catalog.csv 的真实分类语义化派生，与分类一一对应；不得虚构领域",
+  "capabilities": [
+    { "id": "directories-adapters", "name": "目录、Skills 与通用适配", "description": "工具目录、Agent Skills 与通用 AI 工具适配框架", "category": "1." },
+    { "id": "browser-automation", "name": "浏览器、网页检索与抓取", "description": "浏览器控制、网页抓取、检索与自动化", "category": "2." },
+    { "id": "documents", "name": "文件、Office、PDF 与文档", "description": "文件处理、格式转换、PDF 与文档出版", "category": "3." },
+    { "id": "developer-tools", "name": "编程、代码库与开发者工作流", "description": "代码仓库、文档检索、质量检查与开发辅助", "category": "4." },
+    { "id": "data-analytics", "name": "数据库、数据分析与可视化", "description": "数据库查询、数据分析、BI 与图表可视化", "category": "5." },
+    { "id": "devops-cloud", "name": "云平台、DevOps 与监控", "description": "云平台、基础设施、容器、监控与告警", "category": "6." },
+    { "id": "communication-collab", "name": "邮件、通信与团队协作", "description": "邮件、即时通信、日历、任务与团队协作", "category": "7." },
+    { "id": "finance", "name": "财务、会计与区块链", "description": "会计记账、预算、量化交易与链上数据", "category": "8." },
+    { "id": "ecommerce-marketing", "name": "电商、营销与社交媒体", "description": "电商平台、广告投放、SEO 与社交平台数据", "category": "9." },
+    { "id": "china-platforms", "name": "中国本土平台适配", "description": "飞书、钉钉、企微、语雀等中国本土平台接入", "category": "9A." },
+    { "id": "creative-media", "name": "设计、图片、视频与音频", "description": "UI 设计、3D、音视频编辑与内容生成", "category": "10." },
+    { "id": "geo-cad", "name": "CAD、BIM 与地理空间", "description": "CAD/BIM 建模、GIS、地图与遥感数据", "category": "11." },
+    { "id": "healthcare-bio", "name": "医疗健康与生物信息", "description": "医疗标准、医学影像、生物医学与实验室科研", "category": "12." },
+    { "id": "industrial-iot", "name": "工业制造、IoT 与机器人", "description": "PLC、工业协议、智能家居与机器人控制", "category": "13." },
+    { "id": "automotive-games", "name": "汽车诊断与游戏开发", "description": "车辆总线诊断与游戏引擎开发辅助", "category": "14." },
+    { "id": "gov-legal-security", "name": "政务、法律与安全", "description": "公共数据、法律法规与网络安全测试", "category": "15." },
+    { "id": "travel-vertical", "name": "物流、旅游、招聘等垂直应用", "description": "航空、旅行、招聘、图书等垂直场景数据", "category": "16." }
+  ]
+}

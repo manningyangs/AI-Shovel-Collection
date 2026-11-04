@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
 import sitemapPlugin from './src/scripts/sitemap.mjs';
 
 // https://astro.build/config
@@ -16,6 +17,7 @@ export default defineConfig({
     base: '/AI-Shovel-Collection',
     port: 4321
   },
+  // React 仅用于 Tool Map（client:only 水合），不影响其他页面
   // Custom sitemap hook (replaces @astrojs/sitemap which had v3 compat issues)
-  integrations: [sitemapPlugin]
+  integrations: [react(), sitemapPlugin]
 });

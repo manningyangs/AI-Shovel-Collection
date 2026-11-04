@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "note": "集群锚点 + 可选的工具显式坐标。集群内节点由脚本按确定性网格放置（稳定、不随机）；拖动仅发生在用户浏览器本地，不回写本文件。",
+  "cluster": { "cellWidth": 940, "cellHeight": 660, "cols": 4, "nodeColGap": 200, "nodeRowGap": 120, "nodesPerRow": 4 },
+  "anchors": {
+    "directories-adapters": { "x": 0, "y": 0 },
+    "browser-automation": { "x": 940, "y": 0 },
+    "documents": { "x": 1880, "y": 0 },
+    "developer-tools": { "x": 2820, "y": 0 },
+    "data-analytics": { "x": 0, "y": 660 },
+    "devops-cloud": { "x": 940, "y": 660 },
+    "communication-collab": { "x": 1880, "y": 660 },
+    "finance": { "x": 2820, "y": 660 },
+    "ecommerce-marketing": { "x": 0, "y": 1320 },
+    "china-platforms": { "x": 940, "y": 1320 },
+    "creative-media": { "x": 1880, "y": 1320 },
+    "geo-cad": { "x": 2820, "y": 1320 },
+    "healthcare-bio": { "x": 0, "y": 1980 },
+    "industrial-iot": { "x": 940, "y": 1980 },
+    "automotive-games": { "x": 1880, "y": 1980 },
+    "gov-legal-security": { "x": 2820, "y": 1980 },
+    "travel-vertical": { "x": 0, "y": 2640 }
+  },
+  "tools": {}
+}
