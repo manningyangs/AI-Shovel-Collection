@@ -1,6 +1,6 @@
 # AI Tool Map 数据核验报告（TOOL-MAP-VERIFY）
 
-> 由 `scripts/build_tool_map.py` 生成于 2026-11-04T07:00:04Z；输入：catalog.csv / live_multi.json / evaluations/index.json。
+> 由 `scripts/build_tool_map.py` 生成于 2026-11-04T08:50:13Z；输入：catalog.csv / live_multi.json / evaluations/index.json。
 
 ## 数量统计
 
@@ -17,6 +17,10 @@
 | 推断关系（inferred） | 5 |
 | 证据不足关系（unverified，已剔除） | 0 |
 | 已有评测报告的工具数 | 5 |
+| 候选关系（默认不展示，独立候选层） | 68 |
+| 具备输入+输出能力画像的工具数 | 145 |
+| 画像为文档级证据（documented）的工具数 | 15 |
+| 典型工作流模板（通过工具校验） | 10/10 |
 
 ## 关系类型分布
 
