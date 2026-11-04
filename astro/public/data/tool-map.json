@@ -1,0 +1,4876 @@
+{
+ "generatedAt": "2026-11-04T07:00:04Z",
+ "generator": "scripts/build_tool_map.py",
+ "stats": {
+  "catalogRecords": 193,
+  "validRepoUrls": 193,
+  "uniqueTools": 193,
+  "mapNodes": 193,
+  "toolsWithRelations": 44,
+  "relationTotal": 27,
+  "relationByEvidence": {
+   "documented": 22,
+   "inferred": 5
+  },
+  "relationByType": {
+   "alternative": 22,
+   "complementary": 5
+  },
+  "invalidRows": 0,
+  "duplicates": 0,
+  "invalidRelations": 0,
+  "evaluatedTools": 5
+ },
+ "capabilities": [
+  {
+   "id": "directories-adapters",
+   "name": "目录、Skills 与通用适配",
+   "description": "工具目录、Agent Skills 与通用 AI 工具适配框架",
+   "category": "1."
+  },
+  {
+   "id": "browser-automation",
+   "name": "浏览器、网页检索与抓取",
+   "description": "浏览器控制、网页抓取、检索与自动化",
+   "category": "2."
+  },
+  {
+   "id": "documents",
+   "name": "文件、Office、PDF 与文档",
+   "description": "文件处理、格式转换、PDF 与文档出版",
+   "category": "3."
+  },
+  {
+   "id": "developer-tools",
+   "name": "编程、代码库与开发者工作流",
+   "description": "代码仓库、文档检索、质量检查与开发辅助",
+   "category": "4."
+  },
+  {
+   "id": "data-analytics",
+   "name": "数据库、数据分析与可视化",
+   "description": "数据库查询、数据分析、BI 与图表可视化",
+   "category": "5."
+  },
+  {
+   "id": "devops-cloud",
+   "name": "云平台、DevOps 与监控",
+   "description": "云平台、基础设施、容器、监控与告警",
+   "category": "6."
+  },
+  {
+   "id": "communication-collab",
+   "name": "邮件、通信与团队协作",
+   "description": "邮件、即时通信、日历、任务与团队协作",
+   "category": "7."
+  },
+  {
+   "id": "finance",
+   "name": "财务、会计与区块链",
+   "description": "会计记账、预算、量化交易与链上数据",
+   "category": "8."
+  },
+  {
+   "id": "ecommerce-marketing",
+   "name": "电商、营销与社交媒体",
+   "description": "电商平台、广告投放、SEO 与社交平台数据",
+   "category": "9."
+  },
+  {
+   "id": "china-platforms",
+   "name": "中国本土平台适配",
+   "description": "飞书、钉钉、企微、语雀等中国本土平台接入",
+   "category": "9A."
+  },
+  {
+   "id": "creative-media",
+   "name": "设计、图片、视频与音频",
+   "description": "UI 设计、3D、音视频编辑与内容生成",
+   "category": "10."
+  },
+  {
+   "id": "geo-cad",
+   "name": "CAD、BIM 与地理空间",
+   "description": "CAD/BIM 建模、GIS、地图与遥感数据",
+   "category": "11."
+  },
+  {
+   "id": "healthcare-bio",
+   "name": "医疗健康与生物信息",
+   "description": "医疗标准、医学影像、生物医学与实验室科研",
+   "category": "12."
+  },
+  {
+   "id": "industrial-iot",
+   "name": "工业制造、IoT 与机器人",
+   "description": "PLC、工业协议、智能家居与机器人控制",
+   "category": "13."
+  },
+  {
+   "id": "automotive-games",
+   "name": "汽车诊断与游戏开发",
+   "description": "车辆总线诊断与游戏引擎开发辅助",
+   "category": "14."
+  },
+  {
+   "id": "gov-legal-security",
+   "name": "政务、法律与安全",
+   "description": "公共数据、法律法规与网络安全测试",
+   "category": "15."
+  },
+  {
+   "id": "travel-vertical",
+   "name": "物流、旅游、招聘等垂直应用",
+   "description": "航空、旅行、招聘、图书等垂直场景数据",
+   "category": "16."
+  }
+ ],
+ "nodes": [
+  {
+   "id": "abordage/awesome-mcp",
+   "name": "Awesome MCP（自动更新的 MCP 目录）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "Curated list of Model Context Protocol (MCP) servers, clients, and frameworks. Automatically updated daily.",
+   "stars": 29,
+   "lang": "",
+   "pushedAt": "2026-11-04T04:49:29Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/abordage-awesome-mcp/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "id": "mcpHQ/awesome-mcp-servers",
+   "name": "Awesome MCP Servers（MCP 服务器总目录）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "A curated catalog of Model Context Protocol (MCP) servers for discovering and integrating AI tools, data sources, and services. Explore MCP servers across databases, developer tools, web automation, cloud infrastructure, productivity, AI ag",
+   "stars": 189,
+   "lang": "JavaScript",
+   "pushedAt": "2026-11-02T21:34:25Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/mcpHQ-awesome-mcp-servers/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 0
+   }
+  },
+  {
+   "id": "anthropics/skills",
+   "name": "Anthropic Agent Skills（官方示例 Skills，含文档、设计、开发流程）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "Public repository for Agent Skills",
+   "stars": 187185,
+   "lang": "Python",
+   "pushedAt": "2026-10-28T19:20:39Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/anthropics-skills/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 0
+   }
+  },
+  {
+   "id": "chopinfeng/awesome-hardware-skills",
+   "name": "Awesome Hardware Skills（硬件、工业、嵌入式 Agent 工具目录）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "Agent Skills, MCP servers, simulators and benchmarks for AI agents that build, flash and control hardware — with a verification ladder (L0 static / L1 simulator / L2 real-hardware attestation)",
+   "stars": 3,
+   "lang": "Python",
+   "pushedAt": "2026-09-21T13:29:57Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/chopinfeng-awesome-hardware-skills/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 0
+   }
+  },
+  {
+   "id": "Daviidro/awesome-aec-mcp",
+   "name": "Awesome AEC MCP（建筑、工程、施工、BIM、CAD 目录）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "Curated list of MCP servers for Architecture, Engineering, Construction, GIS and 3D workflows. 16 entries · Community-driven · MIT",
+   "stars": 0,
+   "lang": "",
+   "pushedAt": "2026-08-09T15:56:00Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/Daviidro-awesome-aec-mcp/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 120
+   }
+  },
+  {
+   "id": "sparkgeo/geo-mcp-servers",
+   "name": "Geospatial MCP Servers（GIS、地图、遥感工具目录）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "A curated, tracked list of Model Context Protocol (MCP) servers for geospatial, GIS, mapping, and earth-observation work — geocoding, routing, PostGIS, STAC/imagery, QGIS/ArcGIS, weather, and the commercial location platforms.",
+   "stars": 247,
+   "lang": "Python",
+   "pushedAt": "2026-11-03T16:01:50Z",
+   "status": "active",
+   "eval": {
+    "score": 63,
+    "grade": "C",
+    "level": "L1",
+    "status": "preliminary",
+    "reportId": "sparkgeo-geo-mcp-servers-f5f69b9dd9fe"
+   },
+   "detailUrl": "/AI-Shovel-Collection/tools/sparkgeo-geo-mcp-servers/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 120
+   }
+  },
+  {
+   "id": "sharozdawa/awesome-seo-mcp-servers",
+   "name": "Awesome SEO MCP Servers（SEO、营销 Skills 与 MCP 目录）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "A curated list of MCP servers, agent skills, and AI-powered tools for SEO professionals",
+   "stars": 5,
+   "lang": "",
+   "pushedAt": "2026-03-21T18:44:46Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/sharozdawa-awesome-seo-mcp-servers/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 120
+   }
+  },
+  {
+   "id": "modelcontextprotocol/servers",
+   "name": "MCP Reference Servers（MCP 协议参考实现）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "Model Context Protocol Servers",
+   "stars": 91774,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-29T05:27:40Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/modelcontextprotocol-servers/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 120
+   }
+  },
+  {
+   "id": "PrefectHQ/fastmcp",
+   "name": "FastMCP（构建 MCP Server/Client 的 Python 框架）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "🚀 The fast, Pythonic way to build MCP servers and clients.",
+   "stars": 28294,
+   "lang": "Python",
+   "pushedAt": "2026-11-04T06:25:42Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/PrefectHQ-fastmcp/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 240
+   }
+  },
+  {
+   "id": "automation-ai-labs/mcp-link",
+   "name": "OpenAPI to MCP（把 OpenAPI API 暴露为 MCP 工具）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "Convert Any OpenAPI V3 API to MCP Server",
+   "stars": 624,
+   "lang": "Go",
+   "pushedAt": "2025-04-03T15:48:57Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/automation-ai-labs-mcp-link/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 240
+   }
+  },
+  {
+   "id": "tadata-org/fastapi_mcp",
+   "name": "FastAPI MCP（把 FastAPI 接口暴露给 MCP）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "Expose your FastAPI endpoints as Model Context Protocol (MCP) tools, with Auth!",
+   "stars": 12026,
+   "lang": "Python",
+   "pushedAt": "2025-11-24T14:51:54Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/tadata-org-fastapi_mcp/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 240
+   }
+  },
+  {
+   "id": "WordPress/mcp-adapter",
+   "name": "WordPress MCP Adapter（把 WordPress Abilities 暴露为 MCP）",
+   "category": "目录、Skills 与通用 AI 工具适配",
+   "capability": "directories-adapters",
+   "desc": "An MCP adapter that bridges the Abilities API to the Model Context Protocol, enabling MCP clients to discover and invoke WordPress plugin, theme, and core abilities programmatically.",
+   "stars": 1903,
+   "lang": "PHP",
+   "pushedAt": "2026-11-04T00:03:15Z",
+   "status": "active",
+   "eval": {
+    "score": 66,
+    "grade": "C",
+    "level": "L1",
+    "status": "preliminary",
+    "reportId": "WordPress-mcp-adapter-7358e571a6f7"
+   },
+   "detailUrl": "/AI-Shovel-Collection/tools/WordPress-mcp-adapter/",
+   "capabilities": [
+    "directories-adapters"
+   ],
+   "mapGroup": "directories-adapters",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 240
+   }
+  },
+  {
+   "id": "microsoft/playwright-mcp",
+   "name": "Playwright MCP（浏览器控制与网页自动化）",
+   "category": "浏览器、网页检索、抓取与自动化",
+   "capability": "browser-automation",
+   "desc": "Playwright MCP server",
+   "stars": 39149,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T17:08:26Z",
+   "status": "active",
+   "eval": {
+    "score": 66,
+    "grade": "C",
+    "level": "L1",
+    "status": "preliminary",
+    "reportId": "microsoft-playwright-mcp-8e46a9a81019"
+   },
+   "detailUrl": "/AI-Shovel-Collection/tools/microsoft-playwright-mcp/",
+   "capabilities": [
+    "browser-automation"
+   ],
+   "mapGroup": "browser-automation",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 0
+   }
+  },
+  {
+   "id": "BrowserMCP/mcp",
+   "name": "BrowserMCP（浏览器控制）",
+   "category": "浏览器、网页检索、抓取与自动化",
+   "capability": "browser-automation",
+   "desc": "Browser MCP is a Model Context Provider (MCP) server that allows AI applications to control your browser",
+   "stars": 7284,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T01:57:01Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/BrowserMCP-mcp/",
+   "capabilities": [
+    "browser-automation"
+   ],
+   "mapGroup": "browser-automation",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 0
+   }
+  },
+  {
+   "id": "firecrawl/firecrawl-mcp-server",
+   "name": "Firecrawl MCP Server（网页抓取与搜索，输出适合 LLM 的内容）",
+   "category": "浏览器、网页检索、抓取与自动化",
+   "capability": "browser-automation",
+   "desc": "Official Firecrawl MCP server, the context API for AI agents: search, scrape, and interact with the web, plus parse, crawl, map, Agent and Monitor, from any MCP client.",
+   "stars": 7762,
+   "lang": "JavaScript",
+   "pushedAt": "2026-11-04T03:26:12Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/firecrawl-firecrawl-mcp-server/",
+   "capabilities": [
+    "browser-automation"
+   ],
+   "mapGroup": "browser-automation",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 0
+   }
+  },
+  {
+   "id": "apify/apify-mcp-server",
+   "name": "Apify MCP Server（网页抓取与数据提取）",
+   "category": "浏览器、网页检索、抓取与自动化",
+   "capability": "browser-automation",
+   "desc": "The Apify MCP server enables your AI agents to extract data from social media, search engines, maps, e-commerce sites, or any other website using thousands of ready-made scrapers, crawlers, and automation tools available on the Apify Store.",
+   "stars": 14632,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-04T01:30:32Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/apify-apify-mcp-server/",
+   "capabilities": [
+    "browser-automation"
+   ],
+   "mapGroup": "browser-automation",
+   "summary": "",
+   "position": {
+    "x": 1540,
+    "y": 0
+   }
+  },
+  {
+   "id": "brightdata/brightdata-mcp",
+   "name": "Bright Data MCP（网页数据访问与抓取）",
+   "category": "浏览器、网页检索、抓取与自动化",
+   "capability": "browser-automation",
+   "desc": "A powerful Model Context Protocol (MCP) server that provides an all-in-one solution for public web access.",
+   "stars": 2709,
+   "lang": "JavaScript",
+   "pushedAt": "2026-11-02T12:21:35Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/brightdata-brightdata-mcp/",
+   "capabilities": [
+    "browser-automation"
+   ],
+   "mapGroup": "browser-automation",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 120
+   }
+  },
+  {
+   "id": "ScrapeGraphAI/Scrapegraph-ai",
+   "name": "ScrapeGraphAI（AI 驱动的网页数据抓取）",
+   "category": "浏览器、网页检索、抓取与自动化",
+   "capability": "browser-automation",
+   "desc": "Python scraper based on AI",
+   "stars": 32473,
+   "lang": "Python",
+   "pushedAt": "2026-10-06T08:27:54Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/ScrapeGraphAI-Scrapegraph-ai/",
+   "capabilities": [
+    "browser-automation"
+   ],
+   "mapGroup": "browser-automation",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 120
+   }
+  },
+  {
+   "id": "jae-jae/fetcher-mcp",
+   "name": "Fetcher MCP（使用 Playwright 获取网页内容）",
+   "category": "浏览器、网页检索、抓取与自动化",
+   "capability": "browser-automation",
+   "desc": "MCP server for fetch web page content using Playwright headless browser.",
+   "stars": 1088,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-04T02:43:04Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/jae-jae-fetcher-mcp/",
+   "capabilities": [
+    "browser-automation"
+   ],
+   "mapGroup": "browser-automation",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 120
+   }
+  },
+  {
+   "id": "just-every/mcp-read-website-fast",
+   "name": "MCP Read Website Fast（网页转 Markdown）",
+   "category": "浏览器、网页检索、抓取与自动化",
+   "capability": "browser-automation",
+   "desc": "Quickly reads webpages and converts to markdown for fast, token efficient web scraping",
+   "stars": 163,
+   "lang": "TypeScript",
+   "pushedAt": "2026-09-29T21:11:24Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/just-every-mcp-read-website-fast/",
+   "capabilities": [
+    "browser-automation"
+   ],
+   "mapGroup": "browser-automation",
+   "summary": "",
+   "position": {
+    "x": 1540,
+    "y": 120
+   }
+  },
+  {
+   "id": "pskill9/website-downloader",
+   "name": "Website Downloader（下载网站内容）",
+   "category": "浏览器、网页检索、抓取与自动化",
+   "capability": "browser-automation",
+   "desc": "MCP server to download entire websites",
+   "stars": 157,
+   "lang": "JavaScript",
+   "pushedAt": "2024-12-24T20:29:17Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/pskill9-website-downloader/",
+   "capabilities": [
+    "browser-automation"
+   ],
+   "mapGroup": "browser-automation",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 240
+   }
+  },
+  {
+   "id": "vostride/agent-qa",
+   "name": "agent-qa（自然语言网页/移动端 QA；持久记忆与证据门控自我改进；可控制浏览器/设备；FSL-1.1-ALv2，模型与可选设备费用另计）",
+   "category": "浏览器、网页检索、抓取与自动化",
+   "capability": "browser-automation",
+   "desc": "Open-source self-improving QA agent for software teams. A test harness with memory. Write tests in natural language for web and mobile. agent-qa learns from every run, adapts to UI changes, and catches regressions before you ship.",
+   "stars": 923,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T07:54:59Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/vostride-agent-qa/",
+   "capabilities": [
+    "browser-automation"
+   ],
+   "mapGroup": "browser-automation",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 240
+   }
+  },
+  {
+   "id": "zcaceres/markdownify-mcp",
+   "name": "Markdownify MCP（把多种内容转成 Markdown）",
+   "category": "文件、Office、PDF、文档与出版",
+   "capability": "documents",
+   "desc": "A Model Context Protocol server for converting almost anything to Markdown",
+   "stars": 2999,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-26T05:51:27Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/zcaceres-markdownify-mcp/",
+   "capabilities": [
+    "documents"
+   ],
+   "mapGroup": "documents",
+   "summary": "",
+   "position": {
+    "x": 1880,
+    "y": 0
+   }
+  },
+  {
+   "id": "vivekVells/mcp-pandoc",
+   "name": "Pandoc MCP（文档格式转换）",
+   "category": "文件、Office、PDF、文档与出版",
+   "capability": "documents",
+   "desc": "MCP server for document format conversion using pandoc.",
+   "stars": 585,
+   "lang": "Python",
+   "pushedAt": "2026-08-15T21:24:55Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/vivekVells-mcp-pandoc/",
+   "capabilities": [
+    "documents"
+   ],
+   "mapGroup": "documents",
+   "summary": "",
+   "position": {
+    "x": 2080,
+    "y": 0
+   }
+  },
+  {
+   "id": "Unstructured-IO/UNS-MCP",
+   "name": "Unstructured MCP（文档解析与结构化）",
+   "category": "文件、Office、PDF、文档与出版",
+   "capability": "documents",
+   "desc": "",
+   "stars": 43,
+   "lang": "Jupyter Notebook",
+   "pushedAt": "2026-10-20T23:59:56Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/Unstructured-IO-UNS-MCP/",
+   "capabilities": [
+    "documents"
+   ],
+   "mapGroup": "documents",
+   "summary": "",
+   "position": {
+    "x": 2280,
+    "y": 0
+   }
+  },
+  {
+   "id": "danielkennedy1/pdf-tools-mcp",
+   "name": "PDF Tools MCP（PDF 合并、提取与处理）",
+   "category": "文件、Office、PDF、文档与出版",
+   "capability": "documents",
+   "desc": "",
+   "stars": 32,
+   "lang": "Python",
+   "pushedAt": "2025-05-17T13:05:26Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/danielkennedy1-pdf-tools-mcp/",
+   "capabilities": [
+    "documents"
+   ],
+   "mapGroup": "documents",
+   "summary": "",
+   "position": {
+    "x": 2480,
+    "y": 0
+   }
+  },
+  {
+   "id": "gpetraroli/mcp_pdf_reader",
+   "name": "PDF Reader MCP（PDF 文本提取和搜索）",
+   "category": "文件、Office、PDF、文档与出版",
+   "capability": "documents",
+   "desc": "An MCP server to extraxt/search text from pdf",
+   "stars": 32,
+   "lang": "JavaScript",
+   "pushedAt": "2025-07-18T08:15:14Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/gpetraroli-mcp_pdf_reader/",
+   "capabilities": [
+    "documents"
+   ],
+   "mapGroup": "documents",
+   "summary": "",
+   "position": {
+    "x": 1880,
+    "y": 120
+   }
+  },
+  {
+   "id": "baruchiro/paperless-mcp",
+   "name": "Paperless-ngx MCP（文档归档系统接口）",
+   "category": "文件、Office、PDF、文档与出版",
+   "capability": "documents",
+   "desc": "An MCP (Model Context Protocol) server for interacting with a Paperless-NGX API server. This server provides tools for managing documents, tags, correspondents, and document types in your Paperless-NGX instance.",
+   "stars": 150,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T19:33:47Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/baruchiro-paperless-mcp/",
+   "capabilities": [
+    "documents"
+   ],
+   "mapGroup": "documents",
+   "summary": "",
+   "position": {
+    "x": 2080,
+    "y": 120
+   }
+  },
+  {
+   "id": "johannesbrandenburger/typst-mcp",
+   "name": "Typst MCP（Typst 排版与技术文档）",
+   "category": "文件、Office、PDF、文档与出版",
+   "capability": "documents",
+   "desc": "Typst MCP Server is an MCP (Model Context Protocol) implementation that helps AI models interact with Typst, a markup-based typesetting system. The server provides tools for converting between LaTeX and Typst, validating Typst syntax, and g",
+   "stars": 186,
+   "lang": "Python",
+   "pushedAt": "2026-04-18T06:50:34Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/johannesbrandenburger-typst-mcp/",
+   "capabilities": [
+    "documents"
+   ],
+   "mapGroup": "documents",
+   "summary": "",
+   "position": {
+    "x": 2280,
+    "y": 120
+   }
+  },
+  {
+   "id": "github/github-mcp-server",
+   "name": "GitHub MCP Server（GitHub 官方 MCP）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "GitHub's official MCP Server",
+   "stars": 34208,
+   "lang": "Go",
+   "pushedAt": "2026-11-03T20:41:19Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/github-github-mcp-server/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 0
+   }
+  },
+  {
+   "id": "idosal/git-mcp",
+   "name": "Git MCP（通过 MCP 访问 GitHub 仓库内容）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "Put an end to code hallucinations! GitMCP is a free, open-source, remote MCP server for any GitHub project",
+   "stars": 8505,
+   "lang": "TypeScript",
+   "pushedAt": "2026-05-08T14:21:24Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/idosal-git-mcp/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 3020,
+    "y": 0
+   }
+  },
+  {
+   "id": "adhikasp/mcp-git-ingest",
+   "name": "GitHub MCP Ingest（读取并整理 GitHub 仓库内容）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "A Model Context Protocol (MCP) server that helps read GitHub repository structure and important files.",
+   "stars": 315,
+   "lang": "Python",
+   "pushedAt": "2025-01-26T10:32:13Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/adhikasp-mcp-git-ingest/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 3220,
+    "y": 0
+   }
+  },
+  {
+   "id": "upstash/context7",
+   "name": "Context7（为模型提供较新的开发文档）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "Context7 Platform -- Up-to-date docs for AI agents",
+   "stars": 64159,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T14:59:45Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/upstash-context7/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 3420,
+    "y": 0
+   }
+  },
+  {
+   "id": "MicrosoftDocs/mcp",
+   "name": "Microsoft Learn MCP（Microsoft 技术文档检索）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "Official Microsoft Learn MCP Server and CLI tool – powering LLMs and AI agents with real-time, trusted Microsoft docs & code samples.",
+   "stars": 1971,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-30T04:04:15Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/MicrosoftDocs-mcp/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 120
+   }
+  },
+  {
+   "id": "kimsungwhee/apple-docs-mcp",
+   "name": "Apple Developer Docs MCP（Apple 开发者文档）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "MCP server for Apple Developer Documentation - Search iOS/macOS/SwiftUI/UIKit docs, WWDC videos, Swift/Objective-C APIs & code examples in Claude, Cursor & AI assistants",
+   "stars": 1382,
+   "lang": "TypeScript",
+   "pushedAt": "2026-03-17T02:39:50Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/kimsungwhee-apple-docs-mcp/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 3020,
+    "y": 120
+   }
+  },
+  {
+   "id": "bgauryy/octocode",
+   "name": "Octocode（代码语义搜索与上下文生成）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "Code research platform for AI agents; find, understand, and prove context across your code and all of GitHub, in a fraction of the tokens. One toolset, MCP or CLI  ",
+   "stars": 956,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T19:21:25Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/bgauryy-octocode/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 3220,
+    "y": 120
+   }
+  },
+  {
+   "id": "SonarSource/sonarqube-mcp-server",
+   "name": "SonarQube MCP Server（代码质量与安全检查）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "Official SonarQube MCP Server for code quality and security in AI agents",
+   "stars": 678,
+   "lang": "Java",
+   "pushedAt": "2026-11-04T03:07:50Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/SonarSource-sonarqube-mcp-server/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 3420,
+    "y": 120
+   }
+  },
+  {
+   "id": "datalayer/jupyter-mcp-server",
+   "name": "Jupyter MCP Server（Notebook 操作）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "🪐 🔧 Model Context Protocol (MCP) Server for Jupyter.",
+   "stars": 1319,
+   "lang": "Python",
+   "pushedAt": "2026-11-01T16:05:36Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/datalayer-jupyter-mcp-server/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 240
+   }
+  },
+  {
+   "id": "antvis/mcp-server-chart",
+   "name": "MCP Server Chart（AI 调用图表可视化工具）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "🤖 A visualization mcp & skills contains 25+ visual charts using @antvis. Using for chart generation and data analysis.",
+   "stars": 4412,
+   "lang": "TypeScript",
+   "pushedAt": "2026-08-27T01:50:14Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/antvis-mcp-server-chart/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 3020,
+    "y": 240
+   }
+  },
+  {
+   "id": "hustcc/mcp-mermaid",
+   "name": "MCP Mermaid（生成 Mermaid 图表）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "❤️ Generate mermaid diagram and chart with AI MCP dynamically.",
+   "stars": 647,
+   "lang": "TypeScript",
+   "pushedAt": "2026-05-15T12:16:57Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/hustcc-mcp-mermaid/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 3220,
+    "y": 240
+   }
+  },
+  {
+   "id": "axliupore/mcp-code-runner",
+   "name": "Code Runner MCP（在 Docker 容器中运行代码）",
+   "category": "编程、代码库、Git 与开发者工作流",
+   "capability": "developer-tools",
+   "desc": "",
+   "stars": 18,
+   "lang": "TypeScript",
+   "pushedAt": "2025-04-11T04:05:59Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/axliupore-mcp-code-runner/",
+   "capabilities": [
+    "developer-tools"
+   ],
+   "mapGroup": "developer-tools",
+   "summary": "",
+   "position": {
+    "x": 3420,
+    "y": 240
+   }
+  },
+  {
+   "id": "ClickHouse/mcp-clickhouse",
+   "name": "ClickHouse MCP（ClickHouse 数据查询）",
+   "category": "数据库、数据分析、BI 与可视化",
+   "capability": "data-analytics",
+   "desc": "Connect ClickHouse to your AI assistants.",
+   "stars": 901,
+   "lang": "Python",
+   "pushedAt": "2026-11-01T22:13:17Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/ClickHouse-mcp-clickhouse/",
+   "capabilities": [
+    "data-analytics"
+   ],
+   "mapGroup": "data-analytics",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 660
+   }
+  },
+  {
+   "id": "motherduckdb/mcp-server-motherduck",
+   "name": "MotherDuck / DuckDB MCP（本地与云端 DuckDB 数据访问）",
+   "category": "数据库、数据分析、BI 与可视化",
+   "capability": "data-analytics",
+   "desc": "Local MCP server for DuckDB and MotherDuck",
+   "stars": 539,
+   "lang": "Python",
+   "pushedAt": "2026-10-30T23:56:17Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/motherduckdb-mcp-server-motherduck/",
+   "capabilities": [
+    "data-analytics"
+   ],
+   "mapGroup": "data-analytics",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 660
+   }
+  },
+  {
+   "id": "ktanaka101/mcp-server-duckdb",
+   "name": "DuckDB MCP Server（DuckDB 查询工具）",
+   "category": "数据库、数据分析、BI 与可视化",
+   "capability": "data-analytics",
+   "desc": "A Model Context Protocol (MCP) server implementation for DuckDB, providing database interaction capabilities",
+   "stars": 179,
+   "lang": "Python",
+   "pushedAt": "2025-05-05T11:02:57Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/ktanaka101-mcp-server-duckdb/",
+   "capabilities": [
+    "data-analytics"
+   ],
+   "mapGroup": "data-analytics",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 660
+   }
+  },
+  {
+   "id": "ergut/mcp-bigquery-server",
+   "name": "BigQuery MCP Server（Google BigQuery 数据访问）",
+   "category": "数据库、数据分析、BI 与可视化",
+   "capability": "data-analytics",
+   "desc": "A Model Context Protocol (MCP) server that provides secure, read-only access to BigQuery datasets. Enables Large Language Models (LLMs) to safely query and analyze data through a standardized interface.",
+   "stars": 148,
+   "lang": "TypeScript",
+   "pushedAt": "2026-05-22T09:39:51Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/ergut-mcp-bigquery-server/",
+   "capabilities": [
+    "data-analytics"
+   ],
+   "mapGroup": "data-analytics",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 660
+   }
+  },
+  {
+   "id": "Snowflake-Labs/mcp",
+   "name": "Snowflake MCP（Snowflake 数据与 Cortex 能力）",
+   "category": "数据库、数据分析、BI 与可视化",
+   "capability": "data-analytics",
+   "desc": "MCP Server for Snowflake including Cortex AI, object management, SQL orchestration, semantic view consumption, and more",
+   "stars": 303,
+   "lang": "Python",
+   "pushedAt": "2026-05-15T16:30:51Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/Snowflake-Labs-mcp/",
+   "capabilities": [
+    "data-analytics"
+   ],
+   "mapGroup": "data-analytics",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 780
+   }
+  },
+  {
+   "id": "yangkyeongmo/mcp-server-openmetadata",
+   "name": "OpenMetadata MCP（数据目录与元数据管理）",
+   "category": "数据库、数据分析、BI 与可视化",
+   "capability": "data-analytics",
+   "desc": "",
+   "stars": 24,
+   "lang": "Python",
+   "pushedAt": "2025-08-26T04:30:53Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/yangkyeongmo-mcp-server-openmetadata/",
+   "capabilities": [
+    "data-analytics"
+   ],
+   "mapGroup": "data-analytics",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 780
+   }
+  },
+  {
+   "id": "palewire/datawrapper-mcp",
+   "name": "Datawrapper MCP（生成数据图表）",
+   "category": "数据库、数据分析、BI 与可视化",
+   "capability": "data-analytics",
+   "desc": "A Model Context Protocol (MCP) server and app for creating Datawrapper charts using AI assistants.",
+   "stars": 61,
+   "lang": "Python",
+   "pushedAt": "2026-11-01T02:54:49Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/palewire-datawrapper-mcp/",
+   "capabilities": [
+    "data-analytics"
+   ],
+   "mapGroup": "data-analytics",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 780
+   }
+  },
+  {
+   "id": "hustcc/mcp-echarts",
+   "name": "ECharts MCP（ECharts 图表生成）",
+   "category": "数据库、数据分析、BI 与可视化",
+   "capability": "data-analytics",
+   "desc": "🧬 Generate visual charts using ECharts with AI MCP dynamically, used for chart generation and data analysis.",
+   "stars": 268,
+   "lang": "TypeScript",
+   "pushedAt": "2026-08-27T01:50:43Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/hustcc-mcp-echarts/",
+   "capabilities": [
+    "data-analytics"
+   ],
+   "mapGroup": "data-analytics",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 780
+   }
+  },
+  {
+   "id": "isaacwasserman/mcp-vegalite-server",
+   "name": "Vega-Lite MCP（Vega-Lite 数据可视化）",
+   "category": "数据库、数据分析、BI 与可视化",
+   "capability": "data-analytics",
+   "desc": "",
+   "stars": 100,
+   "lang": "Python",
+   "pushedAt": "2025-05-16T19:44:35Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/isaacwasserman-mcp-vegalite-server/",
+   "capabilities": [
+    "data-analytics"
+   ],
+   "mapGroup": "data-analytics",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 900
+   }
+  },
+  {
+   "id": "yangkyeongmo/mcp-server-apache-airflow",
+   "name": "Apache Airflow MCP（工作流编排与调度）",
+   "category": "数据库、数据分析、BI 与可视化",
+   "capability": "data-analytics",
+   "desc": "",
+   "stars": 182,
+   "lang": "Python",
+   "pushedAt": "2026-03-03T13:24:59Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/yangkyeongmo-mcp-server-apache-airflow/",
+   "capabilities": [
+    "data-analytics"
+   ],
+   "mapGroup": "data-analytics",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 900
+   }
+  },
+  {
+   "id": "awslabs/mcp",
+   "name": "AWS MCP（AWS 官方开源 MCP 服务器集合）",
+   "category": "云平台、DevOps、监控与基础设施",
+   "capability": "devops-cloud",
+   "desc": "Open source MCP Servers for AWS",
+   "stars": 9874,
+   "lang": "Python",
+   "pushedAt": "2026-11-03T22:19:45Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/awslabs-mcp/",
+   "capabilities": [
+    "devops-cloud"
+   ],
+   "mapGroup": "devops-cloud",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 660
+   }
+  },
+  {
+   "id": "hashicorp/terraform-mcp-server",
+   "name": "Terraform MCP Server（Terraform / IaC 工作流）",
+   "category": "云平台、DevOps、监控与基础设施",
+   "capability": "devops-cloud",
+   "desc": "The Terraform MCP Server provides seamless integration with Terraform ecosystem, enabling advanced automation and interaction capabilities for Infrastructure as Code (IaC) development.",
+   "stars": 1556,
+   "lang": "Go",
+   "pushedAt": "2026-11-03T17:15:06Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/hashicorp-terraform-mcp-server/",
+   "capabilities": [
+    "devops-cloud"
+   ],
+   "mapGroup": "devops-cloud",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 660
+   }
+  },
+  {
+   "id": "portainer/portainer-mcp",
+   "name": "Portainer MCP（容器管理）",
+   "category": "云平台、DevOps、监控与基础设施",
+   "capability": "devops-cloud",
+   "desc": "Official Portainer MCP server",
+   "stars": 241,
+   "lang": "Python",
+   "pushedAt": "2026-10-23T01:00:05Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/portainer-portainer-mcp/",
+   "capabilities": [
+    "devops-cloud"
+   ],
+   "mapGroup": "devops-cloud",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 660
+   }
+  },
+  {
+   "id": "reza-gholizade/k8s-mcp-server",
+   "name": "Kubernetes MCP Server（Kubernetes 集群管理）",
+   "category": "云平台、DevOps、监控与基础设施",
+   "capability": "devops-cloud",
+   "desc": "Manage Your Kubernetes Cluster with k8s mcp-server",
+   "stars": 188,
+   "lang": "Go",
+   "pushedAt": "2026-11-02T14:24:56Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/reza-gholizade-k8s-mcp-server/",
+   "capabilities": [
+    "devops-cloud"
+   ],
+   "mapGroup": "devops-cloud",
+   "summary": "",
+   "position": {
+    "x": 1540,
+    "y": 660
+   }
+  },
+  {
+   "id": "docker/hub-mcp",
+   "name": "Docker Hub MCP（Docker Hub 操作）",
+   "category": "云平台、DevOps、监控与基础设施",
+   "capability": "devops-cloud",
+   "desc": "Docker Hub MCP Server",
+   "stars": 171,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-14T08:07:20Z",
+   "status": "active",
+   "eval": {
+    "score": 78,
+    "grade": "B",
+    "level": "L1",
+    "status": "preliminary",
+    "reportId": "docker-hub-mcp-a8ca1576aabe"
+   },
+   "detailUrl": "/AI-Shovel-Collection/tools/docker-hub-mcp/",
+   "capabilities": [
+    "devops-cloud"
+   ],
+   "mapGroup": "devops-cloud",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 780
+   }
+  },
+  {
+   "id": "grafana/mcp-grafana",
+   "name": "Grafana MCP（监控面板、数据与告警）",
+   "category": "云平台、DevOps、监控与基础设施",
+   "capability": "devops-cloud",
+   "desc": "MCP server for Grafana",
+   "stars": 3636,
+   "lang": "Go",
+   "pushedAt": "2026-11-03T23:30:34Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/grafana-mcp-grafana/",
+   "capabilities": [
+    "devops-cloud"
+   ],
+   "mapGroup": "devops-cloud",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 780
+   }
+  },
+  {
+   "id": "getsentry/toolkit",
+   "name": "Sentry Agentic Toolkit（错误与应用监控数据）",
+   "category": "云平台、DevOps、监控与基础设施",
+   "capability": "devops-cloud",
+   "desc": "Agentic tooling for Sentry",
+   "stars": 953,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-04T04:31:12Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/getsentry-toolkit/",
+   "capabilities": [
+    "devops-cloud"
+   ],
+   "mapGroup": "devops-cloud",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 780
+   }
+  },
+  {
+   "id": "mpeirone/zabbix-mcp-server",
+   "name": "Zabbix MCP Server（监控告警和运维）",
+   "category": "云平台、DevOps、监控与基础设施",
+   "capability": "devops-cloud",
+   "desc": "🔌 Complete MCP server for Zabbix integration — Connect AI assistants to Zabbix monitoring with a single unified tool covering 100% of Zabbix APIs. Includes read-only mode and documentation tools for seamless exploration of hosts, items, tri",
+   "stars": 260,
+   "lang": "Python",
+   "pushedAt": "2026-05-10T12:29:29Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/mpeirone-zabbix-mcp-server/",
+   "capabilities": [
+    "devops-cloud"
+   ],
+   "mapGroup": "devops-cloud",
+   "summary": "",
+   "position": {
+    "x": 1540,
+    "y": 780
+   }
+  },
+  {
+   "id": "VictoriaMetrics/mcp-victoriametrics",
+   "name": "VictoriaMetrics MCP（时序监控数据）",
+   "category": "云平台、DevOps、监控与基础设施",
+   "capability": "devops-cloud",
+   "desc": "The implementation of Model Context Protocol (MCP) server for VictoriaMetrics",
+   "stars": 242,
+   "lang": "Go",
+   "pushedAt": "2026-11-02T13:20:54Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/VictoriaMetrics-mcp-victoriametrics/",
+   "capabilities": [
+    "devops-cloud"
+   ],
+   "mapGroup": "devops-cloud",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 900
+   }
+  },
+  {
+   "id": "1Panel-dev/mcp-1panel",
+   "name": "1Panel MCP（服务器面板管理）",
+   "category": "云平台、DevOps、监控与基础设施",
+   "capability": "devops-cloud",
+   "desc": "mcp-1panel is an implementation of the Model Context Protocol (MCP) server for 1Panel.",
+   "stars": 171,
+   "lang": "Go",
+   "pushedAt": "2026-11-02T09:54:59Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/1Panel-dev-mcp-1panel/",
+   "capabilities": [
+    "devops-cloud"
+   ],
+   "mapGroup": "devops-cloud",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 900
+   }
+  },
+  {
+   "id": "elie222/inbox-zero",
+   "name": "Inbox Zero（AI 邮件管理助手）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "The world's best AI personal assistant for email. Open source app to help you reach inbox zero fast.",
+   "stars": 12906,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-04T00:48:17Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/elie222-inbox-zero/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 1880,
+    "y": 660
+   }
+  },
+  {
+   "id": "MadLlama25/fastmail-mcp",
+   "name": "Fastmail MCP（Fastmail 邮件 API）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "Unofficial MCP server for the Fastmail JMAP API — email, contacts, and calendar tools for AI assistants. Not affiliated with Fastmail. Includes a DXT for Claude Desktop.",
+   "stars": 131,
+   "lang": "TypeScript",
+   "pushedAt": "2026-09-12T14:22:54Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/MadLlama25-fastmail-mcp/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 2080,
+    "y": 660
+   }
+  },
+  {
+   "id": "Shy2593666979/mcp-server-email",
+   "name": "Email MCP（带附件邮件操作，支持多个邮箱类型）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "一个基于 MCP (Model Context Protocol) 的邮件服务，支持 LLM 发送带附件的电子邮件及在指定目录中搜索文件。提供安全的 SMTP 传输、多收件人支持和附件模式匹配搜索功能，适用于 Gmail、Outlook、Yahoo、QQ 邮箱和网易 126 邮箱等主流邮箱服务。",
+   "stars": 81,
+   "lang": "Python",
+   "pushedAt": "2025-04-27T14:25:02Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/Shy2593666979-mcp-server-email/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 2280,
+    "y": 660
+   }
+  },
+  {
+   "id": "lharries/whatsapp-mcp",
+   "name": "WhatsApp MCP（WhatsApp 消息访问）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "WhatsApp MCP server",
+   "stars": 6802,
+   "lang": "Go",
+   "pushedAt": "2025-07-13T17:22:00Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/lharries-whatsapp-mcp/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 2480,
+    "y": 660
+   }
+  },
+  {
+   "id": "chigwell/telegram-mcp",
+   "name": "Telegram MCP（Telegram 消息与会话操作）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "Telegram MCP server powered by Telethon to let MCP clients read chats, manage groups, and send/modify messages, media, contacts, and settings.",
+   "stars": 1982,
+   "lang": "Python",
+   "pushedAt": "2026-10-31T09:30:55Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/chigwell-telegram-mcp/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 1880,
+    "y": 780
+   }
+  },
+  {
+   "id": "line/line-bot-mcp-server",
+   "name": "LINE Bot MCP（LINE Messaging API）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "MCP server that integrates the LINE Messaging API to connect an AI Agent to the LINE Official Account.",
+   "stars": 797,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T10:36:18Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/line-line-bot-mcp-server/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 2080,
+    "y": 780
+   }
+  },
+  {
+   "id": "ztxtxwd/open-feishu-mcp-server",
+   "name": "Feishu / Lark MCP（飞书 OAuth 与文档管理）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "",
+   "stars": 87,
+   "lang": "TypeScript",
+   "pushedAt": "2026-01-27T15:00:41Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/ztxtxwd-open-feishu-mcp-server/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 2280,
+    "y": 780
+   }
+  },
+  {
+   "id": "mattt/iMCP",
+   "name": "iMCP（macOS 信息、联系人和提醒事项）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "A macOS app that provides an MCP server to your Messages, Contacts, Reminders and more",
+   "stars": 1945,
+   "lang": "Swift",
+   "pushedAt": "2026-11-03T15:50:10Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/mattt-iMCP/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 2480,
+    "y": 780
+   }
+  },
+  {
+   "id": "mondaycom/mcp",
+   "name": "Monday.com MCP（项目与工作数据）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "Enable AI agents to work reliably - giving them secure access to structured data, tools to take action, and the context needed to make smart decisions.",
+   "stars": 436,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T11:23:01Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/mondaycom-mcp/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 1880,
+    "y": 900
+   }
+  },
+  {
+   "id": "jerhadf/linear-mcp-server",
+   "name": "Linear MCP（工单与项目跟踪）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "A server that integrates Linear's project management system with the Model Context Protocol (MCP) to allow LLMs to interact with Linear.",
+   "stars": 346,
+   "lang": "JavaScript",
+   "pushedAt": "2025-05-01T19:45:31Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/jerhadf-linear-mcp-server/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 2080,
+    "y": 900
+   }
+  },
+  {
+   "id": "roychri/mcp-server-asana",
+   "name": "Asana MCP（任务与项目管理）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "MCP Server for Asana",
+   "stars": 149,
+   "lang": "TypeScript",
+   "pushedAt": "2026-05-10T14:47:21Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/roychri-mcp-server-asana/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 2280,
+    "y": 900
+   }
+  },
+  {
+   "id": "taazkareem/clickup-mcp-server",
+   "name": "ClickUp MCP Server（项目和任务）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "ClickUp MCP Server - Integrate ClickUp project management with AI through Model Context Protocol",
+   "stars": 53,
+   "lang": "Dockerfile",
+   "pushedAt": "2026-11-01T12:33:10Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/taazkareem-clickup-mcp-server/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 2480,
+    "y": 900
+   }
+  },
+  {
+   "id": "m0xai/trello-mcp-server",
+   "name": "Trello MCP（看板与任务管理）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "A simple yet powerful MCP server for Trello. ",
+   "stars": 54,
+   "lang": "Python",
+   "pushedAt": "2026-06-18T09:50:16Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/m0xai-trello-mcp-server/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 1880,
+    "y": 1020
+   }
+  },
+  {
+   "id": "EduBase/MCP",
+   "name": "EduBase MCP（学习管理平台）",
+   "category": "邮件、通信、日历与团队协作",
+   "capability": "communication-collab",
+   "desc": "The EduBase MCP server enables Claude and other LLMs to interact with EduBase's comprehensive e-learning platform through the Model Context Protocol (MCP).",
+   "stars": 28,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-31T23:21:58Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/EduBase-MCP/",
+   "capabilities": [
+    "communication-collab"
+   ],
+   "mapGroup": "communication-collab",
+   "summary": "",
+   "position": {
+    "x": 2080,
+    "y": 1020
+   }
+  },
+  {
+   "id": "XeroAPI/xero-mcp-server",
+   "name": "Xero MCP Server（云会计系统）",
+   "category": "财务、会计、投资与区块链",
+   "capability": "finance",
+   "desc": "An MCP server that integrates with the MCP protocol. https://modelcontextprotocol.io/introduction",
+   "stars": 389,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-26T07:23:13Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/XeroAPI-xero-mcp-server/",
+   "capabilities": [
+    "finance"
+   ],
+   "mapGroup": "finance",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 660
+   }
+  },
+  {
+   "id": "akutishevsky/lunchmoney-mcp",
+   "name": "Lunch Money MCP（个人预算与财务数据）",
+   "category": "财务、会计、投资与区块链",
+   "capability": "finance",
+   "desc": "A Model Context Protocol (MCP) server implementation for LunchMoney, providing programmatic access to personal finance management through LunchMoney's API.",
+   "stars": 112,
+   "lang": "TypeScript",
+   "pushedAt": "2026-08-03T08:08:33Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/akutishevsky-lunchmoney-mcp/",
+   "capabilities": [
+    "finance"
+   ],
+   "mapGroup": "finance",
+   "summary": "",
+   "position": {
+    "x": 3020,
+    "y": 660
+   }
+  },
+  {
+   "id": "iiAtlas/hledger-mcp",
+   "name": "hledger MCP（命令行复式记账）",
+   "category": "财务、会计、投资与区块链",
+   "capability": "finance",
+   "desc": "A local MCP server for interacting with the HLedger cli",
+   "stars": 65,
+   "lang": "TypeScript",
+   "pushedAt": "2026-02-28T18:51:46Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/iiAtlas-hledger-mcp/",
+   "capabilities": [
+    "finance"
+   ],
+   "mapGroup": "finance",
+   "summary": "",
+   "position": {
+    "x": 3220,
+    "y": 660
+   }
+  },
+  {
+   "id": "minhyeoky/mcp-server-ledger",
+   "name": "Ledger MCP（Ledger CLI 记账）",
+   "category": "财务、会计、投资与区块链",
+   "capability": "finance",
+   "desc": "A Model Context Protocol server for interacting with Ledger CLI, a powerful double-entry accounting system. This server enables Large Language Models to query and analyze financial data through a standardized interface, making it easy for A",
+   "stars": 51,
+   "lang": "Python",
+   "pushedAt": "2025-10-19T05:15:07Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/minhyeoky-mcp-server-ledger/",
+   "capabilities": [
+    "finance"
+   ],
+   "mapGroup": "finance",
+   "summary": "",
+   "position": {
+    "x": 3420,
+    "y": 660
+   }
+  },
+  {
+   "id": "openMF/mcp-mifosx",
+   "name": "Mifos X MCP（金融服务平台）",
+   "category": "财务、会计、投资与区块链",
+   "capability": "finance",
+   "desc": "Model Context Protocol - MCP for Mifos X",
+   "stars": 28,
+   "lang": "Java",
+   "pushedAt": "2026-11-04T06:32:08Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/openMF-mcp-mifosx/",
+   "capabilities": [
+    "finance"
+   ],
+   "mapGroup": "finance",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 780
+   }
+  },
+  {
+   "id": "QuantConnect/mcp-server",
+   "name": "QuantConnect MCP（量化研究与交易工作流）",
+   "category": "财务、会计、投资与区块链",
+   "capability": "finance",
+   "desc": "Official QuantConnect MCP Server to use AI with QuantConnect",
+   "stars": 80,
+   "lang": "",
+   "pushedAt": "2026-10-26T19:34:55Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/QuantConnect-mcp-server/",
+   "capabilities": [
+    "finance"
+   ],
+   "mapGroup": "finance",
+   "summary": "",
+   "position": {
+    "x": 3020,
+    "y": 780
+   }
+  },
+  {
+   "id": "ethancod1ng/binance-mcp-server",
+   "name": "Binance MCP Server（交易所数据接口）",
+   "category": "财务、会计、投资与区块链",
+   "capability": "finance",
+   "desc": "A Model Context Protocol (MCP) server for integrating AI assistants with Binance cryptocurrency exchange APIs, enabling automated trading, market data access, and account management.",
+   "stars": 34,
+   "lang": "TypeScript",
+   "pushedAt": "2026-01-31T12:10:12Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/ethancod1ng-binance-mcp-server/",
+   "capabilities": [
+    "finance"
+   ],
+   "mapGroup": "finance",
+   "summary": "",
+   "position": {
+    "x": 3220,
+    "y": 780
+   }
+  },
+  {
+   "id": "mcpdotdirect/evm-mcp-server",
+   "name": "EVM MCP Server（EVM 区块链交互）",
+   "category": "财务、会计、投资与区块链",
+   "capability": "finance",
+   "desc": "MCP server that provides LLMs with tools for interacting with EVM networks",
+   "stars": 379,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-03T16:56:41Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/mcpdotdirect-evm-mcp-server/",
+   "capabilities": [
+    "finance"
+   ],
+   "mapGroup": "finance",
+   "summary": "",
+   "position": {
+    "x": 3420,
+    "y": 780
+   }
+  },
+  {
+   "id": "aaronjmars/web3-research-mcp",
+   "name": "Web3 Research MCP（加密资产与链上研究）",
+   "category": "财务、会计、投资与区块链",
+   "capability": "finance",
+   "desc": "Local MCP server for deep crypto token research across CoinGecko, DeFiLlama and web search. Free, no API key.",
+   "stars": 171,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-31T15:30:58Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/aaronjmars-web3-research-mcp/",
+   "capabilities": [
+    "finance"
+   ],
+   "mapGroup": "finance",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 900
+   }
+  },
+  {
+   "id": "callobuzz/cob-shopify-mcp",
+   "name": "Shopify MCP / CLI（商品、订单、客户、库存和分析）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "Production-grade MCP server and CLI tool for Shopify Admin GraphQL API — 49+ tools, YAML-extensible, dual auth, dual transport, Docker-ready",
+   "stars": 18,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-01T00:48:31Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/callobuzz-cob-shopify-mcp/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 1320
+   }
+  },
+  {
+   "id": "HelpCode-ai/ecommerce-mcp-server",
+   "name": "E-commerce MCP Server（多个电商和市场平台的统一入口）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "E-commerce MCP server: connect Amazon, eBay, WooCommerce, Shopware, Kaufland, OTTO and 7 more to Claude & ChatGPT.",
+   "stars": 0,
+   "lang": "JavaScript",
+   "pushedAt": "2026-10-08T13:51:18Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/HelpCode-ai-ecommerce-mcp-server/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 1320
+   }
+  },
+  {
+   "id": "woocommerce/woocommerce",
+   "name": "WooCommerce（电商系统；仓库内含 MCP 集成文档）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "A customizable, open-source ecommerce platform built on WordPress. Build any commerce solution you can imagine.",
+   "stars": 10580,
+   "lang": "PHP",
+   "pushedAt": "2026-11-04T06:32:57Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/woocommerce-woocommerce/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 1320
+   }
+  },
+  {
+   "id": "nowork-studio/notfair-plugin",
+   "name": "NotFair Plugin（SEO、GEO、广告和分析工作流）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "Open-source SEO, GEO, and marketing skills for AI agents.",
+   "stars": 4106,
+   "lang": "Python",
+   "pushedAt": "2026-10-30T02:35:26Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/nowork-studio-notfair-plugin/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 1320
+   }
+  },
+  {
+   "id": "pipeboard-co/meta-ads-mcp",
+   "name": "Meta Ads MCP（Facebook / Instagram 广告）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "Meta Ads (Facebook/Instagram) MCP server for Claude, ChatGPT, Perplexity & Cursor — the Meta node of Pipeboard’s 5-platform family (+ Google, TikTok, Snap, Reddit). Hosted remote MCP, badged Meta Business Partner, free plan — no self-hostin",
+   "stars": 1349,
+   "lang": "Python",
+   "pushedAt": "2026-10-20T13:58:42Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/pipeboard-co-meta-ads-mcp/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 1440
+   }
+  },
+  {
+   "id": "surendranb/google-analytics-mcp",
+   "name": "Google Analytics MCP（GA4 数据访问）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "Google Analytics 4 data to AI agents, agentic workflows, and MCP clients. Give agents analysis-ready access to website traffic, user behavior, and performance data with schema discovery, server-side aggregation, and safe defaults that reduc",
+   "stars": 244,
+   "lang": "Python",
+   "pushedAt": "2026-11-01T23:17:14Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/surendranb-google-analytics-mcp/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 1440
+   }
+  },
+  {
+   "id": "stape-io/google-tag-manager-mcp-server",
+   "name": "Google Tag Manager MCP（GTM 管理）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "MCP server for Google Tag Manager",
+   "stars": 243,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T15:32:21Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/stape-io-google-tag-manager-mcp-server/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 1440
+   }
+  },
+  {
+   "id": "cnych/seo-mcp",
+   "name": "SEO MCP（基于 Ahrefs 数据的 SEO 工具）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "A free SEO tool MCP (Model Control Protocol) service based on Ahrefs data. Includes features such as backlinks, keyword ideas, and more.",
+   "stars": 260,
+   "lang": "Python",
+   "pushedAt": "2025-04-14T13:26:19Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/cnych-seo-mcp/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 1440
+   }
+  },
+  {
+   "id": "zackchewa/awesome-china-mcp",
+   "name": "Awesome China MCP（中国本土平台适配索引）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "Curated index of MCP servers for Chinese apps — connect your AI agent to 高德地图, 12306, 小红书, 飞书, 语雀, A股 and more. The open-source 'Composio for China'.",
+   "stars": 70,
+   "lang": "",
+   "pushedAt": "2026-11-04T01:57:36Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/zackchewa-awesome-china-mcp/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 1560
+   }
+  },
+  {
+   "id": "iFurySt/RedNote-MCP",
+   "name": "RedNote MCP（小红书数据访问）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "🚀MCP server for accessing RedNote(XiaoHongShu, xhs).",
+   "stars": 1129,
+   "lang": "TypeScript",
+   "pushedAt": "2025-05-11T12:30:52Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/iFurySt-RedNote-MCP/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 1560
+   }
+  },
+  {
+   "id": "karanb192/reddit-mcp-buddy",
+   "name": "Reddit MCP Buddy（Reddit 搜索和结构化数据）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "Clean, LLM-optimized Reddit MCP server. Browse posts, search content, analyze users. No fluff, just Reddit data.",
+   "stars": 877,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-02T08:09:10Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/karanb192-reddit-mcp-buddy/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 1560
+   }
+  },
+  {
+   "id": "HagaiHen/facebook-mcp-server",
+   "name": "Facebook MCP Server（帖子、评论和洞察自动化）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "Facebook MCP server for automating posts, comment moderation, insights, and sentiment filtering.",
+   "stars": 234,
+   "lang": "Python",
+   "pushedAt": "2026-04-23T19:08:42Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/HagaiHen-facebook-mcp-server/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 1560
+   }
+  },
+  {
+   "id": "Xquik-dev/x-twitter-scraper",
+   "name": "X/Twitter Scraper（搜索、资料与媒体获取）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "X (Twitter) scraper API & Twitter MCP server to scrape tweets, profiles & followers. Not affiliated with X Corp.",
+   "stars": 227,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T01:46:49Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/Xquik-dev-x-twitter-scraper/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 1680
+   }
+  },
+  {
+   "id": "MFYDev/ghost-mcp",
+   "name": "Ghost MCP（Ghost 内容管理系统）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "A Model Context Protocol (MCP) server for interacting with Ghost CMS through LLM interfaces like Claude. Allow you to control your Ghost blog by simply asking Claude etc.",
+   "stars": 243,
+   "lang": "TypeScript",
+   "pushedAt": "2026-04-27T03:50:34Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/MFYDev-ghost-mcp/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 1680
+   }
+  },
+  {
+   "id": "webflow/mcp-server",
+   "name": "Webflow MCP Server（Webflow 网站数据接口）",
+   "category": "电商、零售、营销与社交媒体",
+   "capability": "ecommerce-marketing",
+   "desc": "Model Context Protocol (MCP) server for the Webflow Data API.",
+   "stars": 140,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-27T00:16:37Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/webflow-mcp-server/",
+   "capabilities": [
+    "ecommerce-marketing"
+   ],
+   "mapGroup": "ecommerce-marketing",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 1680
+   }
+  },
+  {
+   "id": "TonyWang-hub/mcp-cn-commerce",
+   "name": "中国电商 MCP（抖店、淘宝、京东、快手、小红书、微信小店等入口）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "中国电商 MCP 连接器：8 个平台、155 个已注册工具。开源标准版，含能力矩阵与实际工程验收记录；真实商家联调状态逐项公开。Chinese commerce MCP connectors with documented capabilities and validation status.",
+   "stars": 96,
+   "lang": "Python",
+   "pushedAt": "2026-11-02T08:54:24Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/TonyWang-hub-mcp-cn-commerce/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 1320
+   }
+  },
+  {
+   "id": "larksuite/lark-openapi-mcp",
+   "name": "Lark OpenAPI MCP（飞书开放接口）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "飞书/Lark官方 OpenAPI MCP",
+   "stars": 854,
+   "lang": "TypeScript",
+   "pushedAt": "2025-08-14T05:39:18Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/larksuite-lark-openapi-mcp/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 1320
+   }
+  },
+  {
+   "id": "yuque/yuque-mcp-server",
+   "name": "Yuque MCP Server（语雀知识库读写与检索）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "Yuque MCP Server - Model Context Protocol server for Yuque API",
+   "stars": 263,
+   "lang": "TypeScript",
+   "pushedAt": "2026-07-15T03:00:57Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/yuque-yuque-mcp-server/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 1320
+   }
+  },
+  {
+   "id": "yuque/yuque-ecosystem",
+   "name": "Yuque AI Ecosystem（语雀 MCP + Skills + 插件）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "Yuque AI Ecosystem — MCP Server, Skills & Plugin for Yuque (语雀)",
+   "stars": 240,
+   "lang": "TypeScript",
+   "pushedAt": "2026-07-15T04:10:20Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/yuque-yuque-ecosystem/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1540,
+    "y": 1320
+   }
+  },
+  {
+   "id": "yehuoshun/yuque-ai-mcp",
+   "name": "Yuque AI MCP（语雀适配器）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "语雀 AI MCP Server — 62 个工具，覆盖文档/知识库/搜索/回收站/上传/画板/统计/笔记/用户/团队/RSS/爬虫/KV 全功能",
+   "stars": 7,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-02T06:34:50Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/yehuoshun-yuque-ai-mcp/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 1440
+   }
+  },
+  {
+   "id": "hykfft/mcp-dingtalk-doc",
+   "name": "DingTalk Docs MCP（钉钉文档相关工具）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "获取钉钉文档的MCP",
+   "stars": 56,
+   "lang": "Python",
+   "pushedAt": "2025-12-10T08:05:58Z",
+   "status": "active",
+   "eval": {
+    "score": 51,
+    "grade": "D",
+    "level": "L1",
+    "status": "preliminary",
+    "reportId": "hykfft-mcp-dingtalk-doc-a0f03d563e29"
+   },
+   "detailUrl": "/AI-Shovel-Collection/tools/hykfft-mcp-dingtalk-doc/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 1440
+   }
+  },
+  {
+   "id": "keithyt06/quick-dingtalk-mcp",
+   "name": "Quick DingTalk MCP（钉钉 CLI 包装与用户身份）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "User-identity DingTalk MCP server. Wraps the official dws CLI to expose your real DingTalk identity (not a bot) to Amazon Q Desktop / Claude Desktop / Cursor / any MCP host.",
+   "stars": 9,
+   "lang": "TypeScript",
+   "pushedAt": "2026-06-10T08:30:20Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/keithyt06-quick-dingtalk-mcp/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 1440
+   }
+  },
+  {
+   "id": "Shawyeok/mcp-dingding-bot",
+   "name": "DingTalk Bot MCP（钉钉群机器人）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "MCP Server for send text/markdown message via dingding (aka dingtalk) group custom robot",
+   "stars": 12,
+   "lang": "TypeScript",
+   "pushedAt": "2025-07-08T00:52:04Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/Shawyeok-mcp-dingding-bot/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1540,
+    "y": 1440
+   }
+  },
+  {
+   "id": "gotoolkits/mcp-wecombot-server",
+   "name": "WeCom Bot MCP（企业微信群机器人）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "An MCP server application that sends various types of messages to the WeCom group robot.",
+   "stars": 36,
+   "lang": "Go",
+   "pushedAt": "2025-01-22T15:51:29Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/gotoolkits-mcp-wecombot-server/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 1560
+   }
+  },
+  {
+   "id": "loonghao/wecom-bot-mcp-server",
+   "name": "WeCom Bot MCP Server（企业微信机器人，支持更多消息类型）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "A Python server implementation for WeCom (WeChat Work) bot that follows the Model Context Protocol (MCP). This server provides a standardized interface for handling automated messaging and context-aware interactions within enterprise WeChat",
+   "stars": 106,
+   "lang": "Python",
+   "pushedAt": "2026-10-31T09:27:38Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/loonghao-wecom-bot-mcp-server/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 1560
+   }
+  },
+  {
+   "id": "opsre/ZenOps",
+   "name": "ZenOps（面向运维场景的钉钉、飞书、企微机器人入口）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "🧘 通过钉钉、飞书、企微智能机器人用自然语言查询运维资源的工具。",
+   "stars": 164,
+   "lang": "Go",
+   "pushedAt": "2026-06-25T02:34:15Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/opsre-ZenOps/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 1560
+   }
+  },
+  {
+   "id": "chatmcp/mcp-server-flomo",
+   "name": "Flomo MCP（浮墨笔记写入）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "Write notes to Flomo",
+   "stars": 58,
+   "lang": "JavaScript",
+   "pushedAt": "2025-05-23T01:06:37Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/chatmcp-mcp-server-flomo/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1540,
+    "y": 1560
+   }
+  },
+  {
+   "id": "LittlePeter52012/wolai-mcp",
+   "name": "Wolai MCP（我来知识库读写）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "MCP Server for Wolai — Connect AI agents to your Wolai knowledge base",
+   "stars": 10,
+   "lang": "Python",
+   "pushedAt": "2026-09-03T06:36:51Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/LittlePeter52012-wolai-mcp/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 1680
+   }
+  },
+  {
+   "id": "kanyun-inc/rush-shimo-cli",
+   "name": "Rush Shimo CLI（石墨文档读取，CLI / SDK / MCP）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "石墨文档 CLI + SDK + MCP — read Shimo documents from terminal and AI agents",
+   "stars": 4,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-14T10:53:21Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/kanyun-inc-rush-shimo-cli/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 1680
+   }
+  },
+  {
+   "id": "oschina/mcp-gitee",
+   "name": "MCP Gitee（Gitee 仓库访问）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "mcp-gitee is a Model Context Protocol (MCP) server implementation for Gitee. It provides a set of tools that interact with Gitee's API, allowing AI assistants to manage repository, issues, pull requests, etc.",
+   "stars": 66,
+   "lang": "Go",
+   "pushedAt": "2026-09-07T02:53:38Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/oschina-mcp-gitee/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 1680
+   }
+  },
+  {
+   "id": "geekjourneyx/md2wechat-skill",
+   "name": "md2wechat-skill（微信公众号文章排版、图片与草稿工作流）",
+   "category": "中国本土平台适配（单独列出）",
+   "capability": "china-platforms",
+   "desc": "面向 AI Agent 的微信公众号创作与发布 CLI：Markdown 排版、AI 配图、预览与草稿创建；支持由浏览器 Agent 保存知乎、CSDN、头条未发布草稿。",
+   "stars": 3781,
+   "lang": "Go",
+   "pushedAt": "2026-10-14T16:18:24Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/geekjourneyx-md2wechat-skill/",
+   "capabilities": [
+    "china-platforms"
+   ],
+   "mapGroup": "china-platforms",
+   "summary": "",
+   "position": {
+    "x": 1540,
+    "y": 1680
+   }
+  },
+  {
+   "id": "GLips/Figma-Context-MCP",
+   "name": "Figma Context MCP（向 AI 提供 Figma 设计上下文）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "MCP server to provide Figma layout information to AI coding agents like Cursor",
+   "stars": 16150,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-27T05:37:12Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/GLips-Figma-Context-MCP/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 1880,
+    "y": 1320
+   }
+  },
+  {
+   "id": "grab/cursor-talk-to-figma-mcp",
+   "name": "Talk to Figma MCP（Figma 与 Agent 协作）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "TalkToFigma: MCP integration between AI Agent (Cursor, Claude Code, Codex) and Figma, allowing Agentic AI to communicate with Figma for reading designs and modifying them programmatically.",
+   "stars": 7076,
+   "lang": "JavaScript",
+   "pushedAt": "2026-07-26T07:14:26Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/grab-cursor-talk-to-figma-mcp/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 2080,
+    "y": 1320
+   }
+  },
+  {
+   "id": "21st-dev/magic-mcp",
+   "name": "Magic MCP（面向前端 UI 生成的工具）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "It's like v0, but in your Cursor / Claude Code / Windsurf: search 10,000+ React/Tailwind components, generate new UI with AI, and publish your own — right from your editor. Magic MCP is now the 21st MCP; this package keeps old configs worki",
+   "stars": 6368,
+   "lang": "TypeScript",
+   "pushedAt": "2026-09-09T20:38:22Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/21st-dev-magic-mcp/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 2280,
+    "y": 1320
+   }
+  },
+  {
+   "id": "ahujasid/blender-mcp",
+   "name": "Blender MCP（Blender 3D 软件控制）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "",
+   "stars": null,
+   "lang": "",
+   "pushedAt": "",
+   "status": "",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/ahujasid-blender-mcp/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 2480,
+    "y": 1320
+   }
+  },
+  {
+   "id": "mfortne/mcp-video-editing",
+   "name": "Video Editing MCP（FFmpeg 视频编辑、字幕和导出）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "Guardrailed video editing MCP server for AI agents. FFmpeg, Hyperframes, repurposing tools, Python client, and CLI. Local, fast, free.",
+   "stars": 2,
+   "lang": "",
+   "pushedAt": "2026-06-08T09:24:58Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/mfortne-mcp-video-editing/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 1880,
+    "y": 1440
+   }
+  },
+  {
+   "id": "Simon-Kansara/ableton-live-mcp-server",
+   "name": "Ableton Live MCP（音乐制作软件控制）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "MCP Server implementation for Ableton Live OSC control",
+   "stars": 397,
+   "lang": "Python",
+   "pushedAt": "2025-03-26T16:05:41Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/Simon-Kansara-ableton-live-mcp-server/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 2080,
+    "y": 1440
+   }
+  },
+  {
+   "id": "dschuler36/reaper-mcp-server",
+   "name": "REAPER MCP（音频工程与项目操作）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "An MCP Server for interacting with Reaper projects.",
+   "stars": 135,
+   "lang": "Python",
+   "pushedAt": "2026-10-31T01:20:19Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/dschuler36-reaper-mcp-server/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 2280,
+    "y": 1440
+   }
+  },
+  {
+   "id": "luminarylane/fal-mcp-server",
+   "name": "Fal MCP Server（图片、视频和音乐生成 API）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "MCP server for Fal.ai - Generate images, videos, music and audio with Claude",
+   "stars": 61,
+   "lang": "Python",
+   "pushedAt": "2026-05-04T07:32:30Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/luminarylane-fal-mcp-server/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 2480,
+    "y": 1440
+   }
+  },
+  {
+   "id": "nabid-pf/youtube-video-summarizer-mcp",
+   "name": "YouTube Video Summarizer MCP（视频字幕与摘要）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "",
+   "stars": 62,
+   "lang": "TypeScript",
+   "pushedAt": "2026-01-31T20:45:57Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/nabid-pf-youtube-video-summarizer-mcp/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 1880,
+    "y": 1560
+   }
+  },
+  {
+   "id": "tubeagentkit/youtube-mcp",
+   "name": "YouTube MCP（频道、视频、播放列表检索）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "YouTube MCP server: get YouTube video transcripts, search YouTube, browse channels and playlists from Claude, ChatGPT, Cursor and VS Code. Remote, free tier.",
+   "stars": 24,
+   "lang": "JavaScript",
+   "pushedAt": "2026-10-30T09:09:24Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/tubeagentkit-youtube-mcp/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 2080,
+    "y": 1560
+   }
+  },
+  {
+   "id": "hellokaton/unsplash-mcp-server",
+   "name": "Unsplash MCP（图片检索）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "🔎 A MCP server for Unsplash image search.",
+   "stars": 239,
+   "lang": "Python",
+   "pushedAt": "2026-10-12T03:24:26Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/hellokaton-unsplash-mcp-server/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 2280,
+    "y": 1560
+   }
+  },
+  {
+   "id": "video-db/agent-toolkit",
+   "name": "VideoDB Agent Toolkit（视频数据库工具）",
+   "category": "设计、图片、视频、音频与创意生产",
+   "capability": "creative-media",
+   "desc": "An open-source agent toolkit that auto-syncs SDK versions, docs, and examples—built for seamless integration with LLMs, and AI agents ( MCP compatible).",
+   "stars": 50,
+   "lang": "Python",
+   "pushedAt": "2026-03-26T11:05:28Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/video-db-agent-toolkit/",
+   "capabilities": [
+    "creative-media"
+   ],
+   "mapGroup": "creative-media",
+   "summary": "",
+   "position": {
+    "x": 2480,
+    "y": 1560
+   }
+  },
+  {
+   "id": "HorizunGroup/horizun-revit-mcp",
+   "name": "Revit MCP（Revit 2023–2027 BIM 操作与校验）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "Open-source MCP for Autodesk Revit 2023–2027. Downloadable Windows installer with runtime included; no Git or .NET SDK required. Typed BIM automation, families and model verification.",
+   "stars": 78,
+   "lang": "C#",
+   "pushedAt": "2026-11-02T00:42:42Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/HorizunGroup-horizun-revit-mcp/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 1320
+   }
+  },
+  {
+   "id": "zymorel/revit-mcp",
+   "name": "Revit MCP（Revit API 与 BIM/GIS 工作流）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "MCP Server for Revit 2026 — BIM/GIS tools for Claude Desktop (GEOX3D)",
+   "stars": 2,
+   "lang": "C#",
+   "pushedAt": "2026-07-02T08:50:59Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/zymorel-revit-mcp/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 3020,
+    "y": 1320
+   }
+  },
+  {
+   "id": "pascalorg/editor",
+   "name": "Architectural Editor（本地 3D 建筑编辑器，含 CLI/MCP）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "Open-source 3D architectural editor with a local CLI, MCP tools, and practical workflows for humans and AI agents.",
+   "stars": 25313,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T20:36:23Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/pascalorg-editor/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 3220,
+    "y": 1320
+   }
+  },
+  {
+   "id": "jjsantos01/qgis_mcp",
+   "name": "QGIS MCP（QGIS 桌面 GIS 控制）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "Model Context Protocol (MCP) that allows LLMs to use QGIS Desktop",
+   "stars": 1146,
+   "lang": "Python",
+   "pushedAt": "2025-10-01T01:23:25Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/jjsantos01-qgis_mcp/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 3420,
+    "y": 1320
+   }
+  },
+  {
+   "id": "mahdin75/gis-mcp",
+   "name": "GIS MCP（GIS 能力接口）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "A Model Context Protocol (MCP) server implementation that connects Large Language Models (LLMs) to GIS operations using GIS libraries, enabling AI assistants to perform geospatial operations and transformations.",
+   "stars": 202,
+   "lang": "Python",
+   "pushedAt": "2026-08-21T06:27:40Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/mahdin75-gis-mcp/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 1440
+   }
+  },
+  {
+   "id": "mahdin75/geoserver-mcp",
+   "name": "GeoServer MCP（GeoServer 地理空间接口）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "A Model Context Protocol (MCP) server implementation that connects LLMs to the GeoServer REST API",
+   "stars": 96,
+   "lang": "Java",
+   "pushedAt": "2026-08-16T12:14:22Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/mahdin75-geoserver-mcp/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 3020,
+    "y": 1440
+   }
+  },
+  {
+   "id": "JordanGunn/gdal-mcp",
+   "name": "GDAL MCP（地理空间数据处理）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "Model Context Protocol server that packages GDAL-style geospatial workflows through Python-native libraries (Rasterio, GeoPandas, PyProj, etc.) to give AI agents catalog discovery, metadata intelligence, and raster/vector processing with bu",
+   "stars": 84,
+   "lang": "Python",
+   "pushedAt": "2026-05-25T16:51:16Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/JordanGunn-gdal-mcp/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 3220,
+    "y": 1440
+   }
+  },
+  {
+   "id": "BnJam/stac-mcp",
+   "name": "STAC MCP（遥感与地球观测数据检索）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "An MCP Server for STAC requests",
+   "stars": 20,
+   "lang": "Python",
+   "pushedAt": "2026-10-31T02:19:14Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/BnJam-stac-mcp/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 3420,
+    "y": 1440
+   }
+  },
+  {
+   "id": "baidu-maps/mcp",
+   "name": "Baidu Maps MCP（百度地图服务）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "Baidu Map MCP Server",
+   "stars": 447,
+   "lang": "Python",
+   "pushedAt": "2025-08-22T03:30:09Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/baidu-maps-mcp/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 1560
+   }
+  },
+  {
+   "id": "mapbox/mcp-server",
+   "name": "Mapbox MCP（地图、地点和地理 API）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "Mapbox Model Context Protocol (MCP) server",
+   "stars": 365,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T21:45:24Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/mapbox-mcp-server/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 3020,
+    "y": 1560
+   }
+  },
+  {
+   "id": "jagan-shanmugam/open-streetmap-mcp",
+   "name": "OpenStreetMap MCP（开放地图数据）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "An OpenStreetMap MCP server implementation that enhances LLM capabilities with location-based services and geospatial data.",
+   "stars": 231,
+   "lang": "Python",
+   "pushedAt": "2025-07-12T21:55:20Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/jagan-shanmugam-open-streetmap-mcp/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 3220,
+    "y": 1560
+   }
+  },
+  {
+   "id": "tomtom-international/tomtom-maps-mcp",
+   "name": "TomTom Maps MCP（地点、路线和导航）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "A Model Context Protocol (MCP) server providing TomTom's location services, search, routing, and traffic data to AI agents.",
+   "stars": 59,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-04T01:49:52Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/tomtom-international-tomtom-maps-mcp/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 3420,
+    "y": 1560
+   }
+  },
+  {
+   "id": "isdaniel/mcp_weather_server",
+   "name": "Weather MCP（天气数据）",
+   "category": "CAD、BIM、工程、地理空间与地图",
+   "capability": "geo-cad",
+   "desc": "A Model Context Protocol (MCP) server that provides weather information using the Open-Meteo API.",
+   "stars": 61,
+   "lang": "Python",
+   "pushedAt": "2026-09-09T12:55:20Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/isdaniel-mcp_weather_server/",
+   "capabilities": [
+    "geo-cad"
+   ],
+   "mapGroup": "geo-cad",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 1680
+   }
+  },
+  {
+   "id": "genomoncology/biomcp",
+   "name": "BioMCP（生物医学数据检索）",
+   "category": "医疗、健康、生物信息与实验室科研",
+   "capability": "healthcare-bio",
+   "desc": "BioMCP: Biomedical Model Context Protocol",
+   "stars": 672,
+   "lang": "Rust",
+   "pushedAt": "2026-11-02T23:10:30Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/genomoncology-biomcp/",
+   "capabilities": [
+    "healthcare-bio"
+   ],
+   "mapGroup": "healthcare-bio",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 1980
+   }
+  },
+  {
+   "id": "the-momentum/apple-health-mcp-server",
+   "name": "Apple Health MCP（健康数据查询）",
+   "category": "医疗、健康、生物信息与实验室科研",
+   "capability": "healthcare-bio",
+   "desc": "MCP server for querying Apple Health data with natural language using DuckDB under the hood.",
+   "stars": 285,
+   "lang": "Python",
+   "pushedAt": "2026-07-09T10:57:10Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/the-momentum-apple-health-mcp-server/",
+   "capabilities": [
+    "healthcare-bio"
+   ],
+   "mapGroup": "healthcare-bio",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 1980
+   }
+  },
+  {
+   "id": "wso2/fhir-mcp-server",
+   "name": "FHIR MCP Server（医疗互操作标准接口）",
+   "category": "医疗、健康、生物信息与实验室科研",
+   "capability": "healthcare-bio",
+   "desc": "FHIR MCP Server – helping you expose any FHIR Server or API as a MCP Server.",
+   "stars": 137,
+   "lang": "Python",
+   "pushedAt": "2026-11-02T14:49:43Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/wso2-fhir-mcp-server/",
+   "capabilities": [
+    "healthcare-bio"
+   ],
+   "mapGroup": "healthcare-bio",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 1980
+   }
+  },
+  {
+   "id": "JamesANZ/medical-mcp",
+   "name": "Medical MCP（医疗数据处理工具）",
+   "category": "医疗、健康、生物信息与实验室科研",
+   "capability": "healthcare-bio",
+   "desc": "An MCP server that provides comprehensive medical information by querying multiple authoritative medical APIs including FDA, WHO, PubMed, Google Scholar, and RxNorm",
+   "stars": 120,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-15T22:49:42Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/JamesANZ-medical-mcp/",
+   "capabilities": [
+    "healthcare-bio"
+   ],
+   "mapGroup": "healthcare-bio",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 1980
+   }
+  },
+  {
+   "id": "ChristianHinge/dicom-mcp",
+   "name": "DICOM MCP（DICOM / PACS 医学影像系统）",
+   "category": "医疗、健康、生物信息与实验室科研",
+   "capability": "healthcare-bio",
+   "desc": "[Top rated oral EANM'25] Model Context Protocol (MCP) for interacting with dicom servers (PACS etc.) ",
+   "stars": 106,
+   "lang": "Python",
+   "pushedAt": "2026-10-29T19:14:14Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/ChristianHinge-dicom-mcp/",
+   "capabilities": [
+    "healthcare-bio"
+   ],
+   "mapGroup": "healthcare-bio",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 2100
+   }
+  },
+  {
+   "id": "OHNLP/omop_mcp",
+   "name": "OMOP MCP（OMOP 医疗数据标准）",
+   "category": "医疗、健康、生物信息与实验室科研",
+   "capability": "healthcare-bio",
+   "desc": "Model Context Protocol (MCP) server for mapping clinical terminology to Observational Medical Outcomes Partnership (OMOP) concepts using Large Language Models",
+   "stars": 41,
+   "lang": "Python",
+   "pushedAt": "2026-05-11T00:10:32Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/OHNLP-omop_mcp/",
+   "capabilities": [
+    "healthcare-bio"
+   ],
+   "mapGroup": "healthcare-bio",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 2100
+   }
+  },
+  {
+   "id": "cafferychen777/ChatSpatial",
+   "name": "ChatSpatial（空间转录组数据与自然语言分析）",
+   "category": "医疗、健康、生物信息与实验室科研",
+   "capability": "healthcare-bio",
+   "desc": "MCP server for spatial transcriptomics analysis through natural language interfaces.",
+   "stars": 45,
+   "lang": "Python",
+   "pushedAt": "2026-10-20T18:13:07Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/cafferychen777-ChatSpatial/",
+   "capabilities": [
+    "healthcare-bio"
+   ],
+   "mapGroup": "healthcare-bio",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 2100
+   }
+  },
+  {
+   "id": "JonasRackl/labmate-mcp",
+   "name": "LabMate MCP（文献、化合物、合成、实验室与论文工作流）",
+   "category": "医疗、健康、生物信息与实验室科研",
+   "capability": "healthcare-bio",
+   "desc": "Your AI lab companion — 78 MCP tools for literature, compounds, synthesis, benchwork, peptides & publication writing",
+   "stars": 3,
+   "lang": "Python",
+   "pushedAt": "2026-02-03T07:25:24Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/JonasRackl-labmate-mcp/",
+   "capabilities": [
+    "healthcare-bio"
+   ],
+   "mapGroup": "healthcare-bio",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 2100
+   }
+  },
+  {
+   "id": "mochow13/google-scholar-mcp",
+   "name": "Google Scholar MCP（学术搜索）",
+   "category": "医疗、健康、生物信息与实验室科研",
+   "capability": "healthcare-bio",
+   "desc": "An MCP server for Google Scholar written in TypeScript with Streamable HTTP",
+   "stars": 26,
+   "lang": "TypeScript",
+   "pushedAt": "2025-08-18T18:36:48Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/mochow13-google-scholar-mcp/",
+   "capabilities": [
+    "healthcare-bio"
+   ],
+   "mapGroup": "healthcare-bio",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 2220
+   }
+  },
+  {
+   "id": "deadletterq/mcp-opennutrition",
+   "name": "Open Nutrition MCP（营养数据检索和分析）",
+   "category": "医疗、健康、生物信息与实验室科研",
+   "capability": "healthcare-bio",
+   "desc": "MCP server providing access to the comprehensive OpenNutrition food database with 300,000+ food items, nutritional data, and barcode lookups",
+   "stars": 208,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-02T17:39:26Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/deadletterq-mcp-opennutrition/",
+   "capabilities": [
+    "healthcare-bio"
+   ],
+   "mapGroup": "healthcare-bio",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 2220
+   }
+  },
+  {
+   "id": "anviod/edgeCore",
+   "name": "EdgeCore（Modbus、BACnet、OPC UA 等工业边缘运行时）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "EdgeCore is the core runtime of EdgeOS industrial edge platform. 部署于工业现场，支持Modbus、BACnet、OPC-UA、S7、EtherNet等协议接入，通过MQTT、OPC-UA Server、Sparkplug-B连接云端，实现工业数据采集、边缘计算与智能协同(MCP Server)。",
+   "stars": 135,
+   "lang": "Go",
+   "pushedAt": "2026-11-02T22:27:49Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/anviod-edgeCore/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 1980
+   }
+  },
+  {
+   "id": "Nodeblue-AI/studio5000-mcp-server",
+   "name": "Studio 5000 MCP（Rockwell / Allen-Bradley PLC 项目解析）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "MCP server for Rockwell/Allen-Bradley Studio 5000 — parse L5X project exports and give AI agents structured access to PLC tags, UDTs, routines, and programs.",
+   "stars": 25,
+   "lang": "Python",
+   "pushedAt": "2026-09-24T18:34:59Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/Nodeblue-AI-studio5000-mcp-server/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 1980
+   }
+  },
+  {
+   "id": "chewcw/tia-portal-openness-mcpserver",
+   "name": "Siemens TIA Portal Openness MCP（西门子工程软件接口）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "TIA Portal Openness MCP Server",
+   "stars": 40,
+   "lang": "C#",
+   "pushedAt": "2026-09-13T23:32:54Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/chewcw-tia-portal-openness-mcpserver/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 1980
+   }
+  },
+  {
+   "id": "kukapay/opcua-mcp",
+   "name": "OPC UA MCP（工业 OPC UA 数据访问）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "An MCP server that connects to OPC UA-enabled industrial systems.",
+   "stars": 31,
+   "lang": "Python",
+   "pushedAt": "2025-10-29T23:52:25Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/kukapay-opcua-mcp/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 1540,
+    "y": 1980
+   }
+  },
+  {
+   "id": "kukapay/modbus-mcp",
+   "name": "Modbus MCP（工业寄存器与设备数据）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "An MCP server that standardizes and contextualizes industrial Modbus data.",
+   "stars": 26,
+   "lang": "Python",
+   "pushedAt": "2025-05-12T07:11:37Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/kukapay-modbus-mcp/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 2100
+   }
+  },
+  {
+   "id": "johannesPettersson80/codesys-mcp-toolkit",
+   "name": "CODESYS MCP Toolkit（工业自动化工程平台）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "Model Context Protocol server for CODESYS automation platform",
+   "stars": 128,
+   "lang": "TypeScript",
+   "pushedAt": "2025-05-24T19:04:54Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/johannesPettersson80-codesys-mcp-toolkit/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 2100
+   }
+  },
+  {
+   "id": "LGDiMaggio/predictive-maintenance-mcp",
+   "name": "Predictive Maintenance MCP（预测性维护与故障诊断）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "An open-source MCP server that turns LLMs into condition monitoring assistants for reliability engineers. It gives your AI assistant evidence-based vibration diagnostics: machine fault detection, severity assessment and diagnostic reports, ",
+   "stars": 107,
+   "lang": "Python",
+   "pushedAt": "2026-11-03T18:42:04Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/LGDiMaggio-predictive-maintenance-mcp/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 2100
+   }
+  },
+  {
+   "id": "tevonsb/homeassistant-mcp",
+   "name": "Home Assistant MCP（智能家居控制）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "A MCP server for Home Assistant",
+   "stars": 575,
+   "lang": "TypeScript",
+   "pushedAt": "2026-01-25T20:52:22Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/tevonsb-homeassistant-mcp/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 1540,
+    "y": 2100
+   }
+  },
+  {
+   "id": "driin0/ha-mcp-server",
+   "name": "HA MCP Server（Home Assistant 控制与状态查询）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "MCP server for Home Assistant: 182 tools over the REST and WebSocket APIs, with a status dashboard. Runs as a container or as a Home Assistant app.",
+   "stars": 0,
+   "lang": "Python",
+   "pushedAt": "2026-08-30T15:21:39Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/driin0-ha-mcp-server/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 2220
+   }
+  },
+  {
+   "id": "horw/esp-mcp",
+   "name": "ESP MCP（ESP32 开发与设备控制）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "Centralize ESP32 related commands and simplify getting started with seamless, LLM-driven interaction and help.",
+   "stars": 156,
+   "lang": "Python",
+   "pushedAt": "2025-12-27T01:32:27Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/horw-esp-mcp/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 2220
+   }
+  },
+  {
+   "id": "robotmcp/ros-mcp-server",
+   "name": "ROS MCP Server（ROS 机器人控制）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "Connect AI models like Claude & GPT with robots using MCP and ROS.",
+   "stars": 1512,
+   "lang": "Python",
+   "pushedAt": "2026-11-03T15:38:21Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/robotmcp-ros-mcp-server/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 2220
+   }
+  },
+  {
+   "id": "wise-vision/ros2_mcp",
+   "name": "ROS 2 MCP（ROS 2 机器人接口）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "ROS2 MCP: the MCP server that lets AI agents see, understand and operate ROS 2 robots. MPL-2.0.",
+   "stars": 98,
+   "lang": "Python",
+   "pushedAt": "2026-10-21T13:26:29Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/wise-vision-ros2_mcp/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 1540,
+    "y": 2220
+   }
+  },
+  {
+   "id": "omni-mcp/isaac-sim-mcp",
+   "name": "Isaac Sim MCP（机器人仿真）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "Isaac Simulation MCP Extension and Server",
+   "stars": 199,
+   "lang": "Python",
+   "pushedAt": "2026-10-13T13:03:52Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/omni-mcp-isaac-sim-mcp/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 940,
+    "y": 2340
+   }
+  },
+  {
+   "id": "lpigeon/unitree-go2-mcp-server",
+   "name": "Unitree Go2 MCP（四足机器人控制）",
+   "category": "工业制造、PLC、IoT、硬件与机器人",
+   "capability": "industrial-iot",
+   "desc": "The Unitree Go2 MCP Server is a server built on the MCP that enables users to control the Unitree Go2 robot using natural language commands interpreted by a LLM.",
+   "stars": 88,
+   "lang": "Python",
+   "pushedAt": "2026-06-10T07:34:11Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/lpigeon-unitree-go2-mcp-server/",
+   "capabilities": [
+    "industrial-iot"
+   ],
+   "mapGroup": "industrial-iot",
+   "summary": "",
+   "position": {
+    "x": 1140,
+    "y": 2340
+   }
+  },
+  {
+   "id": "farzadnadiri/MCP-CAN",
+   "name": "MCP-CAN（CAN、OBD-II、UDS、J1939 诊断与模拟）",
+   "category": "汽车、车辆诊断与游戏开发",
+   "capability": "automotive-games",
+   "desc": "Talk to Your Car Using AI",
+   "stars": 25,
+   "lang": "Python",
+   "pushedAt": "2026-10-09T18:47:05Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/farzadnadiri-MCP-CAN/",
+   "capabilities": [
+    "automotive-games"
+   ],
+   "mapGroup": "automotive-games",
+   "summary": "",
+   "position": {
+    "x": 1880,
+    "y": 1980
+   }
+  },
+  {
+   "id": "farzadnadiri/peykan",
+   "name": "Peykan（虚拟车辆、CAN/OBD 与 AI 诊断）",
+   "category": "汽车、车辆诊断与游戏开发",
+   "capability": "automotive-games",
+   "desc": "",
+   "stars": null,
+   "lang": "",
+   "pushedAt": "",
+   "status": "",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/farzadnadiri-peykan/",
+   "capabilities": [
+    "automotive-games"
+   ],
+   "mapGroup": "automotive-games",
+   "summary": "",
+   "position": {
+    "x": 2080,
+    "y": 1980
+   }
+  },
+  {
+   "id": "CoplayDev/unity-mcp",
+   "name": "Unity MCP（操作 Unity 编辑器、场景、资源和脚本）",
+   "category": "汽车、车辆诊断与游戏开发",
+   "capability": "automotive-games",
+   "desc": "Unity MCP acts as a bridge between AI assistants and your Unity Editor. Give your LLM tools to manage assets, control scenes, edit scripts, and automate tasks within Unity.",
+   "stars": 15681,
+   "lang": "C#",
+   "pushedAt": "2026-10-30T18:15:23Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/CoplayDev-unity-mcp/",
+   "capabilities": [
+    "automotive-games"
+   ],
+   "mapGroup": "automotive-games",
+   "summary": "",
+   "position": {
+    "x": 2280,
+    "y": 1980
+   }
+  },
+  {
+   "id": "IvanMurzak/GameDev-MCP-Server",
+   "name": "GameDev MCP Server（Unity、Godot、Unreal 通用游戏开发工具）",
+   "category": "汽车、车辆诊断与游戏开发",
+   "capability": "automotive-games",
+   "desc": "Engine-agnostic MCP server shared by Unity-MCP, Godot-MCP and Unreal-MCP",
+   "stars": 18,
+   "lang": "C#",
+   "pushedAt": "2026-11-04T01:00:16Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/IvanMurzak-GameDev-MCP-Server/",
+   "capabilities": [
+    "automotive-games"
+   ],
+   "mapGroup": "automotive-games",
+   "summary": "",
+   "position": {
+    "x": 2480,
+    "y": 1980
+   }
+  },
+  {
+   "id": "quazaai/UnityMCPIntegration",
+   "name": "Unity MCP Integration（Unity AI 工具集成）",
+   "category": "汽车、车辆诊断与游戏开发",
+   "capability": "automotive-games",
+   "desc": "Enable AI Agents to Control Unity",
+   "stars": 156,
+   "lang": "C#",
+   "pushedAt": "2025-04-15T07:20:09Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/quazaai-UnityMCPIntegration/",
+   "capabilities": [
+    "automotive-games"
+   ],
+   "mapGroup": "automotive-games",
+   "summary": "",
+   "position": {
+    "x": 1880,
+    "y": 2100
+   }
+  },
+  {
+   "id": "jifrozen0110/mcp-riot",
+   "name": "MCP for Riot Games（Riot 游戏数据接口）",
+   "category": "汽车、车辆诊断与游戏开发",
+   "capability": "automotive-games",
+   "desc": "League of Legends MCP Server",
+   "stars": 27,
+   "lang": "Python",
+   "pushedAt": "2025-07-05T16:14:15Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/jifrozen0110-mcp-riot/",
+   "capabilities": [
+    "automotive-games"
+   ],
+   "mapGroup": "automotive-games",
+   "summary": "",
+   "position": {
+    "x": 2080,
+    "y": 2100
+   }
+  },
+  {
+   "id": "EricGrill/mcp-civic-data",
+   "name": "Civic Data MCP（公共部门与政府开放数据 API）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "MCP server for free government and open data APIs",
+   "stars": 3,
+   "lang": "Python",
+   "pushedAt": "2026-07-07T03:15:01Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/EricGrill-mcp-civic-data/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 1980
+   }
+  },
+  {
+   "id": "OpenDataMCP/OpenDataMCP",
+   "name": "OpenDataMCP（将开放数据接入 LLM）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "Connect any Open Data to any LLM with Model Context Protocol.",
+   "stars": 156,
+   "lang": "Python",
+   "pushedAt": "2024-12-20T17:37:45Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/OpenDataMCP-OpenDataMCP/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 3020,
+    "y": 1980
+   }
+  },
+  {
+   "id": "JamesANZ/us-legal-mcp",
+   "name": "US Legal MCP（美国法律与法规数据）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "An MCP server that provides comprehensive US legislation.",
+   "stars": 38,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-15T22:49:47Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/JamesANZ-us-legal-mcp/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 3220,
+    "y": 1980
+   }
+  },
+  {
+   "id": "amurshak/congressMCP",
+   "name": "Congress MCP（美国国会数据）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "An MCP server allowing AI agents and MCP clients to interface with the Congress.gov API",
+   "stars": 36,
+   "lang": "Python",
+   "pushedAt": "2026-08-27T01:21:11Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/amurshak-congressMCP/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 3420,
+    "y": 1980
+   }
+  },
+  {
+   "id": "riemannzeta/patent_mcp_server",
+   "name": "Patent MCP Server（专利数据检索）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "MCP Server for USPTO data",
+   "stars": 85,
+   "lang": "Python",
+   "pushedAt": "2026-11-01T21:35:12Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/riemannzeta-patent_mcp_server/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 2100
+   }
+  },
+  {
+   "id": "PortSwigger/mcp-server",
+   "name": "Burp MCP Server（Burp Suite 安全测试工具）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "MCP Server for Burp",
+   "stars": 0,
+   "lang": "Kotlin",
+   "pushedAt": "2026-11-03T11:01:22Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/PortSwigger-mcp-server/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 3020,
+    "y": 2100
+   }
+  },
+  {
+   "id": "w0h1v/mcp-shodan",
+   "name": "Shodan MCP（互联网资产与设备检索）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "MCP server for Shodan — search internet-connected devices, IP reconnaissance, DNS lookups, and CVE/CPE vulnerability intelligence. Works with Claude Code, Codex, Gemini CLI, and Claude Desktop.",
+   "stars": 186,
+   "lang": "TypeScript",
+   "pushedAt": "2026-11-03T17:38:22Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/w0h1v-mcp-shodan/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 3220,
+    "y": 2100
+   }
+  },
+  {
+   "id": "roadwy/cve-search_mcp",
+   "name": "CVE Search MCP（漏洞数据库查询）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "A Model Context Protocol (MCP) server for querying the CVE-Search API",
+   "stars": 109,
+   "lang": "Python",
+   "pushedAt": "2025-07-26T14:17:29Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/roadwy-cve-search_mcp/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 3420,
+    "y": 2100
+   }
+  },
+  {
+   "id": "eqtylab/mcp-guardian",
+   "name": "MCP Guardian（MCP 代理与安全控制）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "Manage / Proxy / Secure your MCP Servers",
+   "stars": 204,
+   "lang": "Rust",
+   "pushedAt": "2025-08-08T01:17:20Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/eqtylab-mcp-guardian/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 2820,
+    "y": 2220
+   }
+  },
+  {
+   "id": "kapilduraphe/mcp-watch",
+   "name": "MCP Watch（MCP 安全扫描）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "A comprehensive security scanner for Model Context Protocol (MCP) servers that detects vulnerabilities and security issues in your MCP server implementations.",
+   "stars": 139,
+   "lang": "TypeScript",
+   "pushedAt": "2026-07-20T03:20:20Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/kapilduraphe-mcp-watch/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 3020,
+    "y": 2220
+   }
+  },
+  {
+   "id": "securityfortech/secops-mcp",
+   "name": "SecOps MCP（安全运维测试工具箱）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "All-in-one security testing toolbox that brings together popular open source tools through a single MCP interface. Connected to an AI agent, it enables tasks like pentesting, bug bounty hunting, threat hunting, and more.",
+   "stars": 219,
+   "lang": "Python",
+   "pushedAt": "2025-09-17T14:57:39Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/securityfortech-secops-mcp/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 3220,
+    "y": 2220
+   }
+  },
+  {
+   "id": "gbrigandi/mcp-server-wazuh",
+   "name": "Wazuh MCP（SIEM / 安全告警查询）",
+   "category": "政务、法律、公共数据、专利与安全",
+   "capability": "gov-legal-security",
+   "desc": "MCP Server for Wazuh SIEM",
+   "stars": 241,
+   "lang": "Rust",
+   "pushedAt": "2025-12-12T03:06:04Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/gbrigandi-mcp-server-wazuh/",
+   "capabilities": [
+    "gov-legal-security"
+   ],
+   "mapGroup": "gov-legal-security",
+   "summary": "",
+   "position": {
+    "x": 3420,
+    "y": 2220
+   }
+  },
+  {
+   "id": "Pradumnasaraf/aviationstack-mcp",
+   "name": "AviationStack MCP（航空与航班数据）",
+   "category": "物流、航空、旅游、招聘与其他垂直应用",
+   "capability": "travel-vertical",
+   "desc": "An MCP server using the AviationStack API to fetch real-time flight data including airline flights, airport schedules, future flights and aircraft types ✈️.",
+   "stars": 28,
+   "lang": "Python",
+   "pushedAt": "2026-10-28T17:43:25Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/Pradumnasaraf-aviationstack-mcp/",
+   "capabilities": [
+    "travel-vertical"
+   ],
+   "mapGroup": "travel-vertical",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 2640
+   }
+  },
+  {
+   "id": "sunsetcoder/flightradar24-mcp-server",
+   "name": "FlightRadar24 MCP（航班跟踪数据）",
+   "category": "物流、航空、旅游、招聘与其他垂直应用",
+   "capability": "travel-vertical",
+   "desc": "Model Context Protocol server for Flight Tracking",
+   "stars": 47,
+   "lang": "JavaScript",
+   "pushedAt": "2025-01-29T15:17:02Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/sunsetcoder-flightradar24-mcp-server/",
+   "capabilities": [
+    "travel-vertical"
+   ],
+   "mapGroup": "travel-vertical",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 2640
+   }
+  },
+  {
+   "id": "JordanDalton/DoorDash-MCP-Server",
+   "name": "DoorDash MCP（配送平台集成）",
+   "category": "物流、航空、旅游、招聘与其他垂直应用",
+   "capability": "travel-vertical",
+   "desc": "",
+   "stars": 25,
+   "lang": "TypeScript",
+   "pushedAt": "2025-04-16T23:47:33Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/JordanDalton-DoorDash-MCP-Server/",
+   "capabilities": [
+    "travel-vertical"
+   ],
+   "mapGroup": "travel-vertical",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 2640
+   }
+  },
+  {
+   "id": "campertunity/mcp-server",
+   "name": "Campground MCP（露营地查询和预订）",
+   "category": "物流、航空、旅游、招聘与其他垂直应用",
+   "capability": "travel-vertical",
+   "desc": "",
+   "stars": 17,
+   "lang": "TypeScript",
+   "pushedAt": "2026-04-15T04:22:05Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/campertunity-mcp-server/",
+   "capabilities": [
+    "travel-vertical"
+   ],
+   "mapGroup": "travel-vertical",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 2640
+   }
+  },
+  {
+   "id": "0xDAEF0F/job-searchoor",
+   "name": "Job Searchoor（根据需求搜索职位）",
+   "category": "物流、航空、旅游、招聘与其他垂直应用",
+   "capability": "travel-vertical",
+   "desc": "A simple MCP server that delivers you jobs based on your needs",
+   "stars": 65,
+   "lang": "JavaScript",
+   "pushedAt": "2025-04-08T22:17:50Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/0xDAEF0F-job-searchoor/",
+   "capabilities": [
+    "travel-vertical"
+   ],
+   "mapGroup": "travel-vertical",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 2760
+   }
+  },
+  {
+   "id": "Himalayas-App/himalayas-mcp",
+   "name": "Himalayas MCP（职位、候选人和薪资数据）",
+   "category": "物流、航空、旅游、招聘与其他垂直应用",
+   "capability": "travel-vertical",
+   "desc": "Remote jobs MCP server — search 100,000+ remote jobs, post listings, find candidates, and check salary benchmarks from Claude, ChatGPT, Cursor, and any MCP client. Free, no API key required.",
+   "stars": 21,
+   "lang": "",
+   "pushedAt": "2026-10-21T08:04:26Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/Himalayas-App-himalayas-mcp/",
+   "capabilities": [
+    "travel-vertical"
+   ],
+   "mapGroup": "travel-vertical",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 2760
+   }
+  },
+  {
+   "id": "thechandanbhagat/cv-forge",
+   "name": "CV Forge（ATS 简历、求职信与邮件）",
+   "category": "物流、航空、旅游、招聘与其他垂直应用",
+   "capability": "travel-vertical",
+   "desc": "MCP server that generates ATS-friendly CVs, cover letters, and email templates tailored to any job description",
+   "stars": 30,
+   "lang": "TypeScript",
+   "pushedAt": "2025-12-19T07:45:54Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/thechandanbhagat-cv-forge/",
+   "capabilities": [
+    "travel-vertical"
+   ],
+   "mapGroup": "travel-vertical",
+   "summary": "",
+   "position": {
+    "x": 400,
+    "y": 2760
+   }
+  },
+  {
+   "id": "8enSmith/mcp-open-library",
+   "name": "MCP Open Library（图书与作者检索）",
+   "category": "物流、航空、旅游、招聘与其他垂直应用",
+   "capability": "travel-vertical",
+   "desc": "A Model Context Protocol (MCP) server for the Internet Archive's Open Library API that enables AI assistants to search for book and author information.",
+   "stars": 100,
+   "lang": "TypeScript",
+   "pushedAt": "2026-10-22T21:28:53Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/8enSmith-mcp-open-library/",
+   "capabilities": [
+    "travel-vertical"
+   ],
+   "mapGroup": "travel-vertical",
+   "summary": "",
+   "position": {
+    "x": 600,
+    "y": 2760
+   }
+  },
+  {
+   "id": "Rudra-ravi/wikipedia-mcp",
+   "name": "Wikipedia MCP（百科数据检索）",
+   "category": "物流、航空、旅游、招聘与其他垂直应用",
+   "capability": "travel-vertical",
+   "desc": "A Model Context Protocol (MCP) server that retrieves information from Wikipedia to provide context to LLMs.",
+   "stars": 305,
+   "lang": "Python",
+   "pushedAt": "2026-05-01T03:39:08Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/Rudra-ravi-wikipedia-mcp/",
+   "capabilities": [
+    "travel-vertical"
+   ],
+   "mapGroup": "travel-vertical",
+   "summary": "",
+   "position": {
+    "x": 0,
+    "y": 2880
+   }
+  },
+  {
+   "id": "sonirico/mcp-stockfish",
+   "name": "MCP Stockfish（国际象棋引擎）",
+   "category": "物流、航空、旅游、招聘与其他垂直应用",
+   "capability": "travel-vertical",
+   "desc": "🐟 MCP server connecting AI systems to Stockfish chess engine ",
+   "stars": 16,
+   "lang": "Go",
+   "pushedAt": "2025-06-29T12:25:00Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/sonirico-mcp-stockfish/",
+   "capabilities": [
+    "travel-vertical"
+   ],
+   "mapGroup": "travel-vertical",
+   "summary": "",
+   "position": {
+    "x": 200,
+    "y": 2880
+   }
+  },
+  {
+   "id": "seifip/kilobat-cli",
+   "name": "Kilobat CLI（Mac 本机网络诊断与按应用流量 MCP）",
+   "category": "云平台、DevOps、监控与基础设施",
+   "capability": "devops-cloud",
+   "desc": "macOS network diagnostics CLI and MCP server",
+   "stars": 1,
+   "lang": "Swift",
+   "pushedAt": "2026-11-03T21:47:21Z",
+   "status": "active",
+   "eval": null,
+   "detailUrl": "/AI-Shovel-Collection/tools/seifip-kilobat-cli/",
+   "capabilities": [
+    "devops-cloud"
+   ],
+   "mapGroup": "devops-cloud",
+   "summary": "",
+   "position": {
+    "x": 1340,
+    "y": 900
+   }
+  }
+ ],
+ "relations": [
+  {
+   "id": "rel-001",
+   "source": "tevonsb/homeassistant-mcp",
+   "target": "driin0/ha-mcp-server",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均提供 Home Assistant 智能家居的 MCP 控制接入，功能高度重叠，可互为替代",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/tevonsb/homeassistant-mcp"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/driin0/ha-mcp-server"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-002",
+   "source": "yuque/yuque-mcp-server",
+   "target": "yehuoshun/yuque-ai-mcp",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均为语雀知识库提供 MCP 读写与检索接入",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/yuque/yuque-mcp-server"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/yehuoshun/yuque-ai-mcp"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-003",
+   "source": "yuque/yuque-mcp-server",
+   "target": "yuque/yuque-ecosystem",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "官方语雀 MCP Server 与官方语雀 AI 生态（含 MCP）均提供语雀 MCP 接入能力",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/yuque/yuque-mcp-server"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/yuque/yuque-ecosystem"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-004",
+   "source": "HorizunGroup/horizun-revit-mcp",
+   "target": "zymorel/revit-mcp",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均为 Autodesk Revit 提供 MCP 操作接口，功能重叠",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/HorizunGroup/horizun-revit-mcp"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/zymorel/revit-mcp"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-005",
+   "source": "robotmcp/ros-mcp-server",
+   "target": "wise-vision/ros2_mcp",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均提供 ROS/ROS 2 机器人控制的 MCP 接口（分属 ROS 与 ROS 2 生态，选型时按目标版本替代）",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/robotmcp/ros-mcp-server"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/wise-vision/ros2_mcp"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-006",
+   "source": "motherduckdb/mcp-server-motherduck",
+   "target": "ktanaka101/mcp-server-duckdb",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均提供 DuckDB 引擎的数据查询 MCP 接入（母鸭云版与本地版侧重不同）",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/motherduckdb/mcp-server-motherduck"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/ktanaka101/mcp-server-duckdb"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-007",
+   "source": "gotoolkits/mcp-wecombot-server",
+   "target": "loonghao/wecom-bot-mcp-server",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均为企业微信群机器人提供消息发送 MCP 接入",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/gotoolkits/mcp-wecombot-server"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/loonghao/wecom-bot-mcp-server"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-008",
+   "source": "CoplayDev/unity-mcp",
+   "target": "quazaai/UnityMCPIntegration",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均提供通过 MCP 操作 Unity 编辑器（场景/资源/脚本）的能力",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/CoplayDev/unity-mcp"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/quazaai/UnityMCPIntegration"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-009",
+   "source": "CoplayDev/unity-mcp",
+   "target": "IvanMurzak/GameDev-MCP-Server",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "Unity 编辑器操作能力重叠：专用 Unity MCP 与通用游戏开发 MCP（含 Unity）可互为替代",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/CoplayDev/unity-mcp"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/IvanMurzak/GameDev-MCP-Server"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-010",
+   "source": "GLips/Figma-Context-MCP",
+   "target": "grab/cursor-talk-to-figma-mcp",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均把 Figma 设计信息提供给 AI/Agent 使用，面向同一应用场景",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/GLips/Figma-Context-MCP"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/grab/cursor-talk-to-figma-mcp"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-011",
+   "source": "github/github-mcp-server",
+   "target": "idosal/git-mcp",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均通过 MCP 提供 GitHub 仓库内容访问（官方全功能接口 vs 轻量仓库读取）",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/github/github-mcp-server"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/idosal/git-mcp"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-012",
+   "source": "danielkennedy1/pdf-tools-mcp",
+   "target": "gpetraroli/mcp_pdf_reader",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均面向 PDF 文件处理（合并/提取 vs 文本提取/搜索），功能范围重叠",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/danielkennedy1/pdf-tools-mcp"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/gpetraroli/mcp_pdf_reader"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-013",
+   "source": "antvis/mcp-server-chart",
+   "target": "hustcc/mcp-mermaid",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均以 MCP 形式生成图表（AntV 图表 vs Mermaid 图），图表生成场景可替代",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/antvis/mcp-server-chart"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/hustcc/mcp-mermaid"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-014",
+   "source": "palewire/datawrapper-mcp",
+   "target": "hustcc/mcp-echarts",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均生成数据可视化图表（Datawrapper vs ECharts），同属数据图表选型",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/palewire/datawrapper-mcp"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/hustcc/mcp-echarts"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-015",
+   "source": "hustcc/mcp-echarts",
+   "target": "isaacwasserman/mcp-vegalite-server",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均生成数据可视化图表（ECharts vs Vega-Lite），同属数据图表选型",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/hustcc/mcp-echarts"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/isaacwasserman/mcp-vegalite-server"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-016",
+   "source": "automation-ai-labs/mcp-link",
+   "target": "tadata-org/fastapi_mcp",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均把 HTTP API 暴露为 MCP 工具（OpenAPI 通用转换 vs FastAPI 专用挂载）",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/automation-ai-labs/mcp-link"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/tadata-org/fastapi_mcp"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-017",
+   "source": "ztxtxwd/open-feishu-mcp-server",
+   "target": "larksuite/lark-openapi-mcp",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均为飞书/Lark 平台提供 MCP 接入（第三方 OAuth 文档版 vs 官方 OpenAPI 版）",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/ztxtxwd/open-feishu-mcp-server"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/larksuite/lark-openapi-mcp"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-018",
+   "source": "microsoft/playwright-mcp",
+   "target": "BrowserMCP/mcp",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均提供浏览器控制与网页自动化能力",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/microsoft/playwright-mcp"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/BrowserMCP/mcp"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-019",
+   "source": "microsoft/playwright-mcp",
+   "target": "jae-jae/fetcher-mcp",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均基于 Playwright 获取/操作网页内容（全功能浏览器自动化 vs 轻量抓取）",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/microsoft/playwright-mcp"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/jae-jae/fetcher-mcp"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-020",
+   "source": "firecrawl/firecrawl-mcp-server",
+   "target": "apify/apify-mcp-server",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均提供网页抓取与内容提取的 MCP 接入，同属抓取工具选型",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/firecrawl/firecrawl-mcp-server"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/apify/apify-mcp-server"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-021",
+   "source": "firecrawl/firecrawl-mcp-server",
+   "target": "brightdata/brightdata-mcp",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均提供网页数据访问与抓取的 MCP 接入，同属抓取工具选型",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/firecrawl/firecrawl-mcp-server"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/brightdata/brightdata-mcp"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-022",
+   "source": "apify/apify-mcp-server",
+   "target": "brightdata/brightdata-mcp",
+   "type": "alternative",
+   "evidenceLevel": "documented",
+   "description": "两者均提供网页抓取与数据提取的 MCP 接入，同属抓取工具选型",
+   "evidence": [
+    {
+     "type": "official_repository",
+     "url": "https://github.com/apify/apify-mcp-server"
+    },
+    {
+     "type": "official_repository",
+     "url": "https://github.com/brightdata/brightdata-mcp"
+    }
+   ],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-023",
+   "source": "firecrawl/firecrawl-mcp-server",
+   "target": "Unstructured-IO/UNS-MCP",
+   "type": "complementary",
+   "evidenceLevel": "inferred",
+   "description": "推断：网页抓取产出的原始内容交给文档解析工具做结构化，可组成「抓取 → 解析」工作流",
+   "evidence": [],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-024",
+   "source": "github/github-mcp-server",
+   "target": "SonarSource/sonarqube-mcp-server",
+   "type": "complementary",
+   "evidenceLevel": "inferred",
+   "description": "推断：代码仓库访问与代码质量检查可组成「取代码 → 查质量」工作流",
+   "evidence": [],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-025",
+   "source": "ClickHouse/mcp-clickhouse",
+   "target": "hustcc/mcp-echarts",
+   "type": "complementary",
+   "evidenceLevel": "inferred",
+   "description": "推断：数据库查询结果交给图表工具可视化，可组成「查数 → 出图」工作流",
+   "evidence": [],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-026",
+   "source": "zcaceres/markdownify-mcp",
+   "target": "vivekVells/mcp-pandoc",
+   "type": "complementary",
+   "evidenceLevel": "inferred",
+   "description": "推断：内容先转 Markdown 再做格式转换出版，可组成「转 MD → 转格式」工作流",
+   "evidence": [],
+   "updatedAt": "2026-11-04"
+  },
+  {
+   "id": "rel-027",
+   "source": "tubeagentkit/youtube-mcp",
+   "target": "nabid-pf/youtube-video-summarizer-mcp",
+   "type": "complementary",
+   "evidenceLevel": "inferred",
+   "description": "推断：先检索定位视频、再生成字幕摘要，可组成「检索 → 摘要」工作流",
+   "evidence": [],
+   "updatedAt": "2026-11-04"
+  }
+ ]
+}
