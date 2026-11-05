@@ -449,6 +449,14 @@ jobs:
                   emit("submission_id", os.environ["SUBMISSION_ID"])
                   raise SystemExit(0)
 
+          # 3.5 社区候选池容量上限（独立于自动发现池 150 条规则；统计口径以服务端为准）
+          CAPACITY = 500
+          if len(existing) >= CAPACITY:
+              print(f"::warning::社区候选池已满（{len(existing)}/{CAPACITY}）→ 拒绝新候选: {canonical}")
+              emit("action", "capacity_full")
+              emit("submission_id", os.environ["SUBMISSION_ID"])
+              raise SystemExit(0)
+
           # 4. 追加新条目，按 submitted_at 倒序
           existing.append(entry)
           existing.sort(key=lambda x: x.get("submitted_at", ""), reverse=True)
@@ -472,8 +480,8 @@ jobs:
         id: push
         run: |
           ACTION="${{ steps.merge.outputs.action }}"
-          if [ "$ACTION" = "skip_duplicate" ]; then
-              echo "action=skip_duplicate 输出 → 跳过 commit"
+          if [ "$ACTION" = "skip_duplicate" ] || [ "$ACTION" = "capacity_full" ]; then
+              echo "action=${ACTION} 输出 → 跳过 commit"
               echo "sha=" >> "$GITHUB_OUTPUT"
               exit 0
           fi
@@ -513,6 +521,29 @@ jobs:
           })
           with urllib.request.urlopen(req, timeout=15) as r:
               print(f"duplicate callback → HTTP {r.status}")
+          PY
+
+      - name: Callback → rejected (社区候选池已满 500)
+        if: steps.merge.outputs.action == 'capacity_full'
+        env:
+          MSG: "社区候选池已满（500 条），本次提交暂不收录；后续有人工审核通过的候选移出/转正后可再试"
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          url = os.environ["COLLECTION_CALLBACK_URL"]
+          body = json.dumps({
+              "submission_id": os.environ["SUBMISSION_ID"],
+              "status": "rejected",
+              "status_message": os.environ.get("MSG", "社区候选池已满"),
+              "failure_code": "POOL_CAPACITY_REACHED",
+          }).encode()
+          req = urllib.request.Request(url, data=body, method="POST", headers={
+              "Content-Type": "application/json",
+              "User-Agent": "ai-shovel-collection-actions/1.0 (+https://github.com/manningyangs/AI-Shovel-Collection)",
+              "Authorization": f"Bearer {os.environ['COLLECTION_CALLBACK_SECRET']}",
+          })
+          with urllib.request.urlopen(req, timeout=15) as r:
+              print(f"capacity callback → HTTP {r.status}")
           PY
 
       - name: Callback → candidate_added

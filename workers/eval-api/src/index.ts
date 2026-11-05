@@ -40,6 +40,7 @@ import {
   handleCollectionCallback,
   handleCreateSubmission,
   handleGetSubmission,
+  handleListSubmissions,
 } from "./collection-service";
 
 const app = new Hono<AppEnv>();
@@ -118,6 +119,7 @@ app.get("/api/evaluations/:id", handleGetEvaluation);
 /* ----------------------------- 提交收录 API（任务书 §五） ----------------------------- */
 
 app.post("/api/collection-submissions", handleCreateSubmission);
+app.get("/api/collection-submissions", handleListSubmissions);
 app.get("/api/collection-submissions/:id", handleGetSubmission);
 
 /* ------------------------------ 内部回调（HMAC / Bearer） ------------------------------ */

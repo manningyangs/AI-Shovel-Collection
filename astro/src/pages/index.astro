@@ -34,6 +34,23 @@ const curatedArr = Array.isArray(liveData.curated) ? liveData.curated : Object.v
 const liveBySlug = {};
 curatedArr.forEach(c => { const s = (c.repo_url || '').replace(/^https?:\/\/(www\.)?github\.com\//, '').replace(/\.git$/, ''); if (s) liveBySlug[s] = c; });
 
+// 社区提交候选池（public/submissions/candidates.json，由 collection-submission 工作流维护）
+// 与 /submit/ 收录列表、工具目录「提交收录」Tab 共用同一数据源；与自动发现候选池完全独立
+const poolMod = import.meta.glob('../../public/submissions/candidates.json', { as: 'json', eager: true });
+const poolData = poolMod['../../public/submissions/candidates.json'] || null;
+const poolArr = poolData
+  ? (Array.isArray(poolData) ? poolData : (Array.isArray(poolData.candidates) ? poolData.candidates : []))
+  : [];
+const communityPool = {
+  total: poolData && typeof poolData.total === 'number' ? poolData.total : poolArr.length,
+  pending: poolArr.filter(c => (c.review_status || 'pending') === 'pending').length,
+  approved: poolArr.filter(c => c.review_status === 'approved').length,
+  recent: poolArr
+    .slice()
+    .sort((a, b) => (b.submitted_at || 0) - (a.submitted_at || 0))
+    .slice(0, 4),
+};
+
 const catalogItems = parseCatalog(csvRaw);
 const colorPalette = ['#eef2ff', '#c7d2fe', '#4f46e5', '#fef3c7', '#fbbf24', '#f59e0b', '#fef9c3', '#f0fdf4', '#22c55e', '#86efac', '#fce7f3', '#f9a8d4'];
 const colorOf = {};
@@ -239,6 +256,52 @@ try {
     baseUrl={mapPreview.baseUrl}
   />
 
+  <!-- 🤝 社区新提交引导模块：与排行榜/评测报告/工具地图并列的社区参与入口 -->
+  <!-- 数据 = 社区提交候选池（构建时读取，与 /submit/ 列表、「提交收录」Tab 同一数据源） -->
+  <section class="community-feat" aria-label="🤝 社区新提交">
+    <div class="cf-head">
+      <div class="cf-head-text">
+        <span class="cf-title">🤝 社区新提交</span>
+        <span class="cf-sub">社区用户主动推荐的工具：自动校验通过后进入待人工审核候选池，人工审核通过才会进入精选目录。</span>
+      </div>
+      <a class="cf-all" href={`/AI-Shovel-Collection/submit/`}>查看更多 →</a>
+    </div>
+
+    <div class="cf-stats">
+      <span class="cf-stat" title="社区提交候选池中的工具总数（独立于自动发现候选池）"><b>{communityPool.total}</b> 社区提交</span>
+      <span class="cf-stat warn" title="自动校验通过、等待人工审核"><b>{communityPool.pending}</b> 待人工审核</span>
+      {communityPool.approved > 0 ? (
+        <span class="cf-stat ok" title="人工审核已通过"><b>{communityPool.approved}</b> 已审核</span>
+      ) : null}
+      <span class="cf-note">独立数据源 · 池容量上限 500 · 与自动发现（150 条）互不影响</span>
+    </div>
+
+    {communityPool.recent.length > 0 ? (
+      <div class="cf-row">
+        {communityPool.recent.map(t => (
+          <a class="cf-card" href={t.repo_url || `https://github.com/${t.repo_slug || ''}`} target="_blank" rel="noopener">
+            <span class="cf-name">{esc(t.title || t.repo_slug || '')}</span>
+            {t.description ? <span class="cf-desc">{esc(String(t.description).slice(0, 70))}</span> : null}
+            <span class="cf-meta">
+              <span class={`cf-status ${t.review_status === 'approved' ? 'ok' : 'pending'}`}>
+                {t.review_status === 'approved' ? '已审核' : '待人工审核'}
+              </span>
+              <span class="cf-src">社区提交</span>
+              {typeof t.stars === 'number' ? <span class="cf-stars">⭐ {fmtStars(t.stars)}</span> : null}
+            </span>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="cf-empty">还没有社区提交 —— <a href={`/AI-Shovel-Collection/submit/?view=form`}>成为第一个推荐者 →</a></div>
+    )}
+
+    <div class="cf-actions">
+      <a class="cf-btn primary" href={`/AI-Shovel-Collection/submit/?view=form`}>📝 提交新工具</a>
+      <a class="cf-btn" href={`/AI-Shovel-Collection/submit/`}>📄 收录列表</a>
+    </div>
+  </section>
+
   <noscript><div class="noscript-note">⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（191 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。</div></noscript>
 </header>
 
@@ -277,6 +340,7 @@ try {
   <div class="list-tabs" id="listTabs" role="tablist">
     <button class="list-tab active" data-tab="curated" type="button" role="tab" aria-selected="true">📦 精选工具<span class="tab-count" id="tabCuratedCount">191</span></button>
     <button class="list-tab" data-tab="candidates" type="button" role="tab" aria-selected="false">🧭 自动发现<span class="tab-count" id="tabCandidateCount">150</span></button>
+    <button class="list-tab" data-tab="community" type="button" role="tab" aria-selected="false">📥 提交收录<span class="tab-count" id="tabCommunityCount">{communityPool.total}</span></button>
     <button class="list-tab" data-tab="live" type="button" role="tab" aria-selected="false">🌐 GitHub 实时搜索</button>
   </div>
   <div class="sort-bar" id="sortBar">
@@ -335,6 +399,19 @@ try {
     <div class="candidates-hint">候选按 <b>MCP 官方注册 + Stars / 下载量 + 端点可调用 + 活跃状态</b> 加权排序 · 当前每轮保留 Top <b id="candidateCount">…</b> 条</div>
     <div id="inboxBanner" class="inbox-banner"></div>
     <div class="grid" id="candidateGrid"></div>
+  </section>
+  <!-- 社区提交收录 Tab：社区候选池全部有效工具（独立数据源，与自动发现并列，互不写入） -->
+  <section id="communityTab" data-tabpanel="community" style="display:none">
+    <div class="section-head">
+      <h2>📥 提交收录<span class="unverified-tag" style="background:#eef2ff;color:#3730a3" title="社区用户主动提交的候选工具：自动校验通过后进入待人工审核候选池，人工审核通过才进入精选目录">🤝 社区提交</span></h2>
+      <span class="hint">社区用户主动推荐 · <b>与「自动发现」相互独立</b>（独立数据池，容量上限 500 条） · 人工审核通过才进入精选目录</span>
+    </div>
+    <div class="candidates-hint">社区候选 <b id="communityCount">{communityPool.total}</b> 条 · 与 <a href={`/AI-Shovel-Collection/submit/`}>提交收录页</a>、首页「社区新提交」模块<b>同一数据源</b> · 卡片标注实时审核状态</div>
+    <div class="grid" id="communityGrid"></div>
+    <div class="empty" id="communityEmpty" style="display:none"></div>
+    <div id="communityMoreWrap" style="text-align:center;margin-top:16px;display:none">
+      <button class="comm-more" id="communityMore" type="button">加载更多</button>
+    </div>
   </section>
   <section id="liveTab" data-tabpanel="live" style="display:none">
     <div class="section-head">
@@ -408,6 +485,112 @@ try {
   <div class="drawer-body" id="drawerBody"></div>
   <div class="drawer-actions" id="drawerActions"></div>
 </aside>
+
+<style>
+  /* 🤝 社区新提交引导模块（indigo 识别色，视觉语言对齐排行榜/评测报告/工具地图） */
+  .community-feat {
+    max-width: 980px;
+    margin: 28px auto 0;
+    padding: 20px 24px;
+    background: #f5f3ff;
+    border: 1px solid #ddd6fe;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    text-align: left;
+  }
+  .cf-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  .cf-head-text { display: flex; flex-direction: column; gap: 6px; }
+  .cf-title { font-size: 1.05rem; font-weight: 800; color: #4338ca; letter-spacing: .3px; }
+  .cf-sub { font-size: .84rem; color: var(--text-2); line-height: 1.6; }
+  .cf-all {
+    font-size: .82rem; font-weight: 700; color: var(--primary);
+    text-decoration: none; white-space: nowrap; padding-top: 4px;
+  }
+  .cf-all:hover { text-decoration: underline; }
+
+  .cf-stats {
+    display: flex; align-items: center; gap: 10px;
+    flex-wrap: wrap; margin-bottom: 14px;
+  }
+  .cf-stat {
+    font-size: .78rem; font-weight: 600; color: #4338ca;
+    background: #fff; border: 1px solid #ddd6fe;
+    border-radius: 999px; padding: 4px 12px;
+  }
+  .cf-stat b { font-size: .95rem; font-weight: 800; margin-right: 3px; }
+  .cf-stat.warn { color: #b45309; border-color: #fde68a; background: #fffbeb; }
+  .cf-stat.ok { color: #166534; border-color: #bbf7d0; background: #f0fdf4; }
+  .cf-note { font-size: .74rem; color: var(--text-3); }
+
+  .cf-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .cf-card {
+    display: flex; flex-direction: column; gap: 5px;
+    background: #fff; border: 1px solid #e9e5fd; border-radius: 10px;
+    padding: 12px 14px; text-decoration: none; color: inherit;
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+  }
+  .cf-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 2px 10px rgba(79,70,229,.1);
+    transform: translateY(-1px);
+  }
+  .cf-name {
+    font-size: .84rem; font-weight: 700; color: var(--text);
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .cf-desc {
+    font-size: .75rem; color: var(--text-2); line-height: 1.5;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .cf-meta { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 2px; }
+  .cf-status { font-size: .68rem; font-weight: 700; border-radius: 999px; padding: 2px 8px; }
+  .cf-status.pending { background: #fff7ed; color: #9a3412; }
+  .cf-status.ok { background: #dcfce7; color: #166534; }
+  .cf-src {
+    font-size: .68rem; font-weight: 700; background: #eef2ff;
+    color: #4338ca; border-radius: 999px; padding: 2px 8px;
+  }
+  .cf-stars { font-size: .7rem; color: #b45309; font-weight: 600; }
+
+  .cf-empty {
+    font-size: .84rem; color: var(--text-2);
+    background: #fff; border: 1px dashed #c7d2fe; border-radius: 10px;
+    padding: 18px; text-align: center; margin-bottom: 14px;
+  }
+  .cf-empty a { color: var(--primary); font-weight: 700; text-decoration: none; }
+  .cf-empty a:hover { text-decoration: underline; }
+
+  .cf-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .cf-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 18px; border-radius: 8px;
+    font-size: .84rem; font-weight: 700; text-decoration: none;
+    background: #fff; color: #4338ca; border: 1.5px solid #c7d2fe;
+    transition: all .15s;
+  }
+  .cf-btn:hover { border-color: var(--primary); background: #eef2ff; }
+  .cf-btn.primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+  .cf-btn.primary:hover { background: #1d4ed8; border-color: #1d4ed8; }
+
+  @media (max-width: 640px) {
+    .community-feat { padding: 16px; }
+    .cf-head { flex-direction: column; }
+    .cf-note { width: 100%; }
+  }
+</style>
 
 <script is:inline set:html={appJs}></script>
 </Base>

@@ -13,12 +13,18 @@
   var liveResults = [];
   var liveAbort = null;
   var liveFetchedFor = "";
+  var communityItems = [];   // 社区提交候选池（submissions/candidates.json，独立于自动发现候选池）
+  var communityLoaded = false;
+  var communityShown = 24;   // 「提交收录」Tab 每批加载条数（分页展示）
+  var commLastQuery = null;
+  var communityCurated = {}; // 展示层识别：社区条目是否同时已在精选目录（仅打标，不删记录、不跨池写入）
 
   var SOURCE_LABEL = {
     mcp_registry: "MCP Registry",
     github_rest: "GitHub",
     npm: "npm",
-    crates: "crates.io"
+    crates: "crates.io",
+    community: "社区提交"
   };
 
   /* ================= 工具函数 ================= */
@@ -120,16 +126,19 @@
         return r.text();
       }),
       fetch("README.md").then(function (r) { return r.ok ? r.text() : ""; }).catch(function () { return ""; }),
-      fetch("live_multi.json?ts=" + Math.floor(Date.now() / 3600000)).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
+      fetch("live_multi.json?ts=" + Math.floor(Date.now() / 3600000)).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+      fetch("submissions/candidates.json?ts=" + Math.floor(Date.now() / 600000)).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; })
     ]).then(function (res) {
       livePayload = res[2];
       buildItems(parseCSV(res[0]));
       buildCandidates();
+      buildCommunity(res[3]);
       buildDomains(res[1]);
       renderChips();
       buildLangFilter();
       render();
       renderCandidates();
+      renderCommunity();
       renderMeta(res[1]);
       // 注意顺序：animateStats() 内部用 requestAnimationFrame 异步调度，
       // 所以必须在 renderLiveMeta() 之后调用，确保 data-target 已被更新为动态值
@@ -706,6 +715,121 @@
     return '<div class="ep-pill" title="MCP Server 端点 · 点击复制" onclick="navigator.clipboard.writeText(this.textContent)">📡 ' + esc(ep) + "</div>";
   }
 
+  /* ================= 社区提交收录（社区候选池，独立数据源，与自动发现池互不写入） ================= */
+
+  function buildCommunity(poolData) {
+    communityLoaded = true;
+    communityItems = [];
+    if (!poolData) return;
+    var arr = Array.isArray(poolData) ? poolData
+      : (Array.isArray(poolData.candidates) ? poolData.candidates : []);
+    communityCurated = {};
+    items.forEach(function (it) { communityCurated[String(it.slug).toLowerCase()] = true; });
+    communityItems = arr.map(function (e) {
+      var slug = e.repo_slug || "";
+      var title = e.title || slug;
+      var stars = typeof e.stars === "number" ? e.stars : null;
+      var pushed = e.pushed_at || "";
+      return {
+        id: e.submission_id || "",
+        source: "community",
+        title: title,
+        desc: e.description || "",
+        url: e.repo_url || e.html_url || ("https://github.com/" + slug),
+        slug: slug,
+        stars: stars,
+        lang: e.language || "",
+        pushed_at: pushed,
+        submitted_at: e.submitted_at || "",
+        review_status: e.review_status || "pending",
+        live: { stars: stars || 0, pushed_at: pushed || (e.submitted_at || ""), lang: e.language || "" },
+        hay: (title + " " + (e.description || "") + " " + slug + " 社区提交 社区新提交 " +
+          (e.language || "") + " stars" + (stars || 0)).toLowerCase()
+      };
+    });
+    // 默认顺序：按提交时间从新到旧
+    communityItems.sort(function (a, b) {
+      return String(b.submitted_at).localeCompare(String(a.submitted_at));
+    });
+    var tabCount = document.getElementById("tabCommunityCount");
+    if (tabCount) tabCount.textContent = communityItems.length;
+    var cnt = document.getElementById("communityCount");
+    if (cnt) cnt.textContent = communityItems.length;
+  }
+
+  function commSubmittedText(iso) {
+    if (!iso) return null;
+    var days = (Date.now() - new Date(iso).getTime()) / 86400000;
+    if (isNaN(days)) return null;
+    if (days < 1) return { text: "今天提交", cls: "ok" };
+    if (days < 30) return { text: Math.floor(days) + " 天前提交", cls: "ok" };
+    if (days < 365) return { text: Math.floor(days / 30) + " 个月前提交", cls: "warm" };
+    return { text: Math.floor(days / 365) + " 年前提交", cls: "cold" };
+  }
+
+  function renderCommunity() {
+    var section = document.getElementById("communityTab");
+    var grid = document.getElementById("communityGrid");
+    var emptyEl = document.getElementById("communityEmpty");
+    var moreWrap = document.getElementById("communityMoreWrap");
+    var moreBtn = document.getElementById("communityMore");
+    if (!section || !grid) return;
+
+    if (commLastQuery !== query) { communityShown = 24; commLastQuery = query; }
+
+    if (!communityItems.length) {
+      grid.innerHTML = "";
+      if (emptyEl) {
+        emptyEl.style.display = "block";
+        emptyEl.innerHTML = communityLoaded
+          ? '社区候选池暂无条目 —— <b><a href="submit/">成为第一个推荐者 →</a></b>'
+          : "社区提交数据加载失败，请稍后重试（可刷新页面）。";
+      }
+      if (moreWrap) moreWrap.style.display = "none";
+      return;
+    }
+    if (emptyEl) emptyEl.style.display = "none";
+
+    var raw = communityItems;
+    if (query) raw = raw.filter(function (c) { return c.hay.indexOf(query) !== -1; });
+    var list = applySort(raw);
+    var visible = list.slice(0, communityShown);
+
+    grid.innerHTML = visible.map(function (c) {
+      var statusBadge = c.review_status === "approved"
+        ? '<span class="comm-status ok" title="人工审核通过">✅ 已审核</span>'
+        : '<span class="comm-status pending" title="自动校验通过，等待人工审核">⏳ 待人工审核</span>';
+      var curatedTag = communityCurated[String(c.slug).toLowerCase()]
+        ? '<span class="unverified-tag" style="background:#dcfce7;color:#166534;margin-left:6px" title="该仓库同时已存在于精选目录；社区提交记录独立保留，状态互不覆盖">已在精选</span>'
+        : "";
+      var sub = commSubmittedText(c.submitted_at);
+      return '<article class="card unverified">' +
+        '<div class="card-top">' +
+          '<div class="card-title"><a href="' + esc(c.url) + '" target="_blank" rel="noopener">' +
+            highlight(c.title, query) + curatedTag + "</a></div>" +
+          sourceBadge("community") +
+        "</div>" +
+        (c.desc ? '<div class="card-desc">' + highlight(c.desc, query) + "</div>" : "") +
+        liveRow(c) +
+        '<div class="card-live">' + statusBadge +
+          (sub ? '<span class="fresh ' + sub.cls + '" title="提交时间">' + sub.text + "</span>" : "") +
+        "</div>" +
+        '<div class="card-foot"><span class="card-repo">' + highlight(c.slug, query) + "</span>" +
+          '<span><a class="ext" href="' + esc(c.url) + '" target="_blank" rel="noopener">GitHub ↗</a>' +
+          '<a class="ext" href="submit/">收录页 ↗</a></span></div>' +
+      "</article>";
+    }).join("");
+
+    if (moreWrap && moreBtn) {
+      if (list.length > communityShown) {
+        moreWrap.style.display = "block";
+        moreBtn.textContent = "加载更多（已显示 " + visible.length + " / " + list.length + "）";
+      } else {
+        moreWrap.style.display = "none";
+      }
+    }
+  }
+
   /* ================= 配置块弹窗 ================= */
 
   var cfgStore = []; // 渲染时收集条目 payload，卡片按钮用 data-cfg 索引引用
@@ -956,6 +1080,7 @@
       // 绑定预渲染卡片上的 drawer/cfg 事件委托
       bindPreRenderCardEvents();
       renderCandidates();
+      renderCommunity();
       return;
     }
 
@@ -1000,6 +1125,7 @@
     var hc2 = document.getElementById("heroCount"); if (hc2) hc2.textContent = items.length;
 
     renderCandidates();
+    renderCommunity();
   }
 
   // Astro 预渲染卡片事件委托：填新鲜度时间戳 + 绑定任何卡片内事件
@@ -1182,8 +1308,8 @@
       });
       syncTaskChips();
     }
-    // 有搜索词时自动切到精选 tab 展示过滤结果
-    if (query && activeTab !== "curated") switchTab("curated");
+    // 有搜索词时自动切到精选 tab 展示过滤结果（在社区 Tab 上保持社区过滤，不跳走）
+    if (query && activeTab !== "curated" && activeTab !== "community") switchTab("curated");
     render();
     // 搜索有结果才自动滚到工具卡片区域；0 结果时保持当前页面位置
     // 用 "auto"（无动画）避免逐字输入时多次 smooth scroll 互相打断导致"看起来没跳"
@@ -1204,8 +1330,8 @@
     box.classList.remove("has-text");
     input.focus();
     hideLiveSection();
-    // 清空搜索后切回精选 tab + 确保 chip 视觉状态同步
-    if (activeTab !== "curated") switchTab("curated");
+    // 清空搜索后切回精选 tab + 确保 chip 视觉状态同步（社区 Tab 上保持原位）
+    if (activeTab !== "curated" && activeTab !== "community") switchTab("curated");
     syncTaskChips();
     render();
   });
@@ -1305,6 +1431,10 @@
     if (name === "candidates") {
       renderCandidates();
     }
+    // 切到 community（提交收录）tab 时渲染社区候选
+    if (name === "community") {
+      renderCommunity();
+    }
     // 切换到 liveTab 且有搜索词时自动搜索
     if (name === "live" && query.length >= 2 && liveFetchedFor !== query) {
       runLiveSearch(true);
@@ -1319,6 +1449,15 @@
   });
 
   /* ================= 排序 ================= */
+  /* ================= 社区提交收录 Tab：加载更多 ================= */
+  var communityMoreBtn = document.getElementById("communityMore");
+  if (communityMoreBtn) {
+    communityMoreBtn.addEventListener("click", function () {
+      communityShown += 24;
+      renderCommunity();
+    });
+  }
+
   var sortSelect = document.getElementById("sortSelect");
   if (sortSelect) {
     sortSelect.addEventListener("change", function () {
@@ -1328,6 +1467,7 @@
       cfgStore = [];
       if (activeTab === "curated") render();
       else if (activeTab === "candidates") renderCandidates();
+      else if (activeTab === "community") renderCommunity();
     });
   }
 

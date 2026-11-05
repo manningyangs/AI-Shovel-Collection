@@ -3,6 +3,7 @@
  *
  * 路由一览：
  *   POST   /api/collection-submissions           创建提交（需登录 session）
+ *   GET    /api/collection-submissions           社区提交公开列表（只读，白名单字段，LIMIT 500）
  *   GET    /api/collection-submissions/:id       查询状态（公开，状态分享链接可用）
  *   POST   /internal/collection-submissions/status   Actions 回调（COLLECTION_CALLBACK_SECRET）
  *
@@ -139,6 +140,22 @@ async function countRecentByHash(
     .bind(hash, since)
     .first<{ n: number }>();
   return row?.n ?? 0;
+}
+
+/** 滚动窗口内最早一笔提交时间（额度 429 倒计时用；仅在触发限流时查询） */
+async function getEarliestRecentByHash(
+  env: AppEnv["Bindings"],
+  hash: string,
+  windowSeconds: number,
+): Promise<number | null> {
+  const since = Math.floor(Date.now() / 1000) - windowSeconds;
+  const row = await env.DB.prepare(
+    `SELECT MIN(created_at) AS t FROM collection_submissions
+     WHERE requester_hash = ? AND created_at >= ?`,
+  )
+    .bind(hash, since)
+    .first<{ t: number | null }>();
+  return row?.t ?? null;
 }
 
 async function insertSubmission(
@@ -323,7 +340,23 @@ export async function handleCreateSubmission(c: Context<AppEnv>) {
   const limit = parseInt(c.env.COLLECTION_RATE_DAILY_PER_IP || "5", 10);
   const used = await countRecentByHash(c.env, requesterHash, IP_LIMIT_WINDOW);
   if (used >= limit) {
-    throw new ApiError(429, "IP_DAILY_LIMIT", `过去 24 小时内提交次数已达上限（${limit} 次），请稍后再试`);
+    // 滚动窗口：最早一笔提交满 24h 时释放一个名额（与评测页同一套倒计时语义，独立额度规则）
+    const now = Math.floor(Date.now() / 1000);
+    const earliest = await getEarliestRecentByHash(c.env, requesterHash, IP_LIMIT_WINDOW);
+    const retryAfter = earliest ? Math.max(0, earliest + IP_LIMIT_WINDOW - now) : 0;
+    const nextAvail = new Date((now + retryAfter) * 1000).toISOString();
+    throw new ApiError(
+      429,
+      "IP_DAILY_LIMIT",
+      `过去 24 小时内提交次数已达上限（${used}/${limit} 次），请在倒计时结束后再试`,
+      {
+        limit,
+        used,
+        retry_after_seconds: retryAfter,
+        next_available_at: nextAvail,
+        window_seconds: IP_LIMIT_WINDOW,
+      },
+    );
   }
 
   // 4. 同仓库进行中任务去重
@@ -399,6 +432,61 @@ export async function handleGetSubmission(c: Context<AppEnv>) {
       updated_at: new Date(row.updated_at * 1000).toISOString(),
       completed_at: row.completed_at ? new Date(row.completed_at * 1000).toISOString() : null,
       cache_hint: now, // 让前端能分辨"刷新"
+    },
+    200,
+    { "Cache-Control": "no-store" },
+  );
+}
+
+/**
+ * 社区提交公开列表（只读，无需登录）。
+ * 三个展示入口（/submit/ 列表、首页社区模块、首页工具目录 Tab）共用的后端数据源：
+ * 返回白名单字段，不暴露 requester_hash（HMAC IP）、workflow_run_id 等内部字段。
+ * LIMIT 与社区候选池容量上限一致（500），统计口径以服务端为准。
+ */
+const LIST_LIMIT = 500;
+
+export async function handleListSubmissions(c: Context<AppEnv>) {
+  const res = await c.env.DB.prepare(
+    `SELECT submission_id, repo_owner, repo_name, repo_url, status, status_message,
+            failure_code, duplicate_of, created_at, updated_at, completed_at
+     FROM collection_submissions
+     ORDER BY created_at DESC
+     LIMIT ?`,
+  )
+    .bind(LIST_LIMIT)
+    .all<{
+      submission_id: string;
+      repo_owner: string;
+      repo_name: string;
+      repo_url: string;
+      status: string;
+      status_message: string | null;
+      failure_code: string | null;
+      duplicate_of: string | null;
+      created_at: number;
+      updated_at: number;
+      completed_at: number | null;
+    }>();
+
+  const rows = res.results ?? [];
+  return c.json(
+    {
+      success: true,
+      count: rows.length,
+      limit: LIST_LIMIT,
+      submissions: rows.map((r) => ({
+        submission_id: r.submission_id,
+        repo: `${r.repo_owner}/${r.repo_name}`,
+        repo_url: r.repo_url,
+        status: r.status,
+        status_message: r.status_message,
+        failure_code: r.failure_code,
+        duplicate_of: r.duplicate_of,
+        created_at: new Date(r.created_at * 1000).toISOString(),
+        updated_at: new Date(r.updated_at * 1000).toISOString(),
+        completed_at: r.completed_at ? new Date(r.completed_at * 1000).toISOString() : null,
+      })),
     },
     200,
     { "Cache-Control": "no-store" },

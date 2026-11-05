@@ -510,6 +510,24 @@
   .src-github_rest   { background: #f1f3f5; color: #24292f; border: 1px solid #d0d7de; }
   .src-npm           { background: #ffebe9; color: #c21825; }
   .src-crates        { background: #fff0f6; color: #be1a72; }
+  .src-community     { background: #eef2ff; color: #4338ca; border: 1px solid #c7d2fe; }
+
+  /* 社区提交收录 Tab：审核状态徽标 + 加载更多（JS 注入卡片使用，需全局样式） */
+  .comm-status {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 700;
+    border-radius: 999px; padding: 1px 8px; white-space: nowrap;
+    margin-right: 6px;
+  }
+  .comm-status.pending { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+  .comm-status.ok      { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+  .comm-more {
+    background: #fff; color: #475569; border: 1.5px solid #e2e8f0;
+    border-radius: 8px; padding: 9px 22px;
+    font-size: 13.5px; font-weight: 600; cursor: pointer; font-family: inherit;
+    transition: all .15s;
+  }
+  .comm-more:hover { border-color: #2563eb; color: #2563eb; background: #fff; }
 
   /* 端点 URL 小胶囊 */
   .ep-pill {
