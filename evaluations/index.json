@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-05T01:45:58.233269Z",
+  "updated_at": "2026-11-05T06:02:21.678866Z",
   "total_reports": 10,
   "reports": [
     {
@@ -16,7 +16,7 @@
       "grade": "C",
       "coverage": 92,
       "commit_sha": "024f97cea9a9",
-      "evaluated_at": "2026-11-05T01:45:58.233269Z"
+      "evaluated_at": "2026-11-05T06:02:21.678866Z"
     },
     {
       "report_id": "woocommerce-woocommerce-c9db32208b26",

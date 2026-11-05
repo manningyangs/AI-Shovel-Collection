@@ -24,7 +24,7 @@
     "official_score": null,
     "grade": "C",
     "coverage": 92,
-    "evaluated_at": "2026-11-05T01:45:58.233269Z",
+    "evaluated_at": "2026-11-05T06:02:21.678866Z",
     "report_generated_by": "AI Shovel Eval",
     "disclaimer": "静态初评 · 非正式认证 · 不能作为项目真实运行能力的担保"
   },
@@ -53,6 +53,51 @@
     "detected_via_manifest": true
   },
   "dimensions": {
+    "functionality": {
+      "label": "功能完整度",
+      "score": 75,
+      "max_score": 100,
+      "weight": 25,
+      "weighted_score": 18.75,
+      "sub_coverage": 80,
+      "sub_items": [
+        {
+          "dim_key": "functionality",
+          "sub_key": "core_completeness",
+          "weight": 5,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "coverage",
+          "weight": 5,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "schema_completeness",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "task_examples",
+          "weight": 5,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "error_handling",
+          "weight": 5,
+          "level": 0,
+          "status": "not_tested"
+        }
+      ]
+    },
     "docs": {
       "label": "文档与开发者体验",
       "score": 92,
@@ -80,6 +125,44 @@
           "sub_key": "license_info",
           "weight": 1,
           "level": 5,
+          "status": "verified"
+        }
+      ]
+    },
+    "ease_of_use": {
+      "label": "易用性与集成体验",
+      "score": 67,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 10.05,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "install_instructions",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "config_env",
+          "weight": 4,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "deploy",
+          "weight": 3,
+          "level": 3,
+          "status": "declared"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "quickstart",
+          "weight": 3,
+          "level": 3,
           "status": "verified"
         }
       ]
@@ -160,44 +243,6 @@
         }
       ]
     },
-    "reliability": {
-      "label": "可靠性与运行效率",
-      "score": 58,
-      "max_score": 100,
-      "weight": 15,
-      "weighted_score": 8.7,
-      "sub_coverage": 75,
-      "sub_items": [
-        {
-          "dim_key": "reliability",
-          "sub_key": "test_evidence",
-          "weight": 5,
-          "level": 4,
-          "status": "verified"
-        },
-        {
-          "dim_key": "reliability",
-          "sub_key": "ci_complete",
-          "weight": 4,
-          "level": 0,
-          "status": "failed"
-        },
-        {
-          "dim_key": "reliability",
-          "sub_key": "error_mechanism",
-          "weight": 3,
-          "level": 2,
-          "status": "not_tested"
-        },
-        {
-          "dim_key": "reliability",
-          "sub_key": "release_stability",
-          "weight": 3,
-          "level": 5,
-          "status": "verified"
-        }
-      ]
-    },
     "security": {
       "label": "安全性与隐私保护",
       "score": 76,
@@ -236,85 +281,40 @@
         }
       ]
     },
-    "functionality": {
-      "label": "功能完整度",
-      "score": 75,
-      "max_score": 100,
-      "weight": 25,
-      "weighted_score": 18.75,
-      "sub_coverage": 80,
-      "sub_items": [
-        {
-          "dim_key": "functionality",
-          "sub_key": "core_completeness",
-          "weight": 5,
-          "level": 3,
-          "status": "verified"
-        },
-        {
-          "dim_key": "functionality",
-          "sub_key": "coverage",
-          "weight": 5,
-          "level": 3,
-          "status": "verified"
-        },
-        {
-          "dim_key": "functionality",
-          "sub_key": "schema_completeness",
-          "weight": 5,
-          "level": 4,
-          "status": "verified"
-        },
-        {
-          "dim_key": "functionality",
-          "sub_key": "task_examples",
-          "weight": 5,
-          "level": 5,
-          "status": "verified"
-        },
-        {
-          "dim_key": "functionality",
-          "sub_key": "error_handling",
-          "weight": 5,
-          "level": 0,
-          "status": "not_tested"
-        }
-      ]
-    },
-    "ease_of_use": {
-      "label": "易用性与集成体验",
-      "score": 67,
+    "reliability": {
+      "label": "可靠性与运行效率",
+      "score": 58,
       "max_score": 100,
       "weight": 15,
-      "weighted_score": 10.05,
-      "sub_coverage": 100,
+      "weighted_score": 8.7,
+      "sub_coverage": 75,
       "sub_items": [
         {
-          "dim_key": "ease_of_use",
-          "sub_key": "install_instructions",
+          "dim_key": "reliability",
+          "sub_key": "test_evidence",
           "weight": 5,
           "level": 4,
           "status": "verified"
         },
         {
-          "dim_key": "ease_of_use",
-          "sub_key": "config_env",
+          "dim_key": "reliability",
+          "sub_key": "ci_complete",
           "weight": 4,
-          "level": 3,
-          "status": "verified"
+          "level": 0,
+          "status": "failed"
         },
         {
-          "dim_key": "ease_of_use",
-          "sub_key": "deploy",
+          "dim_key": "reliability",
+          "sub_key": "error_mechanism",
           "weight": 3,
-          "level": 3,
-          "status": "declared"
+          "level": 2,
+          "status": "not_tested"
         },
         {
-          "dim_key": "ease_of_use",
-          "sub_key": "quickstart",
+          "dim_key": "reliability",
+          "sub_key": "release_stability",
           "weight": 3,
-          "level": 3,
+          "level": 5,
           "status": "verified"
         }
       ]
