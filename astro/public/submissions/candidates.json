@@ -1,8 +1,38 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-05T03:20:21Z",
-  "total": 1,
+  "updated_at": "2026-11-05T03:28:39Z",
+  "total": 2,
   "candidates": [
+    {
+      "repo_slug": "sindresorhus/awesome-nodejs",
+      "repo_url": "https://github.com/sindresorhus/awesome-nodejs",
+      "title": "sindresorhus/awesome-nodejs",
+      "description": ":zap: Delightful Node.js packages and resources [BECAUSE OF TOO MUCH SPAM AND LOW-QUALITY SUBMISSIONS, SUBMISSIONS ARE PAUSED TEMPORARILY]",
+      "language": null,
+      "license_spdx": "CC0-1.0",
+      "stars": 67383,
+      "forks": 6255,
+      "topics": [
+        "awesome",
+        "awesome-list",
+        "nodejs",
+        "javascript",
+        "list",
+        "node"
+      ],
+      "archived": false,
+      "fork": false,
+      "default_branch": "main",
+      "homepage": "https://node.cool",
+      "pushed_at": "2026-09-02T02:11:34Z",
+      "created_at": "2014-07-11T13:35:34Z",
+      "submission_id": "CS-76f07f723b51641748fb3998ddbd955b",
+      "submitted_at": "2026-11-05T03:28:39Z",
+      "reason": "???????:Node.js ??????",
+      "source": "community_submission",
+      "review_status": "pending",
+      "verified_by_auto": true
+    },
     {
       "repo_slug": "withastro/astro",
       "repo_url": "https://github.com/withastro/astro",
