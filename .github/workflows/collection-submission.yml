@@ -105,6 +105,11 @@ jobs:
           python3 - <<'PY'
           import os, sys, re, json, urllib.request, urllib.error
 
+          def emit(k, v):
+              print(f"{k}={v}")
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+                  fh.write(f"{k}={v}\n")
+
           submission_id = os.environ["SUBMISSION_ID"]
           owner = os.environ["REPO_OWNER_INPUT"]
           name = os.environ["REPO_NAME_INPUT"]
@@ -114,7 +119,7 @@ jobs:
           m = re.match(r'^https?://(?:www\.)?github\.com/([^/\s]+)/([^/\s?#]+)/?$', url_input)
           if not m:
               print(f"::error::非法 GitHub URL: {url_input}")
-              print(f"repo_json=INVALID_URL") >> "$GITHUB_OUTPUT"
+              emit("repo_json", "INVALID_URL")
               sys.exit(1)
 
           url_owner = m.group(1).lower()
@@ -123,14 +128,14 @@ jobs:
           # 2. owner/repo 必须与 input 一致（防止 URL 注入）
           if url_owner != owner.lower() or url_name.lower() != name.lower():
               print(f"::error::URL 中的 owner/repo 与输入不一致: URL={url_owner}/{url_name} vs INPUT={owner}/{name}")
-              print(f"repo_json=MISMATCH") >> "$GITHUB_OUTPUT"
+              emit("repo_json", "MISMATCH")
               sys.exit(1)
 
           # 3. 禁止 GitHub 特殊路径
           forbidden = ["issues", "pull", "pulls", "blob", "tree", "commit", "gist", "raw", "releases", "tags", "actions", "wiki", "security", "settings"]
           if url_name in forbidden or url_owner in forbidden:
               print(f"::error::禁止的路径类型: {url_input}")
-              print(f"repo_json=FORBIDDEN_PATH") >> "$GITHUB_OUTPUT"
+              emit("repo_json", "FORBIDDEN_PATH")
               sys.exit(1)
 
           # 4. 通过 GitHub API 获取仓库元数据（不 clone！）
@@ -147,17 +152,17 @@ jobs:
           except urllib.error.HTTPError as e:
               body = e.read().decode(errors="replace")[:300]
               print(f"::error::GitHub API HTTP {e.code}: {body}")
-              print(f"repo_json=API_ERROR_{e.code}") >> "$GITHUB_OUTPUT"
+              emit("repo_json", f"API_ERROR_{e.code}")
               sys.exit(1)
           except Exception as e:
               print(f"::error::GitHub API 异常: {e}")
-              print(f"repo_json=API_EXCEPTION") >> "$GITHUB_OUTPUT"
+              emit("repo_json", "API_EXCEPTION")
               sys.exit(1)
 
           # 5. 必须公开可访问
           if repo.get("private", False):
               print(f"::error::私有仓库，无法自动收录")
-              print(f"repo_json=PRIVATE") >> "$GITHUB_OUTPUT"
+              emit("repo_json", "PRIVATE")
               sys.exit(1)
 
           # 6. 输出精简元数据到 GITHUB_OUTPUT（供后续 Job 使用）
@@ -193,7 +198,7 @@ jobs:
           except Exception:
               pass  # Topics 失败不阻塞
 
-          print(f"repo_json={json.dumps(out)}") >> "$GITHUB_OUTPUT"
+          emit("repo_json", json.dumps(out))
           print(f"✅ 仓库公开有效: {out['full_name']}")
           print(f"   Stars: {out['stargazers_count']} · Lang: {out['language']} · Archived: {out['archived']} · Fork: {out['fork']}")
           PY
@@ -207,6 +212,11 @@ jobs:
         run: |
           python3 - <<'PY'
           import os, sys, json, re
+
+          def emit(k, v):
+              print(f"{k}={v}")
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+                  fh.write(f"{k}={v}\n")
           from pathlib import Path
 
           owner = os.environ["REPO_OWNER_INPUT"].lower()
@@ -228,8 +238,8 @@ jobs:
                   m = re.match(r'^https?://(?:www\.)?github\.com/([^/]+)/([^/?#]+)', url, re.I)
                   if m and f"{m.group(1).lower()}/{m.group(2).replace('.git', '').lower()}" == canonical:
                       print(f"::warning::仓库已存在于精选目录 catalog.csv → duplicate")
-                      print(f"result=duplicate") >> "$GITHUB_OUTPUT"
-                      print(f"message=仓库已存在于精选目录，无需重复提交") >> "$GITHUB_OUTPUT"
+                      emit("result", "duplicate")
+                      emit("message", "仓库已存在于精选目录，无需重复提交")
                       sys.exit(0)
 
           # B. submissions/candidates.json 查重
@@ -241,8 +251,8 @@ jobs:
                       slug = c.get("repo_slug", "") or c.get("slug", "")
                       if slug.lower() == canonical.lower():
                           print(f"::warning::仓库已存在于候选池 submissions/candidates.json → duplicate")
-                          print(f"result=duplicate") >> "$GITHUB_OUTPUT"
-                          print(f"message=仓库已在候选池中，审核通过后会进入精选目录") >> "$GITHUB_OUTPUT"
+                          emit("result", "duplicate")
+                          emit("message", "仓库已在候选池中，审核通过后会进入精选目录")
                           sys.exit(0)
               except Exception as e:
                   print(f"⚠️ candidates.json 读取失败（不阻塞）: {e}")
@@ -256,22 +266,22 @@ jobs:
                       for entry in (lm.get("curated") or {}).values():
                           if isinstance(entry, dict) and (entry.get("repo_slug") or "").lower() == canonical.lower():
                               print(f"::warning::仓库已存在于实时数据 curated → duplicate")
-                              print(f"result=duplicate") >> "$GITHUB_OUTPUT"
-                              print(f"message=仓库已在自动发现列表中") >> "$GITHUB_OUTPUT"
+                              emit("result", "duplicate")
+                              emit("message", "仓库已在自动发现列表中")
                               sys.exit(0)
                       # inbox 部分
                       for entry in (lm.get("inbox") or []):
                           if isinstance(entry, dict) and (entry.get("repo_slug") or "").lower() == canonical.lower():
                               print(f"::warning::仓库已存在于实时数据 inbox → duplicate")
-                              print(f"result=duplicate") >> "$GITHUB_OUTPUT"
-                              print(f"message=仓库已在自动发现候选中") >> "$GITHUB_OUTPUT"
+                              emit("result", "duplicate")
+                              emit("message", "仓库已在自动发现候选中")
                               sys.exit(0)
                   except Exception:
                       pass
 
           # 全部查重通过
-          print(f"result=ok") >> "$GITHUB_OUTPUT"
-          print(f"message=自动校验通过") >> "$GITHUB_OUTPUT"
+          emit("result", "ok")
+          emit("message", "自动校验通过")
           print(f"✅ 查重通过：未在 catalog.csv / candidates.json / live_multi.json 中发现")
           PY
 
@@ -364,6 +374,11 @@ jobs:
         run: |
           python3 - <<'PY'
           import os, json, re
+
+          def emit(k, v):
+              print(f"{k}={v}")
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+                  fh.write(f"{k}={v}\n")
           from pathlib import Path, PurePath
 
           repo_json_raw = os.environ["REPO_JSON"]
@@ -423,8 +438,8 @@ jobs:
               if (ex.get("repo_slug") or "").lower() == canonical.lower():
                   print(f"::warning::write-candidate 二次查重命中: {canonical}（validate 已通过？竞态）→ 跳过写入")
                   # 输出 duplicate 标记，让 commit step 跳过
-                  print("action=skip_duplicate") >> "$GITHUB_OUTPUT"
-                  print(f"submission_id={os.environ['SUBMISSION_ID']}") >> "$GITHUB_OUTPUT"
+                  emit("action", "skip_duplicate")
+                  emit("submission_id", os.environ["SUBMISSION_ID"])
                   raise SystemExit(0)
 
           # 4. 追加新条目，按 submitted_at 倒序
@@ -441,9 +456,9 @@ jobs:
           cand_path.parent.mkdir(parents=True, exist_ok=True)
           cand_path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
           print(f"📄 已写入候选池: {cand_path}（共 {len(existing)} 条）")
-          print(f"slug={canonical}") >> "$GITHUB_OUTPUT"
-          print("action=commit") >> "$GITHUB_OUTPUT"
-          print(f"submission_id={os.environ['SUBMISSION_ID']}") >> "$GITHUB_OUTPUT"
+          emit("slug", canonical)
+          emit("action", "commit")
+          emit("submission_id", os.environ["SUBMISSION_ID"])
           PY
 
       - name: Commit and push candidates.json
