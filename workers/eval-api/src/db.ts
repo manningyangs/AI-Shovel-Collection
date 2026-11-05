@@ -122,6 +122,28 @@ export async function countRecentTasks(
   return row?.n ?? 0;
 }
 
+/**
+ * 同时间窗口的"计数 + 最早一笔创建时间"联合查询。
+ * 供每日额度超限时计算 retry_after_seconds 用：
+ *   earliest_created_at + 86400 - now  = 距离最早一笔任务满 24h 的剩余秒数
+ * 时间单位与 countRecentTasks 一致：D1 记录为 Unix 秒。
+ */
+export async function getRecentTaskWindow(
+  env: Env,
+  requesterId: number,
+  sinceSecondsAgo: number,
+): Promise<{ count: number; earliestCreatedAt: number | null }> {
+  const since = Math.floor(Date.now() / 1000) - sinceSecondsAgo;
+  const row = await env.DB.prepare(
+    `SELECT COUNT(*) AS n, MIN(created_at) AS earliest
+     FROM evaluation_tasks
+     WHERE requester_github_id = ? AND created_at >= ?`,
+  )
+    .bind(requesterId, since)
+    .first<{ n: number; earliest: number | null }>();
+  return { count: row?.n ?? 0, earliestCreatedAt: row?.earliest ?? null };
+}
+
 export async function countActiveTasks(
   env: Env,
   requesterId: number,

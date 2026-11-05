@@ -133,7 +133,14 @@ app.onError((err, c) => {
     console.error("unhandled:", err?.message);
   }
   return c.json(
-    { success: false, error: { code: apiErr.code, message: apiErr.message } },
+    {
+      success: false,
+      error: {
+        code: apiErr.code,
+        message: apiErr.message,
+        ...(apiErr.extra ?? {}),
+      },
+    },
     apiErr.status as ContentfulStatusCode,
     corsNow(c),
   );

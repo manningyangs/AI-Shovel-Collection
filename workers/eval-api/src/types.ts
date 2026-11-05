@@ -78,6 +78,8 @@ export class ApiError extends Error {
     public status: number,
     public code: string,
     message: string,
+    /** 机器可读扩展字段（如 limit/retry_after_seconds/next_available_at 等） */
+    public extra?: Record<string, unknown>,
   ) {
     super(message);
   }
@@ -86,7 +88,7 @@ export class ApiError extends Error {
 export function errJson(e: ApiError) {
   return {
     success: false as const,
-    error: { code: e.code, message: e.message },
+    error: { code: e.code, message: e.message, ...(e.extra ?? {}) },
   };
 }
 

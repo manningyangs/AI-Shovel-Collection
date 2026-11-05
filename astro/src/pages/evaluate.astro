@@ -157,6 +157,21 @@ const reports = indexData.reports || [];
   .auth-user { color: #475569; font-weight: 600; }
   .form-hint { margin-top: 10px; font-size: 0.8rem; color: #94a3b8; }
   .form-hint.error { color: #dc2626; }
+  /* —— 每日额度倒计时（任务书 §五）—— */
+  .quota-block {
+    margin-top: 12px; padding: 12px 16px; background: #fff7ed;
+    border: 1px solid #fed7aa; border-left: 4px solid #f97316; border-radius: 8px;
+  }
+  .quota-title { font-weight: 700; color: #9a3412; font-size: 0.9rem; }
+  .quota-sub { font-size: 0.78rem; color: #c2410c; margin-top: 4px; line-height: 1.5; }
+  .quota-row { font-size: 0.85rem; color: #7c2d12; margin-top: 10px; font-weight: 600; }
+  .quota-time {
+    display: inline-block; margin-left: 4px; padding: 2px 10px;
+    background: #fed7aa; color: #9a3412; border-radius: 6px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0.03em;
+  }
+  .quota-done { margin-top: 10px; font-size: 0.8rem; color: #166534; font-weight: 600; }
 
   /* —— 八阶段进度面板 —— */
   .progress-panel { margin-top: 16px; border-top: 1px dashed #e2e8f0; padding-top: 16px; }
@@ -328,6 +343,13 @@ const reports = indexData.reports || [];
         <input id="repoInput" type="url" placeholder="https://github.com/owner/repository" />
         <button id="submitEvalBtn" type="button">✨ 申请评测 →</button>
         <p class="form-hint" id="submitHint"></p>
+        <!-- 每日额度滚动倒计时（任务书 §五） -->
+        <div class="quota-block" id="quotaBlock" hidden>
+          <div class="quota-title">⚠️ 评测额度已用完</div>
+          <div class="quota-sub">过去 24 小时内已使用 5 次评测额度，按滚动窗口依次释放。</div>
+          <div class="quota-row">距离下一次额度释放还有：<span class="quota-time" id="quotaTime">--</span></div>
+          <div class="quota-done" id="quotaDone" hidden>✅ 额度预计已释放，可以重新提交评测（最终以服务端校验为准）。</div>
+        </div>
       </div>
 
       <!-- 八阶段进度面板 -->
@@ -380,11 +402,72 @@ const reports = indexData.reports || [];
     progressMsg: $("progressMsg"), stageList: $("stageList"),
     reportLink: $("reportLink"), newEvalBtn: $("newEvalBtn"),
     historyPanel: $("historyPanel"), historyList: $("historyList"),
+    quotaBlock: $("quotaBlock"), quotaTime: $("quotaTime"), quotaDone: $("quotaDone"),
   };
 
   let pollTimer = null;
   let pollErrors = 0;
   let currentUser = null;
+
+  // —— 每日额度倒计时（任务书 §五）——
+  const QUOTA_KEY = "EVAL_QUOTA_NEXT_AT"; // sessionStorage
+  let quotaTimer = null;
+
+  function clearQuotaTimer() {
+    if (quotaTimer) { clearInterval(quotaTimer); quotaTimer = null; }
+  }
+
+  function formatHMS(sec) {
+    sec = Math.max(0, Math.floor(sec));
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    const s = sec % 60;
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${pad(h)}小时${pad(m)}分${pad(s)}秒`;
+  }
+
+  function startQuotaCountdown(nextAtIso) {
+    clearQuotaTimer();
+    const nextMs = new Date(nextAtIso).getTime();
+    if (!nextMs || isNaN(nextMs)) return;
+    // 存一份（nextAt + 接收时 Date.now()），页面刷新恢复用
+    sessionStorage.setItem(QUOTA_KEY, JSON.stringify({ next: nextAtIso, receivedAt: Date.now() }));
+
+    els.quotaBlock.hidden = false;
+    els.quotaDone.hidden = true;
+    els.quotaTime.textContent = formatHMS((nextMs - Date.now()) / 1000);
+    // 禁用提交按钮（倒计时期间不允许提交）
+    els.submitBtn.disabled = true;
+
+    quotaTimer = setInterval(() => {
+      const remain = Math.floor((nextMs - Date.now()) / 1000);
+      if (remain <= 0) {
+        clearQuotaTimer();
+        sessionStorage.removeItem(QUOTA_KEY);
+        els.quotaTime.textContent = "00小时00分00秒";
+        els.quotaTime.hidden = true;
+        els.quotaDone.hidden = false;
+        els.submitBtn.disabled = false; // 恢复可提交状态
+        // 不自动提交（任务书 §五.3）
+        return;
+      }
+      els.quotaTime.textContent = formatHMS(remain);
+    }, 1000);
+  }
+
+  function restoreQuotaFromStorage() {
+    try {
+      const raw = sessionStorage.getItem(QUOTA_KEY);
+      if (!raw) return;
+      const { next } = JSON.parse(raw);
+      const nextMs = new Date(next).getTime();
+      if (!nextMs || nextMs <= Date.now()) {
+        sessionStorage.removeItem(QUOTA_KEY);
+        return;
+      }
+      startQuotaCountdown(next);
+    } catch (e) { sessionStorage.removeItem(QUOTA_KEY); }
+  }
 
   const STAGE_TITLES = {
     queued: "⏳ 等待评测开始",
@@ -411,6 +494,13 @@ const reports = indexData.reports || [];
         const err = new Error((data && data.error && data.error.message) || ("请求失败 HTTP " + res.status));
         err.status = res.status;
         err.code = data && data.error && data.error.code;
+        // Worker 429 daily limit 扩展字段（§四.2）
+        if (data && data.error) {
+          const e = data.error;
+          if (typeof e.retry_after_seconds === "number") err.retry_after_seconds = e.retry_after_seconds;
+          if (typeof e.next_available_at === "string") err.next_available_at = e.next_available_at;
+          if (typeof e.limit === "number") err.limit = e.limit;
+        }
         throw err;
       }
       return data;
@@ -557,6 +647,8 @@ const reports = indexData.reports || [];
   function clearSession() {
     sessionStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem(TASK_KEY);
+    sessionStorage.removeItem(QUOTA_KEY);
+    clearQuotaTimer();
     currentUser = null;
   }
 
@@ -608,6 +700,7 @@ const reports = indexData.reports || [];
         if (!user.login && !user.id) { showLoginState(); return; }
         showLoggedIn(user);
         loadHistory();
+        restoreQuotaFromStorage(); // 页面刷新恢复每日额度倒计时（任务书 §五.4）
         // 恢复进行中的任务
         const saved = sessionStorage.getItem(TASK_KEY);
         if (saved) {
@@ -666,6 +759,12 @@ const reports = indexData.reports || [];
         // 409 → 已有进行中任务，直接恢复展示
         if (err.status === 409 && err.code && /EXIST|ACTIVE|QUEUE/.test(err.code)) {
           els.submitHint.textContent = err.message;
+          return;
+        }
+        // 429 → 每日额度用尽，启动滚动窗口倒计时（任务书 §五.2-3）
+        if (err.status === 429 && err.code === "DAILY_LIMIT_EXCEEDED" && err.next_available_at) {
+          els.submitHint.textContent = err.message + "（额度滚动释放，非零点重置）";
+          startQuotaCountdown(err.next_available_at);
           return;
         }
         els.submitHint.textContent = "提交失败：" + err.message;

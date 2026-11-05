@@ -10,9 +10,9 @@ import { ApiError, STAGE_TOTAL } from "./types";
 import {
   bindRunId,
   countActiveTasks,
-  countRecentTasks,
   findByIdempotencyKey,
   getOwnedTask,
+  getRecentTaskWindow,
   insertTask,
   listTasksByUser,
   updateTaskStatus,
@@ -91,14 +91,30 @@ export async function handleCreateEvaluation(c: Context<AppEnv>): Promise<Respon
     if (existing) return idempotentResponse(c, existing);
   }
 
-  // 2) 频率限制（可配置，任务书 §17.4 建议初始值 3 / 1 / 2）
+  // 2) 频率限制（可配置，任务书 §三：从 3 → 5；保留滚动 24h 语义）
   const dailyLimit = Number(env.RATE_DAILY_PER_USER) || 3;
-  const dailyUsed = await countRecentTasks(env, session.github_user_id, DAY_SECONDS);
+  const { count: dailyUsed, earliestCreatedAt } = await getRecentTaskWindow(
+    env,
+    session.github_user_id,
+    DAY_SECONDS,
+  );
   if (dailyUsed >= dailyLimit) {
+    // 滚动窗口：最早一笔创建满 24h 时释放一个名额
+    const now = Math.floor(Date.now() / 1000);
+    const retryAfter = earliestCreatedAt
+      ? Math.max(0, earliestCreatedAt + DAY_SECONDS - now)
+      : 0;
+    const nextAvail = new Date((now + retryAfter) * 1000).toISOString();
     throw new ApiError(
       429,
-      "RATE_DAILY_LIMIT",
-      `今日评测提交次数已达上限（${dailyLimit} 次/天），请明天再试`,
+      "DAILY_LIMIT_EXCEEDED",
+      `过去 24 小时内已使用 ${dailyUsed}/${dailyLimit} 次评测额度，请在倒计时结束后再试`,
+      {
+        limit: dailyLimit,
+        retry_after_seconds: retryAfter,
+        next_available_at: nextAvail,
+        window_seconds: DAY_SECONDS,
+      },
     );
   }
 

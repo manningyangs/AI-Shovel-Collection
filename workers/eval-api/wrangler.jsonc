@@ -19,7 +19,7 @@
     "GITHUB_WORKFLOW_FILE": "evaluate-shovel.yml",
     "PUBLIC_SITE_BASE_URL": "https://manningyangs.github.io/AI-Shovel-Collection",
     "ALLOWED_SITE_ORIGINS": "https://manningyangs.github.io,http://localhost:4321",
-    "RATE_DAILY_PER_USER": "3",
+    "RATE_DAILY_PER_USER": "5",
     "RATE_MAX_ACTIVE_PER_REPO": "1",
     "RATE_MAX_QUEUED_PER_USER": "2",
     "SESSION_TTL_SECONDS": "28800"
