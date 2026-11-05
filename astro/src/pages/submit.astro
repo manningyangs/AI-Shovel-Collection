@@ -11,7 +11,9 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
   canonical="/submit/"
 >
 
-<style>
+<!-- is:global：列表卡片/进度卡/通知等由页内脚本动态注入，
+     无法携带 Astro scoped 属性，必须用全局选择器才能命中 -->
+<style is:global>
   :root {
     --primary: #4f46e5;
     --primary-h: #4338ca;
