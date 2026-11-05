@@ -494,11 +494,11 @@ try {
   .home-feature-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
+    gap: 22px;
     align-items: stretch;
-    max-width: 980px;
-    /* 上距统计区 28px（沿用原模块节奏）；下距工具目录 36px，避免第二行卡片贴住筛选栏 */
-    margin: 28px auto 36px;
+    max-width: 1400px;
+    /* 上距统计区 28px；下距工具目录 32px（+hero 自身 padding-bottom 8px ≈ 视觉 40px） */
+    margin: 28px auto 32px;
   }
   /* 四个模块根节点各带 margin（28px auto 0 等），且工具地图为行内样式 ——
      统一清零，间距只由网格外层管理，避免叠加 */
@@ -515,10 +515,23 @@ try {
     min-width: 0; overflow-wrap: anywhere; /* 允许换行，不做省略号截断 */
   }
   .home-feature-grid .ttv21-meta { margin-top: 0; margin-left: auto; flex: none; }
+  /* 社区新提交内部卡片列表：宽格子（~640px 内容宽）下 auto-fit 会变 3+1，
+     固定两列保持 2×2 紧凑排列；minmax(0) 防止窄列溢出 */
+  .home-feature-grid .cf-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 
   @media (max-width: 768px) {
     /* minmax(0,1fr)：单列时也禁止 min-content 撑破轨道（1fr 自带 auto 最小值会溢出） */
     .home-feature-grid { grid-template-columns: minmax(0, 1fr); margin-bottom: 32px; }
+  }
+  @media (max-width: 480px) {
+    /* 手机窄屏：社区提交列表退化为单列，避免两条 110px 级窄列挤压名称 */
+    .home-feature-grid .cf-row { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 560px) {
+    /* 手机窄屏：榜单行内放不下名称+元信息时，Stars/语言换行到第二行，
+       避免名称被压成逐字换行的细条（320px 下曾高 600px） */
+    .home-feature-grid .ttv21-card { flex-wrap: wrap; }
+    .home-feature-grid .ttv21-meta { flex: 0 0 100%; margin-left: 0; }
   }
 
   /* 🤝 社区新提交引导模块（indigo 识别色，视觉语言对齐排行榜/评测报告/工具地图） */
