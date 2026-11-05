@@ -72,7 +72,7 @@ jobs:
       REPO_NAME_INPUT: ${{ inputs.repo_name }}
       REPO_URL_INPUT: ${{ inputs.repo_url }}
       COLLECTION_CALLBACK_SECRET: ${{ secrets.COLLECTION_CALLBACK_SECRET }}
-      COLLECTION_CALLBACK_URL: ${{ vars.COLLECTION_CALLBACK_URL || 'https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status' }}
+      COLLECTION_CALLBACK_URL: https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status
     steps:
       # —— ① 回调 Worker：processing ——
       - name: Callback status → processing
@@ -281,7 +281,7 @@ jobs:
         env:
           SUBMISSION_ID: ${{ inputs.submission_id }}
           COLLECTION_CALLBACK_SECRET: ${{ secrets.COLLECTION_CALLBACK_SECRET }}
-          COLLECTION_CALLBACK_URL: ${{ vars.COLLECTION_CALLBACK_URL || 'https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status' }}
+          COLLECTION_CALLBACK_URL: https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status
         run: |
           python3 - <<'PY'
           import os, json, urllib.request
@@ -314,7 +314,7 @@ jobs:
     env:
       SUBMISSION_ID: ${{ inputs.submission_id }}
       COLLECTION_CALLBACK_SECRET: ${{ secrets.COLLECTION_CALLBACK_SECRET }}
-      COLLECTION_CALLBACK_URL: ${{ vars.COLLECTION_CALLBACK_URL || 'https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status' }}
+      COLLECTION_CALLBACK_URL: https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status
     steps:
       - name: Callback → duplicate
         env:
@@ -354,7 +354,7 @@ jobs:
       REASON_INPUT: ${{ inputs.reason }}
       REPO_JSON: ${{ needs.validate.outputs.repo_json }}
       COLLECTION_CALLBACK_SECRET: ${{ secrets.COLLECTION_CALLBACK_SECRET }}
-      COLLECTION_CALLBACK_URL: ${{ vars.COLLECTION_CALLBACK_URL || 'https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status' }}
+      COLLECTION_CALLBACK_URL: https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status
     steps:
       - name: Checkout
         uses: actions/checkout@v4

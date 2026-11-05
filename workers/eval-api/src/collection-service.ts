@@ -399,10 +399,13 @@ export async function handleGetSubmission(c: Context<AppEnv>) {
 }
 
 export async function handleCollectionCallback(c: Context<AppEnv>) {
-  // 1. COLLECTION_CALLBACK_SECRET 校验（恒定时间比较）
   const auth = c.req.header("Authorization") || "";
+  const url = new URL(c.req.url);
+  console.log(`[callback] INCOMING ${c.req.method} ${url.pathname} auth_len=${auth.length}`);
+
   const expected = `Bearer ${c.env.COLLECTION_CALLBACK_SECRET}`;
   if (!(await timingSafeEqual(auth, expected))) {
+    console.log(`[callback] UNAUTHORIZED (auth mismatch). auth_prefix=${auth.slice(0, 20)}... expected_len=${expected.length}`);
     throw new ApiError(401, "CALLBACK_UNAUTHORIZED", "回调凭据无效");
   }
 
@@ -416,6 +419,13 @@ export async function handleCollectionCallback(c: Context<AppEnv>) {
   const id = (body?.submission_id || "").toString().trim();
   const status = (body?.status || "").toString().trim();
   const message = (body?.status_message || body?.message || "").toString().trim().slice(0, 300) || null;
+  console.log(`[callback] parsed id=${id} status=${status}`);
+
+  if (!id) throw new ApiError(400, "SUBMISSION_ID_REQUIRED", "缺少 submission_id");
+  if (!VALID_STATUS.has(status)) {
+    console.log(`[callback] INVALID_STATUS ${status}`);
+    throw new ApiError(400, "INVALID_STATUS", `无效状态：${status}`);
+  }
   const failureCode = (body?.failure_code || "").toString().trim().slice(0, 60) || null;
   const runIdRaw = body?.workflow_run_id;
   const runId = typeof runIdRaw === "number" ? runIdRaw : null;
