@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-05T01:42:36.347848Z",
-  "total_reports": 9,
+  "updated_at": "2026-11-05T01:45:58.233269Z",
+  "total_reports": 10,
   "reports": [
+    {
+      "report_id": "zcaceres-markdownify-mcp-012bb63ceeee",
+      "owner": "zcaceres",
+      "name": "markdownify-mcp",
+      "url": "https://github.com/zcaceres/markdownify-mcp",
+      "project_type": "mcp_server",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 67,
+      "grade": "C",
+      "coverage": 92,
+      "commit_sha": "024f97cea9a9",
+      "evaluated_at": "2026-11-05T01:45:58.233269Z"
+    },
     {
       "report_id": "woocommerce-woocommerce-c9db32208b26",
       "owner": "woocommerce",
