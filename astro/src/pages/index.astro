@@ -220,6 +220,8 @@ try {
     <div class="stat-card" title="已收录仓库的 GitHub Stars 累加"><div class="stat-num c4" id="statStars">…</div><div class="stat-label">累计 GitHub Stars</div></div>
   </div>
 
+  <!-- ===== 核心功能入口区：四模块 2×2（排行榜 → 评测 → 地图 → 社区） ===== -->
+  <div class="home-feature-grid">
   <!-- V2.1: Trending Top 3 横排区块 -->
   {trendingTop3.length > 0 ? (
   <section class="trending-top-v21" aria-label="🔥 Trending Top 3">
@@ -301,6 +303,7 @@ try {
       <a class="cf-btn" href={`/AI-Shovel-Collection/submit/`}>📄 收录列表</a>
     </div>
   </section>
+  </div><!-- /.home-feature-grid -->
 
   <noscript><div class="noscript-note">⚠️ 当前浏览器未启用 JavaScript：下方列表需 JS 渲染，请直接查看 <a href="https://github.com/manningyangs/AI-Shovel-Collection/blob/main/catalog.csv">catalog.csv</a>（191 条精选）或 <a href="live_multi.json">live_multi.json</a>（含候选与端点实测数据）。</div></noscript>
 </header>
@@ -487,6 +490,37 @@ try {
 </aside>
 
 <style>
+  /* ===== 核心功能入口区：四大引导模块 2×2 网格 ===== */
+  .home-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    align-items: stretch;
+    max-width: 980px;
+    /* 上距统计区 28px（沿用原模块节奏）；下距工具目录 36px，避免第二行卡片贴住筛选栏 */
+    margin: 28px auto 36px;
+  }
+  /* 四个模块根节点各带 margin（28px auto 0 等），且工具地图为行内样式 ——
+     统一清零，间距只由网格外层管理，避免叠加 */
+  .home-feature-grid > :global(*) { margin: 0 !important; min-width: 0; }
+  /* 网格内 Stars 榜单：单行紧凑排行（排名 / 名称 / Stars / 语言）；
+     轨道与卡片都必须 minmax(0)/min-width:0，否则 1fr 的 auto 最小值会被 nowrap 内容撑破 */
+  .home-feature-grid .ttv21-row { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .home-feature-grid .ttv21-card {
+    display: flex; align-items: center; gap: 8px;
+    padding: 11px 14px;
+    min-width: 0;
+  }
+  .home-feature-grid .ttv21-name {
+    min-width: 0; overflow-wrap: anywhere; /* 允许换行，不做省略号截断 */
+  }
+  .home-feature-grid .ttv21-meta { margin-top: 0; margin-left: auto; flex: none; }
+
+  @media (max-width: 768px) {
+    /* minmax(0,1fr)：单列时也禁止 min-content 撑破轨道（1fr 自带 auto 最小值会溢出） */
+    .home-feature-grid { grid-template-columns: minmax(0, 1fr); margin-bottom: 32px; }
+  }
+
   /* 🤝 社区新提交引导模块（indigo 识别色，视觉语言对齐排行榜/评测报告/工具地图） */
   .community-feat {
     max-width: 980px;
@@ -549,7 +583,7 @@ try {
   .cf-name {
     font-size: .84rem; font-weight: 700; color: var(--text);
     font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    overflow-wrap: anywhere; /* 工具名正常换行，不截断（简介仍按需截断） */
   }
   .cf-desc {
     font-size: .75rem; color: var(--text-2); line-height: 1.5;
