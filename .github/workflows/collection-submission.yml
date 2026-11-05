@@ -117,7 +117,7 @@ jobs:
           url_input = os.environ["REPO_URL_INPUT"]
 
           # 1. URL 格式严格校验（只允许 github.com/owner/repo 形式）
-          m = re.match(r'^https?://(?:www\.)?github\.com/([^/\s]+)/([^/\s?#]+)/?$', url_input)
+          m = re.match(r'^https?://(?:www\.)?github\.com/([A-Za-z0-9-]+)/([A-Za-z0-9._-]+)/?$', url_input)
           if not m:
               print(f"::error::非法 GitHub URL: {url_input}")
               emit("repo_json", "INVALID_URL")

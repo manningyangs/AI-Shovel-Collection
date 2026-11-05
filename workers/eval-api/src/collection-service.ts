@@ -38,7 +38,9 @@ const URL_MAX = 400;
 const IP_LIMIT_WINDOW = 86_400; // 24h
 const SUBMISSION_ID_BYTES = 16; // 128-bit 随机
 
-const GITHUB_REPO_RE = /^https?:\/\/(?:www\.)?github\.com\/([^/\s]+)\/([^/\s?#]+)\/?.*$/i;
+// 严格：只允许 github.com/owner/repo（可带尾斜杠/.git 后缀）。
+// 拒绝 Issue/PR/blob 等额外路径段、query、fragment、凭据（user:pass@）、非字符集字符。
+const GITHUB_REPO_RE = /^https?:\/\/(?:www\.)?github\.com\/([A-Za-z0-9-]+)\/([A-Za-z0-9._-]+)\/?$/i;
 
 function randomSubmissionId(): string {
   const buf = new Uint8Array(SUBMISSION_ID_BYTES);
