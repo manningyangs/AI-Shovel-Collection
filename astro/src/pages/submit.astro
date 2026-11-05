@@ -27,6 +27,14 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     --blue: #3b82f6;
   }
   .submit-wrap { max-width: 720px; margin: 0 auto; padding: 40px 20px; }
+  .back-home {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; margin-bottom: 16px;
+    background: #fff; color: var(--text-2); text-decoration: none;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 13.5px; font-weight: 600; transition: all .15s;
+  }
+  .back-home:hover { border-color: var(--primary); color: var(--primary); }
   .submit-hero {
     border-radius: 16px; padding: 32px; margin-bottom: 28px;
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
@@ -118,6 +126,8 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
 </style>
 
 <div class="submit-wrap">
+  <a class="back-home" href={`${base}/`}>← 返回主页</a>
+
   <div class="submit-hero">
     <h1>📥 提交收录一个工具</h1>
     <p>
