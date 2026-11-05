@@ -74,6 +74,10 @@ jobs:
       COLLECTION_CALLBACK_SECRET: ${{ secrets.COLLECTION_CALLBACK_SECRET }}
       COLLECTION_CALLBACK_URL: https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status
     steps:
+      # —— ⓪ Checkout：check 查重需要读取 catalog.csv / candidates.json / live_multi.json ——
+      - name: Checkout
+        uses: actions/checkout@v4
+
       # —— ① 回调 Worker：processing ——
       - name: Callback status → processing
         run: |
@@ -489,7 +493,30 @@ jobs:
           fi
 
       # —— 候选写入终态回调 ——
+      - name: Callback → duplicate (merge 层去重兜底)
+        if: steps.merge.outputs.action == 'skip_duplicate'
+        env:
+          MSG: "仓库已在候选池中，审核通过后会进入精选目录"
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          url = os.environ["COLLECTION_CALLBACK_URL"]
+          body = json.dumps({
+              "submission_id": os.environ["SUBMISSION_ID"],
+              "status": "duplicate",
+              "status_message": os.environ.get("MSG", "重复提交"),
+          }).encode()
+          req = urllib.request.Request(url, data=body, method="POST", headers={
+              "Content-Type": "application/json",
+              "User-Agent": "ai-shovel-collection-actions/1.0 (+https://github.com/manningyangs/AI-Shovel-Collection)",
+              "Authorization": f"Bearer {os.environ['COLLECTION_CALLBACK_SECRET']}",
+          })
+          with urllib.request.urlopen(req, timeout=15) as r:
+              print(f"duplicate callback → HTTP {r.status}")
+          PY
+
       - name: Callback → candidate_added
+        if: steps.merge.outputs.action == 'commit'
         env:
           MSG: "自动校验通过，已进入待人工审核候选池"
         run: |
