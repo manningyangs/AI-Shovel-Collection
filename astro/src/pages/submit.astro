@@ -457,9 +457,10 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
 
   async function doPoll(id, slug) {
     try {
-      const resp = await fetch(`${API_BASE}/api/collection-submissions/${id}`, {
-        headers: { "Cache-Control": "no-store" },
-      });
+      // 注意：不要加 Cache-Control 等自定义请求头 —— 会触发 CORS 预检，
+      // 而 Worker 的 Access-Control-Allow-Headers 只放行 Content-Type / Authorization，
+      // 预检失败会让轮询永远拿不到状态（服务端响应本身已带 no-store）。
+      const resp = await fetch(`${API_BASE}/api/collection-submissions/${id}`);
       if (!resp.ok) {
         // 404 / 其他错误 —— 不阻塞，继续轮询
         scheduleNextPoll(id, slug);
@@ -481,7 +482,8 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
         scheduleNextPoll(id, slug);
       }
     } catch (err) {
-      // 网络错误 —— 继续轮询
+      // 网络错误 / CORS 错误 —— 继续轮询，同时留痕便于诊断
+      console.warn("[submit] poll failed, will retry:", err?.message || err);
       scheduleNextPoll(id, slug);
     }
   }
