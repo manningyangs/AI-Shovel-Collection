@@ -1,8 +1,35 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-05T03:42:55Z",
-  "total": 3,
+  "updated_at": "2026-11-05T05:07:37Z",
+  "total": 4,
   "candidates": [
+    {
+      "repo_slug": "manningyangs/AI-Shovel-Collection",
+      "repo_url": "https://github.com/manningyangs/AI-Shovel-Collection",
+      "title": "manningyangs/AI-Shovel-Collection",
+      "description": "Discover open-source “shovels” that let AI agents actually operate software, data, and workflows — curated MCP servers, Agent Skills, CLI/SDK tools, and automation utilities. 让 AI 真正动手干活的开源工具精选目录。",
+      "language": "TypeScript",
+      "license_spdx": "MIT",
+      "stars": 1,
+      "forks": 2,
+      "topics": [
+        "ai",
+        "mcp-server",
+        "shovels"
+      ],
+      "archived": false,
+      "fork": false,
+      "default_branch": "main",
+      "homepage": "https://manningyangs.github.io/AI-Shovel-Collection/#hero",
+      "pushed_at": "2026-11-05T03:46:35Z",
+      "created_at": "2026-10-29T01:33:02Z",
+      "submission_id": "CS-df717dbcf61b9ce5a1a6c44dca87c3fd",
+      "submitted_at": "2026-11-05T05:07:37Z",
+      "reason": "自己怎么不提交呢",
+      "source": "community_submission",
+      "review_status": "pending",
+      "verified_by_auto": true
+    },
     {
       "repo_slug": "expressjs/express",
       "repo_url": "https://github.com/expressjs/express",
