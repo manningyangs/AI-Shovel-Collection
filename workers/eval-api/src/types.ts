@@ -8,6 +8,9 @@ export interface Env {
   GITHUB_APP_PRIVATE_KEY: string;
   GITHUB_APP_INSTALLATION_ID: string;
   EVAL_PROGRESS_SECRET: string;
+  // —— 提交收录改造新增（任务书 §八）——
+  COLLECTION_CALLBACK_SECRET: string;  // Worker ↔ collection-submission.yml 回调共享
+  COLLECTION_IP_SALT: string;          // HMAC(客户端 IP) 摘要盐，不明文存 IP
   // Vars（wrangler.jsonc）
   GITHUB_APP_ID: string;
   GITHUB_API_REPOSITORY: string;
@@ -18,6 +21,9 @@ export interface Env {
   RATE_MAX_ACTIVE_PER_REPO: string;
   RATE_MAX_QUEUED_PER_USER: string;
   SESSION_TTL_SECONDS: string;
+  // —— 提交收录改造新增 vars ——
+  COLLECTION_WORKFLOW_FILE: string;         // collection-submission.yml
+  COLLECTION_RATE_DAILY_PER_IP: string;      // 5 (任务书 §5.5)
 }
 
 export type TaskStatus =

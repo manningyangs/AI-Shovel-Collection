@@ -1,0 +1,628 @@
+---
+import Base from "../layouts/Base.astro";
+
+const base = "/AI-Shovel-Collection";
+const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/, "");
+---
+
+<Base
+  title="📥 提交收录 · AI Shovel Collection"
+  description="推荐一个 GitHub 工具仓库，AI Shovel 会自动校验并加入待人工审核候选池"
+  canonical="/submit/"
+>
+
+<style>
+  :root {
+    --primary: #4f46e5;
+    --primary-h: #4338ca;
+    --text: #0f172a;
+    --text-2: #475569;
+    --text-3: #94a3b8;
+    --border: #e2e8f0;
+    --surface: #ffffff;
+    --bg: #f8fafc;
+    --green: #10b981;
+    --red: #dc2626;
+    --amber: #d97706;
+    --blue: #3b82f6;
+  }
+  .submit-wrap { max-width: 720px; margin: 0 auto; padding: 40px 20px; }
+  .submit-hero {
+    border-radius: 16px; padding: 32px; margin-bottom: 28px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
+    color: #fff; box-shadow: 0 4px 20px rgba(99,102,241,0.25);
+  }
+  .submit-hero h1 { font-size: 1.65rem; margin: 0 0 10px; }
+  .submit-hero p { margin: 0; opacity: 0.92; line-height: 1.7; font-size: 14.5px; }
+
+  .card {
+    background: #fff; border: 1px solid var(--border); border-radius: 12px;
+    padding: 22px 24px; margin-bottom: 18px;
+  }
+  .card h3 { font-size: 14.5px; font-weight: 700; margin: 0 0 14px; color: var(--text); }
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--text-2); margin-bottom: 6px; }
+
+  input[type="url"], textarea {
+    width: 100%; padding: 11px 13px; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: 14px; font-family: inherit; color: var(--text);
+    background: #fff; transition: border-color .15s; box-sizing: border-box;
+  }
+  textarea { resize: vertical; min-height: 100px; font-family: inherit; line-height: 1.6; }
+  input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.12); }
+
+  button {
+    background: var(--primary); color: #fff; border: 0; border-radius: 8px;
+    padding: 11px 24px; font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: inherit; transition: background .15s;
+  }
+  button:hover:not(:disabled) { background: var(--primary-h); }
+  button.secondary { background: #fff; color: var(--text); border: 1.5px solid var(--border); }
+  button.secondary:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
+  button:disabled { opacity: .55; cursor: not-allowed; }
+
+  .hint { font-size: 12.5px; color: var(--text-3); margin-top: 6px; line-height: 1.5; }
+  .mt { margin-top: 14px; }
+  .spinner {
+    display: inline-block; width: 14px; height: 14px; border: 2px solid #e2e8f0;
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin .7s linear infinite; vertical-align: middle; margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* 结果面板 */
+  .result-card { border-radius: 12px; padding: 22px 24px; margin-bottom: 18px; border: 1px solid transparent; }
+  .result-success { background: #f0fdf4; border-color: #bbf7d0; }
+  .result-error   { background: #fef2f2; border-color: #fecaca; }
+  .result-duplicate { background: #fff7ed; border-color: #fed7aa; }
+  .result-processing { background: #eff6ff; border-color: #bfdbfe; }
+
+  .result-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+  .result-sub { font-size: 13.5px; color: var(--text-2); line-height: 1.6; }
+
+  .submission-id {
+    display: inline-block; background: #eef2ff; color: var(--primary);
+    padding: 4px 10px; border-radius: 6px; font-family: ui-monospace, Consolas, monospace;
+    font-size: 12.5px; font-weight: 600; letter-spacing: .3px;
+  }
+
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+  }
+  .pill-queued     { background: #f1f5f9; color: #475569; }
+  .pill-processing { background: #dbeafe; color: #1e40af; }
+  .pill-candidate  { background: #dcfce7; color: #166534; }
+  .pill-duplicate  { background: #ffedd5; color: #9a3412; }
+  .pill-rejected   { background: #fee2e2; color: #991b1b; }
+  .pill-failed     { background: #f1f5f9; color: #475569; }
+
+  .link-row { margin-top: 14px; font-size: 13px; color: var(--text-2); }
+  .link-row a { color: var(--primary); text-decoration: none; }
+  .link-row a:hover { text-decoration: underline; }
+
+  .rules {
+    background: #f8fafc; border-radius: 10px; padding: 14px 18px;
+    font-size: 13px; color: var(--text-2); line-height: 1.7;
+  }
+  .rules b { color: var(--text); }
+  .rules ul { margin: 8px 0 0; padding-left: 18px; }
+  .rules li { margin-bottom: 3px; }
+
+  .api-off {
+    background: #fef3c7; border: 1px solid #fde68a; color: #92400e;
+    border-radius: 10px; padding: 14px 18px; font-size: 13px; font-weight: 500;
+    margin-bottom: 20px;
+  }
+
+  footer { text-align: center; color: var(--text-3); font-size: 12.5px; margin-top: 30px; }
+</style>
+
+<div class="submit-wrap">
+  <div class="submit-hero">
+    <h1>📥 提交收录一个工具</h1>
+    <p>
+      输入 GitHub 仓库地址，AI Shovel 会自动获取仓库信息、完成基础校验，
+      校验通过后将进入<b>待人工审核候选池</b>。
+      <br><b>人工审核通过后才会进入精选工具目录</b>。
+    </p>
+  </div>
+
+  <div id="apiOff" class="api-off" style="display:none">
+    ⚠️ 后端服务暂未接入（PUBLIC_EVAL_API_BASE 未配置），提交功能暂时不可用。
+    请稍后再来，或联系维护者。
+  </div>
+
+  <!-- 提交表单 -->
+  <div class="card" id="formCard">
+    <h3>① 填写仓库信息</h3>
+    <label for="repoUrl">GitHub 仓库地址 <span style="color:#dc2626">*</span></label>
+    <input type="url" id="repoUrl" placeholder="https://github.com/用户名/仓库名"
+      autocomplete="off" spellcheck="false">
+    <p class="hint">
+      示例：<code>https://github.com/PlaywrightMCP/playwright-mcp</code>
+      &nbsp;·&nbsp;
+      仅支持公开的 GitHub 仓库（Issue / PR / Gist 链接无效）
+    </p>
+
+    <label for="reason" class="mt">推荐理由（选填）</label>
+    <textarea id="reason" placeholder="为什么觉得这个工具值得推荐？有什么亮点？（最多 500 字）"
+      maxlength="500"></textarea>
+    <p class="hint"><span id="reasonCount">0</span> / 500 字</p>
+
+    <button id="submitBtn" class="mt" type="button">🚀 提交收录</button>
+  </div>
+
+  <!-- 规则说明 -->
+  <div class="card">
+    <h3>📋 收录规则</h3>
+    <div class="rules">
+      <b>自动校验会检查：</b>
+      <ul>
+        <li>仓库是否公开可访问</li>
+        <li>是否已经在精选目录或候选池中（去重）</li>
+        <li>是否已经有同样的仓库正在处理中</li>
+      </ul>
+      <br>
+      <b>候选池不会做的事：</b>
+      <ul>
+        <li>不会自动信任你的分类判断</li>
+        <li>不会自动执行目标仓库代码（安全红线）</li>
+        <li>不会直接写入精选目录 <code>catalog.csv</code></li>
+      </ul>
+      <br>
+      审核通过与否，由维护者人工判断项目用途、文档完整度、维护状态、许可证和安全风险。
+    </div>
+  </div>
+
+  <!-- 之前的提交恢复区（初始隐藏） -->
+  <div id="restoreCard" class="card" style="display:none">
+    <h3>🔄 恢复之前的提交</h3>
+    <p class="hint" id="restoreInfo" style="color:var(--text-2)"></p>
+    <div style="display:flex; gap:10px; margin-top:10px">
+      <button class="secondary" id="restoreBtn">恢复查询</button>
+      <button class="secondary" id="clearBtn">清除记录</button>
+    </div>
+  </div>
+
+  <footer>
+    提交全程在本站完成 · GitHub Token 不暴露给浏览器 ·
+    <a href="https://github.com/manningyangs/AI-Shovel-Collection" target="_blank" rel="noopener">AI-Shovel-Collection ↗</a>
+  </footer>
+</div>
+
+<script is:inline define:vars={{ evalApiBase }}>
+(function () {
+  "use strict";
+
+  // ===== 配置 =====
+  const API_BASE = (evalApiBase || "").replace(/\/+$/, "");
+  const LS_KEY = "AI_SHOVEL_SUBMISSIONS";     // localStorage 提交记录
+  const POLL_INTERVALS = [5000, 8000, 12000, 15000]; // 递增轮询间隔
+  const TERMINAL = new Set(["candidate_added", "duplicate", "rejected", "failed"]);
+
+  // ===== 状态 → 文案映射 =====
+  const STATUS_TEXT = {
+    queued: { label: "已收到提交，等待处理",    className: "pill-queued",     color: "text" },
+    dispatching: { label: "已提交到自动校验队列", className: "pill-queued",     color: "text" },
+    processing: { label: "正在校验 GitHub 仓库",  className: "pill-processing", color: "blue" },
+    candidate_added: { label: "自动校验通过 ✅",  className: "pill-candidate",  color: "green" },
+    duplicate: { label: "重复收录",              className: "pill-duplicate",  color: "amber" },
+    rejected: { label: "未通过基础校验",          className: "pill-rejected",   color: "red" },
+    failed: { label: "系统处理失败",              className: "pill-failed",     color: "text" },
+  };
+
+  const TERMINAL_FULL_TEXT = {
+    candidate_added: `自动校验通过 ✅<br><br>
+      系统已经收到你的工具推荐，<b>正在等待人工审核</b>。<br><br>
+      审核通过后，工具会正式进入精选工具目录。在此之前，它会出现在自动发现的候选区域，标记为"待人工审核"。`,
+
+    duplicate: `该工具已经收录或正在审核中。<br><br>
+      你可以在精选目录或自动发现区域找到它。`,
+
+    rejected: `未通过基础校验。<br><br>
+      请检查仓库地址是否正确、仓库是否公开可访问，然后重新提交。`,
+
+    failed: `系统处理失败。<br><br>
+      请稍后重试，或联系维护者。`,
+  };
+
+  // ===== DOM =====
+  const $ = (id) => document.getElementById(id);
+  const formCard = $("formCard");
+  const submitBtn = $("submitBtn");
+  const repoUrlInput = $("repoUrl");
+  const reasonInput = $("reason");
+  const reasonCount = $("reasonCount");
+  const apiOff = $("apiOff");
+  const restoreCard = $("restoreCard");
+  const restoreBtn = $("restoreBtn");
+  const clearBtn = $("clearBtn");
+  const restoreInfo = $("restoreInfo");
+
+  // ===== API 未配置警告 =====
+  if (!API_BASE) {
+    apiOff.style.display = "";
+    submitBtn.disabled = true;
+  }
+
+  // ===== 字数计数 =====
+  reasonInput?.addEventListener("input", () => {
+    reasonCount.textContent = reasonInput.value.length;
+  });
+
+  // ===== 提交按钮 =====
+  submitBtn?.addEventListener("click", handleSubmit);
+  repoUrlInput?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSubmit();
+    }
+  });
+
+  // ===== 结果卡片 =====
+  function showResult(kind, htmlContent) {
+    // 移除旧的结果卡片
+    document.querySelectorAll(".result-card").forEach(el => el.remove());
+
+    const card = document.createElement("div");
+    card.className = `result-card result-${kind}`;
+    card.innerHTML = htmlContent;
+
+    // 插入到 hero 和 formCard 之间
+    const hero = document.querySelector(".submit-hero");
+    if (hero && hero.nextSibling) {
+      hero.parentNode.insertBefore(card, hero.nextSibling);
+    } else {
+      formCard.parentNode.insertBefore(card, formCard);
+    }
+    card.scrollIntoView({ behavior: "smooth", block: "center" });
+    return card;
+  }
+
+  function showProgressCard(submissionId, repoSlug, status, statusMessage) {
+    const pillInfo = STATUS_TEXT[status] || STATUS_TEXT.queued;
+    const card = showResult("processing", `
+      <div class="result-title">
+        ${pillInfo.color === "green" ? "✅" : pillInfo.color === "red" ? "❌" : pillInfo.color === "amber" ? "⚠️" : pillInfo.color === "blue" ? "🔄" : "⏳"}
+        收录处理中
+      </div>
+      <div class="result-sub" style="margin-top:6px">
+        仓库：<code>${repoSlug}</code>
+      </div>
+      <div class="result-sub" style="margin-top:6px">
+        提交编号：<span class="submission-id">${submissionId}</span>
+        &nbsp;&nbsp;
+        <span class="status-pill ${pillInfo.className}">${pillInfo.label}</span>
+      </div>
+      ${statusMessage ? `<div class="result-sub" style="margin-top:6px">${escapeHtml(statusMessage)}</div>` : ""}
+      <div class="link-row" style="margin-top:12px">
+        状态查询链接：<a href="?submission=${submissionId}">?submission=${submissionId}</a>
+        &nbsp;·&nbsp; <button class="secondary" id="copyLinkBtn" style="padding:4px 10px;font-size:12px">📋 复制</button>
+      </div>
+      <div class="hint" style="margin-top:10px">正在自动查询最新状态，完成后会自动停止轮询…</div>
+    `);
+
+    const copyBtn = card.querySelector("#copyLinkBtn");
+    copyBtn?.addEventListener("click", () => {
+      const link = `${location.origin}${location.pathname}?submission=${submissionId}`;
+      navigator.clipboard.writeText(link).then(() => {
+        copyBtn.textContent = "✓ 已复制";
+        setTimeout(() => copyBtn.textContent = "📋 复制", 1500);
+      });
+    });
+
+    return card;
+  }
+
+  function showTerminalCard(submissionId, repoSlug, status, statusMessage) {
+    const pillInfo = STATUS_TEXT[status];
+    const titleMap = {
+      candidate_added: "🎉 自动校验通过",
+      duplicate: "⚠️ 重复收录",
+      rejected: "❌ 未通过校验",
+      failed: "😵 系统处理失败",
+    };
+    const emojiMap = {
+      candidate_added: "🎉", duplicate: "⚠️", rejected: "❌", failed: "😵"
+    };
+    const kind = status === "candidate_added" ? "success"
+              : status === "duplicate" ? "duplicate"
+              : "error";
+
+    const card = showResult(kind, `
+      <div class="result-title">${emojiMap[status] || "📋"} ${titleMap[status] || "处理完成"}</div>
+      <div class="result-sub" style="margin-top:6px">
+        仓库：<code>${repoSlug}</code>
+      </div>
+      <div class="result-sub" style="margin-top:6px">
+        提交编号：<span class="submission-id">${submissionId}</span>
+        &nbsp;&nbsp;
+        <span class="status-pill ${pillInfo.className}">${pillInfo.label}</span>
+      </div>
+      <div class="result-sub" style="margin-top:10px">
+        ${TERMINAL_FULL_TEXT[status] || escapeHtml(statusMessage || "")}
+      </div>
+      ${statusMessage && !TERMINAL_FULL_TEXT[status] ? `<div class="result-sub" style="margin-top:8px;color:#dc2626">${escapeHtml(statusMessage)}</div>` : ""}
+      <div class="link-row" style="margin-top:14px">
+        <a href="${location.pathname}">← 返回表单</a>
+      </div>
+    `);
+
+    // 终态了，刷新表单
+    resetForm();
+    return card;
+  }
+
+  function showErrorCard(title, message, suggestion) {
+    const card = showResult("error", `
+      <div class="result-title">❌ ${title}</div>
+      <div class="result-sub" style="margin-top:6px">${escapeHtml(message)}</div>
+      ${suggestion ? `<div class="result-sub" style="margin-top:10px">${suggestion}</div>` : ""}
+    `);
+    return card;
+  }
+
+  // ===== 提交 =====
+  async function handleSubmit() {
+    if (!API_BASE) return;
+
+    const repoUrl = (repoUrlInput.value || "").trim();
+    const reason = (reasonInput.value || "").trim();
+
+    // 前端校验
+    if (!repoUrl) {
+      showErrorCard("请填写仓库地址", "GitHub 仓库地址不能为空");
+      repoUrlInput.focus();
+      return;
+    }
+    if (reason.length > 500) {
+      showErrorCard("推荐理由过长", "最多 500 字");
+      reasonInput.focus();
+      return;
+    }
+    if (!/^https?:\/\/(?:www\.)?github\.com\/[^/\s]+\/[^/\s?#]+\/?.*$/i.test(repoUrl)) {
+      showErrorCard("GitHub 仓库地址格式不正确", "仅支持 <code>https://github.com/owner/repo</code> 格式的公开仓库地址。Issue / PR / Gist 链接无效。");
+      repoUrlInput.focus();
+      return;
+    }
+
+    // 禁止重复点击
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner"></span>提交中…';
+
+    try {
+      const resp = await fetch(`${API_BASE}/api/collection-submissions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ repo_url: repoUrl, reason }),
+      });
+
+      const data = await resp.json().catch(() => ({ error: { code: "PARSE_ERROR", message: "响应解析失败" } }));
+
+      if (resp.status === 202 && data.success) {
+        // 提交成功 —— 保存到 localStorage，开始轮询
+        const id = data.submission_id;
+        const slug = extractSlug(repoUrl);
+        saveSubmission(id, slug);
+        startPolling(id, slug);
+        showProgressCard(id, slug, data.status || "dispatching", data.message);
+      } else if (resp.status === 409 && data.error?.code === "DUPLICATE_IN_PROGRESS") {
+        // 已有同仓库进行中任务
+        const existingId = data.error?.submission_id;
+        const existingSlug = extractSlug(repoUrl);
+        if (existingId) {
+          saveSubmission(existingId, existingSlug);
+          startPolling(existingId, existingSlug);
+          showProgressCard(existingId, existingSlug, data.error?.status || "processing", data.error?.message || "该仓库已有提交在处理中");
+        } else {
+          showErrorCard("该仓库已在处理中", data.error?.message || "请稍后再查");
+        }
+      } else if (resp.status === 429) {
+        showErrorCard("提交过于频繁", data.error?.message || "过去 24 小时内提交次数已达上限，请稍后再试");
+      } else {
+        showErrorCard(
+          "提交失败",
+          data.error?.message || "未知错误",
+          `<b>错误代码：</b> <code>${escapeHtml(data.error?.code || "UNKNOWN")}</code><br>如持续出现，请联系维护者。`
+        );
+      }
+    } catch (err) {
+      showErrorCard(
+        "网络错误",
+        err?.message || "无法连接到服务器",
+        "请检查网络连接后重试。如果问题持续，可能是后端服务暂时不可用。"
+      );
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "🚀 提交收录";
+    }
+  }
+
+  // ===== 轮询 =====
+  let pollingTimer = null;
+  let pollAttempt = 0;
+
+  function startPolling(id, slug) {
+    stopPolling();
+    pollAttempt = 0;
+    doPoll(id, slug);
+  }
+
+  function stopPolling() {
+    if (pollingTimer) {
+      clearTimeout(pollingTimer);
+      pollingTimer = null;
+    }
+  }
+
+  async function doPoll(id, slug) {
+    try {
+      const resp = await fetch(`${API_BASE}/api/collection-submissions/${id}`, {
+        headers: { "Cache-Control": "no-store" },
+      });
+      if (!resp.ok) {
+        // 404 / 其他错误 —— 不阻塞，继续轮询
+        scheduleNextPoll(id, slug);
+        return;
+      }
+      const data = await resp.json().catch(() => null);
+      if (!data) { scheduleNextPoll(id, slug); return; }
+
+      const status = data.status;
+      const message = data.status_message;
+
+      if (TERMINAL.has(status)) {
+        stopPolling();
+        showTerminalCard(id, slug, status, message);
+        updateLocalStorageRecord(id, status);
+      } else {
+        // 更新进度卡片（如果存在）
+        updateProgressCard(id, slug, status, message);
+        scheduleNextPoll(id, slug);
+      }
+    } catch (err) {
+      // 网络错误 —— 继续轮询
+      scheduleNextPoll(id, slug);
+    }
+  }
+
+  function scheduleNextPoll(id, slug) {
+    pollAttempt++;
+    const idx = Math.min(pollAttempt, POLL_INTERVALS.length - 1);
+    const delay = POLL_INTERVALS[idx];
+    pollingTimer = setTimeout(() => doPoll(id, slug), delay);
+  }
+
+  function updateProgressCard(id, slug, status, message) {
+    const card = document.querySelector(".result-card.result-processing");
+    if (!card) return;
+
+    const pillInfo = STATUS_TEXT[status] || STATUS_TEXT.queued;
+    const emoji = pillInfo.color === "blue" ? "🔄" : pillInfo.color === "green" ? "✅" : pillInfo.color === "amber" ? "⏳" : "⏳";
+
+    // 更新状态 pill
+    const pill = card.querySelector(".status-pill");
+    if (pill) {
+      pill.className = `status-pill ${pillInfo.className}`;
+      pill.textContent = pillInfo.label;
+    }
+
+    // 更新标题 emoji
+    const title = card.querySelector(".result-title");
+    if (title) title.textContent = `${emoji} 收录处理中`;
+
+    // 更新 status_message
+    const existingMsgEl = card.querySelector(".result-sub");
+    const allSubs = card.querySelectorAll(".result-sub");
+    if (allSubs.length > 1) {
+      // 第二个 result-sub 通常是 status_message 区域
+      if (message) allSubs[2]?.replaceChildren(document.createTextNode(message));
+    }
+  }
+
+  // ===== localStorage =====
+  function loadSubmissions() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr : [];
+    } catch { return []; }
+  }
+
+  function saveSubmission(id, slug) {
+    const list = loadSubmissions();
+    const entry = { id, slug, saved_at: Date.now(), status: "queued" };
+    // 去重 + 保留最新 3 条
+    const filtered = list.filter(s => s.id !== id);
+    filtered.unshift(entry);
+    localStorage.setItem(LS_KEY, JSON.stringify(filtered.slice(0, 3)));
+  }
+
+  function updateLocalStorageRecord(id, status) {
+    const list = loadSubmissions();
+    const idx = list.findIndex(s => s.id === id);
+    if (idx >= 0) {
+      list[idx].status = status;
+      localStorage.setItem(LS_KEY, JSON.stringify(list));
+    }
+  }
+
+  function clearLocalStorage() {
+    localStorage.removeItem(LS_KEY);
+    restoreCard.style.display = "none";
+  }
+
+  // ===== URL query ?submission=ID =====
+  function tryQueryRestore() {
+    const url = new URL(location.href);
+    const subId = url.searchParams.get("submission");
+    if (subId && /^CS-[a-f0-9]{32}$/i.test(subId)) {
+      saveSubmission(subId, "unknown/unknown");
+      showProgressCard(subId, "unknown/unknown", "queued", "正在恢复提交状态…");
+      startPolling(subId, "unknown/unknown");
+      // 清理 URL
+      url.searchParams.delete("submission");
+      history.replaceState({}, "", url.toString());
+      return true;
+    }
+    return false;
+  }
+
+  // ===== 恢复卡片 =====
+  function setupRestore() {
+    const list = loadSubmissions();
+    if (list.length === 0) return;
+    const recent = list[0];
+    const ageMin = Math.floor((Date.now() - (recent.saved_at || Date.now())) / 60000);
+    const ageText = ageMin < 1 ? "刚刚" : ageMin < 60 ? `${ageMin} 分钟前` : `${Math.floor(ageMin/60)} 小时前`;
+
+    restoreInfo.innerHTML = `
+      最近有一条提交记录：<br>
+      编号 <span class="submission-id">${recent.id}</span>
+      ${recent.slug && recent.slug !== "unknown/unknown" ? `· <code>${recent.slug}</code>` : ""}
+      · <b>${ageText}</b>
+      ${recent.status && recent.status !== "queued" ? `· 当前状态：${STATUS_TEXT[recent.status]?.label || recent.status}` : ""}
+    `;
+    restoreCard.style.display = "";
+    restoreBtn?.addEventListener("click", () => {
+      showProgressCard(recent.id, recent.slug, recent.status || "queued", "正在恢复提交状态…");
+      startPolling(recent.id, recent.slug);
+    });
+    clearBtn?.addEventListener("click", clearLocalStorage);
+  }
+
+  // ===== 工具函数 =====
+  function resetForm() {
+    repoUrlInput.value = "";
+    reasonInput.value = "";
+    reasonCount.textContent = "0";
+  }
+
+  function extractSlug(url) {
+    const m = (url || "").match(/github\.com\/([^/]+\/[^/?#]+)/i);
+    return m ? m[1].replace(/\.git$/, "") : "unknown/unknown";
+  }
+
+  function escapeHtml(s) {
+    return String(s || "").replace(/[<>&"']/g, c =>
+      ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&#39;" })[c]
+    );
+  }
+
+  // ===== 初始化 =====
+  function init() {
+    if (tryQueryRestore()) return;
+    setupRestore();
+  }
+  init();
+
+  // 页面离开停止轮询
+  window.addEventListener("beforeunload", stopPolling);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") stopPolling();
+  });
+})();
+</script>
+
+</Base>

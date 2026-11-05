@@ -36,6 +36,11 @@ import {
   initOriginGuard,
 } from "./evaluation-service";
 import { handleFinalize, handleProgress } from "./progress-service";
+import {
+  handleCollectionCallback,
+  handleCreateSubmission,
+  handleGetSubmission,
+} from "./collection-service";
 
 const app = new Hono<AppEnv>();
 
@@ -110,10 +115,16 @@ app.post("/api/evaluations", handleCreateEvaluation);
 app.get("/api/evaluations", handleListEvaluations);
 app.get("/api/evaluations/:id", handleGetEvaluation);
 
-/* ------------------------------ 内部回调（HMAC） ------------------------------ */
+/* ----------------------------- 提交收录 API（任务书 §五） ----------------------------- */
+
+app.post("/api/collection-submissions", handleCreateSubmission);
+app.get("/api/collection-submissions/:id", handleGetSubmission);
+
+/* ------------------------------ 内部回调（HMAC / Bearer） ------------------------------ */
 
 app.post("/internal/progress", handleProgress);
 app.post("/internal/finalize", handleFinalize);
+app.post("/internal/collection-submissions/status", handleCollectionCallback);
 
 /* -------------------------------- 统一错误处理 -------------------------------- */
 

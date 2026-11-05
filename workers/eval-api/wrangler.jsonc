@@ -22,7 +22,10 @@
     "RATE_DAILY_PER_USER": "5",
     "RATE_MAX_ACTIVE_PER_REPO": "1",
     "RATE_MAX_QUEUED_PER_USER": "2",
-    "SESSION_TTL_SECONDS": "28800"
+    "SESSION_TTL_SECONDS": "28800",
+    // —— 提交收录改造（任务书 §八）——
+    "COLLECTION_WORKFLOW_FILE": "collection-submission.yml",
+    "COLLECTION_RATE_DAILY_PER_IP": "5"
   },
   "observability": {
     "enabled": true

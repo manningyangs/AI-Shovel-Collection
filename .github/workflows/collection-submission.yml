@@ -1,0 +1,561 @@
+# AI Shovel Collection — 用户提交收录自动处理
+#
+# 触发方式：workflow_dispatch（由 Cloudflare Worker 调用）
+#   submission_id — 提交编号（CS-xxxxxxxx，Worker 生成）
+#   repo_owner    — GitHub 仓库所有者（已由 Worker 规范化为小写）
+#   repo_name     — 仓库名称
+#   repo_url      — 完整仓库 URL
+#   reason        — 用户推荐理由（选填）
+#
+# 安全红线（任务书 §6.3）：
+#   - 严禁 clone 目标仓库 → 不执行任何外部仓库代码
+#   - 严禁 npm install / pip install / setup.py / Makefile / Dockerfile
+#   - 只读 GitHub API 获取公开元数据
+#   - 用户输入通过 env 传递，不拼 shell 命令
+#   - Secret 仅存在于 Actions Secret，不进日志、不进构建产物
+#
+# 候选池写入路径：astro/public/submissions/candidates.json
+# （与 catalog.csv 完全独立，人工审核才进精选）
+name: Collection Submission
+
+run-name: "收录候选 · ${{ inputs.submission_id }} · ${{ inputs.repo_owner }}/${{ inputs.repo_name }}"
+
+on:
+  workflow_dispatch:
+    inputs:
+      submission_id:
+        description: "提交编号（Worker 生成的 CS-xxxxxxxx）"
+        required: true
+        type: string
+      repo_owner:
+        description: "GitHub 仓库所有者（已规范化为小写）"
+        required: true
+        type: string
+      repo_name:
+        description: "仓库名称"
+        required: true
+        type: string
+      repo_url:
+        description: "完整仓库 URL"
+        required: true
+        type: string
+      reason:
+        description: "用户推荐理由（选填）"
+        required: false
+        default: ""
+        type: string
+
+# 整个工作流串行化，避免多个用户提交并发导致 candidates.json 丢失
+concurrency:
+  group: collection-submissions
+  queue: max
+  cancel-in-progress: false
+
+# 仓库仓库（这个仓库！）—— Worker 安装在本仓库上，所以 GITHUB_TOKEN 就是本仓库的
+env:
+  COLLECTION_REPO: ${{ github.repository }}  # manningyangs/AI-Shovel-Collection
+
+jobs:
+  # ========== Job 1: Validate & Check（只读权限，安全入口） ==========
+  validate:
+    name: 🛡️ 安全校验与查重
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      repo_json: ${{ steps.fetch.outputs.repo_json }}
+      validation_result: ${{ steps.check.outputs.result }}
+      validation_message: ${{ steps.check.outputs.message }}
+    env:
+      SUBMISSION_ID: ${{ inputs.submission_id }}
+      REPO_OWNER_INPUT: ${{ inputs.repo_owner }}
+      REPO_NAME_INPUT: ${{ inputs.repo_name }}
+      REPO_URL_INPUT: ${{ inputs.repo_url }}
+      COLLECTION_CALLBACK_SECRET: ${{ secrets.COLLECTION_CALLBACK_SECRET }}
+      COLLECTION_CALLBACK_URL: ${{ vars.COLLECTION_CALLBACK_URL || 'https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status' }}
+    steps:
+      # —— ① 回调 Worker：processing ——
+      - name: Callback status → processing
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          url = os.environ["COLLECTION_CALLBACK_URL"]
+          body = json.dumps({
+              "submission_id": os.environ["SUBMISSION_ID"],
+              "status": "processing",
+              "status_message": "正在校验 GitHub 仓库",
+          }).encode()
+          req = urllib.request.Request(url, data=body, method="POST", headers={
+              "Content-Type": "application/json",
+              "Authorization": f"Bearer {os.environ['COLLECTION_CALLBACK_SECRET']}",
+          })
+          try:
+              with urllib.request.urlopen(req, timeout=15) as r:
+                  print(f"processing callback → HTTP {r.status}")
+          except Exception as e:
+              print(f"⚠️ processing callback failed (non-fatal): {e}")
+          PY
+
+      # —— ② 仓库 URL 与 GitHub API 二次校验（Python 安全处理）——
+      - name: Validate repo URL & fetch via GitHub API
+        id: fetch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import os, sys, re, json, urllib.request, urllib.error
+
+          submission_id = os.environ["SUBMISSION_ID"]
+          owner = os.environ["REPO_OWNER_INPUT"]
+          name = os.environ["REPO_NAME_INPUT"]
+          url_input = os.environ["REPO_URL_INPUT"]
+
+          # 1. URL 格式严格校验（只允许 github.com/owner/repo 形式）
+          m = re.match(r'^https?://(?:www\.)?github\.com/([^/\s]+)/([^/\s?#]+)/?$', url_input)
+          if not m:
+              print(f"::error::非法 GitHub URL: {url_input}")
+              print(f"repo_json=INVALID_URL") >> "$GITHUB_OUTPUT"
+              sys.exit(1)
+
+          url_owner = m.group(1).lower()
+          url_name = m.group(2).replace('.git', '')
+
+          # 2. owner/repo 必须与 input 一致（防止 URL 注入）
+          if url_owner != owner.lower() or url_name.lower() != name.lower():
+              print(f"::error::URL 中的 owner/repo 与输入不一致: URL={url_owner}/{url_name} vs INPUT={owner}/{name}")
+              print(f"repo_json=MISMATCH") >> "$GITHUB_OUTPUT"
+              sys.exit(1)
+
+          # 3. 禁止 GitHub 特殊路径
+          forbidden = ["issues", "pull", "pulls", "blob", "tree", "commit", "gist", "raw", "releases", "tags", "actions", "wiki", "security", "settings"]
+          if url_name in forbidden or url_owner in forbidden:
+              print(f"::error::禁止的路径类型: {url_input}")
+              print(f"repo_json=FORBIDDEN_PATH") >> "$GITHUB_OUTPUT"
+              sys.exit(1)
+
+          # 4. 通过 GitHub API 获取仓库元数据（不 clone！）
+          api_url = f"https://api.github.com/repos/{owner}/{name}"
+          req = urllib.request.Request(api_url, headers={
+              "Accept": "application/vnd.github+json",
+              "Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}",
+              "User-Agent": "ai-shovel-collection-submission",
+              "X-GitHub-Api-Version": "2022-11-28",
+          })
+          try:
+              with urllib.request.urlopen(req, timeout=20) as resp:
+                  repo = json.loads(resp.read())
+          except urllib.error.HTTPError as e:
+              body = e.read().decode(errors="replace")[:300]
+              print(f"::error::GitHub API HTTP {e.code}: {body}")
+              print(f"repo_json=API_ERROR_{e.code}") >> "$GITHUB_OUTPUT"
+              sys.exit(1)
+          except Exception as e:
+              print(f"::error::GitHub API 异常: {e}")
+              print(f"repo_json=API_EXCEPTION") >> "$GITHUB_OUTPUT"
+              sys.exit(1)
+
+          # 5. 必须公开可访问
+          if repo.get("private", False):
+              print(f"::error::私有仓库，无法自动收录")
+              print(f"repo_json=PRIVATE") >> "$GITHUB_OUTPUT"
+              sys.exit(1)
+
+          # 6. 输出精简元数据到 GITHUB_OUTPUT（供后续 Job 使用）
+          out = {
+              "full_name": repo.get("full_name"),
+              "html_url": repo.get("html_url"),
+              "default_branch": repo.get("default_branch", "main"),
+              "description": repo.get("description"),
+              "stargazers_count": repo.get("stargazers_count", 0),
+              "forks_count": repo.get("forks_count", 0),
+              "language": repo.get("language"),
+              "topics": repo.get("topics", []),
+              "homepage": repo.get("homepage"),
+              "created_at": repo.get("created_at"),
+              "updated_at": repo.get("updated_at"),
+              "pushed_at": repo.get("pushed_at"),
+              "archived": repo.get("archived", False),
+              "fork": repo.get("fork", False),
+              "license_spdx": (repo.get("license") or {}).get("spdx_id") if repo.get("license") else None,
+          }
+          # Topics API 单独请求（GitHub 默认不返回 topics 到 repos endpoint）
+          topics_url = f"https://api.github.com/repos/{owner}/{name}/topics"
+          try:
+              t_req = urllib.request.Request(topics_url, headers={
+                  "Accept": "application/vnd.github+json",
+                  "Authorization": f"Bearer {os.environ['GITHUB_TOKEN']}",
+                  "User-Agent": "ai-shovel-collection-submission",
+                  "X-GitHub-Api-Version": "2022-11-28",
+              })
+              with urllib.request.urlopen(t_req, timeout=15) as tr:
+                  tdata = json.loads(tr.read())
+                  out["topics"] = tdata.get("names", [])
+          except Exception:
+              pass  # Topics 失败不阻塞
+
+          print(f"repo_json={json.dumps(out)}") >> "$GITHUB_OUTPUT"
+          print(f"✅ 仓库公开有效: {out['full_name']}")
+          print(f"   Stars: {out['stargazers_count']} · Lang: {out['language']} · Archived: {out['archived']} · Fork: {out['fork']}")
+          PY
+
+      # —— ③ 查重：catalog.csv（精选目录）+ submissions/candidates.json（候选池）——
+      - name: Check duplicates against catalog & candidates
+        id: check
+        env:
+          REPO_OWNER_INPUT: ${{ inputs.repo_owner }}
+          REPO_NAME_INPUT: ${{ inputs.repo_name }}
+        run: |
+          python3 - <<'PY'
+          import os, sys, json, re
+          from pathlib import Path
+
+          owner = os.environ["REPO_OWNER_INPUT"].lower()
+          name = os.environ["REPO_NAME_INPUT"].lower()
+          canonical = f"{owner}/{name}"
+          print(f"🔍 查重: canonical={canonical}")
+
+          # A. catalog.csv 查重
+          catalog_path = Path("catalog.csv")
+          if catalog_path.exists():
+              raw = catalog_path.read_text(encoding="utf-8-sig")
+              for line in raw.splitlines():
+                  if not line.strip() or line.startswith("分类"):
+                      continue
+                  parts = line.split(",")
+                  if len(parts) < 3:
+                      continue
+                  url = parts[2].strip()
+                  m = re.match(r'^https?://(?:www\.)?github\.com/([^/]+)/([^/?#]+)', url, re.I)
+                  if m and f"{m.group(1).lower()}/{m.group(2).replace('.git', '').lower()}" == canonical:
+                      print(f"::warning::仓库已存在于精选目录 catalog.csv → duplicate")
+                      print(f"result=duplicate") >> "$GITHUB_OUTPUT"
+                      print(f"message=仓库已存在于精选目录，无需重复提交") >> "$GITHUB_OUTPUT"
+                      sys.exit(0)
+
+          # B. submissions/candidates.json 查重
+          cand_path = Path("astro/public/submissions/candidates.json")
+          if cand_path.exists():
+              try:
+                  cands = json.loads(cand_path.read_text(encoding="utf-8"))
+                  for c in cands if isinstance(cands, list) else cands.get("candidates", []):
+                      slug = c.get("repo_slug", "") or c.get("slug", "")
+                      if slug.lower() == canonical.lower():
+                          print(f"::warning::仓库已存在于候选池 submissions/candidates.json → duplicate")
+                          print(f"result=duplicate") >> "$GITHUB_OUTPUT"
+                          print(f"message=仓库已在候选池中，审核通过后会进入精选目录") >> "$GITHUB_OUTPUT"
+                          sys.exit(0)
+              except Exception as e:
+                  print(f"⚠️ candidates.json 读取失败（不阻塞）: {e}")
+
+          # C. live_multi.json inbox / curated 查重
+          for lm_path in [Path("live_multi.json"), Path("astro/public/live_multi.json")]:
+              if lm_path.exists():
+                  try:
+                      lm = json.loads(lm_path.read_text(encoding="utf-8"))
+                      # curated 部分
+                      for entry in (lm.get("curated") or {}).values():
+                          if isinstance(entry, dict) and (entry.get("repo_slug") or "").lower() == canonical.lower():
+                              print(f"::warning::仓库已存在于实时数据 curated → duplicate")
+                              print(f"result=duplicate") >> "$GITHUB_OUTPUT"
+                              print(f"message=仓库已在自动发现列表中") >> "$GITHUB_OUTPUT"
+                              sys.exit(0)
+                      # inbox 部分
+                      for entry in (lm.get("inbox") or []):
+                          if isinstance(entry, dict) and (entry.get("repo_slug") or "").lower() == canonical.lower():
+                              print(f"::warning::仓库已存在于实时数据 inbox → duplicate")
+                              print(f"result=duplicate") >> "$GITHUB_OUTPUT"
+                              print(f"message=仓库已在自动发现候选中") >> "$GITHUB_OUTPUT"
+                              sys.exit(0)
+                  except Exception:
+                      pass
+
+          # 全部查重通过
+          print(f"result=ok") >> "$GITHUB_OUTPUT"
+          print(f"message=自动校验通过") >> "$GITHUB_OUTPUT"
+          print(f"✅ 查重通过：未在 catalog.csv / candidates.json / live_multi.json 中发现")
+          PY
+
+      # —— 失败回调：任何失败都置 rejected 或 failed ——
+      - name: Callback validation failure → rejected
+        if: failure()
+        env:
+          SUBMISSION_ID: ${{ inputs.submission_id }}
+          COLLECTION_CALLBACK_SECRET: ${{ secrets.COLLECTION_CALLBACK_SECRET }}
+          COLLECTION_CALLBACK_URL: ${{ vars.COLLECTION_CALLBACK_URL || 'https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status' }}
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          url = os.environ["COLLECTION_CALLBACK_URL"]
+          body = json.dumps({
+              "submission_id": os.environ["SUBMISSION_ID"],
+              "status": "rejected",
+              "status_message": "基础校验未通过，详见 GitHub Actions run ${{ github.run_id }}",
+              "failure_code": "VALIDATION_FAILED",
+          }).encode()
+          req = urllib.request.Request(url, data=body, method="POST", headers={
+              "Content-Type": "application/json",
+              "Authorization": f"Bearer {os.environ['COLLECTION_CALLBACK_SECRET']}",
+          })
+          try:
+              with urllib.request.urlopen(req, timeout=15) as r:
+                  print(f"rejected callback → HTTP {r.status}")
+          except Exception as e:
+              print(f"⚠️ rejected callback failed (non-fatal): {e}")
+          PY
+
+  # ========== Job 2: Rejected Short-Circuit（查重命中时走这里，不做候选写入） ==========
+  rejected:
+    name: 🔁 重复收录处理
+    if: needs.validate.outputs.validation_result == 'duplicate'
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      SUBMISSION_ID: ${{ inputs.submission_id }}
+      COLLECTION_CALLBACK_SECRET: ${{ secrets.COLLECTION_CALLBACK_SECRET }}
+      COLLECTION_CALLBACK_URL: ${{ vars.COLLECTION_CALLBACK_URL || 'https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status' }}
+    steps:
+      - name: Callback → duplicate
+        env:
+          MSG: ${{ needs.validate.outputs.validation_message }}
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          url = os.environ["COLLECTION_CALLBACK_URL"]
+          body = json.dumps({
+              "submission_id": os.environ["SUBMISSION_ID"],
+              "status": "duplicate",
+              "status_message": os.environ.get("MSG", "仓库已存在于收录列表"),
+          }).encode()
+          req = urllib.request.Request(url, data=body, method="POST", headers={
+              "Content-Type": "application/json",
+              "Authorization": f"Bearer {os.environ['COLLECTION_CALLBACK_SECRET']}",
+          })
+          with urllib.request.urlopen(req, timeout=15) as r:
+              print(f"duplicate callback → HTTP {r.status}")
+          PY
+
+  # ========== Job 3: Write Candidate（写入候选池，需要 contents: write） ==========
+  write-candidate:
+    name: 📝 写入候选池
+    if: needs.validate.outputs.validation_result == 'ok'
+    needs: validate
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      commit_sha: ${{ steps.push.outputs.sha }}
+    env:
+      SUBMISSION_ID: ${{ inputs.submission_id }}
+      REPO_OWNER_INPUT: ${{ inputs.repo_owner }}
+      REPO_NAME_INPUT: ${{ inputs.repo_name }}
+      REPO_URL_INPUT: ${{ inputs.repo_url }}
+      REASON_INPUT: ${{ inputs.reason }}
+      REPO_JSON: ${{ needs.validate.outputs.repo_json }}
+      COLLECTION_CALLBACK_SECRET: ${{ secrets.COLLECTION_CALLBACK_SECRET }}
+      COLLECTION_CALLBACK_URL: ${{ vars.COLLECTION_CALLBACK_URL || 'https://ai-shovel-eval-api.yang1-75.workers.dev/internal/collection-submissions/status' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Read & merge candidates.json + append new entry
+        id: merge
+        run: |
+          python3 - <<'PY'
+          import os, json, re
+          from pathlib import Path, PurePath
+
+          repo_json_raw = os.environ["REPO_JSON"]
+          if repo_json_raw.startswith("INVALID") or repo_json_raw.startswith("MISMATCH") or repo_json_raw.startswith("FORBIDDEN") or repo_json_raw.startswith("API") or repo_json_raw.startswith("PRIVATE"):
+              print(f"::error::validate job 失败但 write-candidate 被触发（并发竞态？）→ 退出")
+              raise SystemExit(1)
+
+          repo_meta = json.loads(repo_json_raw)
+
+          # 1. 构造新候选条目
+          owner = os.environ["REPO_OWNER_INPUT"]
+          name = os.environ["REPO_NAME_INPUT"]
+          canonical = f"{owner.lower()}/{name}"
+          now_iso = os.popen("date -u +%Y-%m-%dT%H:%M:%SZ").read().strip()
+
+          entry = {
+              "repo_slug": canonical,
+              "repo_url": repo_meta["html_url"] or os.environ["REPO_URL_INPUT"],
+              "title": repo_meta.get("full_name") or f"{owner}/{name}",
+              "description": repo_meta.get("description") or "",
+              "language": repo_meta.get("language"),
+              "license_spdx": repo_meta.get("license_spdx"),
+              "stars": repo_meta.get("stargazers_count", 0),
+              "forks": repo_meta.get("forks_count", 0),
+              "topics": repo_meta.get("topics") or [],
+              "archived": repo_meta.get("archived", False),
+              "fork": repo_meta.get("fork", False),
+              "default_branch": repo_meta.get("default_branch", "main"),
+              "homepage": repo_meta.get("homepage"),
+              "pushed_at": repo_meta.get("pushed_at"),
+              "created_at": repo_meta.get("created_at"),
+              # —— 收录专用字段 ——
+              "submission_id": os.environ["SUBMISSION_ID"],
+              "submitted_at": now_iso,
+              "reason": os.environ.get("REASON_INPUT", "").strip(),
+              "source": "community_submission",
+              "review_status": "pending",   # 待人工审核（任务书 §七）
+              "verified_by_auto": True,     # 已通过基础自动校验
+          }
+
+          # 2. 读取现有 candidates.json（如存在）
+          cand_path = Path("astro/public/submissions/candidates.json")
+          existing = []
+          if cand_path.exists():
+              try:
+                  data = json.loads(cand_path.read_text(encoding="utf-8"))
+                  if isinstance(data, list):
+                      existing = data
+                  elif isinstance(data, dict) and "candidates" in data:
+                      existing = data["candidates"]
+              except Exception as e:
+                  print(f"⚠️ candidates.json 损坏，重建: {e}")
+                  existing = []
+
+          # 3. 二次去重（保险）
+          for ex in existing:
+              if (ex.get("repo_slug") or "").lower() == canonical.lower():
+                  print(f"::warning::write-candidate 二次查重命中: {canonical}（validate 已通过？竞态）→ 跳过写入")
+                  # 输出 duplicate 标记，让 commit step 跳过
+                  print("action=skip_duplicate") >> "$GITHUB_OUTPUT"
+                  print(f"submission_id={os.environ['SUBMISSION_ID']}") >> "$GITHUB_OUTPUT"
+                  raise SystemExit(0)
+
+          # 4. 追加新条目，按 submitted_at 倒序
+          existing.append(entry)
+          existing.sort(key=lambda x: x.get("submitted_at", ""), reverse=True)
+
+          # 5. 写回 candidates.json（带元数据）
+          out = {
+              "schema_version": "1.0",
+              "updated_at": now_iso,
+              "total": len(existing),
+              "candidates": existing,
+          }
+          cand_path.parent.mkdir(parents=True, exist_ok=True)
+          cand_path.write_text(json.dumps(out, indent=2, ensure_ascii=False), encoding="utf-8")
+          print(f"📄 已写入候选池: {cand_path}（共 {len(existing)} 条）")
+          print(f"slug={canonical}") >> "$GITHUB_OUTPUT"
+          print("action=commit") >> "$GITHUB_OUTPUT"
+          print(f"submission_id={os.environ['SUBMISSION_ID']}") >> "$GITHUB_OUTPUT"
+          PY
+
+      - name: Commit and push candidates.json
+        id: push
+        run: |
+          ACTION="${{ steps.merge.outputs.action }}"
+          if [ "$ACTION" = "skip_duplicate" ]; then
+              echo "action=skip_duplicate 输出 → 跳过 commit"
+              echo "sha=" >> "$GITHUB_OUTPUT"
+              exit 0
+          fi
+
+          git config --local user.name "AI Shovel Bot"
+          git config --local user.email "ai-shovel-bot@users.noreply.github.com"
+
+          git add astro/public/submissions/candidates.json
+          if git diff --cached --quiet; then
+              echo "No changes (unlikely, but handle gracefully)"
+              echo "sha=" >> "$GITHUB_OUTPUT"
+          else
+              git commit -m "🤖 收录候选: ${{ steps.merge.outputs.slug }} (${{ steps.merge.outputs.submission_id }}) — 自动校验通过，待人工审核"
+              git push origin main
+              echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+              echo "✅ candidates.json 已推送到 main"
+          fi
+
+      # —— 候选写入终态回调 ——
+      - name: Callback → candidate_added
+        env:
+          MSG: "自动校验通过，已进入待人工审核候选池"
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          url = os.environ["COLLECTION_CALLBACK_URL"]
+          body = json.dumps({
+              "submission_id": os.environ["SUBMISSION_ID"],
+              "status": "candidate_added",
+              "status_message": os.environ.get("MSG", "自动校验通过"),
+          }).encode()
+          req = urllib.request.Request(url, data=body, method="POST", headers={
+              "Content-Type": "application/json",
+              "Authorization": f"Bearer {os.environ['COLLECTION_CALLBACK_SECRET']}",
+          })
+          with urllib.request.urlopen(req, timeout=15) as r:
+              print(f"candidate_added callback → HTTP {r.status}")
+          PY
+
+      # —— 失败兜底：任何环节失败都置 failed（避免任务卡死）——
+      - name: Callback write failure → failed
+        if: failure()
+        run: |
+          python3 - <<'PY'
+          import os, json, urllib.request
+          url = os.environ["COLLECTION_CALLBACK_URL"]
+          body = json.dumps({
+              "submission_id": os.environ["SUBMISSION_ID"],
+              "status": "failed",
+              "status_message": "候选写入失败，详见 GitHub Actions run ${{ github.run_id }}",
+              "failure_code": "WRITE_CANDIDATE_FAILED",
+          }).encode()
+          req = urllib.request.Request(url, data=body, method="POST", headers={
+              "Content-Type": "application/json",
+              "Authorization": f"Bearer {os.environ['COLLECTION_CALLBACK_SECRET']}",
+          })
+          try:
+              with urllib.request.urlopen(req, timeout=15) as r:
+                  print(f"failed callback → HTTP {r.status}")
+          except Exception as e:
+              print(f"⚠️ failed callback failed (non-fatal): {e}")
+          PY
+
+  # ========== Job 4: Dispatch Pages（显式触发，因为 GITHUB_TOKEN push 不触发下游 push 事件） ==========
+  dispatch-pages:
+    name: 🚀 触发 Pages 部署
+    # 只有 write-candidate 真写了 candidates.json（commit_sha 非空）才触发 Pages
+    # duplicate / rejected / validate 失败 → 什么都没写，不触发
+    if: always() && needs.write-candidate.result == 'success' && needs.write-candidate.outputs.commit_sha != ''
+    needs: [validate, write-candidate, rejected]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Dispatch pages-astro.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys, urllib.request, urllib.error
+
+          repo = os.environ.get("GITHUB_REPOSITORY", "manningyangs/AI-Shovel-Collection")
+          url = f"https://api.github.com/repos/{repo}/actions/workflows/pages-astro.yml/dispatches"
+          payload = json.dumps({
+              "ref": "main",
+              "inputs": {},  # 空输入——普通 Pages 构建
+          }).encode()
+          req = urllib.request.Request(url, data=payload, method="POST", headers={
+              "Accept": "application/vnd.github+json",
+              "Authorization": f"Bearer {os.environ['GH_TOKEN']}",
+              "Content-Type": "application/json",
+              "X-GitHub-Api-Version": "2022-11-28",
+              "User-Agent": "ai-shovel-collection-dispatch-pages",
+          })
+          try:
+              with urllib.request.urlopen(req, timeout=20) as resp:
+                  print(f"✅ Pages deploy dispatched: HTTP {resp.status}")
+          except urllib.error.HTTPError as e:
+              if e.code == 204:
+                  print("✅ Pages deploy dispatched: HTTP 204")
+              else:
+                  body = e.read().decode(errors="replace")[:500]
+                  print(f"::warning::Pages dispatch failed: HTTP {e.code} {body}")
+                  # 不阻塞整个工作流——候选已写入，用户提交已经完成
+          except Exception as e:
+              print(f"::warning::Pages dispatch exception (non-fatal): {e}")
+          PY
