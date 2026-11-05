@@ -45,3 +45,46 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add live_multi.json trending.json scripts/.state/stars-history.json astro/public/live_multi.json astro/public/trending.json
           git diff --cached --quiet || (git commit -m "chore: 同步实时数据 + trending 榜单" && git push origin main)
+
+  # sync Job 无论是否产生新 commit，都显式触发 pages-astro.yml 的 workflow_dispatch。
+  # 原因：GITHUB_TOKEN push 不会触发下游 push 事件（GitHub 防循环触发机制），
+  # 即使 sync 产出了新的 astro/public/*.json，pages-astro 的 on: push 也会被跳过。
+  # 用 GITHUB_TOKEN 直接调 workflow_dispatch 是官方允许的例外。
+  dispatch-pages:
+    name: Dispatch Astro Pages deploy
+    needs: sync
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Trigger pages-astro.yml dispatch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          API="https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/pages-astro.yml/dispatches"
+          BODY='{"ref":"main"}'
+          MAX_ATTEMPT=3
+          for i in $(seq 1 $MAX_ATTEMPT); do
+            echo "[attempt $i/$MAX_ATTEMPT] POST $API"
+            HTTP_CODE=$(curl -sS -o /tmp/dispatch-resp.json -w "%{http_code}" \
+              -X POST "$API" \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "$BODY") || HTTP_CODE="000"
+            echo "HTTP $HTTP_CODE"
+            if [ "$HTTP_CODE" = "204" ]; then
+              echo "✅ workflow_dispatch accepted"
+              exit 0
+            fi
+            if [ "$HTTP_CODE" = "401" ] || [ "$HTTP_CODE" = "403" ] || [ "$HTTP_CODE" = "404" ]; then
+              echo "❌ Permanent error (HTTP $HTTP_CODE): $(cat /tmp/dispatch-resp.json 2>/dev/null || true)"
+              exit 1
+            fi
+            echo "Temporary error, retrying in ${i}s..."
+            sleep "$i"
+          done
+          echo "❌ dispatch failed after $MAX_ATTEMPT attempts"
+          cat /tmp/dispatch-resp.json 2>/dev/null || true
+          exit 1
