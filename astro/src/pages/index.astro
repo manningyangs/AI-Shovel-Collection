@@ -74,7 +74,8 @@ const withStars = catalogItems
   .map(it => ({ ...it, live: liveBySlug[it.slug] || {} }))
   .filter(it => it.live.stars > 0)
   .sort((a, b) => (b.live.stars || 0) - (a.live.stars || 0));
-const trendingTop3 = withStars.slice(0, 3);
+// 首页榜单展示 Top5：宽格子下 3 行比同排评测卡矮约 100px，5 行（+2 行 ≈ +96px）刚好填平行高
+const trendingTop5 = withStars.slice(0, 5);
 
 // V2.1: Domains 简洁入口（取前 8 条）
 const domainMod = import.meta.glob('../../public/README.md', { as: 'raw', eager: true });
@@ -222,17 +223,17 @@ try {
 
   <!-- ===== 核心功能入口区：四模块 2×2（排行榜 → 评测 → 地图 → 社区） ===== -->
   <div class="home-feature-grid">
-  <!-- V2.1: Trending Top 3 横排区块 -->
-  {trendingTop3.length > 0 ? (
-  <section class="trending-top-v21" aria-label="🔥 Trending Top 3">
+  <!-- V2.1: Trending Top 5 横排区块 -->
+  {trendingTop5.length > 0 ? (
+  <section class="trending-top-v21" aria-label="🔥 Trending Top 5">
     <div class="ttv21-head">
       <span class="ttv21-badge">🔥 LIVE</span>
       <span class="ttv21-title">本周 Stars 冠军</span>
       <a href="/AI-Shovel-Collection/trending/" class="ttv21-all">完整榜单 →</a>
     </div>
     <div class="ttv21-row">
-      {trendingTop3.map((t, i) => (
-        <a href={detailHref(t.slug)} class="ttv21-card" style={i === 0 ? '--ttv21-rank:#f59e0b' : i === 1 ? '--ttv21-rank:#94a3b8' : '--ttv21-rank:#d97706'}>
+      {trendingTop5.map((t, i) => (
+        <a href={detailHref(t.slug)} class="ttv21-card" style={i === 0 ? '--ttv21-rank:#f59e0b' : i === 1 ? '--ttv21-rank:#94a3b8' : i === 2 ? '--ttv21-rank:#d97706' : '--ttv21-rank:#8b949e'}>
           <span class="ttv21-rank">#{i + 1}</span>
           <span class="ttv21-name">{esc(t.name)}</span>
           <span class="ttv21-meta">
