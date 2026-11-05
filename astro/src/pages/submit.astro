@@ -181,8 +181,6 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     font-size: 12px; font-weight: 600; color: var(--primary);
     background: #eef2ff; padding: 4px 10px; border-radius: 999px;
   }
-  .list-actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-  .list-actions button { padding: 9px 18px; font-size: 13.5px; }
 
   .lgrid { display: grid; gap: 12px; }
   .lcard {
@@ -287,23 +285,10 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
           <button class="secondary" id="refreshBtn" type="button" style="padding:7px 14px;font-size:13px">⟳ 刷新</button>
         </div>
       </div>
-      <div class="list-actions">
-        <button id="ctaSubmitBtn" type="button">📝 提交新工具</button>
-      </div>
     </div>
 
     <!-- 结果反馈区（提交成功 / 终态反馈插入到列表视图顶部） -->
     <div id="listNotice"></div>
-
-    <!-- 本浏览器之前的提交记录（本地恢复入口，与公开列表是两回事） -->
-    <div id="restoreCard" class="card" style="display:none">
-      <h3>🔄 恢复之前的提交</h3>
-      <p class="hint" id="restoreInfo" style="color:var(--text-2)"></p>
-      <div style="display:flex; gap:10px; margin-top:10px">
-        <button class="secondary" id="restoreBtn">恢复查询</button>
-        <button class="secondary" id="clearBtn">清除记录</button>
-      </div>
-    </div>
 
     <div class="lgrid" id="listGrid"></div>
     <div class="list-state" id="listLoading">正在加载社区提交列表…</div>
@@ -319,6 +304,16 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
 
   <!-- ========== 视图二：提交表单 ========== -->
   <div id="viewForm" style="display:none">
+    <!-- 本浏览器之前的提交记录（本地恢复入口，与公开列表是两回事） -->
+    <div id="restoreCard" class="card" style="display:none">
+      <h3>🔄 恢复之前的提交</h3>
+      <p class="hint" id="restoreInfo" style="color:var(--text-2)"></p>
+      <div style="display:flex; gap:10px; margin-top:10px">
+        <button class="secondary" id="restoreBtn">恢复查询</button>
+        <button class="secondary" id="clearBtn">清除记录</button>
+      </div>
+    </div>
+
     <!-- 结果反馈区 -->
     <div id="formNotice"></div>
 
@@ -741,9 +736,7 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
 
   function renderList() {
     const total = listData.length;
-    listMeta.textContent = total
-      ? `共 ${total} 条社区提交 · 与首页「社区新提交」模块、「提交收录」Tab 同一数据源`
-      : "";
+    listMeta.textContent = total ? `共 ${total} 条社区提交记录` : "";
     listEmpty.style.display = total ? "none" : "";
     listGrid.innerHTML = listData.map((sub) => {
       const poolEntry = pool.byId[sub.submission_id] || pool.bySlug[String(sub.repo || "").toLowerCase()] || null;
@@ -780,7 +773,6 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
 
   $("refreshBtn")?.addEventListener("click", () => refreshList());
   $("retryBtn")?.addEventListener("click", () => refreshList());
-  $("ctaSubmitBtn")?.addEventListener("click", () => setView("form"));
   $("emptyCtaBtn")?.addEventListener("click", () => setView("form"));
 
   // ===== 结果卡片（插入到当前视图顶部；不展示内部错误码/堆栈/原始 JSON） =====
@@ -1148,7 +1140,7 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
       ${recent.slug && recent.slug !== "unknown/unknown" ? `· <code>${esc(recent.slug)}</code>` : ""}
       · <b>${ageText}</b>
       ${recent.status && recent.status !== "queued" && STATUS_TEXT[recent.status] ? `· 当前状态：${STATUS_TEXT[recent.status].label}` : ""}
-      <br><span class="hint" style="margin-top:4px">恢复查询会在下方列表中定位并持续跟踪该提交（本机记录，与公开列表相互独立）。</span>
+      <br><span class="hint" style="margin-top:4px">恢复查询会切换到收录列表并持续跟踪该提交（本机记录，与公开列表相互独立）。</span>
     `;
     restoreCard.style.display = "";
     restoreBtn?.addEventListener("click", () => {
