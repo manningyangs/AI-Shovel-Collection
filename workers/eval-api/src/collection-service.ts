@@ -2,11 +2,12 @@
  * Worker：提交收录核心路由（任务书 §五）
  *
  * 路由一览：
- *   POST   /api/collection-submissions           创建提交
- *   GET    /api/collection-submissions/:id       查询状态
+ *   POST   /api/collection-submissions           创建提交（需登录 session）
+ *   GET    /api/collection-submissions/:id       查询状态（公开，状态分享链接可用）
  *   POST   /internal/collection-submissions/status   Actions 回调（COLLECTION_CALLBACK_SECRET）
  *
  * 安全红线：
+ *   - 创建提交强制 GitHub OAuth session（requireSession），未登录 401
  *   - 客户端 IP 不明文存，只存 HMAC(IP, COLLECTION_IP_SALT)
  *   - GitHub App Installation Token 只在 Worker 服务端使用，不暴露给前端
  *   - /internal/* 不加 Origin guard（Actions 内部调用），但加 COLLECTION_CALLBACK_SECRET 校验
@@ -16,6 +17,7 @@ import type { Context } from "hono";
 import type { AppEnv } from "./types";
 import { ApiError } from "./types";
 import { allowedOrigins, corsHeadersFor } from "./security";
+import { requireSession } from "./sessions";
 
 /* ============================================================
  * 常量 & 工具
@@ -280,6 +282,9 @@ async function dispatchCollectionWorkflow(
 export async function handleCreateSubmission(c: Context<AppEnv>) {
   const allowed = allowedOrigins(c.env.ALLOWED_SITE_ORIGINS);
   const corsHeaders = corsHeadersFor(c.req.header("Origin"), allowed);
+
+  // 0. 强制登录（与评测系统共用 GitHub OAuth Session），未登录 401
+  await requireSession(c.env, c.req.header("Authorization"));
 
   // 1. 限制请求体大小（任务书 §5.5）
   const contentLength = parseInt(c.req.header("Content-Length") || "0", 10);

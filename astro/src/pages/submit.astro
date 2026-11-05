@@ -35,6 +35,30 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     font-size: 13.5px; font-weight: 600; transition: all .15s;
   }
   .back-home:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* 登录状态行（与评测页共用 GitHub OAuth Session） */
+  .auth-row {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    margin-bottom: 16px; font-size: 13.5px;
+  }
+  .auth-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 999px; font-size: 12.5px; font-weight: 600;
+  }
+  .auth-badge.ok  { background: #d1fae5; color: #065f46; }
+  .auth-badge.no  { background: #f1f5f9; color: #475569; }
+  .auth-badge.err { background: #fee2e2; color: #991b1b; }
+  .auth-btn {
+    margin: 0 !important; padding: 7px 16px !important; border-radius: 8px !important;
+    font-size: 13px !important; font-weight: 600; cursor: pointer;
+    background: #24292f !important; color: #fff !important; border: none;
+  }
+  .auth-btn.ghost {
+    background: transparent !important; color: #64748b !important;
+    border: 1.5px solid var(--border) !important;
+  }
+  .auth-btn.ghost:hover:not(:disabled) { border-color: var(--primary); color: var(--primary) !important; }
+  .auth-user { color: var(--text-2); font-weight: 600; }
   .submit-hero {
     border-radius: 16px; padding: 32px; margin-bottom: 28px;
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a78bfa 100%);
@@ -137,6 +161,13 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     </p>
   </div>
 
+  <div class="auth-row" id="authRow">
+    <span class="auth-badge no" id="authBadge">⏳ 正在检查登录状态…</span>
+    <span class="auth-user" id="authUser" hidden></span>
+    <button class="auth-btn" id="loginBtn" type="button" hidden>🐙 使用 GitHub 登录</button>
+    <button class="auth-btn ghost" id="logoutBtn" type="button" hidden>退出登录</button>
+  </div>
+
   <div id="apiOff" class="api-off" style="display:none">
     ⚠️ 后端服务暂未接入（PUBLIC_EVAL_API_BASE 未配置），提交功能暂时不可用。
     请稍后再来，或联系维护者。
@@ -160,6 +191,9 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     <p class="hint"><span id="reasonCount">0</span> / 500 字</p>
 
     <button id="submitBtn" class="mt" type="button">🚀 提交收录</button>
+    <p class="hint" id="submitAuthHint" style="display:none;color:#d97706">
+      ⚠️ 提交收录需要先登录 GitHub（与评测页同一账号），请点击上方登录按钮。
+    </p>
   </div>
 
   <!-- 规则说明 -->
@@ -200,12 +234,13 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
   </footer>
 </div>
 
-<script is:inline define:vars={{ evalApiBase }}>
+<script is:inline define:vars={{ evalApiBase, base }}>
 (function () {
   "use strict";
 
   // ===== 配置 =====
   const API_BASE = (evalApiBase || "").replace(/\/+$/, "");
+  const SESSION_KEY = "EV_SESSION";     // 与评测页共用（同标签页 sessionStorage，仅走 Authorization 头）
   const LS_KEY = "AI_SHOVEL_SUBMISSIONS";     // localStorage 提交记录
   const POLL_INTERVALS = [5000, 8000, 12000, 15000]; // 递增轮询间隔
   const TERMINAL = new Set(["candidate_added", "duplicate", "rejected", "failed"]);
@@ -248,10 +283,51 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
   const restoreBtn = $("restoreBtn");
   const clearBtn = $("clearBtn");
   const restoreInfo = $("restoreInfo");
+  const authBadge = $("authBadge");
+  const authUser = $("authUser");
+  const loginBtn = $("loginBtn");
+  const logoutBtn = $("logoutBtn");
+  const submitAuthHint = $("submitAuthHint");
+
+  // ===== 登录态（强制登录：未登录不可提交） =====
+  function token() { return sessionStorage.getItem(SESSION_KEY) || ""; }
+  function clearSession() { sessionStorage.removeItem(SESSION_KEY); }
+
+  function setAuthBadge(kind, text) {
+    authBadge.className = "auth-badge " + kind;
+    authBadge.textContent = text;
+  }
+
+  function updateSubmitGate() {
+    if (!API_BASE) { submitBtn.disabled = true; return; }   // 服务未接入
+    const ok = !!token();
+    submitBtn.disabled = !ok;
+    submitAuthHint.style.display = ok ? "none" : "";
+  }
+
+  function showLoginState() {
+    setAuthBadge("no", "未登录");
+    authUser.hidden = true;
+    loginBtn.hidden = false;
+    logoutBtn.hidden = true;
+    updateSubmitGate();
+  }
+
+  function showLoggedIn(user) {
+    setAuthBadge("ok", "已登录");
+    authUser.hidden = false;
+    authUser.textContent = "@" + (user.login || user.name || "user");
+    loginBtn.hidden = true;
+    logoutBtn.hidden = false;
+    updateSubmitGate();
+  }
 
   // ===== API 未配置警告 =====
   if (!API_BASE) {
     apiOff.style.display = "";
+    setAuthBadge("err", "提交服务未接入");
+    loginBtn.hidden = true;
+    logoutBtn.hidden = true;
     submitBtn.disabled = true;
   }
 
@@ -278,10 +354,10 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     card.className = `result-card result-${kind}`;
     card.innerHTML = htmlContent;
 
-    // 插入到 hero 和 formCard 之间
-    const hero = document.querySelector(".submit-hero");
-    if (hero && hero.nextSibling) {
-      hero.parentNode.insertBefore(card, hero.nextSibling);
+    // 插入到登录状态行之后（没有则 hero 之后）
+    const anchor = document.getElementById("authRow") || document.querySelector(".submit-hero");
+    if (anchor && anchor.nextSibling) {
+      anchor.parentNode.insertBefore(card, anchor.nextSibling);
     } else {
       formCard.parentNode.insertBefore(card, formCard);
     }
@@ -395,15 +471,24 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
       repoUrlInput.focus();
       return;
     }
+    // 强制登录：未登录不允许提交
+    if (!token()) {
+      showLoginState();
+      showErrorCard("请先登录", "提交收录需要 GitHub 登录（与评测页同一账号）。", "点击上方的「🐙 使用 GitHub 登录」按钮完成登录后再提交。");
+      return;
+    }
 
     // 禁止重复点击
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="spinner"></span>提交中…';
 
     try {
+      const headers = { "Content-Type": "application/json" };
+      const t = token();
+      if (t) headers["Authorization"] = "Bearer " + t;
       const resp = await fetch(`${API_BASE}/api/collection-submissions`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({ repo_url: repoUrl, reason }),
       });
 
@@ -427,6 +512,11 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
         } else {
           showErrorCard("该仓库已在处理中", data.error?.message || "请稍后再查");
         }
+      } else if (resp.status === 401) {
+        // 登录失效 —— 清 session、回到未登录态
+        clearSession();
+        showLoginState();
+        showErrorCard("登录已过期", "请重新登录 GitHub 后再提交。");
       } else if (resp.status === 429) {
         showErrorCard("提交过于频繁", data.error?.message || "过去 24 小时内提交次数已达上限，请稍后再试");
       } else {
@@ -443,17 +533,19 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
         "请检查网络连接后重试。如果问题持续，可能是后端服务暂时不可用。"
       );
     } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = "🚀 提交收录";
+      submitBtn.innerHTML = "🚀 提交收录";
+      updateSubmitGate();   // 按登录态决定是否可点，避免请求后误恢复
     }
   }
 
   // ===== 轮询 =====
   let pollingTimer = null;
   let pollAttempt = 0;
+  let activePoll = null;   // 当前跟踪中的提交 {id, slug}（切回标签页时恢复轮询用）
 
   function startPolling(id, slug) {
     stopPolling();
+    activePoll = { id, slug };
     pollAttempt = 0;
     doPoll(id, slug);
   }
@@ -484,6 +576,7 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
 
       if (TERMINAL.has(status)) {
         stopPolling();
+        activePoll = null;
         showTerminalCard(id, slug, status, message);
         updateLocalStorageRecord(id, status);
       } else {
@@ -622,17 +715,81 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     );
   }
 
+  // ===== 最近提交自动续查（无需手动点击恢复） =====
+  function autoResume() {
+    const list = loadSubmissions();
+    if (!list.length) return false;
+    const recent = list[0];
+    const ageMs = Date.now() - (recent.saved_at || 0);
+    const pending = !recent.status || !TERMINAL.has(recent.status);
+    // 24 小时内仍在处理中的提交：加载页面后自动展示进度并恢复轮询
+    if (pending && ageMs < 24 * 3600 * 1000) {
+      restoreCard.style.display = "none";
+      showProgressCard(recent.id, recent.slug, recent.status || "queued", "正在恢复提交状态…");
+      startPolling(recent.id, recent.slug);
+      return true;
+    }
+    setupRestore(); // 兜底：更早或已终态的记录仍提供手动恢复入口
+    return false;
+  }
+
   // ===== 初始化 =====
   function init() {
+    // 登录按钮（与评测页同一条 GitHub OAuth 链路，回跳到本页）
+    loginBtn.addEventListener("click", () => {
+      sessionStorage.setItem("EV_RETURN", location.href);
+      location.href = API_BASE + "/auth/github/start?return_to=" +
+        encodeURIComponent(base + "/auth/callback");
+    });
+
+    logoutBtn.addEventListener("click", () => {
+      const t = token();
+      fetch(API_BASE + "/api/auth/logout", {
+        method: "POST",
+        headers: Object.assign(
+          { "Content-Type": "application/json" },
+          t ? { "Authorization": "Bearer " + t } : {},
+        ),
+        body: "{}",
+      }).catch(() => {}).finally(() => {
+        clearSession();
+        showLoginState();
+      });
+    });
+
+    // 恢复登录态
+    if (API_BASE && token()) {
+      fetch(API_BASE + "/api/me", {
+        headers: { "Authorization": "Bearer " + token() },
+      })
+        .then((res) => (res.ok ? res.json() : Promise.reject({ status: res.status })))
+        .then((data) => {
+          const user = (data && (data.user || data)) || {};
+          if (!user.login && !user.id) { showLoginState(); return; }
+          showLoggedIn(user);
+        })
+        .catch((err) => {
+          if (err && err.status === 401) { clearSession(); showLoginState(); }
+          else setAuthBadge("err", "登录状态检查失败");
+        });
+    } else if (API_BASE) {
+      showLoginState();
+    }
+
+    // 自动刷新：优先恢复 URL 中的分享链接，其次自动续查最近进行中的提交
     if (tryQueryRestore()) return;
-    setupRestore();
+    autoResume();
   }
   init();
 
-  // 页面离开停止轮询
+  // 页面离开暂停轮询；切回标签页自动恢复（借鉴评测页）
   window.addEventListener("beforeunload", stopPolling);
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") stopPolling();
+    if (document.visibilityState === "hidden") {
+      stopPolling();
+    } else if (activePoll && !pollingTimer) {
+      startPolling(activePoll.id, activePoll.slug);
+    }
   });
 })();
 </script>
