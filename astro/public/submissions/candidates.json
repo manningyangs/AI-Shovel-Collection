@@ -1,8 +1,36 @@
 {
   "schema_version": "1.0",
-  "updated_at": "2026-11-05T03:28:39Z",
-  "total": 2,
+  "updated_at": "2026-11-05T03:42:55Z",
+  "total": 3,
   "candidates": [
+    {
+      "repo_slug": "expressjs/express",
+      "repo_url": "https://github.com/expressjs/express",
+      "title": "expressjs/express",
+      "description": "Fast, unopinionated, minimalist web framework for node.",
+      "language": "JavaScript",
+      "license_spdx": "MIT",
+      "stars": 69580,
+      "forks": 25365,
+      "topics": [
+        "javascript",
+        "nodejs",
+        "express",
+        "server"
+      ],
+      "archived": false,
+      "fork": false,
+      "default_branch": "master",
+      "homepage": "https://expressjs.com",
+      "pushed_at": "2026-11-02T20:15:26Z",
+      "created_at": "2009-06-26T18:56:01Z",
+      "submission_id": "CS-17d123275b0bfccfe56805d91032fc59",
+      "submitted_at": "2026-11-05T03:42:55Z",
+      "reason": "Web 框架事实标准，Node.js 生态必备工具",
+      "source": "community_submission",
+      "review_status": "pending",
+      "verified_by_auto": true
+    },
     {
       "repo_slug": "sindresorhus/awesome-nodejs",
       "repo_url": "https://github.com/sindresorhus/awesome-nodejs",
