@@ -196,7 +196,7 @@ async function updateSubmissionStatus(
   }
   const now = Math.floor(Date.now() / 1000);
   const completed = ACTIVE_STATUSES.has(status) ? null : now;
-  await env.DB.prepare(
+  const result = await env.DB.prepare(
     `UPDATE collection_submissions
      SET status = ?, status_message = ?, updated_at = ?,
          completed_at = COALESCE(?, completed_at),
@@ -206,6 +206,8 @@ async function updateSubmissionStatus(
      WHERE submission_id = ?`,
   )
     .bind(status, message ?? null, now, completed, failureCode ?? null, workflowRunId ?? null, duplicateOf ?? null, id)
+    .run();
+  console.log(`[updateSubmissionStatus] id=${id} → ${status} (changes=${result.meta?.changes})`);
 }
 
 /* ============================================================
