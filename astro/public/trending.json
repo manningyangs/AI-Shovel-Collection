@@ -1,6 +1,6 @@
 {
-  "updated_at": "2026-11-05T06:59:06Z",
-  "data_points": 11,
+  "updated_at": "2026-11-05T07:03:24Z",
+  "data_points": 12,
   "history_days_covered": 4,
   "top_stars": [
     {
@@ -28,7 +28,7 @@
       "repo_slug": "upstash/context7",
       "repo_url": "https://github.com/upstash/context7",
       "title": "context7",
-      "stars": 64213,
+      "stars": 64214,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-04T17:51:22Z"
@@ -68,7 +68,7 @@
       "repo_slug": "prefecthq/fastmcp",
       "repo_url": "https://github.com/prefecthq/fastmcp",
       "title": "fastmcp",
-      "stars": 28312,
+      "stars": 28311,
       "stars_growth": null,
       "lang": "Python",
       "pushed_at": "2026-11-05T06:44:34Z"
@@ -121,7 +121,7 @@
       "stars": 12913,
       "stars_growth": null,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-04T23:02:28Z"
+      "pushed_at": "2026-11-05T07:01:00Z"
     },
     {
       "rank": 13,
@@ -240,8 +240,8 @@
       "repo_slug": "upstash/context7",
       "repo_url": "https://github.com/upstash/context7",
       "title": "context7",
-      "stars": 64213,
-      "stars_growth": 149,
+      "stars": 64214,
+      "stars_growth": 150,
       "lang": "TypeScript",
       "pushed_at": "2026-11-04T17:51:22Z"
     },
@@ -317,16 +317,6 @@
     },
     {
       "rank": 12,
-      "repo_slug": "prefecthq/fastmcp",
-      "repo_url": "https://github.com/prefecthq/fastmcp",
-      "title": "fastmcp",
-      "stars": 28312,
-      "stars_growth": 40,
-      "lang": "Python",
-      "pushed_at": "2026-11-05T06:44:34Z"
-    },
-    {
-      "rank": 13,
       "repo_slug": "21st-dev/magic-mcp",
       "repo_url": "https://github.com/21st-dev/magic-mcp",
       "title": "magic-mcp",
@@ -334,6 +324,16 @@
       "stars_growth": 39,
       "lang": "TypeScript",
       "pushed_at": "2026-09-09T20:38:22Z"
+    },
+    {
+      "rank": 13,
+      "repo_slug": "prefecthq/fastmcp",
+      "repo_url": "https://github.com/prefecthq/fastmcp",
+      "title": "fastmcp",
+      "stars": 28311,
+      "stars_growth": 39,
+      "lang": "Python",
+      "pushed_at": "2026-11-05T06:44:34Z"
     },
     {
       "rank": 14,
@@ -363,7 +363,7 @@
       "stars": 12913,
       "stars_growth": 24,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-04T23:02:28Z"
+      "pushed_at": "2026-11-05T07:01:00Z"
     },
     {
       "rank": 17,
@@ -442,8 +442,8 @@
       "repo_slug": "upstash/context7",
       "repo_url": "https://github.com/upstash/context7",
       "title": "context7",
-      "stars": 64213,
-      "stars_growth": 149,
+      "stars": 64214,
+      "stars_growth": 150,
       "lang": "TypeScript",
       "pushed_at": "2026-11-04T17:51:22Z"
     },
@@ -519,16 +519,6 @@
     },
     {
       "rank": 12,
-      "repo_slug": "prefecthq/fastmcp",
-      "repo_url": "https://github.com/prefecthq/fastmcp",
-      "title": "fastmcp",
-      "stars": 28312,
-      "stars_growth": 40,
-      "lang": "Python",
-      "pushed_at": "2026-11-05T06:44:34Z"
-    },
-    {
-      "rank": 13,
       "repo_slug": "21st-dev/magic-mcp",
       "repo_url": "https://github.com/21st-dev/magic-mcp",
       "title": "magic-mcp",
@@ -536,6 +526,16 @@
       "stars_growth": 39,
       "lang": "TypeScript",
       "pushed_at": "2026-09-09T20:38:22Z"
+    },
+    {
+      "rank": 13,
+      "repo_slug": "prefecthq/fastmcp",
+      "repo_url": "https://github.com/prefecthq/fastmcp",
+      "title": "fastmcp",
+      "stars": 28311,
+      "stars_growth": 39,
+      "lang": "Python",
+      "pushed_at": "2026-11-05T06:44:34Z"
     },
     {
       "rank": 14,
@@ -565,7 +565,7 @@
       "stars": 12913,
       "stars_growth": 24,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-04T23:02:28Z"
+      "pushed_at": "2026-11-05T07:01:00Z"
     },
     {
       "rank": 17,
@@ -661,7 +661,7 @@
       "stars": 12913,
       "stars_growth": null,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-04T23:02:28Z",
+      "pushed_at": "2026-11-05T07:01:00Z",
       "activity_score": 18.0
     },
     {
@@ -724,7 +724,7 @@
       "repo_slug": "prefecthq/fastmcp",
       "repo_url": "https://github.com/prefecthq/fastmcp",
       "title": "fastmcp",
-      "stars": 28312,
+      "stars": 28311,
       "stars_growth": null,
       "lang": "Python",
       "pushed_at": "2026-11-05T06:44:34Z",
@@ -735,7 +735,7 @@
       "repo_slug": "upstash/context7",
       "repo_url": "https://github.com/upstash/context7",
       "title": "context7",
-      "stars": 64213,
+      "stars": 64214,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-04T17:51:22Z",
