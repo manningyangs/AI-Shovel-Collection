@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-04T08:31:28.286876Z",
-  "total_reports": 8,
+  "updated_at": "2026-11-05T01:42:36.347848Z",
+  "total_reports": 9,
   "reports": [
+    {
+      "report_id": "woocommerce-woocommerce-c9db32208b26",
+      "owner": "woocommerce",
+      "name": "woocommerce",
+      "url": "https://github.com/woocommerce/woocommerce",
+      "project_type": "agent_skill",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 50,
+      "grade": "D",
+      "coverage": 92,
+      "commit_sha": "27aeffd55218",
+      "evaluated_at": "2026-11-05T01:42:36.347848Z"
+    },
     {
       "report_id": "BrowserMCP-mcp-bb121834c2e1",
       "owner": "BrowserMCP",

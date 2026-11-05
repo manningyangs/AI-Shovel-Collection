@@ -1,0 +1,350 @@
+{
+  "schema_version": "1.0",
+  "report_id": "woocommerce-woocommerce-c9db32208b26",
+  "repository": {
+    "owner": "woocommerce",
+    "name": "woocommerce",
+    "url": "https://github.com/woocommerce/woocommerce",
+    "commit_sha": "27aeffd5521881f0b31cf60bf74828930b599cea",
+    "language": "PHP",
+    "license": null,
+    "license_file": null,
+    "stars": 10583,
+    "forks": 10657,
+    "archived": false
+  },
+  "evaluation": {
+    "evaluation_version": "1.0",
+    "scoring_version": "1.0.1",
+    "evaluation_mode": "static",
+    "evaluation_level": "L1",
+    "level": "L1",
+    "score_status": "preliminary",
+    "preliminary_score": 50,
+    "official_score": null,
+    "grade": "D",
+    "coverage": 92,
+    "evaluated_at": "2026-11-05T01:42:36.347848Z",
+    "report_generated_by": "AI Shovel Eval",
+    "disclaimer": "静态初评 · 非正式认证 · 不能作为项目真实运行能力的担保"
+  },
+  "project_type": {
+    "type": "agent_skill",
+    "confidence": 0.62,
+    "scores": {
+      "mcp_server": 0,
+      "agent_skill": 5,
+      "framework": 0,
+      "cli_sdk_api": 0,
+      "collection": 3
+    },
+    "evidence": {
+      "mcp_server": [],
+      "agent_skill": [
+        ".ai/skills/woocommerce-backend-dev/SKILL.md",
+        ".ai/skills/woocommerce-backend-dev/code-entities.md",
+        ".ai/skills/woocommerce-backend-dev/coding-conventions.md"
+      ],
+      "framework": [],
+      "cli_sdk_api": [],
+      "collection": [
+        "collection_signals=11"
+      ]
+    },
+    "detected_via_manifest": true
+  },
+  "dimensions": {
+    "functionality": {
+      "label": "功能完整度",
+      "score": 25,
+      "max_score": 100,
+      "weight": 30,
+      "weighted_score": 7.5,
+      "sub_coverage": 80,
+      "sub_items": [
+        {
+          "dim_key": "functionality",
+          "sub_key": "core_completeness",
+          "weight": 5,
+          "level": 1,
+          "status": "partial"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "coverage",
+          "weight": 5,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "schema_completeness",
+          "weight": 5,
+          "level": 0,
+          "status": "partial"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "task_examples",
+          "weight": 5,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "error_handling",
+          "weight": 5,
+          "level": 0,
+          "status": "not_tested"
+        }
+      ]
+    },
+    "reliability": {
+      "label": "可靠性与运行效率",
+      "score": 92,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 13.8,
+      "sub_coverage": 75,
+      "sub_items": [
+        {
+          "dim_key": "reliability",
+          "sub_key": "test_evidence",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "ci_complete",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "error_mechanism",
+          "weight": 3,
+          "level": 2,
+          "status": "not_tested"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "release_stability",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    },
+    "agent_compat": {
+      "label": "智能体兼容性",
+      "score": 24,
+      "max_score": 100,
+      "weight": 20,
+      "weighted_score": 4.8,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "protocol_compliance",
+          "weight": 4,
+          "level": 1,
+          "status": "partial"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "host_support",
+          "weight": 5,
+          "level": 1,
+          "status": "partial"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "transport_config",
+          "weight": 3,
+          "level": 1,
+          "status": "declared"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "env_auth",
+          "weight": 3,
+          "level": 2,
+          "status": "declared"
+        }
+      ]
+    },
+    "docs": {
+      "label": "文档与开发者体验",
+      "score": 48,
+      "max_score": 100,
+      "weight": 5,
+      "weighted_score": 2.4,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "docs",
+          "sub_key": "install_deploy_doc",
+          "weight": 2,
+          "level": 5,
+          "status": "partial"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "usage_example",
+          "weight": 2,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "license_info",
+          "weight": 1,
+          "level": 0,
+          "status": "failed"
+        }
+      ]
+    },
+    "ease_of_use": {
+      "label": "易用性与集成体验",
+      "score": 9,
+      "max_score": 100,
+      "weight": 10,
+      "weighted_score": 0.9,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "install_instructions",
+          "weight": 5,
+          "level": 0,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "config_env",
+          "weight": 4,
+          "level": 1,
+          "status": "partial"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "deploy",
+          "weight": 3,
+          "level": 1,
+          "status": "declared"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "quickstart",
+          "weight": 3,
+          "level": 0,
+          "status": "verified"
+        }
+      ]
+    },
+    "maintenance": {
+      "label": "项目维护健康度",
+      "score": 92,
+      "max_score": 100,
+      "weight": 10,
+      "weighted_score": 9.2,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "maintenance",
+          "sub_key": "update_release",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "ci_status",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "issue_maintain",
+          "weight": 2,
+          "level": 4,
+          "status": "partial"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "continuity",
+          "weight": 2,
+          "level": 4,
+          "status": "verified"
+        }
+      ]
+    },
+    "security": {
+      "label": "安全性与隐私保护",
+      "score": 92,
+      "max_score": 100,
+      "weight": 10,
+      "weighted_score": 9.2,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "security",
+          "sub_key": "dependency_vulns",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "danger_ops",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "data_access",
+          "weight": 3,
+          "level": 3,
+          "status": "partial"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "secret_scan",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    }
+  },
+  "agent_compatibility": {
+    "checks": {
+      "mcp_protocol_deps": false,
+      "auth_methods": []
+    },
+    "evidence": []
+  },
+  "security_findings": [],
+  "recommendations": [
+    "添加 README.md，至少包含项目简介、安装步骤、基本用法",
+    "添加 LICENSE 文件（MIT / Apache 2.0 / BSD 推荐）",
+    "配置 Dependabot 或 OSV-Scanner 做自动化安全扫描"
+  ],
+  "evidence": [
+    "[agent_skill] manifest 识别证据: .ai/skills/woocommerce-backend-dev/SKILL.md",
+    "[agent_skill] manifest 识别证据: .ai/skills/woocommerce-backend-dev/code-entities.md",
+    "[collection] manifest 识别证据: collection_signals=11",
+    "[security] 扫描 2 个源码文件",
+    "[osv] 查询 0 个依赖漏洞"
+  ],
+  "limitations": [
+    "⚠️ 本报告为纯静态分析（L1），未执行被测仓库中的任何代码",
+    "⚠️ 静态初评 · 非正式认证 — 评分不能等同于真实运行表现",
+    "⚠️ 覆盖率仅 92%，未测试项目不计零分",
+    "⚠️ 无法确认 License 类型"
+  ]
+}
