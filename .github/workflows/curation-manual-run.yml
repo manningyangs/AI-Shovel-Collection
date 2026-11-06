@@ -1,0 +1,18 @@
+name: curation-manual-run
+
+# 手动触发精选推荐评估周期（POST /internal/curation/cycle）。
+# 与 Cron（40 */6 * * * UTC）走同一套评估逻辑，幂等可重复执行。
+# 鉴权复用仓库 secret EVAL_PROGRESS_SECRET（Bearer）。
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-cycle:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger curation evaluation cycle
+        run: |
+          curl -sS --max-time 300 -X POST \
+            -H "Authorization: Bearer ${{ secrets.EVAL_PROGRESS_SECRET }}" \
+            https://ai-shovel-eval-api.yang1-75.workers.dev/internal/curation/cycle

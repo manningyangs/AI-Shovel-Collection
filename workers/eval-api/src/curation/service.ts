@@ -15,6 +15,7 @@
 import type { Context } from "hono";
 import type { Env, AppEnv } from "../types";
 import { ApiError } from "../types";
+import { installationToken } from "../github-app";
 import {
   ALGORITHM_VERSION,
   EVAL,
@@ -230,18 +231,26 @@ type FetchOutcome =
 export type { ApiFacts, FetchOutcome };
 
 /**
- * 匿名核验第三方仓库（§十六 Rate Limit：匿名 60 次/时，配合每轮预算）。
- * 不使用 installation token——App 仅安装于本账号，token 查第三方仓库会 404 误判。
+ * 核验第三方仓库（§十六 预算控制）。
+ * 优先 installation token：实测可读未安装的 public 仓库（5000 次/时）——
+ * Workers 出口共享 IP 的匿名配额（60 次/时）几乎恒被限流，会让评分长期缺事实；
+ * token 获取失败时回退匿名请求（403/429 → rate_limited 语义不变）。
  */
-export async function fetchRepoFacts(slug: string): Promise<FetchOutcome> {
+export async function fetchRepoFacts(slug: string, env?: Env): Promise<FetchOutcome> {
+  const headers: Record<string, string> = {
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": API_VERSION,
+    "User-Agent": "ai-shovel-curation-worker/1.0",
+  };
+  if (env) {
+    try {
+      headers.Authorization = `token ${await installationToken(env)}`;
+    } catch {
+      // token 获取失败 → 回退匿名
+    }
+  }
   try {
-    const res = await fetch(`${GITHUB_API}/repos/${slug}`, {
-      headers: {
-        Accept: "application/vnd.github+json",
-        "X-GitHub-Api-Version": API_VERSION,
-        "User-Agent": "ai-shovel-curation-worker/1.0",
-      },
-    });
+    const res = await fetch(`${GITHUB_API}/repos/${slug}`, { headers });
     if (res.status === 404) return { kind: "not_found" };
     if (res.status === 403 || res.status === 429) return { kind: "rate_limited" };
     if (!res.ok) return { kind: "error" };
@@ -342,7 +351,7 @@ export async function runCurationCycle(env: Env, trigger: string): Promise<Cycle
     let apiFacts: ApiFacts | null = null;
     if (!rateLimited && needsApi(m) && apiBudget > 0) {
       apiBudget--;
-      const outcome = await fetchRepoFacts(m.slug);
+      const outcome = await fetchRepoFacts(m.slug, env);
       if (outcome.kind === "ok") {
         apiFacts = outcome.facts;
         withApi++;
@@ -547,6 +556,29 @@ export async function getPublicRecommendations(env: Env) {
 export async function handleGetRecommendations(c: Context<AppEnv>) {
   const payload = await getPublicRecommendations(c.env);
   return c.json(payload, 200, { "Cache-Control": "public, max-age=300" });
+}
+
+/**
+ * 手动触发一轮评估周期：POST /internal/curation/cycle
+ * 鉴权：Authorization: Bearer <EVAL_PROGRESS_SECRET>（与 GitHub Actions / curl 指令触发共用）；
+ * 拒绝带 Origin 的浏览器请求。周期本身幂等（增量评估），重复触发安全。
+ */
+export async function handleManualCycle(c: Context<AppEnv>) {
+  if (c.req.header("Origin")) {
+    return c.json(
+      { success: false, error: { code: "INTERNAL_FORBIDDEN", message: "内部接口不接受浏览器请求" } },
+      403,
+    );
+  }
+  const auth = c.req.header("Authorization") || "";
+  if (!c.env.EVAL_PROGRESS_SECRET || auth !== `Bearer ${c.env.EVAL_PROGRESS_SECRET}`) {
+    return c.json(
+      { success: false, error: { code: "UNAUTHORIZED", message: "缺少或错误的触发凭证" } },
+      401,
+    );
+  }
+  const stats = await runCurationCycle(c.env, "manual:api");
+  return c.json({ success: true, stats });
 }
 
 /* ------------------------------ Cron 入口（§十六 定期计算） ------------------------------ */

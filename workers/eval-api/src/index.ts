@@ -54,7 +54,7 @@ import {
   handleGetSubmission,
   handleListSubmissions,
 } from "./collection-service";
-import { handleGetRecommendations, handleCurationScheduled } from "./curation/service";
+import { handleGetRecommendations, handleCurationScheduled, handleManualCycle } from "./curation/service";
 import {
   handleAdminLogout,
   handleAdminMe,
@@ -166,6 +166,7 @@ app.post("/api/curation/admin/candidates/:id/promote", handlePromote);
 app.post("/internal/progress", handleProgress);
 app.post("/internal/finalize", handleFinalize);
 app.post("/internal/collection-submissions/status", handleCollectionCallback);
+app.post("/internal/curation/cycle", handleManualCycle);
 
 /* -------------------------------- 统一错误处理 -------------------------------- */
 

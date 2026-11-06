@@ -298,15 +298,15 @@ async function runFinalChecks(
   );
   const poolFound = { auto: !!merged?.auto, community: !!merged?.community };
 
-  // §12.1.8：仓库存在性和最新事实（匿名核验，失败 fail-closed）
-  const outcome = await fetchRepoFacts(row.repo_slug);
+  // §12.1.8：仓库存在性和最新事实（installation token 核验，失败 fail-closed）
+  const outcome = await fetchRepoFacts(row.repo_slug, env);
   if (outcome.kind === "not_found") {
     return fail("REPO_UNAVAILABLE", "收录前核验发现仓库不存在或已被删除，已停止收录", {
       pool: poolFound,
     });
   }
   if (outcome.kind === "rate_limited") {
-    return fail("FACTS_RATE_LIMITED", "GitHub 匿名核验配额不足，请稍后重试收录", {});
+    return fail("FACTS_RATE_LIMITED", "GitHub 核验配额不足，请稍后重试收录", {});
   }
   if (outcome.kind === "error") {
     return fail("FACTS_FETCH_FAILED", "收录前仓库事实核验失败，已停止收录", {});
