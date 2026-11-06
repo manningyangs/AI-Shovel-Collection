@@ -8,6 +8,9 @@ import path from 'path';
 // Use process.cwd() which is project root (repo/astro/) during astro build
 const appJs = fs.readFileSync(path.resolve(process.cwd(), 'src/scripts/app.js'), 'utf8');
 
+// 公开推荐 API 地址（构建期注入；app.js 加载精选推荐 Tab 数据）
+const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/, "");
+
 // Astro SSG: 构建时读取 catalog.csv + live_multi.json，预渲染 curated 卡片到 HTML
 const csvMod = import.meta.glob('../../public/catalog.csv', { as: 'raw', eager: true });
 const liveMod = import.meta.glob('../../public/live_multi.json', { as: 'json', eager: true });
@@ -346,6 +349,7 @@ try {
     <button class="list-tab" data-tab="candidates" type="button" role="tab" aria-selected="false">🧭 自动发现<span class="tab-count" id="tabCandidateCount">150</span></button>
     <button class="list-tab" data-tab="community" type="button" role="tab" aria-selected="false">📥 提交收录<span class="tab-count" id="tabCommunityCount">{communityPool.total}</span></button>
     <button class="list-tab" data-tab="live" type="button" role="tab" aria-selected="false">🌐 GitHub 实时搜索</button>
+    <button class="list-tab" data-tab="curation" type="button" role="tab" aria-selected="false">⭐ 精选推荐<span class="tab-count" id="tabCurationCount">…</span></button>
   </div>
   <div class="sort-bar" id="sortBar">
     <span class="mf-label">排序：</span>
@@ -428,6 +432,17 @@ try {
       <span class="live-status" id="liveStatus"></span>
     </div>
     <div class="grid" id="liveGrid2"></div>
+  </section>
+  <!-- ⭐ 精选推荐 Tab（任务书 §七）：Worker 周期评估持久化的公开推荐数据，访客免登录浏览；仅公开 4 状态（§7.4） -->
+  <section id="curationTab" data-tabpanel="curation" style="display:none">
+    <div class="section-head">
+      <h2>⭐ 精选推荐<span class="unverified-tag" style="background:#fef3c7;color:#92400e" title="推荐算法基于两个候选池的公开数据自动评分生成；进入正式精选库需仓库所有者人工审核">🤖 算法推荐</span></h2>
+      <span class="hint">来自<b>自动发现</b>与<b>社区提交</b>两候选池的去重候选 · 100 分制七维评分 · <b>推荐不等于正式收录</b>（收录需人工审核）</span>
+    </div>
+    <div class="cur-note">评分与理由由算法基于公开数据（Stars、活跃度、许可证、文档等）生成，<b>不是精选排名或质量背书</b>；已收录、被拦截和未通过审核的项目不会出现在本列表。数据随周期评估自动更新。</div>
+    <div class="cur-stats" id="curationStats" style="display:none"></div>
+    <div class="grid" id="curationGrid"></div>
+    <div class="empty" id="curationEmpty" style="display:none"></div>
   </section>
 </main>
 
@@ -640,5 +655,6 @@ try {
   }
 </style>
 
+<script is:inline set:html={`window.__EVAL_API_BASE = ${JSON.stringify(evalApiBase)};`}></script>
 <script is:inline set:html={appJs}></script>
 </Base>

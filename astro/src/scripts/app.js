@@ -830,6 +830,194 @@
     }
   }
 
+  /* ================= ⭐ 精选推荐 Tab（任务书 §七） =================
+     数据源：Worker 公开只读 API /api/curation/recommendations（周期评估持久化 D1，零实时 GitHub 请求）
+     仅展示公开 4 状态（§7.4：recommended / pending_review / reviewing / approved），访客免登录（§7.2） */
+
+  var curationItems = [];
+  var curationStats = null;
+  var curationLoaded = false;
+  var curationLoading = false;
+  var CUR_PUBLIC = { recommended: 1, pending_review: 1, reviewing: 1, approved: 1 };
+  var CUR_STATUS = {
+    recommended: { label: "🤖 算法推荐", cls: "st-rec", tip: "算法综合评分达到公开推荐门槛，等待或已进入人工审核" },
+    pending_review: { label: "⏳ 待审核", cls: "st-pending", tip: "已进入公开推荐，等待仓库所有者审核" },
+    reviewing: { label: "🔍 审核中", cls: "st-reviewing", tip: "仓库所有者正在进行六阶段审核" },
+    approved: { label: "✅ 已批准", cls: "st-approved", tip: "人工审核通过，等待正式写入精选库" }
+  };
+  var CUR_SOURCE = { auto_discovery: "🧭 自动发现", community_submission: "📥 社区提交" };
+  var CUR_DIM = {
+    ai_value: "AI 价值", completeness: "功能完整度", practical: "实用价值",
+    activity: "项目活跃度", maturity: "技术成熟度", community: "社区认可度", license: "许可证"
+  };
+
+  function curRelTime(iso, prefix) {
+    if (!iso) return null;
+    var t = new Date(iso).getTime();
+    if (isNaN(t)) return null;
+    var days = (Date.now() - t) / 86400000;
+    var text;
+    if (days < 1) text = "今天";
+    else if (days < 30) text = Math.floor(days) + " 天前";
+    else if (days < 365) text = Math.floor(days / 30) + " 个月前";
+    else text = Math.floor(days / 365) + " 年前";
+    return prefix + text;
+  }
+
+  function ensureCuration() {
+    if (curationLoaded || curationLoading) return;
+    curationLoading = true;
+    var base = String(window.__EVAL_API_BASE || "").replace(/\/+$/, "");
+    if (!base) {
+      curationLoading = false;
+      renderCuration("no-api");
+      return;
+    }
+    fetch(base + "/api/curation/recommendations")
+      .then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+      })
+      .then(function (data) {
+        curationLoading = false;
+        if (!data || data.success !== true) throw new Error("bad payload");
+        // 防御性状态过滤：即使后端已过滤，前端再保证只出现 4 个公开状态（§7.4）
+        curationItems = (data.items || []).filter(function (it) {
+          return CUR_PUBLIC[it.status] === 1;
+        });
+        curationStats = data.stats || null;
+        curationLoaded = true;
+        var tc = document.getElementById("tabCurationCount");
+        if (tc) tc.textContent = curationStats && typeof curationStats.visible === "number"
+          ? String(curationStats.visible)
+          : String(curationItems.length);
+        renderCuration();
+      })
+      .catch(function () {
+        curationLoading = false;
+        renderCuration("error");
+      });
+  }
+
+  function curCard(it) {
+    var st = CUR_STATUS[it.status] || { label: it.status, cls: "st-pending", tip: "" };
+    var scoreHtml;
+    if (typeof it.total_score === "number") {
+      var sc = it.total_score >= 80 ? "hi" : it.total_score >= 70 ? "mid" : "lo";
+      scoreHtml = '<span class="cur-score ' + sc + '" title="推荐综合评分（100 分制，非精选排名）">' + it.total_score + '<small>分</small></span>';
+    } else {
+      scoreHtml = '<span class="cur-score pending" title="首次评估完成前显示待评估">评估中</span>';
+    }
+
+    var srcs = (it.sources || []).map(function (s) {
+      var label = CUR_SOURCE[s] || s;
+      return '<span class="cur-src" title="候选来源：' + esc(label) + '">' + esc(label) + "</span>";
+    }).join("");
+
+    var dims = (it.dimensions || []).map(function (d) {
+      var pct = d.weight ? Math.round((d.score / d.weight) * 100) : 0;
+      var cls = pct >= 80 ? "hi" : pct >= 50 ? "mid" : "lo";
+      var label = CUR_DIM[d.key] || d.key;
+      var ev = (d.evidence || []).join("；");
+      return '<span class="cur-dim ' + cls + '" title="' +
+        esc(label + "：" + d.score + "/" + d.weight + (ev ? "｜" + ev : "")) + '">' +
+        esc(label) + " <b>" + d.score + "/" + d.weight + "</b></span>";
+    }).join("");
+
+    var evRows = [];
+    (it.dimensions || []).forEach(function (d) {
+      var label = CUR_DIM[d.key] || d.key;
+      (d.evidence || []).forEach(function (e) {
+        evRows.push("<li><b>" + esc(label) + "</b> " + esc(e) + "</li>");
+      });
+    });
+
+    var recAt = curRelTime(it.first_recommended_at, "推荐于 ");
+    var chkAt = curRelTime(it.last_checked_at, "最近检查 ");
+
+    return '<article class="card cur-card">' +
+      '<div class="card-top">' +
+        '<div class="card-title"><a href="' + esc(it.repo_url) + '" target="_blank" rel="noopener">' +
+          highlight(it.tool_name, query) + "</a></div>" +
+        scoreHtml +
+      "</div>" +
+      (it.description ? '<div class="card-desc">' + highlight(it.description, query) + "</div>" : "") +
+      (it.reason ? '<div class="cur-reason" title="推荐理由（基于下方真实评分依据生成）">💡 ' + esc(it.reason) + "</div>" : "") +
+      (dims ? '<div class="cur-dims">' + dims + "</div>" : "") +
+      '<div class="card-live">' +
+        '<span class="cur-status ' + st.cls + '" title="' + esc(st.tip) + '">' + st.label + "</span>" +
+        srcs +
+        (recAt ? '<span class="fresh ok" title="首次进入公开推荐的时间">' + esc(recAt) + "</span>" : "") +
+        (chkAt ? '<span class="fresh cold" title="算法最近一次核验仓库数据的时间">' + esc(chkAt) + "</span>" : "") +
+      "</div>" +
+      (evRows.length ? '<details class="cur-ev"><summary>主要评分依据（' + evRows.length + " 条）</summary><ul>" + evRows.join("") + "</ul></details>" : "") +
+      '<div class="card-foot"><span class="card-repo">' + highlight(it.repo_slug, query) + "</span>" +
+        '<span><a class="ext" href="' + esc(it.repo_url) + '" target="_blank" rel="noopener">GitHub ↗</a></span></div>' +
+      "</article>";
+  }
+
+  function renderCuration(errKind) {
+    var grid = document.getElementById("curationGrid");
+    var emptyEl = document.getElementById("curationEmpty");
+    var statsEl = document.getElementById("curationStats");
+    if (!grid || !emptyEl) return;
+
+    if (!curationLoaded) {
+      grid.innerHTML = "";
+      emptyEl.style.display = "block";
+      if (errKind === "no-api") {
+        emptyEl.innerHTML = "推荐服务未接入（公开 API 未配置）。";
+      } else if (curationLoading || errKind === "loading") {
+        emptyEl.innerHTML = "正在加载公开推荐数据…";
+      } else {
+        emptyEl.innerHTML = "推荐数据加载失败，请稍后重试。";
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "comm-more";
+        btn.textContent = "重新加载";
+        btn.addEventListener("click", function () {
+          curationLoading = true;
+          renderCuration("loading");
+          ensureCurationRetry();
+        });
+        emptyEl.appendChild(btn);
+      }
+      if (statsEl) statsEl.style.display = "none";
+      return;
+    }
+
+    if (statsEl) {
+      if (curationStats) {
+        var bits = ["共 <b>" + (curationStats.visible || curationItems.length) + "</b> 个公开推荐"];
+        if (curationStats.recommended) bits.push("算法推荐 " + curationStats.recommended);
+        if (curationStats.pending_review) bits.push("待审核 " + curationStats.pending_review);
+        if (curationStats.reviewing) bits.push("审核中 " + curationStats.reviewing);
+        if (curationStats.approved) bits.push("已批准 " + curationStats.approved);
+        statsEl.innerHTML = bits.join(" · ");
+        statsEl.style.display = "block";
+      } else {
+        statsEl.style.display = "none";
+      }
+    }
+
+    if (!curationItems.length) {
+      grid.innerHTML = "";
+      emptyEl.style.display = "block";
+      emptyEl.innerHTML = "暂无符合条件的公开推荐 —— 推荐由周期评估生成（每 6 小时更新），稍后再来看看；" +
+        '也可以先看 <a href="#candidates">自动发现候选</a> 或 <a href="submit/">提交你心仪的工具</a>。';
+      return;
+    }
+
+    emptyEl.style.display = "none";
+    grid.innerHTML = curationItems.map(curCard).join("");
+  }
+
+  function ensureCurationRetry() {
+    curationLoaded = false;
+    curationLoading = false;
+    ensureCuration();
+  }
+
   /* ================= 配置块弹窗 ================= */
 
   var cfgStore = []; // 渲染时收集条目 payload，卡片按钮用 data-cfg 索引引用
@@ -1434,6 +1622,10 @@
     // 切到 community（提交收录）tab 时渲染社区候选
     if (name === "community") {
       renderCommunity();
+    }
+    // 切到 curation（精选推荐）tab 时按需拉取公开推荐数据（首访客免登录，仅 1 次 API 请求，会话内不重复）
+    if (name === "curation") {
+      ensureCuration();
     }
     // 切换到 liveTab 且有搜索词时自动搜索
     if (name === "live" && query.length >= 2 && liveFetchedFor !== query) {
