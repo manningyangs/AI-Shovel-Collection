@@ -1,0 +1,463 @@
+{
+  "schema_version": "1.0",
+  "report_id": "TonyWang-hub-mcp-cn-commerce-b061b1ef6112",
+  "repository": {
+    "owner": "TonyWang-hub",
+    "name": "mcp-cn-commerce",
+    "url": "https://github.com/TonyWang-hub/mcp-cn-commerce",
+    "commit_sha": "03292c7f3c28712bc733524312e33a0322787099",
+    "language": "Python",
+    "license": "MIT",
+    "license_file": "LICENSE",
+    "stars": 96,
+    "forks": 18,
+    "archived": false
+  },
+  "evaluation": {
+    "evaluation_version": "1.0",
+    "scoring_version": "1.0.1",
+    "evaluation_mode": "static",
+    "evaluation_level": "L1",
+    "level": "L1",
+    "score_status": "preliminary",
+    "preliminary_score": 74,
+    "official_score": null,
+    "grade": "B",
+    "coverage": 92,
+    "evaluated_at": "2026-11-06T02:37:49.748580Z",
+    "report_generated_by": "AI Shovel Eval",
+    "disclaimer": "静态初评 · 非正式认证 · 不能作为项目真实运行能力的担保"
+  },
+  "project_type": {
+    "type": "mcp_server",
+    "confidence": 0.78,
+    "scores": {
+      "mcp_server": 7,
+      "agent_skill": 0,
+      "framework": 0,
+      "cli_sdk_api": 2,
+      "collection": 0
+    },
+    "evidence": {
+      "mcp_server": [
+        "pyproject/requirements 含 mcp-server",
+        "pyproject/requirements 含 mcp",
+        "README 含 MCP 关键词 x3"
+      ],
+      "agent_skill": [],
+      "framework": [],
+      "cli_sdk_api": [
+        "pyproject.toml [project.scripts]"
+      ],
+      "collection": []
+    },
+    "detected_via_manifest": true
+  },
+  "dimensions": {
+    "reliability": {
+      "label": "可靠性与运行效率",
+      "score": 100,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 15.0,
+      "sub_coverage": 75,
+      "sub_items": [
+        {
+          "dim_key": "reliability",
+          "sub_key": "test_evidence",
+          "weight": 5,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "ci_complete",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "error_mechanism",
+          "weight": 3,
+          "level": 2,
+          "status": "not_tested"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "release_stability",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    },
+    "maintenance": {
+      "label": "项目维护健康度",
+      "score": 84,
+      "max_score": 100,
+      "weight": 10,
+      "weighted_score": 8.4,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "maintenance",
+          "sub_key": "update_release",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "ci_status",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "issue_maintain",
+          "weight": 2,
+          "level": 4,
+          "status": "partial"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "continuity",
+          "weight": 2,
+          "level": 2,
+          "status": "verified"
+        }
+      ]
+    },
+    "security": {
+      "label": "安全性与隐私保护",
+      "score": 76,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 11.4,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "security",
+          "sub_key": "dependency_vulns",
+          "weight": 4,
+          "level": 2,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "danger_ops",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "data_access",
+          "weight": 3,
+          "level": 3,
+          "status": "partial"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "secret_scan",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    },
+    "functionality": {
+      "label": "功能完整度",
+      "score": 65,
+      "max_score": 100,
+      "weight": 25,
+      "weighted_score": 16.25,
+      "sub_coverage": 80,
+      "sub_items": [
+        {
+          "dim_key": "functionality",
+          "sub_key": "core_completeness",
+          "weight": 5,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "coverage",
+          "weight": 5,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "schema_completeness",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "task_examples",
+          "weight": 5,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "error_handling",
+          "weight": 5,
+          "level": 0,
+          "status": "not_tested"
+        }
+      ]
+    },
+    "ease_of_use": {
+      "label": "易用性与集成体验",
+      "score": 67,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 10.05,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "install_instructions",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "config_env",
+          "weight": 4,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "deploy",
+          "weight": 3,
+          "level": 3,
+          "status": "declared"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "quickstart",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        }
+      ]
+    },
+    "agent_compat": {
+      "label": "智能体兼容性",
+      "score": 65,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 9.75,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "protocol_compliance",
+          "weight": 4,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "host_support",
+          "weight": 5,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "transport_config",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "env_auth",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        }
+      ]
+    },
+    "docs": {
+      "label": "文档与开发者体验",
+      "score": 68,
+      "max_score": 100,
+      "weight": 5,
+      "weighted_score": 3.4,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "docs",
+          "sub_key": "install_deploy_doc",
+          "weight": 2,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "usage_example",
+          "weight": 2,
+          "level": 1,
+          "status": "verified"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "license_info",
+          "weight": 1,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    }
+  },
+  "agent_compatibility": {
+    "checks": {
+      "mcp_protocol_deps": true,
+      "host_claude_desktop": true,
+      "host_cline": true,
+      "transport_methods": [
+        "stdio",
+        "http"
+      ],
+      "auth_methods": [
+        "oauth",
+        "token"
+      ]
+    },
+    "evidence": [
+      "pyproject.toml 含 MCP 依赖",
+      "README 提及 claude_desktop",
+      "README 提及 cline",
+      "README 提及传输: ['stdio', 'http']",
+      "README 提及认证: ['oauth', 'token']"
+    ]
+  },
+  "security_findings": [
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 setuptools@77.0 存在 GHSA-5rjg-fvgr-3xxf：setuptools has a path traversal vulnerability in PackageIndex.download that leads to Arbitrary File Write",
+      "aliases": [
+        "BIT-setuptools-2025-47273",
+        "CVE-2025-47273",
+        "PYSEC-2025-49"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 setuptools@77.0 存在 GHSA-h35f-9h28-mq5c：setuptools: MANIFEST.in exclusion bypass in sdist via Unicode normalization collision (NFC/NFD) on macOS APFS/HFS+",
+      "aliases": [
+        "BIT-setuptools-2026-59890",
+        "CVE-2026-59890",
+        "PYSEC-2026-3447"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 setuptools@77.0 存在 PYSEC-2025-49：setuptools is a package that allows users to download, build, install, upgrade, and uninstall Python packages. A path tr",
+      "aliases": [
+        "BIT-setuptools-2025-47273",
+        "CVE-2025-47273",
+        "GHSA-5rjg-fvgr-3xxf"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 setuptools@77.0 存在 PYSEC-2026-3447：setuptools is a package that allows users to download, build, install, upgrade, and uninstall Python packages. Prior to ",
+      "aliases": [
+        "BIT-setuptools-2026-59890",
+        "CVE-2026-59890",
+        "GHSA-h35f-9h28-mq5c"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@2.1.1 存在 GHSA-5h93-6whr-6q8j：Model Context Protocol Python SDK: HTTP client transports followed cross-origin redirects carrying custom headers and bodies",
+      "aliases": [
+        "CVE-2026-116685"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@2.1.1 存在 GHSA-84m7-p3x7-pcfv：MCP Python SDK: Unbounded Session Accumulation in StreamableHTTP Transport Enables Resource Exhaustion",
+      "aliases": [
+        "CVE-2026-59951"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@2.1.1 存在 GHSA-rwrf-2pqf-9j8j：Model Context Protocol Python SDK: Client fetched server-chosen $ref URLs while validating tool results against output schemas",
+      "aliases": [
+        "CVE-2026-116686"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 mcp@2.1.1 存在 GHSA-w4fh-qvv9-3v23：Model Context Protocol Python SDK: Server bearer-token authentication accepts tokens issued for a different resource server",
+      "aliases": [
+        "CVE-2026-116684"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 pytest@7.0 存在 GHSA-6w46-j5rx-g56g：pytest has vulnerable tmpdir handling",
+      "aliases": [
+        "CVE-2025-71176",
+        "PYSEC-2026-1845"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 pytest@7.0 存在 PYSEC-2026-1845：pytest has vulnerable tmpdir handling",
+      "aliases": [
+        "CVE-2025-71176",
+        "GHSA-6w46-j5rx-g56g"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "low",
+      "message": "依赖 setuptools@77.0 存在 GHSA-xmj3-9gf7-h52w：setuptools: Windows path escape via namespace_packages.txt during legacy wheel installation  Description",
+      "aliases": []
+    }
+  ],
+  "recommendations": [
+    "README 添加使用示例章节（Usage / Examples）",
+    "修复 1 个高危依赖漏洞"
+  ],
+  "evidence": [
+    "[mcp_server] manifest 识别证据: pyproject/requirements 含 mcp-server",
+    "[mcp_server] manifest 识别证据: pyproject/requirements 含 mcp",
+    "[cli_sdk_api] manifest 识别证据: pyproject.toml [project.scripts]",
+    "[docs] README 章节覆盖: install, config, license, troubleshooting, security",
+    "[ease] README 安装命令示例: mkdir -p mcp-cn-commerce-0.1.6",
+    "[docs] README 含 13 个代码块",
+    "[security] 扫描 40 个源码文件",
+    "[osv] 查询 11 个依赖漏洞"
+  ],
+  "limitations": [
+    "⚠️ 本报告为纯静态分析（L1），未执行被测仓库中的任何代码",
+    "⚠️ 静态初评 · 非正式认证 — 评分不能等同于真实运行表现",
+    "⚠️ 覆盖率仅 92%，未测试项目不计零分"
+  ]
+}

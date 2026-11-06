@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-06T02:01:57.908166Z",
-  "total_reports": 12,
+  "updated_at": "2026-11-06T02:37:49.748580Z",
+  "total_reports": 13,
   "reports": [
+    {
+      "report_id": "TonyWang-hub-mcp-cn-commerce-b061b1ef6112",
+      "owner": "TonyWang-hub",
+      "name": "mcp-cn-commerce",
+      "url": "https://github.com/TonyWang-hub/mcp-cn-commerce",
+      "project_type": "mcp_server",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 74,
+      "grade": "B",
+      "coverage": 92,
+      "commit_sha": "03292c7f3c28",
+      "evaluated_at": "2026-11-06T02:37:49.748580Z"
+    },
     {
       "report_id": "firecrawl-firecrawl-mcp-server-f45d6b4e72a8",
       "owner": "firecrawl",
