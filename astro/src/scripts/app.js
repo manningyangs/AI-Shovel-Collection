@@ -1282,6 +1282,10 @@
       var ep = live.endpoint || (live.remotes && live.remotes[0] && live.remotes[0].url);
       var titleUrl = live.repo_url || live.registry_url || it.url;
       var drawIdx = drawerStore.push({ kind: "curated", item: it, live: live }) - 1;
+      // 简介：优先 catalog.csv 名称里的括号描述；缺省回退到实时数据 desc（与 Astro 预渲染同口径，
+      // 否则审核新收录的行只有光名字 → 搜索/切 Tab 触发 JS 重渲染后卡片正文为空、比别的卡矮）
+      var cardDesc = it.desc || live.desc || "";
+      if (cardDesc.length > 180) cardDesc = cardDesc.slice(0, 180);
       return '<article class="card">' +
         '<div class="card-top">' +
           '<div class="card-title"><a href="' + esc(titleUrl) + '" target="_blank" rel="noopener">' +
@@ -1289,7 +1293,7 @@
           '<span class="badge" style="--badge-bg:' + it.color[0] + ";--badge-fg:" + it.color[1] + ";--badge-bd:" + it.color[2] + '" title="' + esc(it.cat) + '">' +
             highlight(it.catLabel, query) + "</span>" +
         "</div>" +
-        (it.desc ? '<div class="card-desc">' + highlight(it.desc, query) + "</div>" : "") +
+        (cardDesc ? '<div class="card-desc">' + highlight(cardDesc, query) + "</div>" : "") +
         epPill(ep) +
         liveRow(live) +
         sourceBadge(it.source) +
