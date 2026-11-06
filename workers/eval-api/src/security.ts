@@ -157,13 +157,15 @@ export function allowedOrigins(raw: string): string[] {
  */
 export function corsHeadersFor(origin: string | undefined, allowList: string[]): Record<string, string> {
   const headers: Record<string, string> = {
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, PUT, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
   };
   if (origin && allowList.includes(origin.replace(/\/+$/, ""))) {
     headers["Access-Control-Allow-Origin"] = origin;
+    // /curation 管理接口走 HttpOnly Cookie（跨站凭据请求），必须显式允许凭据
+    headers["Access-Control-Allow-Credentials"] = "true";
   }
   return headers;
 }

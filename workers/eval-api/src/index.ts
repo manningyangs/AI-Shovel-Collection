@@ -12,6 +12,13 @@
  *  GET    /api/evaluations               我的任务列表
  *  GET    /api/evaluations/:id           任务进度详情
  *  GET    /api/curation/recommendations  精选推荐公开列表（只读白名单字段 §15.1）
+ *  POST   /api/curation/session          Bearer 会话升级为 HttpOnly Cookie（/curation 用 §9.3.9）
+ *  GET    /api/curation/admin/me         当前审核身份（会话 + 所有者双重校验）
+ *  POST   /api/curation/admin/logout     审核登出（撤销会话 + 清 Cookie）
+ *  GET    /api/curation/admin/candidates 审核任务列表（管理员 API §15.2）
+ *  GET    /api/curation/admin/candidates/:id      完整证据 + 六阶段 + 审核日志
+ *  PUT    /api/curation/admin/candidates/:id/reviews/:stage  保存单阶段结果（§十/§十一）
+ *  POST   /api/curation/admin/candidates/:id/decision        所有者最终决策（§10.6）
  *  POST   /internal/progress             内部八阶段进度回调（HMAC）
  *  POST   /internal/finalize             内部终态回调（HMAC）
  *
@@ -46,6 +53,15 @@ import {
   handleListSubmissions,
 } from "./collection-service";
 import { handleGetRecommendations, handleCurationScheduled } from "./curation/service";
+import {
+  handleAdminLogout,
+  handleAdminMe,
+  handleCookieSession,
+  handleDecision,
+  handleGetCandidateDetail,
+  handleListCandidates,
+  handleSaveReview,
+} from "./curation/admin";
 
 const app = new Hono<AppEnv>();
 
@@ -129,6 +145,16 @@ app.get("/api/collection-submissions/:id", handleGetSubmission);
 /* ------------------------- 精选推荐公开 API（任务书 §十五.1） ------------------------- */
 
 app.get("/api/curation/recommendations", handleGetRecommendations);
+
+/* ----------------- 审核工作台管理员 API（任务书 §九/§十/§十五.2，Cookie + 所有者） ----------------- */
+
+app.post("/api/curation/session", handleCookieSession);
+app.post("/api/curation/admin/logout", handleAdminLogout);
+app.get("/api/curation/admin/me", handleAdminMe);
+app.get("/api/curation/admin/candidates", handleListCandidates);
+app.get("/api/curation/admin/candidates/:id", handleGetCandidateDetail);
+app.put("/api/curation/admin/candidates/:id/reviews/:stage", handleSaveReview);
+app.post("/api/curation/admin/candidates/:id/decision", handleDecision);
 
 /* ------------------------------ 内部回调（HMAC / Bearer） ------------------------------ */
 

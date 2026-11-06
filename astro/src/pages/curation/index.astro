@@ -1,0 +1,823 @@
+---
+// 阶段三：人工审核工作台（任务书 §9.1 / §十 / §11 / §15.2）
+// 独立页面，不改动首页原功能；数据全部来自管理员 API（Cookie 会话 + 仓库所有者鉴权）
+import Base from "../../layouts/Base.astro";
+
+const base = "/AI-Shovel-Collection";
+const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/, "");
+---
+
+<Base
+  title="📋 收录审核工作台 — AI Shovel Collection"
+  description="精选推荐的六阶段人工审核与最终收录决策（仅仓库所有者可访问）"
+  canonical="/curation/"
+>
+
+<style is:global>
+  * { box-sizing: border-box; }
+  /* .workbench/.gate-actions 等类带 display 声明会覆盖 UA 的 [hidden] 规则；
+     不加这条时退出登录后已加载的候选数据仍显示在页面上 */
+  [hidden] { display: none !important; }
+  body { margin: 0; background: #f1f5f9; color: #1e293b; font-family: inherit; }
+  .cur-header {
+    background: #fff; border-bottom: 1px solid #e2e8f0; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    position: sticky; top: 0; z-index: 30;
+  }
+  .cur-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .cur-brand h1 { font-size: 1.05rem; margin: 0; color: #1e3a5f; white-space: nowrap; }
+  .cur-brand .sub { font-size: 0.76rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cur-account { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: #475569; }
+  .cur-account .who { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
+    padding: 5px 12px; border-radius: 999px; font-weight: 600; }
+  .btn {
+    border: 1px solid #cbd5e1; background: #fff; color: #334155; padding: 7px 14px;
+    border-radius: 8px; font-size: 0.82rem; cursor: pointer; font-weight: 600;
+  }
+  .btn:hover { background: #f8fafc; }
+  .btn.primary { background: #3b82f6; border-color: #3b82f6; color: #fff; }
+  .btn.primary:hover { background: #2563eb; }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  /* 登录门 */
+  .gate { max-width: 540px; margin: 70px auto; padding: 0 24px; }
+  .gate-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+    padding: 40px 32px; text-align: center; box-shadow: 0 4px 24px rgba(15,23,42,.06); }
+  .gate-card .icon { font-size: 2.6rem; margin-bottom: 10px; }
+  .gate-card h2 { font-size: 1.2rem; color: #1e3a5f; margin: 0 0 10px; }
+  .gate-card p { font-size: 0.9rem; color: #64748b; line-height: 1.7; margin: 6px 0; }
+  .gate-card .hint { font-size: 0.8rem; color: #94a3b8; }
+  .gate-actions { margin-top: 22px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .gate .err { color: #dc2626; }
+  .spinner { width: 36px; height: 36px; margin: 0 auto 14px; border: 4px solid #dbeafe;
+    border-top-color: #3b82f6; border-radius: 50%; animation: curSpin .9s linear infinite; }
+  @keyframes curSpin { to { transform: rotate(360deg); } }
+
+  /* 工作台布局 */
+  .workbench { max-width: 1280px; margin: 18px auto 60px; padding: 0 20px;
+    display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 18px; align-items: start; }
+  @media (max-width: 960px) { .workbench { grid-template-columns: 1fr; } }
+
+  .panel { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; }
+  .toolbar { padding: 14px; border-bottom: 1px solid #eef2f7; display: flex; flex-direction: column; gap: 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { border: 1px solid #cbd5e1; background: #fff; color: #475569; font-size: 0.75rem;
+    padding: 4px 10px; border-radius: 999px; cursor: pointer; }
+  .chip.on { background: #1d4ed8; border-color: #1d4ed8; color: #fff; }
+  .chip .n { opacity: 0.75; font-weight: 700; margin-left: 3px; }
+  .search { display: flex; gap: 8px; }
+  .search input { flex: 1; border: 1px solid #cbd5e1; border-radius: 8px; padding: 7px 10px;
+    font-size: 0.82rem; outline: none; }
+  .search input:focus { border-color: #3b82f6; }
+
+  .list { max-height: calc(100vh - 240px); overflow: auto; padding: 10px; display: flex;
+    flex-direction: column; gap: 8px; }
+  @media (max-width: 960px) { .list { max-height: 420px; } }
+  .item { border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; cursor: pointer;
+    transition: border-color .15s, box-shadow .15s; }
+  .item:hover { border-color: #93c5fd; }
+  .item.on { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,.14); }
+  .item .row1 { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .item .name { font-size: 0.88rem; font-weight: 700; color: #1e3a5f; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap; }
+  .item .slug { font-size: 0.72rem; color: #94a3b8; margin-top: 2px; overflow: hidden;
+    text-overflow: ellipsis; white-space: nowrap; }
+  .item .row2 { display: flex; align-items: center; justify-content: space-between; margin-top: 7px; }
+  .item .score { font-size: 0.8rem; font-weight: 800; color: #0f172a; }
+  .item .prog { font-size: 0.7rem; color: #64748b; }
+  .empty { padding: 30px 16px; text-align: center; color: #94a3b8; font-size: 0.84rem; line-height: 1.7; white-space: pre-line; }
+
+  .detail { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+  .sec { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px 20px; }
+  .sec h3 { font-size: 0.95rem; color: #1e3a5f; margin: 0 0 12px; display: flex;
+    align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .sec h3 .side { font-size: 0.75rem; color: #94a3b8; font-weight: 400; }
+
+  .d-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+  .d-head .title { font-size: 1.15rem; color: #0f172a; margin: 0; }
+  .d-head .slug { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+  .d-head a.repo { color: #2563eb; text-decoration: none; font-size: 0.8rem; }
+  .d-head a.repo:hover { text-decoration: underline; }
+  .reason { font-size: 0.84rem; color: #475569; line-height: 1.7; margin-top: 10px; }
+  .meta-line { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.75rem; color: #94a3b8; margin-top: 8px; }
+
+  .badge { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 3px 10px;
+    border-radius: 999px; white-space: nowrap; }
+  .badge.st-recommended { background: #dcfce7; color: #15803d; }
+  .badge.st-pending_review { background: #dbeafe; color: #1d4ed8; }
+  .badge.st-reviewing { background: #fef3c7; color: #b45309; }
+  .badge.st-approved { background: #d1fae5; color: #047857; }
+  .badge.st-promoted { background: #ede9fe; color: #6d28d9; }
+  .badge.st-watching { background: #f1f5f9; color: #475569; }
+  .badge.st-not_recommended { background: #ffe4e6; color: #be123c; }
+  .badge.st-rejected { background: #fee2e2; color: #b91c1c; }
+  .badge.st-blocked { background: #1e293b; color: #f8fafc; }
+
+  .score-grid { display: grid; grid-template-columns: 150px minmax(0,1fr); gap: 18px; }
+  @media (max-width: 720px) { .score-grid { grid-template-columns: 1fr; } }
+  .score-big { text-align: center; padding: 14px 8px; background: #f8fafc; border: 1px solid #eef2f7; border-radius: 12px; }
+  .score-big .num { font-size: 2.6rem; font-weight: 900; color: #0f172a; line-height: 1; }
+  .score-big .den { font-size: 0.8rem; color: #94a3b8; }
+  .score-big .cap { font-size: 0.74rem; color: #64748b; margin-top: 8px; line-height: 1.6; }
+  .dim { margin-bottom: 11px; }
+  .dim .lab { display: flex; justify-content: space-between; font-size: 0.78rem; color: #334155; margin-bottom: 4px; }
+  .dim .lab b { color: #0f172a; }
+  .dim .bar { height: 8px; background: #eef2f7; border-radius: 999px; overflow: hidden; }
+  .dim .bar i { display: block; height: 100%; background: linear-gradient(90deg,#60a5fa,#2563eb); border-radius: 999px; }
+  .dim .ev { font-size: 0.72rem; color: #94a3b8; margin-top: 4px; line-height: 1.6; }
+
+  .checks { display: flex; flex-direction: column; gap: 7px; }
+  .check { display: flex; gap: 10px; align-items: flex-start; font-size: 0.8rem; padding: 8px 10px;
+    background: #f8fafc; border: 1px solid #eef2f7; border-radius: 8px; }
+  .check .mk { font-weight: 800; flex: none; }
+  .check.pass .mk { color: #16a34a; } .check.warn .mk { color: #d97706; } .check.fail .mk { color: #dc2626; }
+  .check .ck { font-weight: 700; color: #334155; flex: none; }
+  .check .cd { color: #64748b; line-height: 1.55; min-width: 0; word-break: break-word; }
+
+  .sources { display: flex; flex-direction: column; gap: 6px; font-size: 0.8rem; }
+  .sources .src { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; color: #475569; }
+  .src-tag { font-size: 0.7rem; background: #e0f2fe; color: #0369a1; padding: 2px 8px; border-radius: 999px; font-weight: 700; }
+  .src-tag.community { background: #fef9c3; color: #a16207; }
+  .src-ref { color: #94a3b8; font-family: ui-monospace, monospace; font-size: 0.72rem; }
+
+  .stages { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; }
+  .stage { border: 1px solid #e2e8f0; border-radius: 12px; padding: 14px; background: #fff; }
+  .stage.done-pass { border-left: 4px solid #16a34a; }
+  .stage.done-warn { border-left: 4px solid #d97706; }
+  .stage.done-fail { border-left: 4px solid #dc2626; }
+  .stage .sh { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+  .stage .sh .stt { font-size: 0.88rem; font-weight: 800; color: #1e3a5f; }
+  .stage .sh .stt .no { color: #3b82f6; margin-right: 6px; }
+  .stage .state { font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; }
+  .state.pass { background: #dcfce7; color: #15803d; }
+  .state.warn { background: #fef3c7; color: #b45309; }
+  .state.fail { background: #fee2e2; color: #b91c1c; }
+  .state.none { background: #f1f5f9; color: #94a3b8; }
+  .stale-tag { display: inline-block; font-size: 0.68rem; color: #b45309; background: #fffbeb;
+    border: 1px solid #fde68a; border-radius: 6px; padding: 2px 7px; margin-bottom: 8px; }
+  .auto-ev { margin: 0 0 10px; padding: 8px 10px; background: #f8fafc; border: 1px dashed #e2e8f0;
+    border-radius: 8px; font-size: 0.74rem; color: #64748b; line-height: 1.7; }
+  .auto-ev .ev-row { display: flex; gap: 7px; }
+  .auto-ev .ev-row .m { font-weight: 800; flex: none; }
+  .auto-ev .ev-row .m.pass { color: #16a34a; } .auto-ev .ev-row .m.warn { color: #d97706; }
+  .auto-ev .ev-row .m.fail { color: #dc2626; } .auto-ev .ev-row .m.info { color: #2563eb; }
+  .lab { font-size: 0.74rem; font-weight: 700; color: #475569; margin: 8px 0 5px; }
+  .stage .opts { display: flex; gap: 6px; }
+  .stage .opt { flex: 1; border: 1px solid #cbd5e1; background: #fff; border-radius: 8px;
+    padding: 6px 4px; font-size: 0.76rem; cursor: pointer; color: #475569; font-weight: 600; }
+  .stage .opt.on.pass { background: #dcfce7; border-color: #16a34a; color: #15803d; }
+  .stage .opt.on.warn { background: #fef3c7; border-color: #d97706; color: #b45309; }
+  .stage .opt.on.fail { background: #fee2e2; border-color: #dc2626; color: #b91c1c; }
+  .stage textarea, .sec textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px;
+    font-size: 0.78rem; font-family: inherit; resize: vertical; min-height: 54px; outline: none; }
+  .stage textarea:focus, .sec textarea:focus { border-color: #3b82f6; }
+  .stage .sf { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; }
+  .stage .saved { font-size: 0.7rem; color: #16a34a; }
+  .stage .saved.err { color: #dc2626; }
+
+  .decide { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .decide .btn.approve { background: #16a34a; border-color: #16a34a; color: #fff; }
+  .decide .btn.approve:hover { background: #15803d; }
+  .decide .btn.reject { background: #dc2626; border-color: #dc2626; color: #fff; }
+  .decide .btn.reject:hover { background: #b91c1c; }
+  .gate-note { font-size: 0.75rem; color: #b45309; background: #fffbeb; border: 1px solid #fde68a;
+    border-radius: 8px; padding: 7px 10px; margin-top: 8px; line-height: 1.6; }
+
+  table.hist { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  table.hist th { text-align: left; color: #64748b; font-weight: 600; padding: 6px 8px;
+    border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
+  table.hist td { padding: 7px 8px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+  table.hist td .rs { font-weight: 800; color: #0f172a; }
+
+  .logs { display: flex; flex-direction: column; gap: 8px; }
+  .log { display: flex; gap: 10px; font-size: 0.78rem; padding: 8px 10px; background: #f8fafc;
+    border: 1px solid #eef2f7; border-radius: 8px; }
+  .log .t { color: #94a3b8; white-space: nowrap; font-size: 0.72rem; }
+  .log .who { color: #1d4ed8; font-weight: 700; white-space: nowrap; }
+  .log .act { color: #334155; min-width: 0; word-break: break-word; line-height: 1.55; }
+  .log .act .act-tag { font-size: 0.68rem; background: #e2e8f0; color: #475569; padding: 1px 7px;
+    border-radius: 999px; margin-right: 6px; font-weight: 700; }
+
+  .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+    background: #0f172a; color: #fff; padding: 10px 18px; border-radius: 10px; font-size: 0.82rem;
+    opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 99; max-width: 80vw; }
+  .toast.show { opacity: 1; }
+  .toast.err { background: #b91c1c; }
+</style>
+
+<header class="cur-header">
+  <div class="cur-brand">
+    <div>
+      <h1>📋 收录审核工作台</h1>
+      <div class="sub">六阶段人工审核 · 仅仓库所有者可操作（任务书 §十）</div>
+    </div>
+  </div>
+  <div class="cur-account" id="accountBox" hidden>
+    <span class="who" id="whoami"></span>
+    <button class="btn" id="btnRefresh">刷新</button>
+    <button class="btn" id="btnLogout">退出</button>
+  </div>
+</header>
+
+<!-- 登录门 -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <div class="spinner" id="gateIcon" aria-hidden="true"></div>
+    <h2 id="gateTitle">正在校验登录状态…</h2>
+    <p id="gateMsg">正在与审核服务通信，请稍候。</p>
+    <div class="gate-actions" id="gateActions" hidden>
+      <button class="btn primary" id="btnLogin">使用 GitHub 登录</button>
+    </div>
+    <p class="hint" id="gateHint" hidden>审核权限仅授予本仓库（AI-Shovel-Collection）所有者本人；其他账号即使拥有 Admin / Maintain / 协作者权限也会被拒绝。</p>
+  </div>
+</div>
+
+<!-- 工作台 -->
+<main class="workbench" id="workbench" hidden>
+  <section class="panel">
+    <div class="toolbar">
+      <div class="chips" id="chips"></div>
+      <div class="search">
+        <input id="qInput" type="search" placeholder="搜索仓库 / 工具名…" maxlength="100" />
+        <button class="btn" id="btnSearch">搜索</button>
+      </div>
+    </div>
+    <div class="list" id="listBox"><div class="empty">加载中…</div></div>
+  </section>
+  <section class="detail" id="detailBox">
+    <div class="sec"><div class="empty">从左侧选择一个候选开始审核。</div></div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script is:inline define:vars={{ evalApiBase, base }}>
+(function () {
+  "use strict";
+  const API = evalApiBase;
+  const $ = (id) => document.getElementById(id);
+
+  const STATUS_LABELS = {
+    all: "全部",
+    recommended: "推荐中",
+    pending_review: "待审核",
+    reviewing: "审核中",
+    approved: "已批准",
+    promoted: "已收录",
+    watching: "观察",
+    not_recommended: "不推荐",
+    rejected: "已拒绝",
+    blocked: "已拦截",
+  };
+  const CHIP_ORDER = ["all", "pending_review", "reviewing", "recommended", "approved", "rejected", "blocked", "promoted"];
+  const STAGE_TITLES = {
+    1: "项目真实性检查",
+    2: "功能与用途审核",
+    3: "质量与维护审核",
+    4: "安全与许可证审核",
+    5: "重复与收录资格检查",
+    6: "仓库所有者最终审核",
+  };
+  // 自动检查证据 → 阶段映射（任务书 §10 各阶段"自动检查证据"）
+  const STAGE_CHECKS = { 1: ["exists", "authenticity", "completeness"], 2: ["ai_relevance", "purpose", "usability"], 3: [], 4: ["license"], 5: ["duplicate"] };
+  const STAGE_DIMS = { 1: ["completeness"], 2: ["ai_value", "practical"], 3: ["activity", "maturity", "community"], 4: ["license"], 5: [] };
+  const ACTION_LABELS = { evaluate: "评分评估", status_change: "状态变更", review: "阶段审核", decision: "最终决策", promote: "正式收录", sync: "池同步" };
+
+  const state = { filter: "all", q: "", items: [], counts: {}, selectedId: null, detail: null };
+
+  /* ------------------------------ DOM 工具（全部 textContent，防注入） ------------------------------ */
+  function h(tag, props) {
+    const n = document.createElement(tag);
+    if (props) {
+      for (const k of Object.keys(props)) {
+        const v = props[k];
+        if (v == null) continue;
+        if (k === "class") n.className = v;
+        else if (k === "text") n.textContent = v;
+        else if (k.slice(0, 2) === "on" && typeof v === "function") n.addEventListener(k.slice(2), v);
+        else n.setAttribute(k, v);
+      }
+    }
+    for (let i = 2; i < arguments.length; i++) {
+      const c = arguments[i];
+      if (c == null) continue;
+      (Array.isArray(c) ? c : [c]).forEach((x) => x && n.append(x));
+    }
+    return n;
+  }
+  function fmtTime(iso) {
+    if (!iso) return "—";
+    try { return new Date(iso).toLocaleString("zh-CN", { hour12: false }); } catch (e) { return iso; }
+  }
+  let toastTimer = null;
+  function toast(msg, isErr) {
+    const t = $("toast");
+    t.textContent = msg;
+    t.className = "toast show" + (isErr ? " err" : "");
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { t.className = "toast"; }, 3200);
+  }
+  function badge(status) {
+    return h("span", { class: "badge st-" + status, text: STATUS_LABELS[status] || status });
+  }
+
+  /* ------------------------------ API ------------------------------ */
+  async function api(path, opts) {
+    const o = Object.assign({ credentials: "include" }, opts || {});
+    if (o.body && typeof o.body !== "string") {
+      o.headers = Object.assign({ "Content-Type": "application/json" }, o.headers || {});
+      o.body = JSON.stringify(o.body);
+    }
+    const res = await fetch(API + path, o);
+    let data = null;
+    try { data = await res.json(); } catch (e) { /* 空响应 */ }
+    return { res, data };
+  }
+  function errMsg(res, data) {
+    return (data && data.error && data.error.message) || ("请求失败 HTTP " + res.status);
+  }
+
+  /* ------------------------------ 登录门 ------------------------------ */
+  function showGate(kind, payload) {
+    $("gate").hidden = false;
+    $("workbench").hidden = true;
+    $("accountBox").hidden = true;
+    const icon = $("gateIcon"), title = $("gateTitle"), msg = $("gateMsg"),
+          actions = $("gateActions"), hint = $("gateHint");
+    actions.hidden = true; hint.hidden = true;
+    icon.className = ""; msg.className = "";
+
+    if (kind === "loading") {
+      icon.className = "spinner";
+      title.textContent = "正在校验登录状态…";
+      msg.textContent = "正在与审核服务通信，请稍候。";
+    } else if (kind === "login") {
+      icon.textContent = "🔐";
+      title.textContent = "登录审核工作台";
+      msg.textContent = "请使用 GitHub 账号登录。审核权限仅授予本仓库所有者本人，其他账号登录后将看到无权限提示。";
+      actions.hidden = false;
+      hint.hidden = false;
+    } else if (kind === "denied") {
+      icon.textContent = "🚫";
+      title.textContent = "无审核权限";
+      msg.className = "err";
+      msg.textContent = payload && payload.login
+        ? "当前登录账号：" + payload.login + "。只有仓库所有者本人可以执行审核与收录操作。"
+        : "当前账号不是仓库所有者，无法执行审核操作。";
+      actions.hidden = false; // 可换账号重新登录
+      hint.hidden = false;
+    } else {
+      icon.textContent = "⚠️";
+      title.textContent = "服务暂不可用";
+      msg.className = "err";
+      msg.textContent = payload || "无法连接审核服务。";
+      actions.hidden = false;
+      hint.hidden = false;
+    }
+  }
+
+  function startLogin() {
+    if (!API) { toast("评测服务未接入（PUBLIC_EVAL_API_BASE 未设置）", true); return; }
+    // 复用现有 OAuth 链路：回跳到本页后由页面把会话升级为 HttpOnly Cookie（C1）
+    sessionStorage.setItem("EV_RETURN", location.pathname.replace(/\/+$/, "/"));
+    location.href = API + "/auth/github/start?return_to=" + encodeURIComponent(location.origin + base + "/auth/callback");
+  }
+
+  /** 401/403 → 切换到对应登录门；返回 true 表示已处理（403 区分无权限与来源/CSRF 配置问题） */
+  function gateAuth(res, data) {
+    if (res.status === 401) { showGate("login"); return true; }
+    if (res.status === 403 && data && data.error && data.error.code === "NOT_OWNER") {
+      showGate("denied", data.error);
+      return true;
+    }
+    if (res.status === 403) { showGate("error", errMsg(res, data)); return true; }
+    return false;
+  }
+
+  async function boot() {
+    if (!API) { showGate("error", "评测服务未接入（PUBLIC_EVAL_API_BASE 未设置）。"); return; }
+    showGate("loading");
+
+    let r = await api("/api/curation/admin/me");
+    if (r.res.status === 401) {
+      // 站点已有评测登录会话 → 升级为 /curation Cookie（不重复走 OAuth）
+      const tok = sessionStorage.getItem("EV_SESSION");
+      if (tok) {
+        const up = await api("/api/curation/session", { method: "POST", body: { session_token: tok } });
+        if (up.res.ok) r = { res: up.res, data: { success: true, user: up.data.user } };
+        else if (up.res.status === 401) sessionStorage.removeItem("EV_SESSION"); // 过期 → 回落完整登录
+      }
+    }
+
+    if (r.res.ok) {
+      $("gate").hidden = true;
+      $("workbench").hidden = false;
+      $("accountBox").hidden = false;
+      $("whoami").textContent = (r.data && r.data.user && r.data.user.login) || "";
+      await loadList();
+      return;
+    }
+    if (gateAuth(r.res, r.data)) return;
+    showGate("error", errMsg(r.res, r.data));
+  }
+
+  /* ------------------------------ 任务列表 ------------------------------ */
+  function renderChips() {
+    const box = $("chips");
+    box.textContent = "";
+    CHIP_ORDER.forEach((key) => {
+      const n = key === "all"
+        ? Object.keys(state.counts).filter((s) => s !== "promoted").reduce((a, s) => a + (state.counts[s] || 0), 0)
+        : (state.counts[key] || 0);
+      const chip = h("button", {
+        class: "chip" + (state.filter === key ? " on" : ""),
+        onclick: () => { state.filter = key; loadList(); },
+      }, h("span", { text: STATUS_LABELS[key] || key }), h("span", { class: "n", text: String(n) }));
+      box.append(chip);
+    });
+  }
+
+  async function loadList() {
+    const qs = new URLSearchParams();
+    if (state.filter && state.filter !== "all") qs.set("status", state.filter);
+    if (state.q) qs.set("q", state.q);
+    const { res, data } = await api("/api/curation/admin/candidates?" + qs.toString());
+    if (gateAuth(res, data)) return;
+    if (!res.ok) { $("listBox").textContent = ""; $("listBox").append(h("div", { class: "empty", text: errMsg(res, data) })); return; }
+
+    state.items = data.items || [];
+    state.counts = data.counts || {};
+    renderChips();
+    renderList();
+  }
+
+  function renderList() {
+    const box = $("listBox");
+    box.textContent = "";
+    if (state.items.length === 0) {
+      box.append(h("div", { class: "empty", text: "当前筛选下暂无候选。\n候选池由定时任务评估后进入待审队列；社区提交与自动发现的数据源会持续更新。" }));
+      return;
+    }
+    state.items.forEach((it) => {
+      const stageCount = it.review && it.review.completed ? it.review.completed : 0;
+      const card = h("div", {
+        class: "item" + (state.selectedId === it.candidate_id ? " on" : ""),
+        onclick: () => { state.selectedId = it.candidate_id; renderList(); loadDetail(it.candidate_id); },
+      },
+        h("div", { class: "row1" },
+          h("span", { class: "name", text: it.tool_name || it.repo_slug }),
+          badge(it.status)),
+        h("div", { class: "slug", text: it.repo_slug }),
+        h("div", { class: "row2" },
+          h("span", { class: "score", text: it.total_score != null ? "评分 " + it.total_score : "未评分" }),
+          h("span", { class: "prog", text: "审核 " + stageCount + "/6" })));
+      box.append(card);
+    });
+  }
+
+  /* ------------------------------ 详情 ------------------------------ */
+  async function loadDetail(id, silent) {
+    const { res, data } = await api("/api/curation/admin/candidates/" + encodeURIComponent(id));
+    if (gateAuth(res, data)) return;
+    if (!res.ok) {
+      if (!silent) toast(errMsg(res, data), true);
+      return;
+    }
+    state.detail = data;
+    renderDetail(data);
+  }
+
+  function section(title, sideText) {
+    const head = h("h3", {}, h("span", { text: title }));
+    if (sideText) head.append(h("span", { class: "side", text: sideText }));
+    return h("div", { class: "sec" }, head);
+  }
+
+  function renderDetail(data) {
+    const box = $("detailBox");
+    box.textContent = "";
+    const c = data.candidate;
+
+    /* 头部 */
+    const head = section("候选详情");
+    const hl = h("div", {},
+      h("div", { class: "d-head" },
+        h("div", {},
+          h("p", { class: "title", text: c.tool_name || c.repo_slug }),
+          h("div", { class: "slug", text: c.repo_slug }),
+          h("a", { class: "repo", href: c.repo_url, target: "_blank", rel: "noopener noreferrer", text: "在 GitHub 打开 ↗" })),
+        h("div", { style: "text-align:right" },
+          badge(c.status),
+          h("div", { class: "slug", text: "最后评估：" + fmtTime(c.last_evaluated_at) }))),
+      c.status_reason ? h("p", { class: "reason", text: "状态说明：" + c.status_reason }) : null,
+      h("div", { class: "meta-line" },
+        h("span", { text: "数据置信度：" + (c.data_confidence || "—") }),
+        h("span", { text: "算法版本：" + (c.algorithm_version || "—") }),
+        h("span", { text: "首次推荐：" + fmtTime(c.first_recommended_at) }),
+        h("span", { text: "候选 ID：" + c.candidate_id })));
+    head.append(hl);
+    box.append(head);
+
+    /* 评分与维度 */
+    const score = section("综合评分与依据", data.latest_score ? "评估于 " + fmtTime(data.latest_score.scored_at) : "尚无评分");
+    const dims = (data.latest_score && data.latest_score.dimensions) || [];
+    const dimBox = h("div", {});
+    if (dims.length === 0) {
+      dimBox.append(h("div", { class: "empty", text: "暂无维度评分明细。" }));
+    }
+    dims.forEach((d) => {
+      const pct = d.weight ? Math.max(0, Math.min(100, Math.round((d.score / d.weight) * 100))) : 0;
+      const evText = Array.isArray(d.evidence) ? d.evidence.join("；") : (typeof d.evidence === "string" ? d.evidence : "");
+      dimBox.append(h("div", { class: "dim" },
+        h("div", { class: "lab" },
+          h("span", { text: d.label || d.key }),
+          h("b", { text: d.score + " / " + d.weight })),
+        h("div", { class: "bar" }, h("i", { style: "width:" + pct + "%" })),
+        evText ? h("div", { class: "ev", text: evText }) : null));
+    });
+    score.append(h("div", { class: "score-grid" },
+      h("div", { class: "score-big" },
+        h("div", { class: "num", text: c.total_score != null ? String(c.total_score) : "—" }),
+        h("div", { class: "den", text: "满分 100" }),
+        h("div", { class: "cap", text: (data.latest_score && data.latest_score.reason) || "该候选尚未生成评分理由。" })),
+      dimBox));
+    box.append(score);
+
+    /* 硬性检查证据 */
+    const checks = (c.hard_check && c.hard_check.checks) || (Array.isArray(c.hard_check) ? c.hard_check : []);
+    const ck = section("硬性检查（自动）", "状态：" + (c.hard_check_status || "—"));
+    if (checks.length === 0) {
+      ck.append(h("div", { class: "empty", text: "暂无硬检明细（候选可能尚未完成自动检查）。" }));
+    } else {
+      const wrap = h("div", { class: "checks" });
+      checks.forEach((k) => {
+        const mark = k.result === "pass" ? "✓" : k.result === "warn" ? "!" : "✗";
+        wrap.append(h("div", { class: "check " + (k.result || "warn") },
+          h("span", { class: "mk", text: mark }),
+          h("span", { class: "ck", text: k.label || k.key }),
+          h("span", { class: "cd", text: k.detail || "" })));
+      });
+      ck.append(wrap);
+    }
+    box.append(ck);
+
+    /* 来源关联 */
+    const src = section("候选来源", "两池只读关联，不复制原始数据（§4.3）");
+    if (!data.sources || data.sources.length === 0) {
+      src.append(h("div", { class: "empty", text: "暂无来源关联记录。" }));
+    } else {
+      const wrap = h("div", { class: "sources" });
+      data.sources.forEach((s) => {
+        wrap.append(h("div", { class: "src" },
+          h("span", { class: "src-tag" + (s.source_type === "community_submission" ? " community" : ""),
+            text: s.source_type === "community_submission" ? "社区提交池" : "自动发现池" }),
+          h("span", { class: "src-ref", text: s.source_ref }),
+          s.source_status ? h("span", { class: "src-ref", text: "状态 " + s.source_status }) : null));
+      });
+      src.append(wrap);
+    }
+    box.append(src);
+
+    /* 六阶段审核 */
+    const stageSec = section("六阶段人工审核", "进度可中断恢复，自动保存于服务端（§11）");
+    const grid = h("div", { class: "stages" });
+    const reviewByStage = {};
+    (data.reviews || []).forEach((r) => { reviewByStage[r.stage_index] = r; });
+
+    for (let i = 1; i <= 5; i++) grid.append(stageCard(i, reviewByStage[i], data));
+    stageSec.append(grid);
+    box.append(stageSec);
+
+    /* 第六阶段决策卡（独立一节，决策按钮需要宽度） */
+    const dec = section("第六阶段 · 仓库所有者最终审核", data.can_decide ? "前五阶段已完成" : "前五阶段尚未全部完成");
+    dec.append(stageSix(reviewByStage[6], data));
+    box.append(dec);
+
+    /* 历史评分 */
+    const hist = section("评分历史（最近 10 次）");
+    if (!data.score_history || data.score_history.length === 0) {
+      hist.append(h("div", { class: "empty", text: "暂无评分历史。" }));
+    } else {
+      const tbl = h("table", { class: "hist" },
+        h("thead", {}, h("tr", {},
+          h("th", { text: "时间" }), h("th", { text: "评分" }),
+          h("th", { text: "置信度" }), h("th", { text: "算法版本" }), h("th", { text: "理由" }))));
+      const tb = h("tbody", {});
+      data.score_history.forEach((s) => {
+        tb.append(h("tr", {},
+          h("td", { text: fmtTime(s.scored_at) }),
+          h("td", {}, h("span", { class: "rs", text: String(s.total_score) })),
+          h("td", { text: s.data_confidence || "—" }),
+          h("td", { text: s.algorithm_version || "—" }),
+          h("td", { text: (s.reason || "").slice(0, 120) })));
+      });
+      tbl.append(tb);
+      hist.append(tbl);
+    }
+    box.append(hist);
+
+    /* 审核日志 */
+    const logs = section("审核与操作日志", "追加写入，不可篡改（§14.5）");
+    if (!data.audit_logs || data.audit_logs.length === 0) {
+      logs.append(h("div", { class: "empty", text: "暂无操作记录。" }));
+    } else {
+      const wrap = h("div", { class: "logs" });
+      data.audit_logs.forEach((l) => {
+        let detail = "";
+        if (l.details && typeof l.details === "object") {
+          const d = l.details;
+          if (l.action === "review") detail = "阶段 " + d.stage + " → " + (d.result || "清除") + (d.note ? "（" + d.note + "）" : "") + (d.status ? "，" + d.status : "");
+          else if (l.action === "decision") detail = (d.label || d.action) + "：" + (d.from || "?") + " → " + (d.to || "?") + (d.note ? "（" + d.note + "）" : "");
+          else detail = JSON.stringify(d);
+        }
+        wrap.append(h("div", { class: "log" },
+          h("span", { class: "t", text: fmtTime(l.created_at) }),
+          h("span", { class: "who", text: l.actor_login || "system" }),
+          h("span", { class: "act" },
+            h("span", { class: "act-tag", text: ACTION_LABELS[l.action] || l.action }),
+            h("span", { text: detail + (l.result === "ok" ? "" : " [" + l.result + "]") }))));
+      });
+      logs.append(wrap);
+    }
+    box.append(logs);
+  }
+
+  /* 单个阶段卡（1-5） */
+  function stageCard(idx, review, data) {
+    const res = review ? review.result : null;
+    const cls = "stage" + (res ? " done-" + res : "");
+    const card = h("div", { class: cls, id: "stage-" + idx });
+    const stateChip = h("span", {
+      class: "state " + (res || "none"),
+      text: res === "pass" ? "已通过" : res === "warn" ? "有警告" : res === "fail" ? "未通过" : "未检查",
+    });
+    card.append(h("div", { class: "sh" },
+      h("span", { class: "stt" }, h("span", { class: "no", text: "阶段 " + idx }), h("span", { text: STAGE_TITLES[idx] })),
+      stateChip));
+    if (review && review.stale) {
+      card.append(h("div", { class: "stale-tag", text: "⚠️ 候选已在人工检查后重新评估，此结果可能过期，请复核" }));
+    }
+
+    /* 自动检查证据（按阶段映射展示） */
+    const checks = (data.candidate.hard_check && data.candidate.hard_check.checks) || (Array.isArray(data.candidate.hard_check) ? data.candidate.hard_check : []);
+    const dims = (data.latest_score && data.latest_score.dimensions) || [];
+    const evBox = h("div", { class: "auto-ev" });
+    let evCount = 0;
+    (STAGE_CHECKS[idx] || []).forEach((key) => {
+      const k = checks.find((x) => x.key === key);
+      if (!k) return;
+      evCount++;
+      const m = k.result === "pass" ? "pass" : k.result === "warn" ? "warn" : "fail";
+      evBox.append(h("div", { class: "ev-row" },
+        h("span", { class: "m " + m, text: m === "pass" ? "✓" : m === "warn" ? "!" : "✗" }),
+        h("span", { text: (k.label || k.key) + "：" + (k.detail || "") })));
+    });
+    (STAGE_DIMS[idx] || []).forEach((key) => {
+      const d = dims.find((x) => x.key === key);
+      if (!d) return;
+      evCount++;
+      evBox.append(h("div", { class: "ev-row" },
+        h("span", { class: "m info", text: "◆" }),
+        h("span", { text: (d.label || d.key) + "：" + d.score + "/" + d.weight + (Array.isArray(d.evidence) && d.evidence.length ? "（" + d.evidence.join("；") + "）" : "") })));
+    });
+    if (idx === 5 && data.sources && data.sources.length) {
+      evCount++;
+      evBox.append(h("div", { class: "ev-row" },
+        h("span", { class: "m info", text: "◆" }),
+        h("span", { text: "来源关联：" + data.sources.map((s) => (s.source_type === "community_submission" ? "社区提交 " : "自动发现 ") + s.source_ref).join("；") })));
+    }
+    if (evCount === 0) evBox.append(h("div", { class: "ev-row" }, h("span", { text: "该阶段暂无自动证据，主要依据候选事实与评分维度人工判断（可在上方评分/硬检区查看全部数据）。" })));
+    card.append(evBox);
+
+    /* 人工结论 */
+    card.append(h("div", { class: "lab", text: "人工结论" }));
+    const opts = h("div", { class: "opts" });
+    let picked = res;
+    [["pass", "✓ 通过"], ["warn", "! 警告"], ["fail", "✗ 失败"]].forEach(([v, label]) => {
+      const b = h("button", { class: "opt " + v + (picked === v ? " on" : ""), type: "button", text: label });
+      b.addEventListener("click", () => {
+        picked = picked === v ? null : v;
+        Array.prototype.forEach.call(opts.children, (x, i) => {
+          const v2 = ["pass", "warn", "fail"][i];
+          x.className = "opt " + v2 + (picked === v2 ? " on" : "");
+        });
+      });
+      opts.append(b);
+    });
+    card.append(opts);
+
+    card.append(h("div", { class: "lab", text: "人工意见（自动保存到服务端）" }));
+    const ta = h("textarea", { placeholder: "记录核查过程、存疑点或补充证据（可选）…" });
+    ta.value = (review && review.reviewer_note) || "";
+    card.append(ta);
+
+    const saved = h("span", { class: "saved", text: review && review.checked_at ? "已保存 " + fmtTime(review.checked_at) : "" });
+    const btn = h("button", { class: "btn primary", type: "button", text: "保存阶段 " + idx });
+    btn.addEventListener("click", async () => {
+      btn.disabled = true;
+      try {
+        const body = { result: picked };
+        if (ta.value !== ((review && review.reviewer_note) || "")) body.reviewer_note = ta.value;
+        const { res: r, data: d } = await api("/api/curation/admin/candidates/" + encodeURIComponent(state.detail.candidate.candidate_id) + "/reviews/" + idx, { method: "PUT", body });
+        if (!r.ok) throw new Error(errMsg(r, d));
+        toast("阶段 " + idx + " 已保存");
+        await loadDetail(state.detail.candidate.candidate_id, true);
+        await loadList();
+      } catch (e) {
+        saved.textContent = "保存失败：" + e.message;
+        saved.className = "saved err";
+        toast(e.message, true);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+    card.append(h("div", { class: "sf" }, saved, btn));
+    return card;
+  }
+
+  /* 第六阶段决策 */
+  function stageSix(review, data) {
+    const wrap = h("div", {});
+    const c = data.candidate;
+
+    /* 决策摘要 */
+    const checks = (c.hard_check && c.hard_check.checks) || (Array.isArray(c.hard_check) ? c.hard_check : []);
+    const failed = checks.filter((x) => x.result === "fail");
+    wrap.append(h("div", { class: "auto-ev", style: "font-size:0.8rem" },
+      h("div", { class: "ev-row" }, h("span", { class: "m info", text: "◆" }),
+        h("span", { text: "综合评分：" + (c.total_score != null ? c.total_score : "未评分") + "，硬检：" + (c.hard_check_status || "未检查") + (failed.length ? "（失败项：" + failed.map((x) => x.label || x.key).join("、") + "）" : "（无失败项）") }))),
+      h("div", { class: "ev-row" }, h("span", { class: "m info", text: "◆" }),
+        h("span", { text: "前五阶段完成度：" + (data.can_decide ? "5/5 已完成，可以决策" : "未全部完成；服务端将拒绝「确认收录」") })));
+
+    if (review) {
+      wrap.append(h("div", { class: "stale-tag", style: "margin-top:10px",
+        text: "上次决策：" + (review.result === "pass" ? "确认收录" : review.result === "fail" ? "拒绝收录" : "暂不收录/退回") +
+              "（" + fmtTime(review.checked_at) + "）" + (review.reviewer_note ? "：" + review.reviewer_note : "") }));
+    }
+
+    const noteTa = h("textarea", { placeholder: "最终审核意见（写入状态说明与审计日志）…" });
+    noteTa.value = "";
+    wrap.append(h("div", { class: "lab", text: "最终审核意见" }), noteTa);
+
+    const dec = h("div", { class: "decide" });
+    function addAction(label, cls, action, needComplete) {
+      const b = h("button", { class: "btn " + cls, type: "button", text: label });
+      if (needComplete && !data.can_decide) {
+        b.disabled = true;
+        b.title = "请先完成阶段 1-5 的人工结论";
+      }
+      b.addEventListener("click", async () => {
+        if (action === "approve" && !data.can_decide) { toast("前五阶段未全部完成，不能确认收录", true); return; }
+        if (!window.confirm("确认执行「" + label + "」？该操作会写入候选状态与审计日志。")) return;
+        b.disabled = true;
+        try {
+          const { res, data: d } = await api("/api/curation/admin/candidates/" + encodeURIComponent(c.candidate_id) + "/decision",
+            { method: "POST", body: { action: action, note: noteTa.value || null } });
+          if (!res.ok) throw new Error(errMsg(res, d));
+          toast("已执行：" + label + " → " + (STATUS_LABELS[d.status] || d.status));
+          await loadDetail(c.candidate_id, true);
+          await loadList();
+        } catch (e) {
+          toast(e.message, true);
+        } finally {
+          b.disabled = false;
+        }
+      });
+      dec.append(b);
+    }
+    addAction("✅ 确认收录", "approve", "approve", true);
+    addAction("⏸ 暂不收录", "", "hold", false);
+    addAction("❌ 拒绝收录", "reject", "reject", false);
+    addAction("↩ 退回重新审核", "", "return", false);
+    wrap.append(dec);
+
+    if (!data.can_decide) {
+      wrap.append(h("div", { class: "gate-note", text: "⚠️ 阶段 1-5 尚未全部给出人工结论，「确认收录」暂不可用；其余决策可执行。" }));
+    }
+    return wrap;
+  }
+
+  /* ------------------------------ 顶部操作 ------------------------------ */
+  $("btnLogin").addEventListener("click", startLogin);
+  $("btnLogout").addEventListener("click", async () => {
+    try {
+      await api("/api/curation/admin/logout", { method: "POST", body: {} });
+    } catch (e) { /* 忽略：本地状态照常清理 */ }
+    sessionStorage.removeItem("EV_SESSION");
+    toast("已退出审核会话");
+    showGate("login");
+  });
+  $("btnRefresh").addEventListener("click", () => {
+    loadList();
+    if (state.selectedId) loadDetail(state.selectedId, true);
+  });
+  $("btnSearch").addEventListener("click", () => { state.q = $("qInput").value.trim(); loadList(); });
+  $("qInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { state.q = $("qInput").value.trim(); loadList(); }
+  });
+
+  boot().catch((e) => showGate("error", e && e.message ? e.message : String(e)));
+})();
+</script>
+
+</Base>
