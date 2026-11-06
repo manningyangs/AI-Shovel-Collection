@@ -184,6 +184,7 @@ Below is the seed list from the initial round of discovery. Names use "project /
 ### 6. Cloud, DevOps, Monitoring & Infrastructure
 
 - [AWS MCP (official open-source AWS MCP servers)](https://github.com/awslabs/mcp)
+- [DC Hub (data-center site selection / grid-power DCPI MCP; https://dchub.cloud/mcp)](https://github.com/azmartone67/dchub-mcp-server)
 - [Terraform MCP Server (Terraform / IaC workflows)](https://github.com/hashicorp/terraform-mcp-server)
 - [Portainer MCP (container management)](https://github.com/portainer/portainer-mcp)
 - [Kubernetes MCP Server (Kubernetes cluster management)](https://github.com/reza-gholizade/k8s-mcp-server)
