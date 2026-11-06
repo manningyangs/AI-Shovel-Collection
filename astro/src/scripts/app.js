@@ -725,7 +725,12 @@
       : (Array.isArray(poolData.candidates) ? poolData.candidates : []);
     communityCurated = {};
     items.forEach(function (it) { communityCurated[String(it.slug).toLowerCase()] = true; });
-    communityItems = arr.map(function (e) {
+    // 阶段四（任务书 §十三）：跨来源排除——已收录（catalog.csv 已含 / 池记录标记
+    // promoted）的仓库不再进入有效候选展示；底层池记录保留，不物理删除
+    communityItems = arr.filter(function (e) {
+      var s = String(e.repo_slug || "").toLowerCase();
+      return e.review_status !== "promoted" && !communityCurated[s];
+    }).map(function (e) {
       var slug = e.repo_slug || "";
       var title = e.title || slug;
       var stars = typeof e.stars === "number" ? e.stars : null;

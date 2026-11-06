@@ -226,11 +226,14 @@ type FetchOutcome =
   | { kind: "rate_limited" }
   | { kind: "error" };
 
+// 阶段四：最终收录的实时复核（§12.1.8-11）复用同一套匿名事实核验
+export type { ApiFacts, FetchOutcome };
+
 /**
  * 匿名核验第三方仓库（§十六 Rate Limit：匿名 60 次/时，配合每轮预算）。
  * 不使用 installation token——App 仅安装于本账号，token 查第三方仓库会 404 误判。
  */
-async function fetchRepoFacts(slug: string): Promise<FetchOutcome> {
+export async function fetchRepoFacts(slug: string): Promise<FetchOutcome> {
   try {
     const res = await fetch(`${GITHUB_API}/repos/${slug}`, {
       headers: {

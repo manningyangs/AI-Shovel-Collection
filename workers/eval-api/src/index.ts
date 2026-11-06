@@ -19,6 +19,8 @@
  *  GET    /api/curation/admin/candidates/:id      完整证据 + 六阶段 + 审核日志
  *  PUT    /api/curation/admin/candidates/:id/reviews/:stage  保存单阶段结果（§十/§十一）
  *  POST   /api/curation/admin/candidates/:id/decision        所有者最终决策（§10.6）
+ *  GET    /api/curation/admin/candidates/:id/promote         收录前置状态 + 分类（§15.2 最终收录接口）
+ *  POST   /api/curation/admin/candidates/:id/promote         最终复核并写入精选库（§十二，阶段四）
  *  POST   /internal/progress             内部八阶段进度回调（HMAC）
  *  POST   /internal/finalize             内部终态回调（HMAC）
  *
@@ -62,6 +64,7 @@ import {
   handleListCandidates,
   handleSaveReview,
 } from "./curation/admin";
+import { handleGetPromote, handlePromote } from "./curation/promote";
 
 const app = new Hono<AppEnv>();
 
@@ -155,6 +158,8 @@ app.get("/api/curation/admin/candidates", handleListCandidates);
 app.get("/api/curation/admin/candidates/:id", handleGetCandidateDetail);
 app.put("/api/curation/admin/candidates/:id/reviews/:stage", handleSaveReview);
 app.post("/api/curation/admin/candidates/:id/decision", handleDecision);
+app.get("/api/curation/admin/candidates/:id/promote", handleGetPromote);
+app.post("/api/curation/admin/candidates/:id/promote", handlePromote);
 
 /* ------------------------------ 内部回调（HMAC / Bearer） ------------------------------ */
 

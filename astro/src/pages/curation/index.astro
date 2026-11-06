@@ -183,6 +183,15 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
   .gate-note { font-size: 0.75rem; color: #b45309; background: #fffbeb; border: 1px solid #fde68a;
     border-radius: 8px; padding: 7px 10px; margin-top: 8px; line-height: 1.6; }
 
+  /* 阶段四：正式收录（写入精选库）面板 */
+  .promote-box { margin-top: 12px; border-left: 4px solid #8b5cf6; }
+  .promote-row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; align-items: center; }
+  .promote-row .cat-sel { flex: 1; min-width: 220px; border: 1px solid #cbd5e1; border-radius: 8px;
+    padding: 7px 10px; font-size: 0.8rem; background: #fff; color: #1e293b; outline: none; }
+  .promote-row .cat-sel:focus { border-color: #8b5cf6; }
+  .promote-row .btn.promote { background: #8b5cf6; border-color: #8b5cf6; color: #fff; }
+  .promote-row .btn.promote:hover { background: #7c3aed; }
+
   table.hist { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
   table.hist th { text-align: left; color: #64748b; font-weight: 600; padding: 6px 8px;
     border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
@@ -735,6 +744,92 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     return card;
   }
 
+  /* —— 阶段四：正式收录面板（GET/POST …/promote，任务书 §十二/§十三） —— */
+  function promotePanel(c) {
+    const box = h("div", { class: "auto-ev promote-box" });
+
+    /* 已收录：只展示结果（幂等：不会重复写入） */
+    if (c.status === "promoted") {
+      box.append(h("div", { class: "ev-row" },
+        h("span", { class: "m pass", text: "✓" }),
+        h("span", { text: "已正式写入精选库" + (c.promoted_at ? "（" + fmtTime(c.promoted_at) + "）" : "") +
+          (c.catalog_row_key ? " · 精选记录 " + c.catalog_row_key : "") })));
+      return box;
+    }
+
+    box.append(h("div", { class: "lab", text: "正式收录（写入精选库）" }));
+    const state = h("div", { class: "ev-row" },
+      h("span", { class: "m info", text: "◆" }),
+      h("span", { text: "加载收录状态…" }));
+    box.append(state);
+
+    const sel = h("select", { class: "cat-sel" });
+    const btn = h("button", { class: "btn promote", type: "button", text: "🚀 正式写入精选库" });
+    btn.disabled = true;
+    box.append(h("div", { class: "promote-row" }, sel, btn));
+
+    const msg = state.children[1];
+    let poll = 0;
+
+    async function refreshPromote() {
+      try {
+        const { res, data } = await api("/api/curation/admin/candidates/" + encodeURIComponent(c.candidate_id) + "/promote");
+        if (!res.ok) throw new Error(errMsg(res, data));
+        sel.innerHTML = "";
+        (data.categories || []).forEach((cat) => sel.append(h("option", { value: cat, text: cat })));
+        const p = data.promotion;
+        if (p && p.state === "writing") msg.textContent = "上次触发的写入仍在验证中（可点击继续核验恢复）";
+        else if (p && p.state === "failed") msg.textContent = "上次写入失败：" + (p.error || "未知原因") + "，可修正后重试";
+        else if (data.can_promote) {
+          msg.textContent = "前置检查就绪：选择分类后写入。" +
+            (data.in_catalog ? "（精选库已存在该仓库，将跳过重复写入、直接补齐状态）" : "");
+        } else msg.textContent = "暂不可收录：" + (data.blocked_reasons || []).join("；");
+        btn.disabled = !data.can_promote || (data.categories || []).length === 0;
+      } catch (e) {
+        msg.textContent = "收录状态加载失败：" + e.message;
+      }
+    }
+
+    async function promoteOnce() {
+      try {
+        const { res, data } = await api("/api/curation/admin/candidates/" + encodeURIComponent(c.candidate_id) + "/promote",
+          { method: "POST", body: { category: sel.value } });
+        if (res.ok && data && data.status === "promoted") {
+          toast(data.already ? "该工具已在精选库，状态已同步" : "✅ 已写入精选库并完成候选状态同步");
+          await loadDetail(c.candidate_id, true);
+          await loadList();
+          return;
+        }
+        /* 202 = 已触发写入、验证未完成；409 PROMOTION_IN_PROGRESS = 写入窗口内 → 自动轮询恢复（§12.4） */
+        if (res.status === 202 || (res.status === 409 && data && data.error && data.error.code === "PROMOTION_IN_PROGRESS")) {
+          msg.textContent = "写入进行中，页面每 6 秒自动重试核验…（" + (poll + 1) + "/20）";
+          poll += 1;
+          if (poll <= 20) setTimeout(promoteOnce, 6000);
+          else { msg.textContent = "写入仍在进行，请稍后再次点击继续。"; btn.disabled = false; }
+          return;
+        }
+        throw new Error(errMsg(res, data));
+      } catch (e) {
+        toast("收录失败：" + e.message, true);
+        msg.textContent = "收录失败：" + e.message;
+        btn.disabled = false;
+        await refreshPromote();
+      }
+    }
+
+    btn.addEventListener("click", async () => {
+      if (!sel.value) { toast("请先选择精选库分类", true); return; }
+      if (!window.confirm("确认将该工具正式写入精选库（分类：" + sel.value + "）？\n将追加精选目录记录、标记候选池对应记录并写入收录日志。")) return;
+      poll = 0;
+      btn.disabled = true;
+      await promoteOnce();
+      if (poll === 0) btn.disabled = false;
+    });
+
+    refreshPromote();
+    return box;
+  }
+
   /* 第六阶段决策 */
   function stageSix(review, data) {
     const wrap = h("div", {});
@@ -794,6 +889,9 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     if (!data.can_decide) {
       wrap.append(h("div", { class: "gate-note", text: "⚠️ 阶段 1-5 尚未全部给出人工结论，「确认收录」暂不可用；其余决策可执行。" }));
     }
+
+    /* 阶段四：确认收录（approved）后进入正式写入精选库环节 */
+    wrap.append(promotePanel(c));
     return wrap;
   }
 

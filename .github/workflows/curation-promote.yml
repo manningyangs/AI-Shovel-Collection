@@ -1,0 +1,213 @@
+# 正式收录写入（任务书 §十二 / §十三，阶段四；冲突方案 C2）
+#
+# 由 eval Worker 的 POST /api/curation/admin/candidates/:id/promote 经
+# workflow_dispatch 触发——Worker 不直接写仓库，收录写入集中在这个独立工作流：
+#   1. 校验输入（slug / 分类必须为 catalog.csv 现有分类 / 工具名去逗号）
+#   2. catalog.csv 查重后追加一行，并同步 astro/public 与 astro/src/data 两份副本
+#      （三份文件在同一提交内原子更新 → 不存在「半完成的精选库状态」）
+#   3. 社区候选池 candidates.json 中对应记录标记已收录（原始记录保留，不物理删除）
+#   4. 提交推送后显式派发 live-data.yml（自动发现池按 catalog_ids 联动，转正为
+#      curated、移出候选池）与 pages-astro.yml（GITHUB_TOKEN 的 push 不触发
+#      下游 workflow，必须显式派发——同 live-data.yml 的既有约定）
+#
+# 幂等：精选库已存在该仓库 → 不重复追加；重复触发最多产生空提交（跳过）。
+name: Curation Promote
+
+run-name: "正式收录 · ${{ inputs.repo_slug }}（${{ inputs.candidate_id }}）"
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_id:
+        description: 候选 ID（CUR-*，用于日志追踪与幂等关联）
+        required: true
+        type: string
+      repo_slug:
+        description: 仓库标识（owner/repo）
+        required: true
+        type: string
+      tool_name:
+        description: 写入精选库的铲子名称
+        required: true
+        type: string
+      category:
+        description: 精选库分类（必须为 catalog.csv 现有分类）
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  actions: write
+
+# 串行化所有收录写入，避免并发提交竞态（任务书 §12.3）
+concurrency:
+  group: curation-promote
+  cancel-in-progress: false
+
+jobs:
+  write-catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Validate and write (idempotent)
+        id: write
+        env:
+          REPO_SLUG: ${{ inputs.repo_slug }}
+          TOOL_NAME: ${{ inputs.tool_name }}
+          CATEGORY: ${{ inputs.category }}
+          CANDIDATE_ID: ${{ inputs.candidate_id }}
+        run: |
+          python3 <<'PY'
+          import json, os, re, sys, datetime, pathlib
+
+          slug = os.environ["REPO_SLUG"].strip()
+          tool = os.environ["TOOL_NAME"].strip()
+          category = os.environ["CATEGORY"].strip()
+          cid = os.environ["CANDIDATE_ID"].strip()
+
+          if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", slug):
+              sys.exit(f"repo_slug 非法: {slug!r}")
+          if not category or "\n" in category:
+              sys.exit(f"category 非法: {category!r}")
+          # CSV 安全：工具名去掉换行、逗号替换为顿号（与 Worker 端 sanitize 一致）
+          tool = re.sub(r"[\r\n]+", " ", tool).replace(",", "、")
+          tool = re.sub(r"\s+", " ", tool).strip()[:120]
+          if not tool:
+              sys.exit("tool_name 为空")
+
+          def norm(u: str) -> str:
+              u = u.strip().split("?")[0].split("#")[0].rstrip("/")
+              if u.lower().endswith(".git"):
+                  u = u[:-4]
+              m = re.search(r"github\.com/([^/\s]+)/([^/\s]+)", u, re.I)
+              return f"{m.group(1)}/{m.group(2)}".lower() if m else u.lower()
+
+          target = norm(f"https://github.com/{slug}")
+
+          def edit_catalog(path: pathlib.Path) -> bool:
+              """返回是否有改动；分类不存在则直接失败。"""
+              if not path.exists():
+                  return False
+              raw = path.read_bytes()
+              bom = raw.startswith(b"\xef\xbb\xbf")
+              text = raw[3:].decode("utf-8") if bom else raw.decode("utf-8")
+              newline = "\r\n" if "\r\n" in text else "\n"
+              lines = text.split(newline)
+              if lines and lines[-1] == "":
+                  lines.pop()  # 末尾换行另行恢复
+
+              cats = set()
+              for ln in lines[1:]:  # 第 1 行为表头「分类,铲子名称,GitHub仓库链接」
+                  parts = ln.split(",")
+                  if len(parts) >= 3 and "github.com/" in parts[2]:
+                      cats.add(parts[0].strip())
+              if category not in cats:
+                  sys.exit(f"分类不属于 catalog.csv 现有分类: {category!r}")
+
+              for ln in lines:
+                  parts = ln.split(",")
+                  if len(parts) >= 3 and "github.com/" in parts[2] and norm(parts[2]) == target:
+                      return False  # 查重命中：不重复追加（§12.3 幂等）
+
+              lines.append(f"{category},{tool},https://github.com/{slug}")
+              out = newline.join(lines) + newline
+              path.write_bytes((bom and b"\xef\xbb\xbf" or b"") + out.encode("utf-8"))
+              return True
+
+          changed = False
+          if edit_catalog(pathlib.Path("catalog.csv")):
+              changed = True
+              print(f"catalog.csv: 追加 {slug}（{category}）")
+          else:
+              print("catalog.csv: 已存在该仓库或无改动")
+
+          # 首页数据副本（首页与站点读取的是 astro/public 下的副本）
+          pub = pathlib.Path("astro/public/catalog.csv")
+          if edit_catalog(pub):
+              changed = True
+              print("astro/public/catalog.csv: 已同步追加")
+          if pathlib.Path("astro/src/data/catalog.csv").exists():
+              if edit_catalog(pathlib.Path("astro/src/data/catalog.csv")):
+                  changed = True
+                  print("astro/src/data/catalog.csv: 已同步追加")
+
+          # 社区候选池：标记已收录（原始记录保留，不物理删除，§十三）
+          pool_path = pathlib.Path("astro/public/submissions/candidates.json")
+          if pool_path.exists():
+              raw = pool_path.read_bytes()
+              bom = raw.startswith(b"\xef\xbb\xbf")
+              body = raw[3:].decode("utf-8") if bom else raw.decode("utf-8")
+              newline = "\r\n" if "\r\n" in body else "\n"
+              data = json.loads(body)
+              for rec in data.get("candidates", []):
+                  if norm(rec.get("repo_url") or rec.get("repo_slug") or "") == target:
+                      if rec.get("review_status") != "promoted":
+                          rec["review_status"] = "promoted"
+                          rec["promoted_at"] = datetime.datetime.now(
+                              datetime.timezone.utc
+                          ).strftime("%Y-%m-%dT%H:%M:%SZ")
+                          rec["promoted_candidate_id"] = cid
+                          out = json.dumps(data, ensure_ascii=False, indent=2)
+                          if newline == "\r\n":
+                              out = out.replace("\n", "\r\n")
+                          pool_path.write_bytes(
+                              (bom and b"\xef\xbb\xbf" or b"") + out.encode("utf-8")
+                          )
+                          changed = True
+                          print(f"candidates.json: {slug} 标记为已收录（记录保留）")
+                      break
+              else:
+                  print("candidates.json: 不在社区池（自动发现池来源，由 live-data 联动）")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+              f.write(f"action={'append' if changed else 'already'}\n")
+          PY
+
+      - name: Commit and push
+        id: push
+        if: steps.write.outputs.action == 'append'
+        env:
+          REPO_SLUG: ${{ inputs.repo_slug }}
+          CANDIDATE_ID: ${{ inputs.candidate_id }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add catalog.csv astro/public/catalog.csv astro/src/data/catalog.csv astro/public/submissions/candidates.json
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "no changes to commit（并发下已被其他运行写入）"
+          else
+            git commit -m "chore(catalog): 正式收录 ${REPO_SLUG}（${CANDIDATE_ID}）"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Trigger live-data sync and pages deploy
+        if: steps.push.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OWNER_REPO: ${{ github.repository }}
+        run: |
+          python3 <<'PY'
+          import json, os, urllib.request
+          for wf in ("live-data.yml", "pages-astro.yml"):
+              req = urllib.request.Request(
+                  f"https://api.github.com/repos/{os.environ['OWNER_REPO']}/actions/workflows/{wf}/dispatches",
+                  data=json.dumps({"ref": "main"}).encode(),
+                  headers={
+                      "Accept": "application/vnd.github+json",
+                      "Authorization": f"Bearer {os.environ['GH_TOKEN']}",
+                      "X-GitHub-Api-Version": "2022-11-28",
+                  },
+                  method="POST",
+              )
+              try:
+                  urllib.request.urlopen(req, timeout=30)
+                  print(f"dispatched {wf}")
+              except Exception as e:  # 部署派发失败不回滚已写入的精选库（Pages 有 cron 兜底）
+                  print(f"WARN: dispatch {wf} failed: {e}")
+          PY

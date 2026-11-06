@@ -24,6 +24,10 @@ export interface Env {
   // —— 提交收录改造新增 vars ——
   COLLECTION_WORKFLOW_FILE: string;         // collection-submission.yml
   COLLECTION_RATE_DAILY_PER_IP: string;      // 5 (任务书 §5.5)
+  // —— 阶段四正式收录新增 vars（可选，缺省用代码内默认值）——
+  CURATION_WORKFLOW_FILE?: string;           // curation-promote.yml（独立收录写入工作流，冲突方案 C2）
+  PROMOTE_VERIFY_ATTEMPTS?: string;          // 触发写入后就地等待验证的次数（测试调小）
+  PROMOTE_VERIFY_INTERVAL_MS?: string;       // 验证等待间隔（测试调小）
 }
 
 export type TaskStatus =

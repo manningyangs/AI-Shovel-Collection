@@ -44,17 +44,24 @@ const poolData = poolMod['../../public/submissions/candidates.json'] || null;
 const poolArr = poolData
   ? (Array.isArray(poolData) ? poolData : (Array.isArray(poolData.candidates) ? poolData.candidates : []))
   : [];
+
+const catalogItems = parseCatalog(csvRaw);
+
+// 阶段四（任务书 §十三）：展示层跨来源排除——已写入精选库的仓库不再计入
+// 「社区新提交 / 提交收录」有效候选展示；底层 candidates.json 记录保留，不物理删除
+const catalogSlugs = new Set(catalogItems.map(it => String(it.slug).toLowerCase()));
+const validPoolArr = poolArr.filter(c =>
+  c.review_status !== 'promoted' && !catalogSlugs.has(String(c.repo_slug || '').toLowerCase()));
+
 const communityPool = {
-  total: poolData && typeof poolData.total === 'number' ? poolData.total : poolArr.length,
-  pending: poolArr.filter(c => (c.review_status || 'pending') === 'pending').length,
-  approved: poolArr.filter(c => c.review_status === 'approved').length,
-  recent: poolArr
+  total: validPoolArr.length,
+  pending: validPoolArr.filter(c => (c.review_status || 'pending') === 'pending').length,
+  approved: validPoolArr.filter(c => c.review_status === 'approved').length,
+  recent: validPoolArr
     .slice()
     .sort((a, b) => (b.submitted_at || 0) - (a.submitted_at || 0))
     .slice(0, 4),
 };
-
-const catalogItems = parseCatalog(csvRaw);
 const colorPalette = ['#eef2ff', '#c7d2fe', '#4f46e5', '#fef3c7', '#fbbf24', '#f59e0b', '#fef9c3', '#f0fdf4', '#22c55e', '#86efac', '#fce7f3', '#f9a8d4'];
 const colorOf = {};
 const seenCats = {};

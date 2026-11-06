@@ -25,7 +25,9 @@
     "SESSION_TTL_SECONDS": "28800",
     // —— 提交收录改造（任务书 §八）——
     "COLLECTION_WORKFLOW_FILE": "collection-submission.yml",
-    "COLLECTION_RATE_DAILY_PER_IP": "5"
+    "COLLECTION_RATE_DAILY_PER_IP": "5",
+    // —— 阶段四：正式收录独立写入工作流（任务书 §十二，冲突方案 C2）——
+    "CURATION_WORKFLOW_FILE": "curation-promote.yml"
   },
   // —— 精选推荐周期评估（任务书 §十六；错开 live-data.yml 的 23 */6 cron）——
   "triggers": {

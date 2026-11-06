@@ -36,6 +36,9 @@ export function __resetOwnerCache(): void {
   ownerCache = null;
 }
 
+export { requireOwner, assertUnsafeOrigin, loadCandidate, STAGE_LABELS };
+export type { CandidateRow };
+
 /** 已知候选状态集合（参数校验用，与 engine/CurationStatus 保持一致） */
 const KNOWN_STATUSES = new Set([
   "recommended",
