@@ -25,6 +25,7 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     position: sticky; top: 0; z-index: 30;
   }
   .cur-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .cur-brand a.btn { text-decoration: none; display: inline-flex; align-items: center; white-space: nowrap; }
   .cur-brand h1 { font-size: 1.05rem; margin: 0; color: #1e3a5f; white-space: nowrap; }
   .cur-brand .sub { font-size: 0.76rem; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .cur-account { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: #475569; }
@@ -216,9 +217,10 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
 
 <header class="cur-header">
   <div class="cur-brand">
+    <a class="btn" href={base + "/"}>← 返回首页</a>
     <div>
       <h1>📋 收录审核工作台</h1>
-      <div class="sub">六阶段人工审核 · 仅仓库所有者可操作（任务书 §十）</div>
+      <div class="sub">六阶段人工审核 · 仅仓库所有者可操作</div>
     </div>
   </div>
   <div class="cur-account" id="accountBox" hidden>
@@ -287,7 +289,7 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     5: "重复与收录资格检查",
     6: "仓库所有者最终审核",
   };
-  // 自动检查证据 → 阶段映射（任务书 §10 各阶段"自动检查证据"）
+  // 自动检查证据 → 阶段映射（各阶段"自动检查证据"）
   const STAGE_CHECKS = { 1: ["exists", "authenticity", "completeness"], 2: ["ai_relevance", "purpose", "usability"], 3: [], 4: ["license"], 5: ["duplicate"] };
   const STAGE_DIMS = { 1: ["completeness"], 2: ["ai_value", "practical"], 3: ["activity", "maturity", "community"], 4: ["license"], 5: [] };
   const ACTION_LABELS = { evaluate: "评分评估", status_change: "状态变更", review: "阶段审核", decision: "最终决策", promote: "正式收录", sync: "池同步" };
@@ -571,7 +573,7 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     box.append(ck);
 
     /* 来源关联 */
-    const src = section("候选来源", "两池只读关联，不复制原始数据（§4.3）");
+    const src = section("候选来源", "两池只读关联，不复制原始数据");
     if (!data.sources || data.sources.length === 0) {
       src.append(h("div", { class: "empty", text: "暂无来源关联记录。" }));
     } else {
@@ -588,7 +590,7 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     box.append(src);
 
     /* 六阶段审核 */
-    const stageSec = section("六阶段人工审核", "进度可中断恢复，自动保存于服务端（§11）");
+    const stageSec = section("六阶段人工审核", "进度可中断恢复，自动保存于服务端");
     const grid = h("div", { class: "stages" });
     const reviewByStage = {};
     (data.reviews || []).forEach((r) => { reviewByStage[r.stage_index] = r; });
@@ -626,7 +628,7 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     box.append(hist);
 
     /* 审核日志 */
-    const logs = section("审核与操作日志", "追加写入，不可篡改（§14.5）");
+    const logs = section("审核与操作日志", "追加写入，不可篡改");
     if (!data.audit_logs || data.audit_logs.length === 0) {
       logs.append(h("div", { class: "empty", text: "暂无操作记录。" }));
     } else {
@@ -744,7 +746,7 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
     return card;
   }
 
-  /* —— 阶段四：正式收录面板（GET/POST …/promote，任务书 §十二/§十三） —— */
+  /* —— 正式收录面板（GET/POST …/promote，最终收录流程） —— */
   function promotePanel(c) {
     const box = h("div", { class: "auto-ev promote-box" });
 
@@ -800,7 +802,7 @@ const evalApiBase = (import.meta.env.PUBLIC_EVAL_API_BASE || "").replace(/\/+$/,
           await loadList();
           return;
         }
-        /* 202 = 已触发写入、验证未完成；409 PROMOTION_IN_PROGRESS = 写入窗口内 → 自动轮询恢复（§12.4） */
+        /* 202 = 已触发写入、验证未完成；409 PROMOTION_IN_PROGRESS = 写入窗口内 → 自动轮询恢复 */
         if (res.status === 202 || (res.status === 409 && data && data.error && data.error.code === "PROMOTION_IN_PROGRESS")) {
           msg.textContent = "写入进行中，页面每 6 秒自动重试核验…（" + (poll + 1) + "/20）";
           poll += 1;
