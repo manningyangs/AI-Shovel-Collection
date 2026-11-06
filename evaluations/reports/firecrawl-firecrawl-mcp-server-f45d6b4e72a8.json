@@ -1,0 +1,460 @@
+{
+  "schema_version": "1.0",
+  "report_id": "firecrawl-firecrawl-mcp-server-f45d6b4e72a8",
+  "repository": {
+    "owner": "firecrawl",
+    "name": "firecrawl-mcp-server",
+    "url": "https://github.com/firecrawl/firecrawl-mcp-server",
+    "commit_sha": "a7f1d1827a4f01a6cea81dc294c16f6c50305dde",
+    "language": "JavaScript",
+    "license": "MIT",
+    "license_file": "LICENSE",
+    "stars": 7765,
+    "forks": 929,
+    "archived": false
+  },
+  "evaluation": {
+    "evaluation_version": "1.0",
+    "scoring_version": "1.0.1",
+    "evaluation_mode": "static",
+    "evaluation_level": "L1",
+    "level": "L1",
+    "score_status": "preliminary",
+    "preliminary_score": 80,
+    "official_score": null,
+    "grade": "A",
+    "coverage": 92,
+    "evaluated_at": "2026-11-06T02:01:57.908166Z",
+    "report_generated_by": "AI Shovel Eval",
+    "disclaimer": "静态初评 · 非正式认证 · 不能作为项目真实运行能力的担保"
+  },
+  "project_type": {
+    "type": "mcp_server",
+    "confidence": 0.86,
+    "scores": {
+      "mcp_server": 19,
+      "agent_skill": 0,
+      "framework": 0,
+      "cli_sdk_api": 3,
+      "collection": 0
+    },
+    "evidence": {
+      "mcp_server": [
+        "package.json.dependencies.@modelcontextprotocol/server",
+        "package.json.dependencies.@modelcontextprotocol/server",
+        "package.json.devDependencies.@modelcontextprotocol/client",
+        "package.json.devDependencies.@modelcontextprotocol/client",
+        "package.json.devDependencies.@modelcontextprotocol/sdk",
+        "package.json.devDependencies.@modelcontextprotocol/sdk",
+        "README 含 MCP 关键词 x5"
+      ],
+      "agent_skill": [],
+      "framework": [],
+      "cli_sdk_api": [
+        "package.json.bin"
+      ],
+      "collection": []
+    },
+    "detected_via_manifest": true
+  },
+  "dimensions": {
+    "ease_of_use": {
+      "label": "易用性与集成体验",
+      "score": 67,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 10.05,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "install_instructions",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "config_env",
+          "weight": 4,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "deploy",
+          "weight": 3,
+          "level": 3,
+          "status": "declared"
+        },
+        {
+          "dim_key": "ease_of_use",
+          "sub_key": "quickstart",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        }
+      ]
+    },
+    "docs": {
+      "label": "文档与开发者体验",
+      "score": 92,
+      "max_score": 100,
+      "weight": 5,
+      "weighted_score": 4.6,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "docs",
+          "sub_key": "install_deploy_doc",
+          "weight": 2,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "usage_example",
+          "weight": 2,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "docs",
+          "sub_key": "license_info",
+          "weight": 1,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    },
+    "functionality": {
+      "label": "功能完整度",
+      "score": 80,
+      "max_score": 100,
+      "weight": 25,
+      "weighted_score": 20.0,
+      "sub_coverage": 80,
+      "sub_items": [
+        {
+          "dim_key": "functionality",
+          "sub_key": "core_completeness",
+          "weight": 5,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "coverage",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "schema_completeness",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "task_examples",
+          "weight": 5,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "functionality",
+          "sub_key": "error_handling",
+          "weight": 5,
+          "level": 0,
+          "status": "not_tested"
+        }
+      ]
+    },
+    "security": {
+      "label": "安全性与隐私保护",
+      "score": 76,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 11.4,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "security",
+          "sub_key": "dependency_vulns",
+          "weight": 4,
+          "level": 2,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "danger_ops",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "data_access",
+          "weight": 3,
+          "level": 3,
+          "status": "partial"
+        },
+        {
+          "dim_key": "security",
+          "sub_key": "secret_scan",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    },
+    "agent_compat": {
+      "label": "智能体兼容性",
+      "score": 72,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 10.8,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "protocol_compliance",
+          "weight": 4,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "host_support",
+          "weight": 5,
+          "level": 4,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "transport_config",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        },
+        {
+          "dim_key": "agent_compat",
+          "sub_key": "env_auth",
+          "weight": 3,
+          "level": 3,
+          "status": "verified"
+        }
+      ]
+    },
+    "maintenance": {
+      "label": "项目维护健康度",
+      "score": 92,
+      "max_score": 100,
+      "weight": 10,
+      "weighted_score": 9.2,
+      "sub_coverage": 100,
+      "sub_items": [
+        {
+          "dim_key": "maintenance",
+          "sub_key": "update_release",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "ci_status",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "issue_maintain",
+          "weight": 2,
+          "level": 4,
+          "status": "partial"
+        },
+        {
+          "dim_key": "maintenance",
+          "sub_key": "continuity",
+          "weight": 2,
+          "level": 4,
+          "status": "verified"
+        }
+      ]
+    },
+    "reliability": {
+      "label": "可靠性与运行效率",
+      "score": 100,
+      "max_score": 100,
+      "weight": 15,
+      "weighted_score": 15.0,
+      "sub_coverage": 75,
+      "sub_items": [
+        {
+          "dim_key": "reliability",
+          "sub_key": "test_evidence",
+          "weight": 5,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "ci_complete",
+          "weight": 4,
+          "level": 5,
+          "status": "verified"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "error_mechanism",
+          "weight": 3,
+          "level": 2,
+          "status": "not_tested"
+        },
+        {
+          "dim_key": "reliability",
+          "sub_key": "release_stability",
+          "weight": 3,
+          "level": 5,
+          "status": "verified"
+        }
+      ]
+    }
+  },
+  "agent_compatibility": {
+    "checks": {
+      "mcp_protocol_deps": true,
+      "host_cursor": true,
+      "host_claude_desktop": true,
+      "host_cline": true,
+      "transport_methods": [
+        "stdio",
+        "sse",
+        "streamable-http",
+        "http"
+      ],
+      "auth_methods": [
+        "api key",
+        "apikey",
+        "api_key",
+        "oauth",
+        "token",
+        "bearer"
+      ]
+    },
+    "evidence": [
+      "package.json deps 含 MCP: ['@modelcontextprotocol/server', '@modelcontextprotocol/client', '@modelcontextprotocol/sdk']",
+      "README 提及 cursor",
+      "README 提及 claude_desktop",
+      "README 提及 cline",
+      "README 提及传输: ['stdio', 'sse', 'streamable-http', 'http']",
+      "README 提及认证: ['api key', 'apikey', 'api_key', 'oauth', 'token', 'bearer']"
+    ]
+  },
+  "security_findings": [
+    {
+      "type": "osv_vulnerability",
+      "severity": "high",
+      "message": "依赖 zod@4.2.1 存在 GHSA-mrhx-c7xc-m3w5：Zod can exhaust memory while validating oversized constrained collections",
+      "aliases": [
+        "CVE-2023-54404"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 hono@4.12.27 存在 GHSA-54fx-42gc-7vw4：Hono: Algorithmic Complexity DoS in Language Middleware",
+      "aliases": [
+        "CVE-2026-71848"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 hono@4.12.27 存在 GHSA-5r4p-p66f-jhc7：Hono: `serveStatic` decodes the request path a second time, leading to bypass of middleware on static paths",
+      "aliases": [
+        "CVE-2026-109955",
+        "CVE-2026-111757"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 hono@4.12.27 存在 GHSA-8j4g-w8fx-2239：Hono: ReDoS in CORS middleware via Access-Control-Request-Headers",
+      "aliases": [
+        "CVE-2026-69207"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 hono@4.12.27 存在 GHSA-crvj-82cr-hjcx：Hono: Query parser reads parameters after the URL fragment, causing cache-key and proxy interpretation differentials",
+      "aliases": [
+        "CVE-2026-84363"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 hono@4.12.27 存在 GHSA-f23p-vx2j-j53r：Hono: `memo()` retains SSR output across requests, leading to cross-user data disclosure",
+      "aliases": [
+        "CVE-2026-71850"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 hono@4.12.27 存在 GHSA-g6gw-c38x-mqfc：Hono: Unbounded dot-notation nesting in `parseBody()` can cause memory exhaustion",
+      "aliases": [
+        "CVE-2026-84364"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 hono@4.12.27 存在 GHSA-gqvv-2mrq-wpjv：Hono: Incomplete fix for CVE-2026-39408: `toSSG()` still writes files outside the output directory",
+      "aliases": [
+        "CVE-2026-84365"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "medium",
+      "message": "依赖 hono@4.12.27 存在 GHSA-hxh3-vqpv-xpqv：hono/jsx renders plain strings unescaped in boundary components, leading to XSS",
+      "aliases": [
+        "CVE-2026-93981"
+      ]
+    },
+    {
+      "type": "osv_vulnerability",
+      "severity": "low",
+      "message": "依赖 hono@4.12.27 存在 GHSA-79qm-7rj5-m7r9：Hono: Proxy Helper does not remove response headers listed in the `Connection` header",
+      "aliases": [
+        "CVE-2026-71849"
+      ]
+    }
+  ],
+  "recommendations": [
+    "修复 1 个高危依赖漏洞",
+    "配置 Dependabot 或 OSV-Scanner 做自动化安全扫描"
+  ],
+  "evidence": [
+    "[mcp_server] manifest 识别证据: package.json.dependencies.@modelcontextprotocol/server",
+    "[mcp_server] manifest 识别证据: package.json.dependencies.@modelcontextprotocol/server",
+    "[cli_sdk_api] manifest 识别证据: package.json.bin",
+    "[docs] README 章节覆盖: install, usage, config, license, contributing",
+    "[ease] README 安装命令示例: env FIRECRAWL_API_KEY=fc-YOUR_API_KEY npx -y firecrawl-mcp",
+    "[docs] README 含 54 个代码块",
+    "[security] 扫描 36 个源码文件",
+    "[osv] 查询 10 个依赖漏洞"
+  ],
+  "limitations": [
+    "⚠️ 本报告为纯静态分析（L1），未执行被测仓库中的任何代码",
+    "⚠️ 静态初评 · 非正式认证 — 评分不能等同于真实运行表现",
+    "⚠️ 覆盖率仅 92%，未测试项目不计零分"
+  ]
+}

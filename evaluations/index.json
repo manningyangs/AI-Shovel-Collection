@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-06T01:59:04.854796Z",
-  "total_reports": 11,
+  "updated_at": "2026-11-06T02:01:57.908166Z",
+  "total_reports": 12,
   "reports": [
+    {
+      "report_id": "firecrawl-firecrawl-mcp-server-f45d6b4e72a8",
+      "owner": "firecrawl",
+      "name": "firecrawl-mcp-server",
+      "url": "https://github.com/firecrawl/firecrawl-mcp-server",
+      "project_type": "mcp_server",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 80,
+      "grade": "A",
+      "coverage": 92,
+      "commit_sha": "a7f1d1827a4f",
+      "evaluated_at": "2026-11-06T02:01:57.908166Z"
+    },
     {
       "report_id": "sparkgeo-geo-mcp-servers-319bc76796d2",
       "owner": "sparkgeo",
