@@ -11,8 +11,11 @@
  *  POST   /api/evaluations               创建评测（Origin 必查）
  *  GET    /api/evaluations               我的任务列表
  *  GET    /api/evaluations/:id           任务进度详情
+ *  GET    /api/curation/recommendations  精选推荐公开列表（只读白名单字段 §15.1）
  *  POST   /internal/progress             内部八阶段进度回调（HMAC）
  *  POST   /internal/finalize             内部终态回调（HMAC）
+ *
+ *  scheduled（Cron）：精选推荐周期评估（§十六；结果持久化 D1，首页零实时 GitHub 请求）
  *
  * 统一错误结构：{"success": false, "error": {"code", "message"}}（§9.7）
  */
@@ -42,6 +45,7 @@ import {
   handleGetSubmission,
   handleListSubmissions,
 } from "./collection-service";
+import { handleGetRecommendations, handleCurationScheduled } from "./curation/service";
 
 const app = new Hono<AppEnv>();
 
@@ -122,6 +126,10 @@ app.post("/api/collection-submissions", handleCreateSubmission);
 app.get("/api/collection-submissions", handleListSubmissions);
 app.get("/api/collection-submissions/:id", handleGetSubmission);
 
+/* ------------------------- 精选推荐公开 API（任务书 §十五.1） ------------------------- */
+
+app.get("/api/curation/recommendations", handleGetRecommendations);
+
 /* ------------------------------ 内部回调（HMAC / Bearer） ------------------------------ */
 
 app.post("/internal/progress", handleProgress);
@@ -167,4 +175,17 @@ app.notFound((c) =>
   ),
 );
 
-export default app;
+/* ------------------------------ Cron：推荐周期评估（§十六） ------------------------------ */
+
+const worker = {
+  fetch: app.fetch,
+  scheduled(
+    _controller: ScheduledController,
+    env: import("./types").Env,
+    _ctx: ExecutionContext,
+  ): Promise<void> {
+    return handleCurationScheduled(env, _controller.cron ?? "manual");
+  },
+};
+
+export default worker;

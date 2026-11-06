@@ -27,6 +27,10 @@
     "COLLECTION_WORKFLOW_FILE": "collection-submission.yml",
     "COLLECTION_RATE_DAILY_PER_IP": "5"
   },
+  // —— 精选推荐周期评估（任务书 §十六；错开 live-data.yml 的 23 */6 cron）——
+  "triggers": {
+    "crons": ["40 */6 * * *"]
+  },
   "observability": {
     "enabled": true
   }
