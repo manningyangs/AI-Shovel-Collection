@@ -4837,6 +4837,7 @@
 "2026-11-10T02": {
 "aivikings/aivikings-mcp": 0,
 "asms-ai/asms-mcp": 0,
+"agent-operating-system/emailwarmup-mcp": 0,
 "0xdaef0f/job-searchoor": 65,
 "1panel-dev/mcp-1panel": 171,
 "21st-dev/magic-mcp": 6439,
@@ -4846,7 +4847,7 @@
 "adhikasp/mcp-git-ingest": 315,
 "akutishevsky/lunchmoney-mcp": 114,
 "amurshak/congressmcp": 36,
-"anthropics/skills": 191048,
+"anthropics/skills": 191052,
 "antvis/mcp-server-chart": 4416,
 "anviod/edgecore": 135,
 "apify/apify-mcp-server": 15478,

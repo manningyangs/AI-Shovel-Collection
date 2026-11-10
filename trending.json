@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-10T02:00:34Z",
+  "updated_at": "2026-11-10T02:03:53Z",
   "data_points": 26,
   "history_days_covered": 9,
   "top_stars": [
@@ -8,7 +8,7 @@
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 191048,
+      "stars": 191052,
       "stars_growth": null,
       "lang": "Python",
       "pushed_at": "2026-11-06T22:32:32Z"
@@ -181,7 +181,7 @@
       "stars": 7325,
       "stars_growth": null,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-07T10:48:19Z"
+      "pushed_at": "2026-11-10T02:00:24Z"
     },
     {
       "rank": 19,
@@ -210,8 +210,8 @@
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 191048,
-      "stars_growth": 4273,
+      "stars": 191052,
+      "stars_growth": 4277,
       "lang": "Python",
       "pushed_at": "2026-11-06T22:32:32Z"
     },
@@ -363,7 +363,7 @@
       "stars": 7325,
       "stars_growth": 49,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-07T10:48:19Z"
+      "pushed_at": "2026-11-10T02:00:24Z"
     },
     {
       "rank": 17,
@@ -412,8 +412,8 @@
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 191048,
-      "stars_growth": 4536,
+      "stars": 191052,
+      "stars_growth": 4540,
       "lang": "Python",
       "pushed_at": "2026-11-06T22:32:32Z"
     },
@@ -565,7 +565,7 @@
       "stars": 7325,
       "stars_growth": 56,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-07T10:48:19Z"
+      "pushed_at": "2026-11-10T02:00:24Z"
     },
     {
       "rank": 17,
@@ -614,7 +614,7 @@
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 191048,
+      "stars": 191052,
       "stars_growth": null,
       "lang": "Python",
       "pushed_at": "2026-11-06T22:32:32Z",
@@ -650,7 +650,7 @@
       "stars": 7325,
       "stars_growth": null,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-07T10:48:19Z",
+      "pushed_at": "2026-11-10T02:00:24Z",
       "activity_score": 18.0
     },
     {
