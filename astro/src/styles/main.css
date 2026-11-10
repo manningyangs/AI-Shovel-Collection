@@ -245,8 +245,12 @@
   .meta-row .chip-toggle { margin-left: auto; flex-shrink: 0; }
 
   /* chips 折叠态：仅由手动按钮控制；展开时完整 flex-wrap，不做高度裁剪 */
+  /* overflow:hidden 裁掉溢出的分类 chip（.chips 基础是 overflow:visible，压到 max-height:0 后
+     子项会溢出并浮在下方 Tab/卡片上）；pointer-events:none 让透明 chip 不再吃点击，
+     否则「折叠后筛选」会被隐形分类 chip 抢走点击、造成误触 */
   .chips.chips-collapsed {
     max-height: 0 !important; opacity: 0 !important; padding-top: 0 !important;
+    overflow: hidden !important; pointer-events: none !important;
   }
 /* 元数据组合筛选行 */
   .meta-filters {
@@ -904,9 +908,10 @@
   }
   .btn-detail:hover { border-color: var(--primary); color: var(--primary); }
 
-  /* chips 折叠态：滚动超过 260px 自动收起 */
+  /* chips 折叠态：滚动超过 260px 自动收起（overflow/pointer-events 同全局层：防透明 chip 溢出误点） */
   .chips.chips-collapsed {
     max-height: 0 !important; opacity: 0 !important; padding-top: 0 !important;
+    overflow: hidden !important; pointer-events: none !important;
   }
 
   @media (max-width: 760px) {
