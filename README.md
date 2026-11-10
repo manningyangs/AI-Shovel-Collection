@@ -184,6 +184,7 @@
 ### 6. 云平台、DevOps、监控与基础设施
 
 - [AWS MCP（AWS 官方开源 MCP 服务器集合）](https://github.com/awslabs/mcp)
+- [DC Hub（数据中心选址 / 电网电力 DCPI；MCP https://dchub.cloud/mcp）](https://github.com/azmartone67/dchub-mcp-server)
 - [Terraform MCP Server（Terraform / IaC 工作流）](https://github.com/hashicorp/terraform-mcp-server)
 - [Portainer MCP（容器管理）](https://github.com/portainer/portainer-mcp)
 - [Kubernetes MCP Server（Kubernetes 集群管理）](https://github.com/reza-gholizade/k8s-mcp-server)
