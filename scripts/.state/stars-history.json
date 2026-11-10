@@ -4837,6 +4837,7 @@
 "2026-11-10T02": {
 "adgrowofficial/getlead-mcp": 0,
 "aivikings/aivikings-mcp": 0,
+"centricai/arvx-mcp": 0,
 "asms-ai/asms-mcp": 0,
 "gih2yun/bareun-mcp": 0,
 "agent-operating-system/emailwarmup-mcp": 0,
@@ -4849,7 +4850,7 @@
 "adhikasp/mcp-git-ingest": 315,
 "akutishevsky/lunchmoney-mcp": 114,
 "amurshak/congressmcp": 36,
-"anthropics/skills": 191093,
+"anthropics/skills": 191095,
 "antvis/mcp-server-chart": 4416,
 "anviod/edgecore": 135,
 "apify/apify-mcp-server": 15482,

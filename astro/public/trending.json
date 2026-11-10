@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-10T02:32:12Z",
+  "updated_at": "2026-11-10T02:34:51Z",
   "data_points": 26,
   "history_days_covered": 9,
   "top_stars": [
@@ -8,7 +8,7 @@
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 191093,
+      "stars": 191095,
       "stars_growth": null,
       "lang": "Python",
       "pushed_at": "2026-11-06T22:32:32Z"
@@ -210,8 +210,8 @@
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 191093,
-      "stars_growth": 4318,
+      "stars": 191095,
+      "stars_growth": 4320,
       "lang": "Python",
       "pushed_at": "2026-11-06T22:32:32Z"
     },
@@ -412,8 +412,8 @@
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 191093,
-      "stars_growth": 4581,
+      "stars": 191095,
+      "stars_growth": 4583,
       "lang": "Python",
       "pushed_at": "2026-11-06T22:32:32Z"
     },
@@ -614,7 +614,7 @@
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 191093,
+      "stars": 191095,
       "stars_growth": null,
       "lang": "Python",
       "pushed_at": "2026-11-06T22:32:32Z",
