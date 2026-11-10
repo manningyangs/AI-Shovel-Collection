@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-06T02:37:49.748580Z",
-  "total_reports": 13,
+  "updated_at": "2026-11-10T01:48:02.533343Z",
+  "total_reports": 14,
   "reports": [
+    {
+      "report_id": "manningyangs-AI-Shovel-Collection-35fff89e6a7c",
+      "owner": "manningyangs",
+      "name": "AI-Shovel-Collection",
+      "url": "https://github.com/manningyangs/AI-Shovel-Collection",
+      "project_type": "mcp_server",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 53,
+      "grade": "D",
+      "coverage": 92,
+      "commit_sha": "fa2381a9c3eb",
+      "evaluated_at": "2026-11-10T01:48:02.533343Z"
+    },
     {
       "report_id": "TonyWang-hub-mcp-cn-commerce-b061b1ef6112",
       "owner": "TonyWang-hub",
