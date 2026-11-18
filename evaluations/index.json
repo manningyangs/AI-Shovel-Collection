@@ -1,9 +1,23 @@
 {
   "schema_version": "1.0",
   "scoring_version": "1.0.1",
-  "updated_at": "2026-11-10T01:48:02.533343Z",
-  "total_reports": 14,
+  "updated_at": "2026-11-18T06:07:25.965197Z",
+  "total_reports": 15,
   "reports": [
+    {
+      "report_id": "sparkgeo-geo-mcp-servers-fe7b385d7276",
+      "owner": "sparkgeo",
+      "name": "geo-mcp-servers",
+      "url": "https://github.com/sparkgeo/geo-mcp-servers",
+      "project_type": "agent_skill",
+      "level": "L1",
+      "score_status": "preliminary",
+      "preliminary_score": 63,
+      "grade": "C",
+      "coverage": 87,
+      "commit_sha": "d92dc1c93223",
+      "evaluated_at": "2026-11-18T06:07:25.965197Z"
+    },
     {
       "report_id": "manningyangs-AI-Shovel-Collection-35fff89e6a7c",
       "owner": "manningyangs",
