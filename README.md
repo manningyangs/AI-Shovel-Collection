@@ -361,6 +361,7 @@
 - [FlightRadar24 MCP（航班跟踪数据）](https://github.com/sunsetcoder/flightradar24-mcp-server)
 - [DoorDash MCP（配送平台集成）](https://github.com/JordanDalton/DoorDash-MCP-Server)
 - [Campground MCP（露营地查询和预订）](https://github.com/campertunity/mcp-server)
+- [CheapCarRent Search（汽车租赁搜索 MCP；https://cheapcarent.com/mcp）](https://github.com/aleksandrjefimov4-crypto/cheapcarent-mcp)
 - [Job Searchoor（根据需求搜索职位）](https://github.com/0xDAEF0F/job-searchoor)
 - [Himalayas MCP（职位、候选人和薪资数据）](https://github.com/Himalayas-App/himalayas-mcp)
 - [CV Forge（ATS 简历、求职信与邮件）](https://github.com/thechandanbhagat/cv-forge)
