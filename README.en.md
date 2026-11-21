@@ -361,6 +361,7 @@ This section is especially important for Chinese-speaking users. Some projects a
 - [FlightRadar24 MCP (flight tracking data)](https://github.com/sunsetcoder/flightradar24-mcp-server)
 - [DoorDash MCP (delivery platform integration)](https://github.com/JordanDalton/DoorDash-MCP-Server)
 - [Campground MCP (campsite search & booking)](https://github.com/campertunity/mcp-server)
+- [CheapCarRent Search (car rental search MCP; https://cheapcarent.com/mcp)](https://github.com/aleksandrjefimov4-crypto/cheapcarent-mcp)
 - [Job Searchoor (job search by requirements)](https://github.com/0xDAEF0F/job-searchoor)
 - [Himalayas MCP (jobs, candidates & salary data)](https://github.com/Himalayas-App/himalayas-mcp)
 - [CV Forge (ATS resumes, cover letters & emails)](https://github.com/thechandanbhagat/cv-forge)
