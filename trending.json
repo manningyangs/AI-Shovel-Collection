@@ -1,14 +1,14 @@
 {
-  "updated_at": "2026-11-24T22:35:57Z",
-  "data_points": 59,
-  "history_days_covered": 23,
+  "updated_at": "2026-11-25T08:47:30Z",
+  "data_points": 60,
+  "history_days_covered": 24,
   "top_stars": [
     {
       "rank": 1,
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 199926,
+      "stars": 200170,
       "stars_growth": null,
       "lang": "Python",
       "pushed_at": "2026-11-16T14:22:50Z"
@@ -18,27 +18,27 @@
       "repo_slug": "modelcontextprotocol/servers",
       "repo_url": "https://github.com/modelcontextprotocol/servers",
       "title": "servers",
-      "stars": 92223,
+      "stars": 92237,
       "stars_growth": null,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-24T06:14:45Z"
+      "pushed_at": "2026-11-25T05:08:57Z"
     },
     {
       "rank": 3,
       "repo_slug": "upstash/context7",
       "repo_url": "https://github.com/upstash/context7",
       "title": "context7",
-      "stars": 65407,
+      "stars": 65430,
       "stars_growth": null,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-24T16:47:28Z"
+      "pushed_at": "2026-11-25T08:06:57Z"
     },
     {
       "rank": 4,
       "repo_slug": "microsoft/playwright-mcp",
       "repo_url": "https://github.com/microsoft/playwright-mcp",
       "title": "playwright-mcp",
-      "stars": 40104,
+      "stars": 40124,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-18T18:50:37Z"
@@ -48,7 +48,7 @@
       "repo_slug": "github/github-mcp-server",
       "repo_url": "https://github.com/github/github-mcp-server",
       "title": "github-mcp-server",
-      "stars": 34724,
+      "stars": 34737,
       "stars_growth": null,
       "lang": "Go",
       "pushed_at": "2026-11-24T16:19:19Z"
@@ -58,7 +58,7 @@
       "repo_slug": "scrapegraphai/scrapegraph-ai",
       "repo_url": "https://github.com/scrapegraphai/scrapegraph-ai",
       "title": "Scrapegraph-ai",
-      "stars": 32921,
+      "stars": 32929,
       "stars_growth": null,
       "lang": "Python",
       "pushed_at": "2026-10-06T08:27:54Z"
@@ -68,17 +68,17 @@
       "repo_slug": "prefecthq/fastmcp",
       "repo_url": "https://github.com/prefecthq/fastmcp",
       "title": "fastmcp",
-      "stars": 28735,
+      "stars": 28745,
       "stars_growth": null,
       "lang": "Python",
-      "pushed_at": "2026-11-24T22:28:44Z"
+      "pushed_at": "2026-11-25T08:46:30Z"
     },
     {
       "rank": 8,
       "repo_slug": "pascalorg/editor",
       "repo_url": "https://github.com/pascalorg/editor",
       "title": "editor",
-      "stars": 25723,
+      "stars": 25741,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T19:52:35Z"
@@ -88,7 +88,7 @@
       "repo_slug": "apify/apify-mcp-server",
       "repo_url": "https://github.com/apify/apify-mcp-server",
       "title": "apify-mcp-server",
-      "stars": 17736,
+      "stars": 17793,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T19:58:27Z"
@@ -98,7 +98,7 @@
       "repo_slug": "glips/figma-context-mcp",
       "repo_url": "https://github.com/glips/figma-context-mcp",
       "title": "Figma-Context-MCP",
-      "stars": 16304,
+      "stars": 16309,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-15T22:22:42Z"
@@ -108,7 +108,7 @@
       "repo_slug": "coplaydev/unity-mcp",
       "repo_url": "https://github.com/coplaydev/unity-mcp",
       "title": "unity-mcp",
-      "stars": 16157,
+      "stars": 16172,
       "stars_growth": null,
       "lang": "C#",
       "pushed_at": "2026-11-17T15:17:43Z"
@@ -118,7 +118,7 @@
       "repo_slug": "elie222/inbox-zero",
       "repo_url": "https://github.com/elie222/inbox-zero",
       "title": "inbox-zero",
-      "stars": 13112,
+      "stars": 13115,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T16:36:06Z"
@@ -128,7 +128,7 @@
       "repo_slug": "tadata-org/fastapi_mcp",
       "repo_url": "https://github.com/tadata-org/fastapi_mcp",
       "title": "fastapi_mcp",
-      "stars": 12032,
+      "stars": 12030,
       "stars_growth": null,
       "lang": "Python",
       "pushed_at": "2025-11-24T14:51:54Z"
@@ -141,24 +141,24 @@
       "stars": 10610,
       "stars_growth": null,
       "lang": "PHP",
-      "pushed_at": "2026-11-24T22:22:20Z"
+      "pushed_at": "2026-11-25T08:43:04Z"
     },
     {
       "rank": 15,
       "repo_slug": "awslabs/mcp",
       "repo_url": "https://github.com/awslabs/mcp",
       "title": "mcp",
-      "stars": 9948,
+      "stars": 9949,
       "stars_growth": null,
       "lang": "Python",
-      "pushed_at": "2026-11-24T22:17:00Z"
+      "pushed_at": "2026-11-24T22:39:43Z"
     },
     {
       "rank": 16,
       "repo_slug": "idosal/git-mcp",
       "repo_url": "https://github.com/idosal/git-mcp",
       "title": "git-mcp",
-      "stars": 8535,
+      "stars": 8534,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-05-08T14:21:24Z"
@@ -168,17 +168,17 @@
       "repo_slug": "firecrawl/firecrawl-mcp-server",
       "repo_url": "https://github.com/firecrawl/firecrawl-mcp-server",
       "title": "firecrawl-mcp-server",
-      "stars": 7903,
+      "stars": 7908,
       "stars_growth": null,
       "lang": "JavaScript",
-      "pushed_at": "2026-11-24T20:26:43Z"
+      "pushed_at": "2026-11-24T23:17:32Z"
     },
     {
       "rank": 18,
       "repo_slug": "browsermcp/mcp",
       "repo_url": "https://github.com/browsermcp/mcp",
       "title": "mcp",
-      "stars": 7413,
+      "stars": 7414,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-12T16:35:15Z"
@@ -198,7 +198,7 @@
       "repo_slug": "lharries/whatsapp-mcp",
       "repo_url": "https://github.com/lharries/whatsapp-mcp",
       "title": "whatsapp-mcp",
-      "stars": 6949,
+      "stars": 6951,
       "stars_growth": null,
       "lang": "Go",
       "pushed_at": "2025-07-13T17:22:00Z"
@@ -210,8 +210,8 @@
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 199926,
-      "stars_growth": 3271,
+      "stars": 200170,
+      "stars_growth": 3265,
       "lang": "Python",
       "pushed_at": "2026-11-16T14:22:50Z"
     },
@@ -220,8 +220,8 @@
       "repo_slug": "apify/apify-mcp-server",
       "repo_url": "https://github.com/apify/apify-mcp-server",
       "title": "apify-mcp-server",
-      "stars": 17736,
-      "stars_growth": 1027,
+      "stars": 17793,
+      "stars_growth": 1019,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T19:58:27Z"
     },
@@ -230,18 +230,18 @@
       "repo_slug": "upstash/context7",
       "repo_url": "https://github.com/upstash/context7",
       "title": "context7",
-      "stars": 65407,
+      "stars": 65430,
       "stars_growth": 394,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-24T16:47:28Z"
+      "pushed_at": "2026-11-25T08:06:57Z"
     },
     {
       "rank": 4,
       "repo_slug": "microsoft/playwright-mcp",
       "repo_url": "https://github.com/microsoft/playwright-mcp",
       "title": "playwright-mcp",
-      "stars": 40104,
-      "stars_growth": 304,
+      "stars": 40124,
+      "stars_growth": 303,
       "lang": "TypeScript",
       "pushed_at": "2026-11-18T18:50:37Z"
     },
@@ -250,8 +250,8 @@
       "repo_slug": "github/github-mcp-server",
       "repo_url": "https://github.com/github/github-mcp-server",
       "title": "github-mcp-server",
-      "stars": 34724,
-      "stars_growth": 177,
+      "stars": 34737,
+      "stars_growth": 182,
       "lang": "Go",
       "pushed_at": "2026-11-24T16:19:19Z"
     },
@@ -260,18 +260,18 @@
       "repo_slug": "modelcontextprotocol/servers",
       "repo_url": "https://github.com/modelcontextprotocol/servers",
       "title": "servers",
-      "stars": 92223,
-      "stars_growth": 148,
+      "stars": 92237,
+      "stars_growth": 161,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-24T06:14:45Z"
+      "pushed_at": "2026-11-25T05:08:57Z"
     },
     {
       "rank": 7,
       "repo_slug": "pascalorg/editor",
       "repo_url": "https://github.com/pascalorg/editor",
       "title": "editor",
-      "stars": 25723,
-      "stars_growth": 136,
+      "stars": 25741,
+      "stars_growth": 145,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T19:52:35Z"
     },
@@ -280,8 +280,8 @@
       "repo_slug": "coplaydev/unity-mcp",
       "repo_url": "https://github.com/coplaydev/unity-mcp",
       "title": "unity-mcp",
-      "stars": 16157,
-      "stars_growth": 120,
+      "stars": 16172,
+      "stars_growth": 125,
       "lang": "C#",
       "pushed_at": "2026-11-17T15:17:43Z"
     },
@@ -290,38 +290,38 @@
       "repo_slug": "prefecthq/fastmcp",
       "repo_url": "https://github.com/prefecthq/fastmcp",
       "title": "fastmcp",
-      "stars": 28735,
-      "stars_growth": 101,
+      "stars": 28745,
+      "stars_growth": 105,
       "lang": "Python",
-      "pushed_at": "2026-11-24T22:28:44Z"
+      "pushed_at": "2026-11-25T08:46:30Z"
     },
     {
       "rank": 10,
-      "repo_slug": "21st-dev/magic-mcp",
-      "repo_url": "https://github.com/21st-dev/magic-mcp",
-      "title": "magic-mcp",
-      "stars": 6667,
-      "stars_growth": 87,
-      "lang": "TypeScript",
-      "pushed_at": "2026-09-09T20:38:22Z"
-    },
-    {
-      "rank": 11,
       "repo_slug": "scrapegraphai/scrapegraph-ai",
       "repo_url": "https://github.com/scrapegraphai/scrapegraph-ai",
       "title": "Scrapegraph-ai",
-      "stars": 32921,
+      "stars": 32929,
       "stars_growth": 87,
       "lang": "Python",
       "pushed_at": "2026-10-06T08:27:54Z"
+    },
+    {
+      "rank": 11,
+      "repo_slug": "21st-dev/magic-mcp",
+      "repo_url": "https://github.com/21st-dev/magic-mcp",
+      "title": "magic-mcp",
+      "stars": 6668,
+      "stars_growth": 86,
+      "lang": "TypeScript",
+      "pushed_at": "2026-09-09T20:38:22Z"
     },
     {
       "rank": 12,
       "repo_slug": "glips/figma-context-mcp",
       "repo_url": "https://github.com/glips/figma-context-mcp",
       "title": "Figma-Context-MCP",
-      "stars": 16304,
-      "stars_growth": 71,
+      "stars": 16309,
+      "stars_growth": 64,
       "lang": "TypeScript",
       "pushed_at": "2026-11-15T22:22:42Z"
     },
@@ -330,8 +330,8 @@
       "repo_slug": "nowork-studio/notfair-plugin",
       "repo_url": "https://github.com/nowork-studio/notfair-plugin",
       "title": "notfair-plugin",
-      "stars": 4309,
-      "stars_growth": 67,
+      "stars": 4306,
+      "stars_growth": 58,
       "lang": null,
       "pushed_at": "2026-11-17T20:25:09Z"
     },
@@ -340,18 +340,18 @@
       "repo_slug": "firecrawl/firecrawl-mcp-server",
       "repo_url": "https://github.com/firecrawl/firecrawl-mcp-server",
       "title": "firecrawl-mcp-server",
-      "stars": 7903,
+      "stars": 7908,
       "stars_growth": 57,
       "lang": "JavaScript",
-      "pushed_at": "2026-11-24T20:26:43Z"
+      "pushed_at": "2026-11-24T23:17:32Z"
     },
     {
       "rank": 15,
       "repo_slug": "elie222/inbox-zero",
       "repo_url": "https://github.com/elie222/inbox-zero",
       "title": "inbox-zero",
-      "stars": 13112,
-      "stars_growth": 54,
+      "stars": 13115,
+      "stars_growth": 55,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T16:36:06Z"
     },
@@ -360,8 +360,8 @@
       "repo_slug": "lharries/whatsapp-mcp",
       "repo_url": "https://github.com/lharries/whatsapp-mcp",
       "title": "whatsapp-mcp",
-      "stars": 6949,
-      "stars_growth": 42,
+      "stars": 6951,
+      "stars_growth": 39,
       "lang": "Go",
       "pushed_at": "2025-07-13T17:22:00Z"
     },
@@ -370,8 +370,8 @@
       "repo_slug": "browsermcp/mcp",
       "repo_url": "https://github.com/browsermcp/mcp",
       "title": "mcp",
-      "stars": 7413,
-      "stars_growth": 38,
+      "stars": 7414,
+      "stars_growth": 36,
       "lang": "TypeScript",
       "pushed_at": "2026-11-12T16:35:15Z"
     },
@@ -380,30 +380,30 @@
       "repo_slug": "chigwell/telegram-mcp",
       "repo_url": "https://github.com/chigwell/telegram-mcp",
       "title": "telegram-mcp",
-      "stars": 2088,
-      "stars_growth": 35,
+      "stars": 2089,
+      "stars_growth": 33,
       "lang": "Python",
-      "pushed_at": "2026-11-24T14:34:38Z"
+      "pushed_at": "2026-11-25T08:42:00Z"
     },
     {
       "rank": 19,
       "repo_slug": "grafana/mcp-grafana",
       "repo_url": "https://github.com/grafana/mcp-grafana",
       "title": "mcp-grafana",
-      "stars": 3701,
-      "stars_growth": 25,
+      "stars": 3698,
+      "stars_growth": 21,
       "lang": "Go",
       "pushed_at": "2026-11-24T19:20:14Z"
     },
     {
       "rank": 20,
-      "repo_slug": "mattt/imcp",
-      "repo_url": "https://github.com/mattt/imcp",
-      "title": "iMCP",
-      "stars": 2002,
-      "stars_growth": 20,
-      "lang": "Swift",
-      "pushed_at": "2026-11-24T16:46:53Z"
+      "repo_slug": "geekjourneyx/md2wechat-skill",
+      "repo_url": "https://github.com/geekjourneyx/md2wechat-skill",
+      "title": "md2wechat-skill",
+      "stars": 3824,
+      "stars_growth": 19,
+      "lang": "Go",
+      "pushed_at": "2026-11-24T02:58:31Z"
     }
   ],
   "top_growth_30d": [
@@ -412,8 +412,8 @@
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 199926,
-      "stars_growth": 13414,
+      "stars": 200170,
+      "stars_growth": 13658,
       "lang": "Python",
       "pushed_at": "2026-11-16T14:22:50Z"
     },
@@ -422,8 +422,8 @@
       "repo_slug": "apify/apify-mcp-server",
       "repo_url": "https://github.com/apify/apify-mcp-server",
       "title": "apify-mcp-server",
-      "stars": 17736,
-      "stars_growth": 3431,
+      "stars": 17793,
+      "stars_growth": 3488,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T19:58:27Z"
     },
@@ -432,18 +432,18 @@
       "repo_slug": "upstash/context7",
       "repo_url": "https://github.com/upstash/context7",
       "title": "context7",
-      "stars": 65407,
-      "stars_growth": 1343,
+      "stars": 65430,
+      "stars_growth": 1366,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-24T16:47:28Z"
+      "pushed_at": "2026-11-25T08:06:57Z"
     },
     {
       "rank": 4,
       "repo_slug": "microsoft/playwright-mcp",
       "repo_url": "https://github.com/microsoft/playwright-mcp",
       "title": "playwright-mcp",
-      "stars": 40104,
-      "stars_growth": 1135,
+      "stars": 40124,
+      "stars_growth": 1155,
       "lang": "TypeScript",
       "pushed_at": "2026-11-18T18:50:37Z"
     },
@@ -452,8 +452,8 @@
       "repo_slug": "github/github-mcp-server",
       "repo_url": "https://github.com/github/github-mcp-server",
       "title": "github-mcp-server",
-      "stars": 34724,
-      "stars_growth": 572,
+      "stars": 34737,
+      "stars_growth": 585,
       "lang": "Go",
       "pushed_at": "2026-11-24T16:19:19Z"
     },
@@ -462,8 +462,8 @@
       "repo_slug": "coplaydev/unity-mcp",
       "repo_url": "https://github.com/coplaydev/unity-mcp",
       "title": "unity-mcp",
-      "stars": 16157,
-      "stars_growth": 526,
+      "stars": 16172,
+      "stars_growth": 541,
       "lang": "C#",
       "pushed_at": "2026-11-17T15:17:43Z"
     },
@@ -472,8 +472,8 @@
       "repo_slug": "scrapegraphai/scrapegraph-ai",
       "repo_url": "https://github.com/scrapegraphai/scrapegraph-ai",
       "title": "Scrapegraph-ai",
-      "stars": 32921,
-      "stars_growth": 492,
+      "stars": 32929,
+      "stars_growth": 500,
       "lang": "Python",
       "pushed_at": "2026-10-06T08:27:54Z"
     },
@@ -482,28 +482,28 @@
       "repo_slug": "modelcontextprotocol/servers",
       "repo_url": "https://github.com/modelcontextprotocol/servers",
       "title": "servers",
-      "stars": 92223,
-      "stars_growth": 476,
+      "stars": 92237,
+      "stars_growth": 490,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-24T06:14:45Z"
+      "pushed_at": "2026-11-25T05:08:57Z"
     },
     {
       "rank": 9,
       "repo_slug": "prefecthq/fastmcp",
       "repo_url": "https://github.com/prefecthq/fastmcp",
       "title": "fastmcp",
-      "stars": 28735,
-      "stars_growth": 463,
+      "stars": 28745,
+      "stars_growth": 473,
       "lang": "Python",
-      "pushed_at": "2026-11-24T22:28:44Z"
+      "pushed_at": "2026-11-25T08:46:30Z"
     },
     {
       "rank": 10,
       "repo_slug": "pascalorg/editor",
       "repo_url": "https://github.com/pascalorg/editor",
       "title": "editor",
-      "stars": 25723,
-      "stars_growth": 453,
+      "stars": 25741,
+      "stars_growth": 471,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T19:52:35Z"
     },
@@ -512,8 +512,8 @@
       "repo_slug": "21st-dev/magic-mcp",
       "repo_url": "https://github.com/21st-dev/magic-mcp",
       "title": "magic-mcp",
-      "stars": 6667,
-      "stars_growth": 325,
+      "stars": 6668,
+      "stars_growth": 326,
       "lang": "TypeScript",
       "pushed_at": "2026-09-09T20:38:22Z"
     },
@@ -522,8 +522,8 @@
       "repo_slug": "elie222/inbox-zero",
       "repo_url": "https://github.com/elie222/inbox-zero",
       "title": "inbox-zero",
-      "stars": 13112,
-      "stars_growth": 223,
+      "stars": 13115,
+      "stars_growth": 226,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T16:36:06Z"
     },
@@ -532,8 +532,8 @@
       "repo_slug": "nowork-studio/notfair-plugin",
       "repo_url": "https://github.com/nowork-studio/notfair-plugin",
       "title": "notfair-plugin",
-      "stars": 4309,
-      "stars_growth": 216,
+      "stars": 4306,
+      "stars_growth": 213,
       "lang": null,
       "pushed_at": "2026-11-17T20:25:09Z"
     },
@@ -542,8 +542,8 @@
       "repo_slug": "glips/figma-context-mcp",
       "repo_url": "https://github.com/glips/figma-context-mcp",
       "title": "Figma-Context-MCP",
-      "stars": 16304,
-      "stars_growth": 169,
+      "stars": 16309,
+      "stars_growth": 174,
       "lang": "TypeScript",
       "pushed_at": "2026-11-15T22:22:42Z"
     },
@@ -552,8 +552,8 @@
       "repo_slug": "lharries/whatsapp-mcp",
       "repo_url": "https://github.com/lharries/whatsapp-mcp",
       "title": "whatsapp-mcp",
-      "stars": 6949,
-      "stars_growth": 160,
+      "stars": 6951,
+      "stars_growth": 162,
       "lang": "Go",
       "pushed_at": "2025-07-13T17:22:00Z"
     },
@@ -562,18 +562,18 @@
       "repo_slug": "firecrawl/firecrawl-mcp-server",
       "repo_url": "https://github.com/firecrawl/firecrawl-mcp-server",
       "title": "firecrawl-mcp-server",
-      "stars": 7903,
-      "stars_growth": 155,
+      "stars": 7908,
+      "stars_growth": 160,
       "lang": "JavaScript",
-      "pushed_at": "2026-11-24T20:26:43Z"
+      "pushed_at": "2026-11-24T23:17:32Z"
     },
     {
       "rank": 17,
       "repo_slug": "browsermcp/mcp",
       "repo_url": "https://github.com/browsermcp/mcp",
       "title": "mcp",
-      "stars": 7413,
-      "stars_growth": 144,
+      "stars": 7414,
+      "stars_growth": 145,
       "lang": "TypeScript",
       "pushed_at": "2026-11-12T16:35:15Z"
     },
@@ -582,18 +582,18 @@
       "repo_slug": "chigwell/telegram-mcp",
       "repo_url": "https://github.com/chigwell/telegram-mcp",
       "title": "telegram-mcp",
-      "stars": 2088,
-      "stars_growth": 137,
+      "stars": 2089,
+      "stars_growth": 138,
       "lang": "Python",
-      "pushed_at": "2026-11-24T14:34:38Z"
+      "pushed_at": "2026-11-25T08:42:00Z"
     },
     {
       "rank": 19,
       "repo_slug": "zackchewa/awesome-china-mcp",
       "repo_url": "https://github.com/zackchewa/awesome-china-mcp",
       "title": "awesome-china-mcp",
-      "stars": 181,
-      "stars_growth": 117,
+      "stars": 182,
+      "stars_growth": 118,
       "lang": null,
       "pushed_at": "2026-11-14T00:37:29Z"
     },
@@ -602,10 +602,10 @@
       "repo_slug": "awslabs/mcp",
       "repo_url": "https://github.com/awslabs/mcp",
       "title": "mcp",
-      "stars": 9948,
-      "stars_growth": 87,
+      "stars": 9949,
+      "stars_growth": 88,
       "lang": "Python",
-      "pushed_at": "2026-11-24T22:17:00Z"
+      "pushed_at": "2026-11-24T22:39:43Z"
     }
   ],
   "top_activity": [
@@ -614,7 +614,7 @@
       "repo_slug": "apify/apify-mcp-server",
       "repo_url": "https://github.com/apify/apify-mcp-server",
       "title": "apify-mcp-server",
-      "stars": 17736,
+      "stars": 17793,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T19:58:27Z",
@@ -625,10 +625,10 @@
       "repo_slug": "awslabs/mcp",
       "repo_url": "https://github.com/awslabs/mcp",
       "title": "mcp",
-      "stars": 9948,
+      "stars": 9949,
       "stars_growth": null,
       "lang": "Python",
-      "pushed_at": "2026-11-24T22:17:00Z",
+      "pushed_at": "2026-11-24T22:39:43Z",
       "activity_score": 18.0
     },
     {
@@ -636,7 +636,7 @@
       "repo_slug": "elie222/inbox-zero",
       "repo_url": "https://github.com/elie222/inbox-zero",
       "title": "inbox-zero",
-      "stars": 13112,
+      "stars": 13115,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T16:36:06Z",
@@ -647,10 +647,10 @@
       "repo_slug": "firecrawl/firecrawl-mcp-server",
       "repo_url": "https://github.com/firecrawl/firecrawl-mcp-server",
       "title": "firecrawl-mcp-server",
-      "stars": 7903,
+      "stars": 7908,
       "stars_growth": null,
       "lang": "JavaScript",
-      "pushed_at": "2026-11-24T20:26:43Z",
+      "pushed_at": "2026-11-24T23:17:32Z",
       "activity_score": 18.0
     },
     {
@@ -658,7 +658,7 @@
       "repo_slug": "github/github-mcp-server",
       "repo_url": "https://github.com/github/github-mcp-server",
       "title": "github-mcp-server",
-      "stars": 34724,
+      "stars": 34737,
       "stars_growth": null,
       "lang": "Go",
       "pushed_at": "2026-11-24T16:19:19Z",
@@ -669,7 +669,7 @@
       "repo_slug": "microsoft/playwright-mcp",
       "repo_url": "https://github.com/microsoft/playwright-mcp",
       "title": "playwright-mcp",
-      "stars": 40104,
+      "stars": 40124,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-18T18:50:37Z",
@@ -680,10 +680,10 @@
       "repo_slug": "modelcontextprotocol/servers",
       "repo_url": "https://github.com/modelcontextprotocol/servers",
       "title": "servers",
-      "stars": 92223,
+      "stars": 92237,
       "stars_growth": null,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-24T06:14:45Z",
+      "pushed_at": "2026-11-25T05:08:57Z",
       "activity_score": 18.0
     },
     {
@@ -691,7 +691,7 @@
       "repo_slug": "pascalorg/editor",
       "repo_url": "https://github.com/pascalorg/editor",
       "title": "editor",
-      "stars": 25723,
+      "stars": 25741,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-24T19:52:35Z",
@@ -702,10 +702,10 @@
       "repo_slug": "prefecthq/fastmcp",
       "repo_url": "https://github.com/prefecthq/fastmcp",
       "title": "fastmcp",
-      "stars": 28735,
+      "stars": 28745,
       "stars_growth": null,
       "lang": "Python",
-      "pushed_at": "2026-11-24T22:28:44Z",
+      "pushed_at": "2026-11-25T08:46:30Z",
       "activity_score": 18.0
     },
     {
@@ -713,10 +713,10 @@
       "repo_slug": "upstash/context7",
       "repo_url": "https://github.com/upstash/context7",
       "title": "context7",
-      "stars": 65407,
+      "stars": 65430,
       "stars_growth": null,
       "lang": "TypeScript",
-      "pushed_at": "2026-11-24T16:47:28Z",
+      "pushed_at": "2026-11-25T08:06:57Z",
       "activity_score": 18.0
     },
     {
@@ -727,7 +727,7 @@
       "stars": 10610,
       "stars_growth": null,
       "lang": "PHP",
-      "pushed_at": "2026-11-24T22:22:20Z",
+      "pushed_at": "2026-11-25T08:43:04Z",
       "activity_score": 18.0
     },
     {
@@ -746,11 +746,11 @@
       "repo_slug": "grafana/mcp-grafana",
       "repo_url": "https://github.com/grafana/mcp-grafana",
       "title": "mcp-grafana",
-      "stars": 3701,
+      "stars": 3698,
       "stars_growth": null,
       "lang": "Go",
       "pushed_at": "2026-11-24T19:20:14Z",
-      "activity_score": 14.103000000000002
+      "activity_score": 14.094000000000001
     },
     {
       "rank": 14,
@@ -768,11 +768,11 @@
       "repo_slug": "chigwell/telegram-mcp",
       "repo_url": "https://github.com/chigwell/telegram-mcp",
       "title": "telegram-mcp",
-      "stars": 2088,
+      "stars": 2089,
       "stars_growth": null,
       "lang": "Python",
-      "pushed_at": "2026-11-24T14:34:38Z",
-      "activity_score": 9.264
+      "pushed_at": "2026-11-25T08:42:00Z",
+      "activity_score": 9.267
     },
     {
       "rank": 16,
@@ -790,7 +790,7 @@
       "repo_slug": "anthropics/skills",
       "repo_url": "https://github.com/anthropics/skills",
       "title": "skills",
-      "stars": 199926,
+      "stars": 200170,
       "stars_growth": null,
       "lang": "Python",
       "pushed_at": "2026-11-16T14:22:50Z",
@@ -801,7 +801,7 @@
       "repo_slug": "browsermcp/mcp",
       "repo_url": "https://github.com/browsermcp/mcp",
       "title": "mcp",
-      "stars": 7413,
+      "stars": 7414,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-12T16:35:15Z",
@@ -812,7 +812,7 @@
       "repo_slug": "coplaydev/unity-mcp",
       "repo_url": "https://github.com/coplaydev/unity-mcp",
       "title": "unity-mcp",
-      "stars": 16157,
+      "stars": 16172,
       "stars_growth": null,
       "lang": "C#",
       "pushed_at": "2026-11-17T15:17:43Z",
@@ -823,7 +823,7 @@
       "repo_slug": "glips/figma-context-mcp",
       "repo_url": "https://github.com/glips/figma-context-mcp",
       "title": "Figma-Context-MCP",
-      "stars": 16304,
+      "stars": 16309,
       "stars_growth": null,
       "lang": "TypeScript",
       "pushed_at": "2026-11-15T22:22:42Z",
